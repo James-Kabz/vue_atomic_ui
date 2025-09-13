@@ -153,7 +153,7 @@ export {
 }
 
 // Plugin installer (named export instead of default)
-export const VueAtomicUI = {
+export const VueUi = {
   install(app, options = {}) {
     const { prefix = "", globalComponents = true } = options
 
