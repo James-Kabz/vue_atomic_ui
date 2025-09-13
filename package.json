@@ -34,7 +34,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/vue-ui.git"
+    "url": "https://github.com/James-Kabz/vue_atomic_ui"
   },
   "dependencies": {
     "pinia": "^3.0.3",
