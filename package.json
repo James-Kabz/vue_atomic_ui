@@ -1,6 +1,6 @@
 {
   "name": "@stlhorizon/vue-atomic-ui",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "private": false,
   "type": "module",
   "description": "A Vue.js component library with Tailwind CSS styling",
@@ -34,7 +34,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/James-Kabz/vue_atomic_ui"
+    "url": "git+https://github.com/James-Kabz/vue_atomic_ui.git"
   },
   "dependencies": {
     "pinia": "^3.0.3",
