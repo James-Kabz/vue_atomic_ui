@@ -1,11 +1,17 @@
 {
   "name": "@stlhorizon/vue-ui",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": false,
   "type": "module",
   "description": "A Vue.js component library with Tailwind CSS styling",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.js"
+    }
+  },
   "files": [
     "dist",
     "src"

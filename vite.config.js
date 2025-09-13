@@ -1,3 +1,4 @@
+// vite.config.js
 import { fileURLToPath, URL } from "node:url"
 import { dirname, resolve } from "node:path"
 
@@ -12,18 +13,18 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
 export default defineConfig({
-  plugins: [
-    vue(),
-    vueJsx(),
-    vueDevTools(),
-    tailwindcss()
-  ],
+  plugins: [vue(), vueJsx(), vueDevTools(), tailwindcss()],
   build: {
     lib: {
       entry: resolve(__dirname, "src/index.js"),
-      name: "VueUI",
-      fileName: (format) =>
-        `index.${format === "es" ? "esm" : format}.js`,
+      name: "VueUi",
+      formats: ["es", "umd", "cjs"], // ✅ generate all three
+      fileName: (format) => {
+        if (format === "es") return "index.esm.js"
+        if (format === "umd") return "index.umd.js"
+        if (format === "cjs") return "index.js" // ✅ CJS entry
+        return `index.${format}.js`
+      },
     },
     rollupOptions: {
       external: ["vue", "tailwindcss"],
@@ -37,7 +38,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
-      'vue': 'vue/dist/vue.esm-bundler.js',
+      vue: "vue/dist/vue.esm-bundler.js",
     },
   },
 })
