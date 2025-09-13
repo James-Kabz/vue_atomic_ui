@@ -1,0 +1,71 @@
+{
+  "name": "@stlhorizon/vue-atomic-ui",
+  "version": "1.0.5",
+  "private": false,
+  "type": "module",
+  "description": "A Vue.js component library with Tailwind CSS styling",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:watch": "vite build --watch",
+    "preview": "vite preview",
+    "test:unit": "vitest",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "vue",
+    "vue3",
+    "components",
+    "ui",
+    "tailwind",
+    "component-library"
+  ],
+  "author": "Stl-Horizon",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/vue-ui.git"
+  },
+  "dependencies": {
+    "pinia": "^3.0.3",
+    "vue": "^3.5.18",
+    "vue-router": "^4.5.1",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.0.0",
+    "lucide-vue-next": "^0.292.0",
+    "path": "0.12.7",
+    "tailwind-merge": "3.3.1",
+    "tailwindcss-animate": "1.0.7"
+  },
+  "peerDependencies": {
+    "vue": "^3.3.0",
+    "tailwindcss": "^3.4.17"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.31.0",
+    "@tailwindcss/vite": "^4.1.13",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "@vitejs/plugin-vue-jsx": "^5.0.1",
+    "@vue/test-utils": "^2.4.6",
+    "jsdom": "^26.1.0",
+    "vite": "^7.0.6",
+    "vite-plugin-vue-devtools": "^8.0.0",
+    "vitest": "^3.2.4",
+    "eslint": "^9.31.0",
+    "eslint-plugin-vue": "~10.3.0",
+    "tailwindcss": "^4.1.13",
+    "autoprefixer": "^10.4.16",
+    "typescript": "5.9.2",
+    "@types/node": "24.3.3"
+  }
+}
