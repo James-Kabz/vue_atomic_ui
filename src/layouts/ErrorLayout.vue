@@ -102,7 +102,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import Button from '../../atoms/Button/Button.vue'
+import Button from '../components/Button.vue'
 
 // Error icons
 const Error404Icon = {
