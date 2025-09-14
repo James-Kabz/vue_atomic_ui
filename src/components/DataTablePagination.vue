@@ -1,80 +1,152 @@
 <template>
-  <div class="flex items-center justify-between px-2">
-    <div class="flex-1 text-sm text-muted-foreground">
-      {{ selectedText }}
-    </div>
-    <div class="flex items-center space-x-6 lg:space-x-8">
-      <div class="flex items-center space-x-2">
-        <p class="text-sm font-medium">Rows per page</p>
-        <Select :model-value="pageSize" @update:model-value="handlePageSizeChange">
-          <Option v-for="size in pageSizeOptions" :key="size" :value="size">
-            {{ size }}
-          </Option>
-        </Select>
+  <div v-if="showPagination || $slots.footer" :class="footerClasses">
+    <div class="flex items-center justify-between">
+      <!-- Selection Info -->
+      <div v-if="selectable && selectedCount > 0" class="text-sm text-slate-600">
+        {{ selectedCount }} of {{ total }} selected
       </div>
-      <div class="flex w-[100px] items-center justify-center text-sm font-medium">
-        Page {{ currentPage }} of {{ totalPages }}
+      <div v-else class="text-sm text-slate-600">
+        Showing {{ startItem }} to {{ endItem }} of {{ total }} entries
       </div>
-      <div class="flex items-center space-x-2">
-        <Button
-          variant="outline"
-          size="sm"
-          :disabled="currentPage === 1"
-          @click="goToFirstPage"
-        >
-          First
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          :disabled="currentPage === 1"
-          @click="goToPreviousPage"
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          :disabled="currentPage === totalPages"
-          @click="goToNextPage"
-        >
-          Next
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          :disabled="currentPage === totalPages"
-          @click="goToLastPage"
-        >
-          Last
-        </Button>
+
+      <!-- Custom Footer Slot -->
+      <div v-if="$slots.footer" class="flex items-center gap-4">
+        <slot name="footer" />
+      </div>
+
+      <!-- Pagination Controls -->
+      <div v-if="showPagination" class="flex items-center gap-4">
+        <!-- Page Size Selector -->
+        <div class="flex items-center gap-2">
+          <Label for="pageSize" :class="labelClasses" :inline="true">Show:</Label>
+          <Select
+            id="pageSize"
+            :model-value="pageSize"
+            @update:modelValue="val => $emit('update:pageSize', parseInt(val))"
+            :class="selectClasses"
+          >
+            <Option
+              v-for="size in pageSizeOptions"
+              :key="size"
+              :value="size"
+              :label="size.toString()"
+            />
+          </Select>
+        </div>
+
+        <!-- Page Navigation -->
+        <div class="flex items-center gap-1">
+          <!-- First Page -->
+          <button
+            :disabled="currentPage === 1"
+            @click="$emit('update:currentPage', 1)"
+            :class="getPageButtonClasses(false, currentPage === 1)"
+            title="First page"
+          >
+            <ChevronDoubleLeftIcon class="w-4 h-4" />
+          </button>
+
+          <!-- Previous Page -->
+          <button
+            :disabled="currentPage === 1"
+            @click="$emit('update:currentPage', currentPage - 1)"
+            :class="getPageButtonClasses(false, currentPage === 1)"
+            title="Previous page"
+          >
+            <ChevronLeftIcon class="w-4 h-4" />
+          </button>
+
+          <!-- Page Numbers -->
+          <div class="flex items-center gap-1">
+            <button
+              v-for="page in visiblePages"
+              :key="page"
+              @click="$emit('update:currentPage', page)"
+              :class="getPageButtonClasses(page === currentPage, false)"
+            >
+              {{ page }}
+            </button>
+          </div>
+
+          <!-- Next Page -->
+          <button
+            :disabled="currentPage === totalPages"
+            @click="$emit('update:currentPage', currentPage + 1)"
+            :class="getPageButtonClasses(false, currentPage === totalPages)"
+            title="Next page"
+          >
+            <ChevronRightIcon class="w-4 h-4" />
+          </button>
+
+          <!-- Last Page -->
+          <button
+            :disabled="currentPage === totalPages"
+            @click="$emit('update:currentPage', totalPages)"
+            :class="getPageButtonClasses(false, currentPage === totalPages)"
+            title="Last page"
+          >
+            <ChevronDoubleRightIcon class="w-4 h-4" />
+          </button>
+        </div>
+
+        <!-- Page Info -->
+        <div class="text-sm text-slate-600 ml-4">
+          Page {{ currentPage }} of {{ totalPages }}
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
-import Button from './Button.vue'
-import Select from './Select.vue'
+import Label from './Label.vue'
 import Option from './Option.vue'
+import Select from './Select.vue'
+import { computed } from 'vue'
+import { cva } from 'class-variance-authority'
+import { cn } from '../utils/cn.js'
+
+// Icon components
+const ChevronLeftIcon = {
+  template: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>`
+}
+
+const ChevronRightIcon = {
+  template: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" /></svg>`
+}
+
+const ChevronDoubleLeftIcon = {
+  template: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m18.75 4.5-7.5 7.5 7.5 7.5m-6-15L5.25 12l7.5 7.5" /></svg>`
+}
+
+const ChevronDoubleRightIcon = {
+  template: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5" /></svg>`
+}
 
 const props = defineProps({
   currentPage: {
     type: Number,
-    default: 1
+    required: true
   },
   totalPages: {
     type: Number,
     required: true
   },
-  pageSize: {
-    type: Number,
-    default: 10
-  },
-  totalItems: {
+  total: {
     type: Number,
     required: true
+  },
+  pageSize: {
+    type: Number,
+    required: true
+  },
+  showPagination: {
+    type: Boolean,
+    default: true
+  },
+  selectable: {
+    type: Boolean,
+    default: false
   },
   selectedCount: {
     type: Number,
@@ -82,22 +154,151 @@ const props = defineProps({
   },
   pageSizeOptions: {
     type: Array,
-    default: () => [10, 20, 30, 40, 50]
+    default: () => [5, 10, 25, 50, 100]
+  },
+  maxVisiblePages: {
+    type: Number,
+    default: 7
+  },
+  variant: {
+    type: String,
+    default: 'default',
+    validator: (value) => ['default', 'minimal', 'bordered'].includes(value)
+  },
+  padding: {
+    type: String,
+    default: 'normal',
+    validator: (value) => ['compact', 'normal', 'comfortable'].includes(value)
   }
 })
 
-const emit = defineEmits(['page-change', 'page-size-change'])
+const emit = defineEmits(['update:currentPage', 'update:pageSize'])
 
-const selectedText = computed(() => {
-  if (props.selectedCount > 0) {
-    return `${props.selectedCount} of ${props.totalItems} row(s) selected.`
+// CVA variants
+const footerVariants = cva('border-t border-slate-200', {
+  variants: {
+    variant: {
+      default: 'bg-slate-50',
+      minimal: 'bg-transparent border-slate-100',
+      bordered: 'bg-slate-100 border-t-2 border-slate-300'
+    },
+    padding: {
+      compact: 'px-4 py-2',
+      normal: 'px-6 py-4',
+      comfortable: 'px-8 py-6'
+    }
+  },
+  defaultVariants: {
+    variant: 'default',
+    padding: 'normal'
   }
-  return `${props.totalItems} row(s) total.`
 })
 
-const goToFirstPage = () => emit('page-change', 1)
-const goToPreviousPage = () => emit('page-change', props.currentPage - 1)
-const goToNextPage = () => emit('page-change', props.currentPage + 1)
-const goToLastPage = () => emit('page-change', props.totalPages)
-const handlePageSizeChange = (newSize) => emit('page-size-change', newSize)
+const pageButtonVariants = cva('text-sm font-medium border rounded-md transition-colors duration-200', {
+  variants: {
+    state: {
+      active: 'bg-blue-600 text-white border-blue-600',
+      inactive: 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50',
+      disabled: 'bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed'
+    },
+    size: {
+      sm: 'px-2 py-1',
+      md: 'px-3 py-2',
+      lg: 'px-4 py-3'
+    }
+  },
+  defaultVariants: {
+    state: 'inactive',
+    size: 'md'
+  }
+})
+
+const labelVariants = cva('text-slate-700', {
+  variants: {
+    size: {
+      sm: 'text-sm',
+      md: 'text-base',
+      lg: 'text-lg'
+    }
+  },
+  defaultVariants: {
+    size: 'md'
+  }
+})
+
+const selectVariants = cva('border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500', {
+  variants: {
+    size: {
+      sm: 'text-sm px-2 py-1',
+      md: 'text-sm px-3 py-2',
+      lg: 'text-base px-4 py-3'
+    }
+  },
+  defaultVariants: {
+    size: 'sm'
+  }
+})
+
+// Computed properties
+const startItem = computed(() => {
+  return (props.currentPage - 1) * props.pageSize + 1
+})
+
+const endItem = computed(() => {
+  return Math.min(props.currentPage * props.pageSize, props.total)
+})
+
+const visiblePages = computed(() => {
+  const pages = []
+  const total = props.totalPages
+  const current = props.currentPage
+  const maxVisible = props.maxVisiblePages
+
+  if (total <= maxVisible) {
+    for (let i = 1; i <= total; i++) {
+      pages.push(i)
+    }
+  } else {
+    const halfVisible = Math.floor(maxVisible / 2)
+    let start = Math.max(1, current - halfVisible)
+    let end = Math.min(total, start + maxVisible - 1)
+
+    if (end - start + 1 < maxVisible) {
+      start = Math.max(1, end - maxVisible + 1)
+    }
+
+    for (let i = start; i <= end; i++) {
+      pages.push(i)
+    }
+  }
+
+  return pages
+})
+
+// Computed classes using CVA
+const footerClasses = computed(() => 
+  cn(footerVariants({ 
+    variant: props.variant, 
+    padding: props.padding 
+  }))
+)
+
+const labelClasses = computed(() => 
+  cn(labelVariants({ size: 'md' }))
+)
+
+const selectClasses = computed(() => 
+  cn(selectVariants({ size: 'sm' }))
+)
+
+const getPageButtonClasses = (isActive, isDisabled) => {
+  let state = 'inactive'
+  if (isDisabled) state = 'disabled'
+  else if (isActive) state = 'active'
+  
+  return cn(pageButtonVariants({ 
+    state, 
+    size: 'md' 
+  }))
+}
 </script>

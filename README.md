@@ -4,55 +4,104 @@ A comprehensive Vue.js component library built with Tailwind CSS, featuring 60+ 
 
 ## Installation
 
-\`\`\`bash
-npm install @your-org/vue-ui
-\`\`\`
+```bash
+npm install @stlhorizon/vue-ui
+```
 
 ## Setup
 
 1. Install the required peer dependencies:
 
-\`\`\`bash
-npm install vue@^3.3.0
-\`\`\`
+```bash
+npm install vue@^3.5.18
+```
 
 2. Import the base styles in your main CSS file:
 
-\`\`\`css
-@import '@your-org/vue-ui/dist/style.css';
-\`\`\`
+```css
+@import '@stlhorizon/vue-ui/dist/vue-ui.css';
+```
 
 3. Configure your `tailwind.config.js` to include the library's content:
 
-\`\`\`js
+```js
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
     "./src/**/*.{vue,js,ts,jsx,tsx}",
-    "./node_modules/@your-org/vue-ui/**/*.{vue,js,ts,jsx,tsx}"
+    "./node_modules/@stlhorizon/vue-ui/**/*.{vue,js,ts,jsx,tsx}"
   ],
   // ... rest of your config
 }
-\`\`\`
+```
+
+4. **Important: Vue Template Compiler Configuration**
+
+If you encounter the error: *"Component provided template option but runtime compilation is not supported in this build of Vue"*, you need to configure your bundler to use the full Vue build that includes the template compiler.
+
+### For Vite users:
+
+Add this to your `vite.config.js`:
+
+```js
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+
+export default defineConfig({
+  plugins: [vue()],
+  resolve: {
+    alias: {
+      'vue': 'vue/dist/vue.esm-bundler.js'
+    }
+  }
+})
+```
+
+### For Webpack users:
+
+Add this to your `webpack.config.js`:
+
+```js
+module.exports = {
+  resolve: {
+    alias: {
+      'vue$': 'vue/dist/vue.esm-bundler.js'
+    }
+  }
+}
+```
+
+### For Nuxt 3 users:
+
+Add this to your `nuxt.config.ts`:
+
+```ts
+export default defineNuxtConfig({
+  alias: {
+    'vue': 'vue/dist/vue.esm-bundler.js'
+  }
+})
+```
 
 ## Usage
 
 ### Global Registration (Recommended)
 
-\`\`\`js
+```js
 // main.js
 import { createApp } from 'vue'
-import VueUI from '@your-org/vue-ui'
+import VueUI from '@stlhorizon/vue-ui'
+import '@stlhorizon/vue-ui/dist/vue-ui.css'
 import App from './App.vue'
 
 const app = createApp(App)
 app.use(VueUI) // Auto-registers all components globally
 app.mount('#app')
-\`\`\`
+```
 
 ### Individual Component Import
 
-\`\`\`vue
+```vue
 <template>
   <div>
     <Button variant="default" size="lg">Click me</Button>
@@ -62,9 +111,9 @@ app.mount('#app')
 </template>
 
 <script setup>
-import { Button, Input, DataTable } from '@your-org/vue-ui'
+import { Button, Input, DataTable } from '@stlhorizon/vue-ui'
 </script>
-\`\`\`
+```
 
 ## Available Components
 
@@ -166,17 +215,17 @@ import { Button, Input, DataTable } from '@your-org/vue-ui'
 ## Component Examples
 
 ### Button Variants
-\`\`\`vue
+```vue
 <Button variant="default">Default</Button>
 <Button variant="destructive">Destructive</Button>
 <Button variant="outline">Outline</Button>
 <Button variant="secondary">Secondary</Button>
 <Button variant="ghost">Ghost</Button>
 <Button variant="link">Link</Button>
-\`\`\`
+```
 
 ### DataTable Usage
-\`\`\`vue
+```vue
 <template>
   <DataTable 
     :data="users" 
@@ -198,10 +247,10 @@ const columns = [
   { key: 'email', label: 'Email', sortable: true }
 ]
 </script>
-\`\`\`
+```
 
 ### Layout Usage
-\`\`\`vue
+```vue
 <template>
   <DefaultLayout>
     <template #header>
@@ -224,33 +273,45 @@ const columns = [
     </template>
   </DefaultLayout>
 </template>
-\`\`\`
+```
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Template compilation error**: Make sure you've configured the Vue alias as described in the setup section above.
+
+2. **Styles not loading**: Ensure you're importing the CSS file: `@import '@stlhorizon/vue-ui/dist/vue-ui.css';`
+
+3. **Components not found**: Make sure you've either registered components globally or imported them individually.
+
+4. **Tailwind classes not working**: Verify that your `tailwind.config.js` includes the library's content path.
 
 ## Publishing to NPM
 
 1. **Update package details in `package.json`:**
-   - Change `@your-org/vue-ui` to your actual package name
+   - Change package name if needed
    - Update repository URL, author, and description
    - Set the correct version number
 
 2. **Build the library:**
-   \`\`\`bash
+   ```bash
    npm run build
-   \`\`\`
+   ```
 
 3. **Login to npm:**
-   \`\`\`bash
+   ```bash
    npm login
-   \`\`\`
+   ```
 
 4. **Publish:**
-   \`\`\`bash
+   ```bash
    npm publish --access public
-   \`\`\`
+   ```
 
 ## Development
 
-\`\`\`bash
+```bash
 # Install dependencies
 npm install
 
@@ -262,7 +323,12 @@ npm run build
 
 # Lint code
 npm run lint
-\`\`\`
+```
+
+## Requirements
+
+- Node.js: `^20.19.0 || >=22.12.0`
+- Vue.js: `^3.5.18`
 
 ## License
 

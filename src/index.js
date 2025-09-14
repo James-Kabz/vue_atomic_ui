@@ -30,7 +30,8 @@ import Card from "./components/Card.vue"
 import CardHeader from "./components/CardHeader.vue"
 import CardBody from "./components/CardBody.vue"
 import CardFooter from "./components/CardFooter.vue"
-
+import CardContent from "./components/CardContent.vue"
+import CardTitle from "./components/CardTitle.vue"
 import DatePicker from "./components/DatePicker.vue"
 import Dropdown from "./components/Dropdown.vue"
 import DropdownItem from "./components/DropdownItem.vue"
@@ -109,6 +110,8 @@ const components = {
   CardHeader,
   CardBody,
   CardFooter,
+  CardContent,
+  CardTitle,
   DatePicker,
   Dropdown,
   DropdownItem,
@@ -190,6 +193,8 @@ export {
   CardHeader,
   CardBody,
   CardFooter,
+  CardContent,
+  CardTitle,
   DatePicker,
   Dropdown,
   DropdownItem,

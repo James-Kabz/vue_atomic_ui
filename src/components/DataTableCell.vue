@@ -1,11 +1,9 @@
 <template>
-  <component 
-    :is="tag"
-    :class="cellClasses"
-    :style="{ width: width }"
-  >
-    <slot />
-  </component>
+  <td :class="cellClasses">
+    <slot>
+      {{ formattedValue }}
+    </slot>
+  </td>
 </template>
 
 <script setup>
@@ -14,43 +12,101 @@ import { cva } from 'class-variance-authority'
 import { cn } from '../utils/cn.js'
 
 const props = defineProps({
-  tag: {
-    type: String,
-    default: 'td',
-    validator: (value) => ['td', 'th'].includes(value)
+  item: {
+    type: Object,
+    required: true
+  },
+  column: {
+    type: Object,
+    required: true
+  },
+  value: {
+    type: [String, Number, Boolean, Object, Array],
+    default: null
   },
   align: {
     type: String,
     default: 'left',
     validator: (value) => ['left', 'center', 'right'].includes(value)
   },
-  width: String,
-  sortable: Boolean
-})
-
-const cellVariants = cva('p-4', {
-  variants: {
-    tag: {
-      td: 'align-middle',
-      th: 'h-12 px-4 text-left align-middle font-medium text-muted-foreground'
-    },
-    align: {
-      left: 'text-left',
-      center: 'text-center',
-      right: 'text-right'
-    },
-    sortable: {
-      true: 'cursor-pointer hover:bg-muted/50',
-      false: ''
-    }
+  width: {
+    type: String,
+    default: null
+  },
+  padding: {
+    type: String,
+    default: 'normal',
+    validator: (value) => ['compact', 'normal', 'comfortable'].includes(value)
+  },
+  textSize: {
+    type: String,
+    default: 'sm',
+    validator: (value) => ['xs', 'sm', 'base', 'lg'].includes(value)
+  },
+  textColor: {
+    type: String,
+    default: 'slate-900'
   }
 })
 
-const cellClasses = computed(() => 
-  cn(cellVariants({ 
-    tag: props.tag, 
-    align: props.align,
-    sortable: props.sortable 
-  }))
-)
+const formattedValue = computed(() => {
+  const value = props.value ?? getCellValue()
+  
+  if (props.column.formatter) {
+    return props.column.formatter(value, props.item)
+  }
+  
+  return value
+})
+
+const getCellValue = () => {
+  if (props.column.accessor) {
+    return props.column.accessor(props.item)
+  }
+  
+  return props.column.key.split('.').reduce((obj, key) => obj?.[key], props.item)
+}
+
+const cellVariants = cva('whitespace-nowrap', {
+  variants: {
+    align: {
+      left: 'text-left',
+      center: 'text-center', 
+      right: 'text-right'
+    },
+    padding: {
+      compact: 'px-4 py-2',
+      normal: 'px-6 py-4',
+      comfortable: 'px-8 py-6'
+    },
+    textSize: {
+      xs: 'text-xs',
+      sm: 'text-sm',
+      base: 'text-base',
+      lg: 'text-lg'
+    }
+  },
+  defaultVariants: {
+    align: 'left',
+    padding: 'normal',
+    textSize: 'sm'
+  }
+})
+
+const cellClasses = computed(() => {
+  const align = props.align || props.column.align || 'left'
+  const textColorClass = `text-${props.textColor}`
+  const widthClass = props.width ? `w-${props.width}` : ''
+  
+  return cn(
+    cellVariants({
+      align,
+      padding: props.padding,
+      textSize: props.textSize
+    }),
+    textColorClass,
+    widthClass,
+    props.column.cellClasses
+  )
+})
 </script>

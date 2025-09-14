@@ -1,6 +1,6 @@
 {
   "name": "@stlhorizon/vue-ui",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "private": false,
   "type": "module",
   "description": "A Vue.js component library with Tailwind CSS styling",
@@ -48,10 +48,16 @@
   "dependencies": {
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
-    "tailwind-merge": "3.3.1"
+    "tailwind-merge": "3.3.1",
+    "lucide-vue-next": "^0.292.0"
   },
   "peerDependencies": {
     "vue": "^3.5.18"
+  },
+  "peerDependenciesMeta": {
+    "lucide-vue-next": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@eslint/js": "^9.31.0",
@@ -64,7 +70,6 @@
     "eslint": "^9.31.0",
     "eslint-plugin-vue": "~10.3.0",
     "jsdom": "^26.1.0",
-    "lucide-vue-next": "^0.292.0",
     "tailwindcss": "^4.1.13",
     "typescript": "^5.9.2",
     "vite": "^7.0.6",

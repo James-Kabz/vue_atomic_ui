@@ -1,51 +1,335 @@
 <template>
-  <div class="flex items-center justify-between">
-    <div class="flex flex-1 items-center space-x-2">
-      <h2 v-if="title" class="text-lg font-semibold">{{ title }}</h2>
-      <slot name="title" />
+  <div :class="toolbarClasses">
+    <!-- Left side - Selection actions -->
+    <div class="flex items-center gap-3">
+      <div v-if="selectedCount > 0" class="flex items-center gap-3">
+        <span class="text-sm text-slate-600">
+          {{ selectedCount }} selected
+        </span>
+
+        <!-- Bulk actions -->
+        <div class="flex items-center gap-2">
+          <Button
+            v-for="action in bulkActions"
+            :key="action.key"
+            @click="$emit('bulk-action', { action: action.key, items: selectedItems })"
+            :class="getBulkActionClasses(action)"
+          >
+            <component :is="action.icon" v-if="action.icon" class="w-4 h-4" />
+            {{ action.label }}
+          </Button>
+        </div>
+      </div>
+
+      <!-- Default info when no selection -->
+      <div v-else-if="totalItems > 0" :class="itemCountClasses">
+        {{ totalItems }} {{ totalItems === 1 ? 'item' : 'items' }}
+      </div>
     </div>
-    <div class="flex items-center space-x-2">
-      <slot name="actions" />
-      <Button
+
+    <!-- Right side - View controls and actions -->
+    <div class="flex items-center gap-3">
+      <!-- View density toggle -->
+      <div v-if="showDensityToggle" :class="densityToggleClasses">
+        <button
+          v-for="density in densityOptions"
+          :key="density.value"
+          @click="$emit('update:density', density.value)"
+          :class="getDensityButtonClasses(density.value)"
+          :title="density.label"
+        >
+          <component :is="density.icon" class="w-4 h-4" />
+        </button>
+      </div>
+
+      <!-- Column visibility toggle -->
+      <div v-if="showColumnToggle" class="relative">
+        <Button
+          @click="showColumnMenu = !showColumnMenu"
+          :class="columnToggleButtonClasses"
+        >
+          <AdjustmentsHorizontalIcon class="w-4 h-4" />
+          Columns
+        </Button>
+
+        <!-- Column menu -->
+        <div
+          v-if="showColumnMenu"
+          v-click-outside="() => showColumnMenu = false"
+          :class="columnMenuClasses"
+        >
+          <div class="p-2">
+            <div :class="columnMenuHeaderClasses">
+              Show Columns
+            </div>
+            <div
+              v-for="column in toggleableColumns"
+              :key="column.key"
+              :class="columnMenuItemClasses"
+            >
+              <input
+                type="checkbox"
+                :id="`column-${column.key}`"
+                :checked="isColumnVisible(column.key)"
+                @change="toggleColumn(column.key, $event.target.checked)"
+                :class="checkboxClasses"
+              />
+              <label
+                :for="`column-${column.key}`"
+                :class="labelClasses"
+              >
+                {{ column.label }}
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Refresh button -->
+      <button
         v-if="showRefresh"
-        variant="outline"
-        size="sm"
-        @click="handleRefresh"
+        @click="$emit('refresh')"
+        :disabled="isRefreshing"
+        :class="getRefreshButtonClasses()"
       >
-        <Icon name="refresh" class="h-4 w-4" />
+        <ArrowPathIcon :class="getRefreshIconClasses()" />
         Refresh
-      </Button>
-      <Button
-        v-if="showExport"
-        variant="outline"
-        size="sm"
-        @click="handleExport"
-      >
-        <Icon name="download" class="h-4 w-4" />
-        Export
-      </Button>
+      </button>
+
+      <!-- Custom actions -->
+      <div v-if="$slots.actions" class="flex items-center gap-2">
+        <slot name="actions" />
+      </div>
     </div>
   </div>
 </template>
 
+<script>
+// Icons defined in module scope
+const AdjustmentsHorizontalIcon = {
+  template: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m0 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" /></svg>`
+}
+
+const ArrowPathIcon = {
+  template: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>`
+}
+
+const Bars3Icon = {
+  template: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>`
+}
+
+const Bars2Icon = {
+  template: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 9h16.5m-16.5 6.75h16.5" /></svg>`
+}
+
+const MinusIcon = {
+  template: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" /></svg>`
+}
+
+const TrashIcon = {
+  template: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" /></svg>`
+}
+
+const PencilIcon = {
+  template: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" /></svg>`
+}
+
+// Default bulk actions
+const defaultBulkActions = [
+  { key: 'delete', label: 'Delete', icon: TrashIcon, variant: 'danger' },
+  { key: 'edit', label: 'Edit', icon: PencilIcon, variant: 'primary' }
+]
+
+export default {
+  name: 'DataTableToolBar',
+  directives: {
+    clickOutside: {
+      mounted(el, binding) {
+        el.clickOutsideEvent = (event) => {
+          if (!(el === event.target || el.contains(event.target))) {
+            binding.value(event)
+          }
+        }
+        document.addEventListener('click', el.clickOutsideEvent)
+      },
+      unmounted(el) {
+        document.removeEventListener('click', el.clickOutsideEvent)
+      }
+    }
+  }
+}
+</script>
+
 <script setup>
 import Button from './Button.vue'
-import Icon from './Icon.vue'
+import { ref, computed } from 'vue'
+import { cva } from 'class-variance-authority'
+import { cn } from '../utils/cn.js'
 
 const props = defineProps({
-  title: String,
-  showRefresh: {
-    type: Boolean,
-    default: false
+  selectedItems: { type: Array, default: () => [] },
+  totalItems: { type: Number, default: 0 },
+  bulkActions: { type: Array, default: () => defaultBulkActions },
+  showDensityToggle: { type: Boolean, default: true },
+  showColumnToggle: { type: Boolean, default: true },
+  showRefresh: { type: Boolean, default: true },
+  isRefreshing: { type: Boolean, default: false },
+  density: {
+    type: String,
+    default: 'normal',
+    validator: (v) => ['compact', 'normal', 'comfortable'].includes(v)
   },
-  showExport: {
-    type: Boolean,
-    default: false
+  toggleableColumns: { type: Array, default: () => [] },
+  visibleColumns: { type: Array, default: () => [] },
+  variant: {
+    type: String,
+    default: 'default',
+    validator: (value) => ['default', 'minimal', 'bordered'].includes(value)
+  },
+  padding: {
+    type: String,
+    default: 'normal',
+    validator: (value) => ['compact', 'normal', 'comfortable'].includes(value)
   }
 })
 
-const emit = defineEmits(['refresh', 'export'])
+const emit = defineEmits(['bulk-action', 'update:density', 'toggle-column', 'refresh'])
 
-const handleRefresh = () => emit('refresh')
-const handleExport = () => emit('export')
+const showColumnMenu = ref(false)
+const selectedCount = computed(() => props.selectedItems.length)
+
+const densityOptions = [
+  { value: 'compact', label: 'Compact', icon: MinusIcon },
+  { value: 'normal', label: 'Normal', icon: Bars2Icon },
+  { value: 'comfortable', label: 'Comfortable', icon: Bars3Icon }
+]
+
+// CVA Variants
+const toolbarVariants = cva('flex items-center justify-between border-b border-slate-200', {
+  variants: {
+    variant: {
+      default: 'bg-white',
+      minimal: 'bg-transparent border-slate-100',
+      bordered: 'bg-slate-50 border-slate-300'
+    },
+    padding: {
+      compact: 'p-2',
+      normal: 'p-4',
+      comfortable: 'p-6'
+    }
+  },
+  defaultVariants: {
+    variant: 'default',
+    padding: 'normal'
+  }
+})
+
+const bulkActionVariants = cva('px-3 py-1.5 text-sm font-medium rounded-md flex items-center gap-1 transition-colors', {
+  variants: {
+    variant: {
+      danger: 'text-red-700 bg-red-50 hover:bg-red-100 border border-red-200',
+      primary: 'text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200',
+      secondary: 'text-slate-700 bg-slate-50 hover:bg-slate-100 border border-slate-200'
+    }
+  },
+  defaultVariants: {
+    variant: 'secondary'
+  }
+})
+
+const densityButtonVariants = cva('p-2 border border-slate-300 transition-colors', {
+  variants: {
+    active: {
+      true: 'bg-blue-50 text-blue-600 border-blue-300',
+      false: 'bg-white text-slate-600 hover:bg-slate-50'
+    },
+    position: {
+      first: 'rounded-l-md border-r-0',
+      middle: 'border-x-0',
+      last: 'rounded-r-md border-l-0'
+    }
+  },
+  defaultVariants: {
+    active: false,
+    position: 'middle'
+  }
+})
+
+const refreshButtonVariants = cva('px-3 py-2 text-sm border border-slate-300 rounded-md flex items-center gap-2 transition-colors', {
+  variants: {
+    state: {
+      normal: 'text-slate-600 hover:text-slate-800 hover:bg-slate-50',
+      refreshing: 'text-slate-600 opacity-75 cursor-not-allowed'
+    }
+  },
+  defaultVariants: {
+    state: 'normal'
+  }
+})
+
+// Computed Classes
+const toolbarClasses = computed(() => 
+  cn(toolbarVariants({ 
+    variant: props.variant, 
+    padding: props.padding 
+  }))
+)
+
+const itemCountClasses = computed(() => 'text-sm text-slate-600')
+
+const densityToggleClasses = computed(() => 'flex items-center')
+
+const columnToggleButtonClasses = computed(() => 
+  'text-slate-600 hover:text-slate-800 border border-slate-300 rounded-md hover:bg-slate-50 gap-2 px-3 py-2'
+)
+
+const columnMenuClasses = computed(() => 
+  'absolute right-0 top-full mt-1 w-56 bg-white border border-slate-200 rounded-lg shadow-lg z-50'
+)
+
+const columnMenuHeaderClasses = computed(() => 
+  'text-xs font-medium text-slate-500 uppercase tracking-wider mb-2'
+)
+
+const columnMenuItemClasses = computed(() => 
+  'flex items-center gap-2 px-2 py-1 hover:bg-slate-50 rounded'
+)
+
+const checkboxClasses = computed(() => 
+  'rounded border-slate-300 text-blue-600 focus:ring-blue-500'
+)
+
+const labelClasses = computed(() => 
+  'text-sm text-slate-700 cursor-pointer flex-1'
+)
+
+// Methods
+const getBulkActionClasses = (action) => 
+  cn(bulkActionVariants({ variant: action.variant || 'secondary' }))
+
+const getDensityButtonClasses = (densityValue) => {
+  let position = 'middle'
+  if (densityValue === 'compact') position = 'first'
+  else if (densityValue === 'comfortable') position = 'last'
+
+  return cn(densityButtonVariants({
+    active: props.density === densityValue,
+    position
+  }))
+}
+
+const getRefreshButtonClasses = () => 
+  cn(refreshButtonVariants({ 
+    state: props.isRefreshing ? 'refreshing' : 'normal' 
+  }))
+
+const getRefreshIconClasses = () => 
+  cn('w-4 h-4', {
+    'animate-spin': props.isRefreshing
+  })
+
+const isColumnVisible = (columnKey) => props.visibleColumns.includes(columnKey)
+const toggleColumn = (columnKey, visible) => {
+  emit('toggle-column', { column: columnKey, visible })
+}
 </script>

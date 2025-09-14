@@ -29,29 +29,29 @@ export default defineConfig({
         "vue",
         "class-variance-authority",
         "clsx", 
-        "tailwind-merge",
-        "lucide-vue-next"
+        "tailwind-merge"
       ],
       output: {
+        exports: "named",
         globals: {
           vue: "Vue",
           "class-variance-authority": "ClassVarianceAuthority",
           "clsx": "clsx",
-          "tailwind-merge": "tailwindMerge",
-          "lucide-vue-next": "LucideVueNext"
+          "tailwind-merge": "tailwindMerge"
         },
         // Preserve CSS
         assetFileNames: (assetInfo) => {
-          if (assetInfo.name === 'style.css') return 'vue-ui.css';
-          return assetInfo.name;
+          if (assetInfo.names && assetInfo.names[0] === 'style.css') return 'vue-ui.css';
+          return assetInfo.names?.[0];
         },
       },
     },
-    cssCodeSplit: false, // Bundle all CSS into one file
+    cssCodeSplit: false,
   },
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
+      "vue": "vue/dist/vue.esm-bundler.js"
     },
   },
 })
