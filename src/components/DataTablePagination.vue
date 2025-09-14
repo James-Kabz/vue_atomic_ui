@@ -21,14 +21,14 @@
           <Label for="pageSize" :class="labelClasses" :inline="true">Show:</Label>
           <Select
             id="pageSize"
-            :model-value="pageSize"
+            :model-value="pageSize.toString()"
             @update:modelValue="val => $emit('update:pageSize', parseInt(val))"
             :class="selectClasses"
           >
             <Option
               v-for="size in pageSizeOptions"
               :key="size"
-              :value="size"
+              :value="size.toString()"
               :label="size.toString()"
             />
           </Select>
@@ -43,7 +43,9 @@
             :class="getPageButtonClasses(false, currentPage === 1)"
             title="First page"
           >
-            <ChevronDoubleLeftIcon class="w-4 h-4" />
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m18.75 4.5-7.5 7.5 7.5 7.5m-6-15L5.25 12l7.5 7.5" />
+            </svg>
           </button>
 
           <!-- Previous Page -->
@@ -53,7 +55,9 @@
             :class="getPageButtonClasses(false, currentPage === 1)"
             title="Previous page"
           >
-            <ChevronLeftIcon class="w-4 h-4" />
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+            </svg>
           </button>
 
           <!-- Page Numbers -->
@@ -75,7 +79,9 @@
             :class="getPageButtonClasses(false, currentPage === totalPages)"
             title="Next page"
           >
-            <ChevronRightIcon class="w-4 h-4" />
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+            </svg>
           </button>
 
           <!-- Last Page -->
@@ -85,7 +91,9 @@
             :class="getPageButtonClasses(false, currentPage === totalPages)"
             title="Last page"
           >
-            <ChevronDoubleRightIcon class="w-4 h-4" />
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5" />
+            </svg>
           </button>
         </div>
 
@@ -105,23 +113,6 @@ import Select from './Select.vue'
 import { computed } from 'vue'
 import { cva } from 'class-variance-authority'
 import { cn } from '../utils/cn.js'
-
-// Icon components
-const ChevronLeftIcon = {
-  template: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>`
-}
-
-const ChevronRightIcon = {
-  template: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" /></svg>`
-}
-
-const ChevronDoubleLeftIcon = {
-  template: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m18.75 4.5-7.5 7.5 7.5 7.5m-6-15L5.25 12l7.5 7.5" /></svg>`
-}
-
-const ChevronDoubleRightIcon = {
-  template: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5" /></svg>`
-}
 
 const props = defineProps({
   currentPage: {
@@ -226,12 +217,12 @@ const labelVariants = cva('text-slate-700', {
   }
 })
 
-const selectVariants = cva('border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500', {
+const selectVariants = cva('border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm min-w-[60px] focus:border-transparent', {
   variants: {
     size: {
-      sm: 'text-sm px-2 py-1',
-      md: 'text-sm px-3 py-2',
-      lg: 'text-base px-4 py-3'
+      sm: 'px-2 py-1',
+      md: 'px-3 py-2',
+      lg: 'px-4 py-3'
     }
   },
   defaultVariants: {

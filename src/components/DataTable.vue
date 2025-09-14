@@ -42,12 +42,26 @@
                 <span>{{ column.label }}</span>
 
                 <div v-if="column.sortable" class="flex flex-col">
-                  <ChevronUpIcon
+                  <svg
                     :class="getSortIconClasses(column, 'asc')"
-                  />
-                  <ChevronDownIcon
+                    class="w-3 h-3 transition-colors"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                  >
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+                  </svg>
+                  <svg
                     :class="getSortIconClasses(column, 'desc')"
-                  />
+                    class="w-3 h-3 transition-colors"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                  >
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                  </svg>
                 </div>
               </div>
             </th>
@@ -101,7 +115,9 @@
               <slot name="empty">
                 <div class="text-center py-8">
                   <div class="text-slate-400 mb-2">
-                    <TableIcon class="w-12 h-12 mx-auto" />
+                    <svg class="w-12 h-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 0 1-1.125-1.125M3.375 19.5h7.5c.621 0 1.125-.504 1.125-1.125m-9.75 0V5.625m0 0A2.25 2.25 0 0 1 5.625 3.375h4.125c.621 0 1.125.504 1.125 1.125v15.75m-9.75 0h9.75" />
+                    </svg>
                   </div>
                   <p class="text-slate-500">{{ emptyText }}</p>
                 </div>
@@ -142,19 +158,6 @@ import Checkbox from './Checkbox.vue'
 import DataTableHeader from './DataTableHeader.vue'
 import DataTableRow from './DataTableRow.vue'
 import DataTablePagination from './DataTablePagination.vue'
-
-// Icon components
-const ChevronUpIcon = {
-  template: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" /></svg>`
-}
-
-const ChevronDownIcon = {
-  template: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>`
-}
-
-const TableIcon = {
-  template: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 0 1-1.125-1.125M3.375 19.5h7.5c.621 0 1.125-.504 1.125-1.125m-9.75 0V5.625m0 0A2.25 2.25 0 0 1 5.625 3.375h4.125c.621 0 1.125.504 1.125 1.125v15.75m-9.75 0h9.75" /></svg>`
-}
 
 const props = defineProps({
   data: {
@@ -249,6 +252,7 @@ const props = defineProps({
 const emit = defineEmits(['selection-change', 'sort-change', 'row-click'])
 
 const currentPage = ref(1)
+const pageSize = ref(props.pageSize)
 const sortColumn = ref(props.sortBy)
 const sortDirection = ref(props.sortOrder)
 
@@ -328,14 +332,14 @@ const filteredData = computed(() => {
 })
 
 const totalPages = computed(() => {
-  return Math.ceil(filteredData.value.length / props.pageSize)
+  return Math.ceil(filteredData.value.length / pageSize.value)
 })
 
 const paginatedData = computed(() => {
   if (!props.showPagination) return filteredData.value
 
-  const start = (currentPage.value - 1) * props.pageSize
-  const end = start + props.pageSize
+  const start = (currentPage.value - 1) * pageSize.value
+  const end = start + pageSize.value
   return filteredData.value.slice(start, end)
 })
 
@@ -485,7 +489,6 @@ const emptyCellClasses = computed(() => {
 })
 
 const getSortIconClasses = (column, direction) => cn(
-  'w-3 h-3 transition-colors',
   {
     'text-blue-600': sortColumn.value === column.key && sortDirection.value === direction,
     'text-slate-300': sortColumn.value !== column.key || sortDirection.value !== direction
@@ -496,4 +499,9 @@ const getSortIconClasses = (column, direction) => cn(
 watch(() => props.selectedItems, (newSelection) => {
   // Handle external selection changes if needed
 }, { deep: true })
+
+// Watch for prop changes
+watch(() => props.pageSize, (newPageSize) => {
+  pageSize.value = newPageSize
+})
 </script>
