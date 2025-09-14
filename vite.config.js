@@ -1,4 +1,3 @@
-// vite.config.js
 import { fileURLToPath, URL } from "node:url"
 import { dirname, resolve } from "node:path"
 
@@ -17,28 +16,42 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, "src/index.js"),
-      name: "VueUi",
-      formats: ["es", "umd", "cjs"], // ✅ generate all three
+      name: "VueUI",
+      formats: ["es", "cjs"],
       fileName: (format) => {
         if (format === "es") return "index.esm.js"
-        if (format === "umd") return "index.umd.js"
-        if (format === "cjs") return "index.js" // ✅ CJS entry
+        if (format === "cjs") return "index.js"
         return `index.${format}.js`
       },
     },
     rollupOptions: {
-      external: ["vue", "tailwindcss"],
+      external: [
+        "vue",
+        "class-variance-authority",
+        "clsx", 
+        "tailwind-merge",
+        "lucide-vue-next"
+      ],
       output: {
         globals: {
           vue: "Vue",
+          "class-variance-authority": "ClassVarianceAuthority",
+          "clsx": "clsx",
+          "tailwind-merge": "tailwindMerge",
+          "lucide-vue-next": "LucideVueNext"
+        },
+        // Preserve CSS
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name === 'style.css') return 'vue-ui.css';
+          return assetInfo.name;
         },
       },
     },
+    cssCodeSplit: false, // Bundle all CSS into one file
   },
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
-      vue: "vue/dist/vue.esm-bundler.js",
     },
   },
 })

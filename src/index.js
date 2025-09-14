@@ -1,4 +1,6 @@
-// Basic UI Components
+// src/index.js
+
+// Import components
 import Avatar from "./components/Avatar.vue"
 import Badge from "./components/Badge.vue"
 import Button from "./components/Button.vue"
@@ -21,7 +23,6 @@ import Textarea from "./components/Textarea.vue"
 import Tooltip from "./components/Tooltip.vue"
 import Typography from "./components/Typography.vue"
 
-// Layout/Container Components
 import Alert from "./components/Alert.vue"
 import Breadcrumb from "./components/Breadcrumb.vue"
 import ButtonGroup from "./components/ButtonGroup.vue"
@@ -30,7 +31,6 @@ import CardHeader from "./components/CardHeader.vue"
 import CardBody from "./components/CardBody.vue"
 import CardFooter from "./components/CardFooter.vue"
 
-// Form/Input Components
 import DatePicker from "./components/DatePicker.vue"
 import Dropdown from "./components/Dropdown.vue"
 import DropdownItem from "./components/DropdownItem.vue"
@@ -38,11 +38,9 @@ import FileUpload from "./components/FileUpload.vue"
 import FormField from "./components/FormField.vue"
 import InputGroup from "./components/InputGroup.vue"
 
-// List/Menu Components
 import ListItem from "./components/ListItem.vue"
 import MenuItem from "./components/MenuItem.vue"
 
-// Modal/Overlay Components
 import Modal from "./components/Modal.vue"
 import ModalHeader from "./components/ModalHeader.vue"
 import ModalBody from "./components/ModalBody.vue"
@@ -50,17 +48,14 @@ import ModalFooter from "./components/ModalFooter.vue"
 import Notification from "./components/Notification.vue"
 import Toast from "./components/Toast.vue"
 
-// Navigation Components
 import Search from "./components/Search.vue"
 
-// Interactive Components
 import Slider from "./components/Slider.vue"
 import Stepper from "./components/Stepper.vue"
 import StepperItem from "./components/StepperItem.vue"
 import Tab from "./components/Tab.vue"
 import TabPanel from "./components/TabPanel.vue"
 
-// Complex Components
 import Accordion from "./components/Accordion.vue"
 import AccordionItem from "./components/AccordionItem.vue"
 import Calendar from "./components/Calendar.vue"
@@ -72,21 +67,20 @@ import DataTablePagination from "./components/DataTablePagination.vue"
 import DataTableFilters from "./components/DataTableFilters.vue"
 import DataTableToolBar from "./components/DataTableToolBar.vue"
 
-// Layout Section Components
 import Footer from "./components/Footer.vue"
 import Header from "./components/Header.vue"
 import Sidebar from "./components/Sidebar.vue"
 import Timeline from "./components/Timeline.vue"
 import TimelineItem from "./components/TimelineItem.vue"
 
-// Utilities
+// Utils
 export { cn } from "./utils/cn.js"
 
 // Styles
 import "./styles/base.css"
 
-// Export all components (named exports only)
-export {
+// Gather components in an object
+const components = {
   Avatar,
   Badge,
   Button,
@@ -152,82 +146,83 @@ export {
   TimelineItem,
 }
 
-// Plugin installer (named export instead of default)
-export const VueUi = {
+// Plugin installer
+const VueUI = {
   install(app, options = {}) {
-    const { prefix = "", globalComponents = true } = options
-
-    if (globalComponents) {
-      const components = {
-        Avatar,
-        Badge,
-        Button,
-        Checkbox,
-        Divider,
-        Icon,
-        Image,
-        Input,
-        Label,
-        Link,
-        Logo,
-        Option,
-        ProgressBar,
-        Radio,
-        Select,
-        Spinner,
-        Switch,
-        Text,
-        Textarea,
-        Tooltip,
-        Typography,
-        Alert,
-        Breadcrumb,
-        ButtonGroup,
-        Card,
-        CardHeader,
-        CardBody,
-        CardFooter,
-        DatePicker,
-        Dropdown,
-        DropdownItem,
-        FileUpload,
-        FormField,
-        InputGroup,
-        ListItem,
-        MenuItem,
-        Modal,
-        ModalHeader,
-        ModalBody,
-        ModalFooter,
-        Notification,
-        Toast,
-        Search,
-        Slider,
-        Stepper,
-        StepperItem,
-        Tab,
-        TabPanel,
-        Accordion,
-        AccordionItem,
-        Calendar,
-        DataTable,
-        DataTableHeader,
-        DataTableRow,
-        DataTableCell,
-        DataTablePagination,
-        DataTableFilters,
-        DataTableToolBar,
-        Footer,
-        Header,
-        Sidebar,
-        Timeline,
-        TimelineItem,
-      }
-
-      Object.keys(components).forEach((name) => {
-        const componentName = prefix ? `${prefix}${name}` : name
-        app.component(componentName, components[name])
-      })
-    }
+    const { prefix = "" } = options
+    Object.keys(components).forEach((name) => {
+      const componentName = prefix ? `${prefix}${name}` : name
+      app.component(componentName, components[name])
+    })
   },
+}
+
+// ✅ Default export (plugin install)
+export default VueUI
+
+// ✅ Named exports (for tree-shaking)
+export {
+  Avatar,
+  Badge,
+  Button,
+  Checkbox,
+  Divider,
+  Icon,
+  Image,
+  Input,
+  Label,
+  Link,
+  Logo,
+  Option,
+  ProgressBar,
+  Radio,
+  Select,
+  Spinner,
+  Switch,
+  Text,
+  Textarea,
+  Tooltip,
+  Typography,
+  Alert,
+  Breadcrumb,
+  ButtonGroup,
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  DatePicker,
+  Dropdown,
+  DropdownItem,
+  FileUpload,
+  FormField,
+  InputGroup,
+  ListItem,
+  MenuItem,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Notification,
+  Toast,
+  Search,
+  Slider,
+  Stepper,
+  StepperItem,
+  Tab,
+  TabPanel,
+  Accordion,
+  AccordionItem,
+  Calendar,
+  DataTable,
+  DataTableHeader,
+  DataTableRow,
+  DataTableCell,
+  DataTablePagination,
+  DataTableFilters,
+  DataTableToolBar,
+  Footer,
+  Header,
+  Sidebar,
+  Timeline,
+  TimelineItem,
 }
