@@ -504,12 +504,18 @@ const handleDensityChange = (newDensity) => {
   showStatusMessage(`Changed density to ${newDensity}`)
 }
 
+// Fixed column toggle handler
 const handleColumnToggle = (columnInfo) => {
   const { column, visible } = columnInfo
-  if (visible && !visibleColumns.value.includes(column)) {
-    visibleColumns.value.push(column)
-    showStatusMessage(`Showed column: ${allColumns.find(c => c.key === column)?.label}`)
-  } else if (!visible) {
+  
+  if (visible) {
+    // Add column if not already visible
+    if (!visibleColumns.value.includes(column)) {
+      visibleColumns.value.push(column)
+      showStatusMessage(`Showed column: ${allColumns.find(c => c.key === column)?.label}`)
+    }
+  } else {
+    // Remove column
     visibleColumns.value = visibleColumns.value.filter(key => key !== column)
     showStatusMessage(`Hidden column: ${allColumns.find(c => c.key === column)?.label}`)
   }

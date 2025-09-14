@@ -74,6 +74,10 @@ import Sidebar from "./components/Sidebar.vue"
 import Timeline from "./components/Timeline.vue"
 import TimelineItem from "./components/TimelineItem.vue"
 
+import AuthLayout from "./layouts/AuthLayout.vue"
+import DefaultLayout from "./layouts/DefaultLayout.vue"
+import ErrorLayout from "./layouts/ErrorLayout.vue"
+
 // Utils
 export { cn } from "./utils/cn.js"
 
@@ -147,6 +151,9 @@ const components = {
   Sidebar,
   Timeline,
   TimelineItem,
+  AuthLayout,
+  DefaultLayout,
+  ErrorLayout,
 }
 
 // Plugin installer
@@ -230,4 +237,7 @@ export {
   Sidebar,
   Timeline,
   TimelineItem,
+  AuthLayout,
+  DefaultLayout,
+  ErrorLayout
 }
