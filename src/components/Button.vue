@@ -1,16 +1,10 @@
 <template>
-  <component
-    :is="tag"
-    :class="cn(
-      buttonVariants({ variant, size }),
-      { 'opacity-70 pointer-events-none': loading }
-    )"
-    :disabled="isButton && (disabled || loading)"
-    :type="isButton ? type : undefined"
-    :href="isLink ? href : undefined"
-    :to="isRouter ? to : undefined"
+  <button
+    :class="cn(buttonVariants({ variant, size }), $attrs.class)"
+    :disabled="disabled || loading"
     :aria-disabled="disabled || loading"
     :aria-busy="loading"
+    v-bind="$attrs"
   >
     <!-- Loading Spinner -->
     <svg
@@ -22,8 +16,11 @@
     >
       <circle
         class="opacity-25"
-        cx="12" cy="12" r="10"
-        stroke="currentColor" stroke-width="4"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        stroke-width="4"
       />
       <path
         class="opacity-75"
@@ -32,62 +29,50 @@
       />
     </svg>
 
-    <!-- Icon slot -->
-    <slot name="icon" />
+    <!-- Icon slot (only show if not loading) -->
+    <slot v-if="!loading" name="icon" />
 
-    <!-- Button text -->
-    <slot />
-  </component>
+    <!-- Button content -->
+    <span v-if="loading && loadingText">{{ loadingText }}</span>
+    <slot v-else />
+  </button>
 </template>
 
 <script setup>
 import { cva } from 'class-variance-authority'
 import { cn } from '../utils/cn.js'
-import { computed } from 'vue'
+
+defineOptions({
+  inheritAttrs: false
+})
 
 const props = defineProps({
   variant: {
     type: String,
     default: 'default',
-    validator: v => ['default', 'destructive', 'outline', 'secondary', 'ghost', 'link'].includes(v)
+    validator: (value) => ['default', 'destructive', 'outline', 'secondary', 'ghost', 'link'].includes(value)
   },
   size: {
     type: String,
     default: 'default',
-    validator: v => ['default', 'sm', 'lg', 'icon'].includes(v)
-  },
-  tag: {
-    type: String,
-    default: 'button', // "button" | "a" | "router-link"
-  },
-  type: {
-    type: String,
-    default: 'button', // only relevant when tag === "button"
-  },
-  href: {
-    type: String,
-    default: null,
-  },
-  to: {
-    type: [String, Object],
-    default: null, // for <router-link>
+    validator: (value) => ['default', 'sm', 'lg', 'icon'].includes(value)
   },
   disabled: {
     type: Boolean,
-    default: false,
+    default: false
   },
   loading: {
     type: Boolean,
-    default: false,
+    default: false
+  },
+  loadingText: {
+    type: String,
+    default: null
   }
 })
 
-const isButton = computed(() => props.tag === 'button')
-const isLink   = computed(() => props.tag === 'a')
-const isRouter = computed(() => props.tag === 'router-link')
-
 const buttonVariants = cva(
-  'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none',
+  'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
