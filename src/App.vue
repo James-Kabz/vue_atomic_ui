@@ -1,132 +1,577 @@
-<script setup lang="ts">
-import { computed, ref } from 'vue'
-import AuthLayout from './layouts/AuthLayout.vue'
-import Typography from './components/Typography.vue'
-import FormField from './components/FormField.vue'
-import Input from './components/Input.vue'
-import Checkbox from './components/Checkbox.vue'
-import Link from './components/Link.vue'
-import Button from './components/Button.vue'
+<template>
+  <div id="app" class="min-h-screen bg-slate-50">
+    <div class="container mx-auto py-8">
+      <h1 class="text-3xl font-bold text-slate-900 mb-8">Vue DataTable with Filters</h1>
 
-const email = ref('')
-const password = ref('')
-const companyCode = ref('')
-const rememberMe = ref(false)
-const errors = ref<{ email?: string; password?: string; companyCode?: string }>({})
+      <!-- DataTable with Filters -->
+      <div class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+        <!-- Filters Component -->
+        <DataTableFilters
+          v-model:searchQuery="searchQuery"
+          v-model:selectedStatus="selectedStatus"
+          v-model:dateFrom="dateFrom"
+          v-model:dateTo="dateTo"
+          :statusOptions="statusOptions"
+          :showDateFilter="true"
+          :showExport="true"
+          :showAdd="true"
+          searchPlaceholder="Search users..."
+          @export="handleExport"
+          @add="handleAddUser"
+          @clear-filters="clearAllFilters"
+        >
+          <template #filters>
+            <!-- Custom filters -->
+            <select
+              v-model="departmentFilter"
+              class="px-3 py-2 border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">All Departments</option>
+              <option value="Engineering">Engineering</option>
+              <option value="Marketing">Marketing</option>
+              <option value="Sales">Sales</option>
+              <option value="Design">Design</option>
+            </select>
+          </template>
+        </DataTableFilters>
 
-const onSubmit = () => {
-  errors.value = {} // reset
+        <!-- Toolbar Component -->
+        <DataTableToolBar
+          :selectedItems="selectedUsers"
+          :totalItems="filteredUsers.length"
+          :bulkActions="bulkActions"
+          :density="density"
+          :toggleableColumns="allColumns"
+          :visibleColumns="visibleColumns"
+          :isRefreshing="isRefreshing"
+          :showDensityToggle="true"
+          :showColumnToggle="true"
+          :showRefresh="true"
+          @bulk-action="handleBulkAction"
+          @update:density="handleDensityChange"
+          @toggle-column="handleColumnToggle"
+          @refresh="handleRefresh"
+        >
+          <template #actions>
+            <!-- Additional toolbar actions -->
+            <button
+              @click="handleBulkExport"
+              :disabled="selectedUsers.length === 0"
+              class="px-3 py-2 text-sm text-slate-600 hover:text-slate-800 border border-slate-300 rounded-md hover:bg-slate-50 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <DownloadIcon class="w-4 h-4" />
+              Export Selected
+            </button>
+          </template>
+        </DataTableToolBar>
 
-  if (!email.value) {
-    errors.value.email = 'Email is required'
+        <!-- DataTable Component -->
+        <DataTable
+          :data="filteredUsers"
+          :columns="visibleColumnObjects"
+          :selectable="true"
+          :selectedItems="selectedUsers"
+          :striped="true"
+          :hoverable="true"
+          :clickableRows="true"
+          :pageSize="pageSize"
+          :showPagination="true"
+          :density="density"
+          emptyText="No users found"
+          @selection-change="selectedUsers = $event"
+          @sort-change="handleSort"
+          @row-click="handleRowClick"
+        >
+          <!-- Custom cell for user name with avatar -->
+          <template #cell-name="{ item }">
+            <div class="flex items-center">
+              <img
+                :src="item.avatar"
+                :alt="item.name"
+                class="w-8 h-8 rounded-full mr-3"
+                @error="handleImageError"
+              />
+              <div>
+                <div class="font-medium text-slate-900">{{ item.name }}</div>
+                <div class="text-xs text-slate-500">ID: {{ item.id }}</div>
+              </div>
+            </div>
+          </template>
+
+          <!-- Custom cell for status -->
+          <template #cell-status="{ value }">
+            <span :class="getStatusBadgeClasses(value)">
+              <span class="flex items-center gap-1">
+                <span
+                  :class="[
+                    'w-2 h-2 rounded-full',
+                    value === 'active' ? 'bg-green-500' : 'bg-red-500'
+                  ]"
+                ></span>
+                {{ value }}
+              </span>
+            </span>
+          </template>
+
+          <!-- Custom cell for salary -->
+          <template #cell-salary="{ value }">
+            <span class="font-mono text-green-600">
+              {{ formatCurrency(value) }}
+            </span>
+          </template>
+
+          <!-- Custom cell for last login -->
+          <template #cell-lastLogin="{ value }">
+            <span class="text-sm text-slate-600">
+              {{ formatDate(value) }}
+            </span>
+          </template>
+
+          <!-- Custom actions -->
+          <template #actions="{ item }">
+            <div class="flex items-center gap-2 justify-center">
+              <button
+                @click="viewUser(item)"
+                class="p-1 text-slate-400 hover:text-blue-600 rounded"
+                title="View details"
+              >
+                <EyeIcon class="w-4 h-4" />
+              </button>
+              <button
+                @click="editUser(item)"
+                class="p-1 text-slate-400 hover:text-blue-600 rounded"
+                title="Edit user"
+              >
+                <PencilIcon class="w-4 h-4" />
+              </button>
+              <button
+                @click="deleteUser(item)"
+                class="p-1 text-slate-400 hover:text-red-600 rounded"
+                title="Delete user"
+              >
+                <TrashIcon class="w-4 h-4" />
+              </button>
+            </div>
+          </template>
+        </DataTable>
+      </div>
+
+      <!-- Debug Info -->
+      <div class="mt-8 p-4 bg-slate-100 rounded-lg">
+        <h3 class="font-medium text-slate-900 mb-2">Debug Info:</h3>
+        <div class="text-sm text-slate-600 space-y-1">
+          <div>Search Query: "{{ searchQuery }}"</div>
+          <div>Selected Status: "{{ selectedStatus }}"</div>
+          <div>Department Filter: "{{ departmentFilter }}"</div>
+          <div>Date Range: {{ dateFrom }} to {{ dateTo }}</div>
+          <div>Selected Users: {{ selectedUsers.length }}</div>
+          <div>Filtered Results: {{ filteredUsers.length }}</div>
+          <div>Current Density: {{ density }}</div>
+          <div>Visible Columns: {{ visibleColumns.join(', ') }}</div>
+        </div>
+      </div>
+
+      <!-- Status Messages -->
+      <div v-if="statusMessage" class="mt-4 p-4 rounded-lg" :class="statusMessageClass">
+        {{ statusMessage }}
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { DataTable, DataTableFilters, DataTableToolBar } from '@stlhorizon/vue-ui'
+import { ref, computed } from 'vue'
+
+// Icons
+const EyeIcon = {
+  template: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>`
+}
+
+const PencilIcon = {
+  template: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" /></svg>`
+}
+
+const TrashIcon = {
+  template: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" /></svg>`
+}
+
+const DownloadIcon = {
+  template: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>`
+}
+
+// Sample data with better avatars
+const users = ref([
+  {
+    id: 1,
+    name: 'John Doe',
+    email: 'john@example.com',
+    role: 'Admin',
+    department: 'Engineering',
+    status: 'active',
+    lastLogin: new Date('2024-01-15'),
+    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face&auto=format',
+    salary: 75000,
+    joinDate: '2023-03-15'
+  },
+  {
+    id: 2,
+    name: 'Jane Smith',
+    email: 'jane@example.com',
+    role: 'Editor',
+    department: 'Marketing',
+    status: 'active',
+    lastLogin: new Date('2024-01-14'),
+    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b332c3c7?w=32&h=32&fit=crop&crop=face&auto=format',
+    salary: 65000,
+    joinDate: '2023-05-22'
+  },
+  {
+    id: 3,
+    name: 'Mike Johnson',
+    email: 'mike@example.com',
+    role: 'Viewer',
+    department: 'Sales',
+    status: 'inactive',
+    lastLogin: new Date('2024-01-10'),
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=32&h=32&fit=crop&crop=face&auto=format',
+    salary: 55000,
+    joinDate: '2023-07-08'
+  },
+  {
+    id: 4,
+    name: 'Sarah Wilson',
+    email: 'sarah@example.com',
+    role: 'Editor',
+    department: 'Design',
+    status: 'active',
+    lastLogin: new Date('2024-01-16'),
+    avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=32&h=32&fit=crop&crop=face&auto=format',
+    salary: 70000,
+    joinDate: '2023-02-14'
+  },
+  {
+    id: 5,
+    name: 'Alex Chen',
+    email: 'alex@example.com',
+    role: 'Admin',
+    department: 'Engineering',
+    status: 'active',
+    lastLogin: new Date('2024-01-17'),
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=32&h=32&fit=crop&crop=face&auto=format',
+    salary: 80000,
+    joinDate: '2023-01-10'
+  },
+  {
+    id: 6,
+    name: 'Maria Garcia',
+    email: 'maria@example.com',
+    role: 'Editor',
+    department: 'Marketing',
+    status: 'inactive',
+    lastLogin: new Date('2024-01-05'),
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=32&h=32&fit=crop&crop=face&auto=format',
+    salary: 62000,
+    joinDate: '2023-06-20'
   }
-  if (!password.value) {
-    errors.value.password = 'Password is required'
+])
+
+// Filter state
+const searchQuery = ref('')
+const selectedStatus = ref('')
+const departmentFilter = ref('')
+const dateFrom = ref('')
+const dateTo = ref('')
+
+// Table state
+const selectedUsers = ref([])
+const pageSize = ref(10)
+const density = ref('normal')
+const isRefreshing = ref(false)
+
+// Status messages
+const statusMessage = ref('')
+const statusMessageClass = ref('')
+
+// Column configuration
+const allColumns = [
+  { key: 'name', label: 'Name', sortable: true },
+  { key: 'email', label: 'Email', sortable: true },
+  { key: 'role', label: 'Role', sortable: true },
+  { key: 'department', label: 'Department', sortable: true },
+  { key: 'status', label: 'Status', sortable: true },
+  { key: 'lastLogin', label: 'Last Login', sortable: true },
+  { key: 'salary', label: 'Salary', sortable: true }
+]
+
+const visibleColumns = ref(['name', 'email', 'role', 'department', 'status', 'salary'])
+
+// Computed property to get actual column objects for visible columns
+const visibleColumnObjects = computed(() =>
+  allColumns.filter(col => visibleColumns.value.includes(col.key))
+)
+
+const statusOptions = [
+  { value: 'active', label: 'Active' },
+  { value: 'inactive', label: 'Inactive' }
+]
+
+// Updated bulk actions with proper structure
+const bulkActions = [
+  {
+    key: 'activate',
+    label: 'Activate Users',
+    variant: 'primary',
+    icon: {
+      template: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`
+    }
+  },
+  {
+    key: 'deactivate',
+    label: 'Deactivate Users',
+    variant: 'secondary',
+    icon: {
+      template: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L12 12m6.364 6.364L12 12m-6.364-6.364L12 12" /></svg>`
+    }
+  },
+  {
+    key: 'delete',
+    label: 'Delete Users',
+    variant: 'danger',
+    icon: TrashIcon
+  }
+]
+
+// Computed filtered data
+const filteredUsers = computed(() => {
+  let filtered = users.value
+
+  // Apply search filter
+  if (searchQuery.value.trim()) {
+    const query = searchQuery.value.toLowerCase()
+    filtered = filtered.filter(user =>
+      user.name.toLowerCase().includes(query) ||
+      user.email.toLowerCase().includes(query) ||
+      user.role.toLowerCase().includes(query) ||
+      user.department.toLowerCase().includes(query)
+    )
   }
 
-  if (!companyCode.value) {
-    errors.value.companyCode = 'Company code is required'
+  // Apply status filter
+  if (selectedStatus.value) {
+    filtered = filtered.filter(user => user.status === selectedStatus.value)
   }
 
-  if (Object.keys(errors.value).length === 0) {
-    console.log('Form submitted:', {
-      email: email.value,
-      password: password.value,
-      companyCode: companyCode.value,
-      rememberMe: rememberMe.value // Include checkbox value
+  // Apply department filter
+  if (departmentFilter.value) {
+    filtered = filtered.filter(user => user.department === departmentFilter.value)
+  }
+
+  // Apply date range filter (based on join date)
+  if (dateFrom.value || dateTo.value) {
+    filtered = filtered.filter(user => {
+      const joinDate = new Date(user.joinDate)
+      const from = dateFrom.value ? new Date(dateFrom.value) : null
+      const to = dateTo.value ? new Date(dateTo.value) : null
+
+      if (from && to) {
+        return joinDate >= from && joinDate <= to
+      } else if (from) {
+        return joinDate >= from
+      } else if (to) {
+        return joinDate <= to
+      }
+      return true
     })
-    // call API here
+  }
+
+  return filtered
+})
+
+// Helper functions
+const showStatusMessage = (message, type = 'success') => {
+  statusMessage.value = message
+  statusMessageClass.value = type === 'success'
+    ? 'bg-green-100 text-green-800 border border-green-200'
+    : 'bg-red-100 text-red-800 border border-red-200'
+
+  setTimeout(() => {
+    statusMessage.value = ''
+  }, 3000)
+}
+
+const getStatusBadgeClasses = (status) => {
+  const baseClasses = 'inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full'
+
+  switch (status) {
+    case 'active':
+      return `${baseClasses} bg-green-100 text-green-800`
+    case 'inactive':
+      return `${baseClasses} bg-red-100 text-red-800`
+    default:
+      return `${baseClasses} bg-slate-100 text-slate-800`
   }
 }
 
-const isFormValid = computed(() => {
-  return Object.keys(errors.value).length === 0
-})
+const formatCurrency = (amount) => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(amount)
+}
+
+const formatDate = (date) => {
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  }).format(new Date(date))
+}
+
+const handleImageError = (event) => {
+  // Fallback to a placeholder when image fails to load
+  event.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent('User')}&background=e2e8f0&color=64748b&size=32`
+}
+
+// Event handlers
+const handleSort = (sortInfo) => {
+  console.log('Sort changed:', sortInfo)
+  showStatusMessage(`Sorted by ${sortInfo.column} ${sortInfo.direction}`)
+}
+
+const handleRowClick = (rowInfo) => {
+  console.log('Row clicked:', rowInfo)
+  showStatusMessage(`Clicked on ${rowInfo.item.name}`)
+}
+
+const handleExport = () => {
+  console.log('Export clicked - exporting', filteredUsers.value.length, 'users')
+  showStatusMessage(`Exporting ${filteredUsers.value.length} users...`)
+}
+
+const handleAddUser = () => {
+  console.log('Add user clicked')
+  showStatusMessage('Add user dialog would open here')
+}
+
+const handleBulkAction = (actionInfo) => {
+  console.log('Bulk action:', actionInfo)
+  const { action, items } = actionInfo
+
+  switch (action) {
+    case 'activate':
+      items.forEach(user => {
+        const index = users.value.findIndex(u => u.id === user.id)
+        if (index !== -1) {
+          users.value[index].status = 'active'
+        }
+      })
+      showStatusMessage(`Activated ${items.length} users`)
+      selectedUsers.value = []
+      break
+
+    case 'deactivate':
+      items.forEach(user => {
+        const index = users.value.findIndex(u => u.id === user.id)
+        if (index !== -1) {
+          users.value[index].status = 'inactive'
+        }
+      })
+      showStatusMessage(`Deactivated ${items.length} users`)
+      selectedUsers.value = []
+      break
+
+    case 'delete':
+      if (confirm(`Are you sure you want to delete ${items.length} users?`)) {
+        const idsToDelete = items.map(user => user.id)
+        users.value = users.value.filter(user => !idsToDelete.includes(user.id))
+        showStatusMessage(`Deleted ${items.length} users`)
+        selectedUsers.value = []
+      }
+      break
+
+    default:
+      showStatusMessage(`Performed ${action} on ${items.length} users`)
+  }
+}
+
+const handleDensityChange = (newDensity) => {
+  density.value = newDensity
+  showStatusMessage(`Changed density to ${newDensity}`)
+}
+
+// Fixed column toggle handler
+const handleColumnToggle = (columnInfo) => {
+  const { column, visible } = columnInfo
+
+  if (visible) {
+    // Add column if not already visible
+    if (!visibleColumns.value.includes(column)) {
+      visibleColumns.value.push(column)
+      showStatusMessage(`Showed column: ${allColumns.find(c => c.key === column)?.label}`)
+    }
+  } else {
+    // Remove column
+    visibleColumns.value = visibleColumns.value.filter(key => key !== column)
+    showStatusMessage(`Hidden column: ${allColumns.find(c => c.key === column)?.label}`)
+  }
+}
+
+const handleRefresh = () => {
+  isRefreshing.value = true
+  showStatusMessage('Refreshing data...')
+
+  // Simulate API call
+  setTimeout(() => {
+    isRefreshing.value = false
+    showStatusMessage('Data refreshed successfully!')
+  }, 2000)
+}
+
+const handleBulkExport = () => {
+  if (selectedUsers.value.length === 0) return
+
+  console.log('Bulk export selected users:', selectedUsers.value)
+  showStatusMessage(`Exporting ${selectedUsers.value.length} selected users...`)
+}
+
+const clearAllFilters = () => {
+  searchQuery.value = ''
+  selectedStatus.value = ''
+  departmentFilter.value = ''
+  dateFrom.value = ''
+  dateTo.value = ''
+  showStatusMessage('All filters cleared')
+}
+
+const viewUser = (user) => {
+  console.log('View user:', user)
+  showStatusMessage(`Viewing details for ${user.name}`)
+}
+
+const editUser = (user) => {
+  console.log('Edit user:', user)
+  showStatusMessage(`Editing ${user.name}`)
+}
+
+const deleteUser = (user) => {
+  console.log('Delete user:', user)
+  if (confirm(`Are you sure you want to delete ${user.name}?`)) {
+    const index = users.value.findIndex(u => u.id === user.id)
+    if (index > -1) {
+      users.value.splice(index, 1)
+      showStatusMessage(`Deleted ${user.name}`)
+      // Remove from selection if selected
+      selectedUsers.value = selectedUsers.value.filter(u => u.id !== user.id)
+    }
+  }
+}
 </script>
 
-<template>
-  <AuthLayout
-    company-initials="STL"
-    company-name="SOFTWARE"
-    variant="centered"
-    app-name="eRisk & Compliance Management"
-    app-version="1.0.0"
-    secondary-logo-text="Risk & Compliance Management"
-    >
-    <div class="text-center mb-4">
-      <Typography class=" text-h6 text-dark mb-2">Sign In</Typography>
-      <Typography  size="sm" color="muted">Provide your eRisk & Compliance Management authentication credentials</Typography>
-    </div>
-    <Form @submit.prevent="onSubmit" class=" space-y-6">
-      <!-- Email -->
-      <FormField label="Email" :error="errors.email" required>
-        <template #default="{ fieldId, hasError, ariaDescribedBy }">
-          <Input
-            placeholder="Enter your email"
-            :id="fieldId"
-            v-model="email"
-            type="email"
-            :class="hasError ? 'border-red-500' : 'border-slate-300'"
-            :aria-describedby="ariaDescribedBy"
-          />
-        </template>
-      </FormField>
-
-      <!-- Password -->
-      <FormField label="Password" :error="errors.password" required>
-        <template #default="{ fieldId, hasError, ariaDescribedBy }">
-          <Input
-            placeholder="Enter your password"
-            :id="fieldId"
-            v-model="password"
-            type="password"
-            :class="hasError ? 'border-red-500' : 'border-slate-300'"
-            :aria-describedby="ariaDescribedBy"
-          />
-        </template>
-      </FormField>
-
-      <!-- Company Code -->
-      <FormField label="Company Code" :error="errors.companyCode" required>
-        <template #default="{ fieldId, hasError, ariaDescribedBy }">
-          <Input
-            placeholder="Enter your company code"
-            :id="fieldId"
-            v-model="companyCode"
-            type="text"
-            :class="hasError ? 'border-red-500' : 'border-slate-300'"
-            :aria-describedby="ariaDescribedBy"
-          />
-        </template>
-      </FormField>
-
-      <!-- Remember me and forgot password -->
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <Checkbox
-            v-model="rememberMe"
-            id="rememberMe"
-            label="Remember me"
-          />
-        </div>
-
-        <Typography class="text-sm font-medium">
-          <Link href="/auth/forgot-password">
-            Forgot password?
-          </Link>
-          <Link href="/tablex">
-            Table Example
-          </Link>
-        </Typography>
-      </div>
-
-      <!-- Submit -->
-      <Button
-        type="submit"
-        class="w-full rounded-md bg-blue-600 py-2 text-white font-medium hover:bg-blue-700 transition"
-      >
-        Sign In
-      </Button>
-    </Form>
-  </AuthLayout>
-</template>
+<style>
+#app {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+</style>
