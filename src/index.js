@@ -1,6 +1,7 @@
 // src/index.js
 
 import '@fortawesome/fontawesome-free/css/all.min.css'
+import { toast } from './lib/toast'
 // Import components
 import Avatar from "./components/Avatar.vue"
 import Badge from "./components/Badge.vue"
@@ -155,6 +156,7 @@ const components = {
   AuthLayout,
   DefaultLayout,
   ErrorLayout,
+  toast,
 }
 
 // Plugin installer
@@ -240,5 +242,6 @@ export {
   TimelineItem,
   AuthLayout,
   DefaultLayout,
-  ErrorLayout
+  ErrorLayout,
+  toast
 }

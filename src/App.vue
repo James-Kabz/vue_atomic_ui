@@ -7,6 +7,8 @@ import Input from './components/Input.vue'
 import Checkbox from './components/Checkbox.vue'
 import Link from './components/Link.vue'
 import Button from './components/Button.vue'
+import Toast from './components/Toast.vue'
+import { toast } from './lib/toast'
 
 const email = ref('')
 const password = ref('')
@@ -14,30 +16,30 @@ const companyCode = ref('')
 const rememberMe = ref(false)
 const errors = ref<{ email?: string; password?: string; companyCode?: string }>({})
 
+const showToast = ref(false)
+
 const onSubmit = () => {
-  errors.value = {} // reset
+  errors.value = {}
 
-  if (!email.value) {
-    errors.value.email = 'Email is required'
-  }
-  if (!password.value) {
-    errors.value.password = 'Password is required'
-  }
-
-  if (!companyCode.value) {
-    errors.value.companyCode = 'Company code is required'
-  }
+  if (!email.value) errors.value.email = 'Email is required'
+  if (!password.value) errors.value.password = 'Password is required'
+  if (!companyCode.value) errors.value.companyCode = 'Company code is required'
 
   if (Object.keys(errors.value).length === 0) {
     console.log('Form submitted:', {
       email: email.value,
       password: password.value,
       companyCode: companyCode.value,
-      rememberMe: rememberMe.value // Include checkbox value
+      rememberMe: rememberMe.value,
     })
-    // call API here
+
+    // ✅ Show global toast
+    toast.success('Sign in successful!', {
+      description: `Welcome back ${email.value}`,
+    })
   }
 }
+
 
 const isFormValid = computed(() => {
   return Object.keys(errors.value).length === 0
@@ -57,7 +59,7 @@ const isFormValid = computed(() => {
       <Typography class=" text-h6 text-dark mb-2">Sign In</Typography>
       <Typography  size="sm" color="muted">Provide your eRisk & Compliance Management authentication credentials</Typography>
     </div>
-    <Form @submit.prevent="onSubmit" class=" space-y-6">
+    <form @submit.prevent="onSubmit" class=" space-y-6">
       <!-- Email -->
       <FormField label="Email" :error="errors.email" required>
         <template #default="{ fieldId, hasError, ariaDescribedBy }">
@@ -127,6 +129,8 @@ const isFormValid = computed(() => {
       >
         Sign In
       </Button>
-    </Form>
+    </form>
+
+    <Toast />
   </AuthLayout>
 </template>

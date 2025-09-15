@@ -85,5 +85,8 @@ export const icons = {
   },
   rocket: {
     template: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2.25c2.25 0 4.5 1.5 6 3.75-2.25 1.5-4.5 3.75-6 6-1.5-2.25-3.75-4.5-6-6C7.5 3.75 9.75 2.25 12 2.25zm0 6c.828 0 1.5.672 1.5 1.5S12.828 11.25 12 11.25 10.5 10.578 10.5 9.75 11.172 8.25 12 8.25zM6 15l-2.25 6 6-2.25 6 2.25L21 15c-2.25 0-4.5-.75-9-4.5-4.5 3.75-6.75 4.5-9 4.5z" /></svg>`
+  },
+  x: {
+    template: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>`
   }
 };
