@@ -1,12 +1,17 @@
 <template>
-  <div :class="fieldClasses">
+  <div :class="cn(fieldVariants({ size }), $attrs.class)">
     <!-- Label -->
-    <Label v-if="label" :for="fieldId" :required="required">
+    <label
+      v-if="label"
+      :for="fieldId"
+      :class="cn(labelVariants({ size }))"
+    >
       {{ label }}
-    </Label>
+      <span v-if="required" class="text-red-500 ml-1" aria-label="required">*</span>
+    </label>
 
-    <!-- Optional Description -->
-    <p v-if="description" class="text-sm text-slate-600">
+    <!-- Description -->
+    <p v-if="description" :class="cn(descriptionVariants({ size }))">
       {{ description }}
     </p>
 
@@ -31,7 +36,7 @@
       <div
         v-if="hasError"
         :id="`${fieldId}-error`"
-        class="flex items-start gap-2 text-sm text-red-600 mt-1"
+        :class="cn(messageVariants({ size, intent: 'error' }))"
         role="alert"
         aria-live="polite"
       >
@@ -42,11 +47,11 @@
 
     <!-- Help Text -->
     <p
-      v-if="hint && !hasError"
+      v-if="helpText && !hasError"
       :id="`${fieldId}-help`"
-      class="mt-1 text-sm text-muted-foreground"
+      :class="cn(helpVariants({ size }))"
     >
-      {{ hint }}
+      {{ helpText }}
     </p>
 
     <!-- Success Message -->
@@ -60,7 +65,7 @@
     >
       <div
         v-if="success && !hasError"
-        class="flex items-start gap-2 text-sm text-green-600 mt-1"
+        :class="cn(messageVariants({ size, intent: 'success' }))"
       >
         <CheckCircleIcon class="w-4 h-4 flex-shrink-0 mt-0.5" />
         <span>{{ success }}</span>
@@ -70,10 +75,9 @@
 </template>
 
 <script setup>
-import { computed, useId } from 'vue'
-import { cva } from 'class-variance-authority'
-import { cn } from '../utils/cn.js'
-import Label from './Label.vue'
+import { computed, useId } from "vue"
+import { cva } from "class-variance-authority"
+import { cn } from "../utils/cn.js"
 
 // Icons
 const ExclamationCircleIcon = {
@@ -81,54 +85,99 @@ const ExclamationCircleIcon = {
     <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
     </svg>
-  `
+  `,
 }
 const CheckCircleIcon = {
   template: `
     <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
     </svg>
-  `
+  `,
 }
 
 const props = defineProps({
-  id: String,
   label: String,
   description: String,
   error: String,
-  hint: String,
   success: String,
-  required: Boolean,
-  variant: {
+  helpText: String,
+  required: { type: Boolean, default: false },
+  size: {
     type: String,
-    default: 'default',
-    validator: (value) => ['default', 'compact'].includes(value)
-  }
+    default: "md",
+    validator: (v) => ["sm", "md", "lg"].includes(v),
+  },
+  id: String,
 })
 
-const fieldId = computed(() => props.id || useId())
+const fieldId = useId()
 const hasError = computed(() => !!props.error)
 
 const ariaDescribedBy = computed(() => {
   const ids = []
-  if (props.error) {
-    ids.push(`${fieldId.value}-error`)
-  } else if (props.hint) {
-    ids.push(`${fieldId.value}-help`)
-  }
-  return ids.length > 0 ? ids.join(' ') : undefined
+  if (props.error) ids.push(`${fieldId}-error`)
+  else if (props.helpText) ids.push(`${fieldId}-help`)
+  return ids.length > 0 ? ids.join(" ") : undefined
 })
 
-// Variants
-const fieldVariants = cva('space-y-2', {
+/* ------------------ CVA Variants ------------------ */
+
+const fieldVariants = cva("", {
   variants: {
-    variant: {
-      default: 'space-y-2',
-      compact: 'space-y-1'
-    }
-  }
+    size: {
+      sm: "space-y-1",
+      md: "space-y-2",
+      lg: "space-y-3",
+    },
+  },
+  defaultVariants: { size: "md" },
 })
-const fieldClasses = computed(() =>
-  cn(fieldVariants({ variant: props.variant }))
-)
+
+const labelVariants = cva("block text-slate-900", {
+  variants: {
+    size: {
+      sm: "text-xs font-medium",
+      md: "text-sm font-medium",
+      lg: "text-base font-medium",
+    },
+  },
+  defaultVariants: { size: "md" },
+})
+
+const descriptionVariants = cva("text-slate-600", {
+  variants: {
+    size: {
+      sm: "text-xs",
+      md: "text-sm",
+      lg: "text-base",
+    },
+  },
+  defaultVariants: { size: "md" },
+})
+
+const messageVariants = cva("flex items-start gap-2", {
+  variants: {
+    size: {
+      sm: "text-xs",
+      md: "text-sm",
+      lg: "text-sm", // same as before
+    },
+    intent: {
+      error: "text-red-600",
+      success: "text-green-600",
+    },
+  },
+  defaultVariants: { size: "md", intent: "error" },
+})
+
+const helpVariants = cva("text-slate-500", {
+  variants: {
+    size: {
+      sm: "text-xs",
+      md: "text-sm",
+      lg: "text-sm",
+    },
+  },
+  defaultVariants: { size: "md" },
+})
 </script>

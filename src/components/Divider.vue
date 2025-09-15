@@ -1,6 +1,11 @@
 <template>
-  <div :class="dividerClasses" :role="role">
-    <span v-if="label" :class="labelClasses">
+  <div
+    :class="cn(dividerVariants({ orientation, size, color }), { 'opacity-50': faded }, customSpacing)"
+  >
+    <span
+      v-if="label && orientation === 'horizontal'"
+      class="px-3 text-sm text-gray-500 bg-white dark:bg-gray-900 dark:text-gray-400 relative z-10"
+    >
       {{ label }}
     </span>
   </div>
@@ -12,63 +17,90 @@ import { cva } from 'class-variance-authority'
 import { cn } from '../utils/cn.js'
 
 const props = defineProps({
-  label: String,
   orientation: {
     type: String,
     default: 'horizontal',
     validator: (value) => ['horizontal', 'vertical'].includes(value)
   },
-  variant: {
+  size: {
     type: String,
-    default: 'default',
-    validator: (value) => ['default', 'dashed'].includes(value)
+    default: 'md',
+    validator: (value) => ['sm', 'md', 'lg'].includes(value)
   },
-  class: String
+  color: {
+    type: String,
+    default: 'gray',
+    validator: (value) => ['gray', 'primary', 'secondary'].includes(value)
+  },
+  faded: {
+    type: Boolean,
+    default: false
+  },
+  label: {
+    type: String,
+    default: null
+  },
+  spacing: {
+    type: String,
+    default: null
+  }
 })
 
-const role = computed(() => props.orientation === 'vertical' ? 'separator' : 'separator')
-
-const dividerVariants = cva(
-  'shrink-0 bg-border',
-  {
-    variants: {
-      orientation: {
-        horizontal: 'h-[1px] w-full',
-        vertical: 'h-full w-[1px]'
-      },
-      variant: {
-        default: '',
-        dashed: 'border-dashed'
-      }
+const dividerVariants = cva('divider relative flex items-center', {
+  variants: {
+    orientation: {
+      horizontal: 'w-full h-px flex items-center',
+      vertical: 'h-full w-px'
+    },
+    size: {
+      sm: '',
+      md: '',
+      lg: ''
+    },
+    color: {
+      gray: 'bg-gray-200 dark:bg-gray-700',
+      primary: 'bg-blue-500',
+      secondary: 'bg-gray-400'
     }
+  },
+  compoundVariants: [
+    {
+      orientation: 'horizontal',
+      size: 'sm',
+      class: 'my-2'
+    },
+    {
+      orientation: 'horizontal',
+      size: 'md',
+      class: 'my-4'
+    },
+    {
+      orientation: 'horizontal',
+      size: 'lg',
+      class: 'my-6'
+    },
+    {
+      orientation: 'vertical',
+      size: 'sm',
+      class: 'mx-2'
+    },
+    {
+      orientation: 'vertical',
+      size: 'md',
+      class: 'mx-4'
+    },
+    {
+      orientation: 'vertical',
+      size: 'lg',
+      class: 'mx-6'
+    }
+  ],
+  defaultVariants: {
+    orientation: 'horizontal',
+    size: 'md',
+    color: 'gray'
   }
-)
-
-const dividerClasses = computed(() => {
-  if (props.label && props.orientation === 'horizontal') {
-    return cn(
-      'relative flex items-center',
-      props.class
-    )
-  }
-  
-  return cn(
-    dividerVariants({ 
-      orientation: props.orientation, 
-      variant: props.variant 
-    }),
-    props.variant === 'dashed' && props.orientation === 'horizontal' && 'border-t',
-    props.variant === 'dashed' && props.orientation === 'vertical' && 'border-l',
-    props.class
-  )
 })
 
-const labelClasses = computed(() => 
-  cn(
-    'px-3 text-sm text-muted-foreground bg-background',
-    'before:content-[""] before:flex-1 before:h-[1px] before:bg-border before:mr-3',
-    'after:content-[""] after:flex-1 after:h-[1px] after:bg-border after:ml-3',
-    'flex items-center w-full'
-  )
-)
+const customSpacing = computed(() => (props.spacing ? props.spacing : ''))
 </script>

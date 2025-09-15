@@ -1,6 +1,6 @@
 {
   "name": "@stlhorizon/vue-ui",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "private": false,
   "type": "module",
   "description": "A Vue.js component library with Tailwind CSS styling",
@@ -46,6 +46,7 @@
     "url": "git+https://github.com/James-Kabz/vue_atomic_ui.git"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^7.0.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "lucide-vue-next": "^0.292.0",

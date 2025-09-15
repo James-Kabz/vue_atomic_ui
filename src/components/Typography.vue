@@ -1,51 +1,129 @@
 <template>
-  <component :is="as" :class="typographyClasses">
+  <component
+    :is="tag"
+    :class="typographyClasses"
+  >
     <slot />
   </component>
 </template>
 
 <script setup>
 import { computed } from 'vue'
-import { cva } from 'class-variance-authority'
-import { cn } from '../utils/cn.js'
 
 const props = defineProps({
-  as: {
-    type: String,
-    default: 'h1'
-  },
   variant: {
     type: String,
-    default: 'h1',
-    validator: (value) => ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'blockquote', 'code', 'lead', 'large', 'small', 'muted'].includes(value)
+    default: 'body-md',
+    validator: (value) =>
+      [
+        // Body
+        'body-xs', 'body-sm', 'body-md', 'body-lg',
+        // text
+        'text-xs' ,'text-sm', 'text-md', 'text-lg',
+        // Display / Heading
+        'display-sm', 'display-md', 'display-lg',
+        'caption', 'overline'
+      ].includes(value)
   },
-  class: String
+  color: {
+    type: String,
+    default: 'default',
+    validator: (value) => [
+      'default', 'primary', 'secondary',
+      'success', 'warning', 'danger', 'muted'
+    ].includes(value)
+  },
+  align: {
+    type: String,
+    default: 'left',
+    validator: (value) =>
+      ['left', 'center', 'right', 'justify'].includes(value)
+  },
+  italic: Boolean,
+  underline: Boolean,
+  truncate: Boolean,
+  noWrap: Boolean
 })
 
-const typographyVariants = cva(
-  '',
-  {
-    variants: {
-      variant: {
-        h1: 'scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl',
-        h2: 'scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0',
-        h3: 'scroll-m-20 text-2xl font-semibold tracking-tight',
-        h4: 'scroll-m-20 text-xl font-semibold tracking-tight',
-        h5: 'scroll-m-20 text-lg font-semibold tracking-tight',
-        h6: 'scroll-m-20 text-base font-semibold tracking-tight',
-        p: 'leading-7 [&:not(:first-child)]:mt-6',
-        blockquote: 'mt-6 border-l-2 pl-6 italic',
-        code: 'relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold',
-        lead: 'text-xl text-muted-foreground',
-        large: 'text-lg font-semibold',
-        small: 'text-sm font-medium leading-none',
-        muted: 'text-sm text-muted-foreground'
-      }
-    }
+/* --- Tag mapping (semantic HTML) --- */
+const tag = computed(() => {
+  const tagMap = {
+    'body-xs': 'p',
+    'body-sm': 'p',
+    'body-md': 'p',
+    'body-lg': 'p',
+    'text-xs': 'h6',
+    'text-sm': 'h5',
+    'text-md': 'h4',
+    'text-lg': 'h3',
+    'display-sm': 'h2',
+    'display-md': 'h1',
+    'display-lg': 'h1',
+    caption: 'span',
+    overline: 'span'
   }
-)
+  return tagMap[props.variant] || 'p'
+})
 
-const typographyClasses = computed(() => 
-  cn(typographyVariants({ variant: props.variant }), props.class)
-)
+/* --- Variant → Tailwind mapping --- */
+const variantClasses = computed(() => {
+  const variants = {
+    // Body text
+    'body-xs': 'text-xs leading-normal',
+    'body-sm': 'text-sm leading-relaxed',
+    'body-md': 'text-base leading-relaxed',
+    'body-lg': 'text-lg leading-relaxed',
+
+    // texts
+    'text-xs': 'text-md font-semibold leading-snug',
+    'text-sm': 'text-xl font-semibold leading-snug',
+    'text-md': 'text-2xl font-semibold leading-snug',
+    'text-lg': 'text-3xl font-bold leading-snug',
+
+    // Displays
+    'display-sm': 'text-4xl font-bold leading-tight tracking-tight',
+    'display-md': 'text-5xl font-bold leading-tight tracking-tight',
+    'display-lg': 'text-6xl font-bold leading-tight tracking-tight',
+
+    // Extras
+    caption: 'text-xs leading-normal',
+    overline: 'text-xs font-medium uppercase tracking-wider leading-normal'
+  }
+  return variants[props.variant]
+})
+
+/* --- Color mapping --- */
+const colorClasses = computed(() => {
+  const colors = {
+    default: 'text-slate-900',
+    primary: 'text-blue-600',
+    secondary: 'text-slate-600',
+    success: 'text-green-600',
+    warning: 'text-yellow-600',
+    danger: 'text-red-600',
+    muted: 'text-slate-500'
+  }
+  return colors[props.color]
+})
+
+/* --- Alignment --- */
+const alignClasses = computed(() => ({
+  left: 'text-left',
+  center: 'text-center',
+  right: 'text-right',
+  justify: 'text-justify'
+}[props.align]))
+
+/* --- Merge classes --- */
+const typographyClasses = computed(() => [
+  variantClasses.value,
+  colorClasses.value,
+  alignClasses.value,
+  {
+    italic: props.italic,
+    underline: props.underline,
+    truncate: props.truncate,
+    'whitespace-nowrap': props.noWrap
+  }
+])
 </script>

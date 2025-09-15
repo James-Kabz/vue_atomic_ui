@@ -2,6 +2,7 @@
 
 A comprehensive Vue.js component library built with Tailwind CSS, featuring 60+ components for building modern web applications.
 
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" /> --> add the link in the index.html
 ## Installation
 
 ```bash
