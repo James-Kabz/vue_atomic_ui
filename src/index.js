@@ -224,7 +224,6 @@ export {
   ModalFooter,
   Notification,
   Toast,
-  Toaster, // Export Toaster component
   Search,
   Slider,
   Stepper,

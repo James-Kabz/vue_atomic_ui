@@ -62,9 +62,9 @@ const toast = Object.assign(
   // Toast type methods
   {
     success: (message, options) => createToast(message, { ...options, variant: 'success' }),
-    error: (message, options) => createToast(message, { ...options, variant: 'destructive' }),
+    error: (message, options) => createToast(message, { ...options, variant: 'error' }),
     warning: (message, options) => createToast(message, { ...options, variant: 'warning' }),
-    info: (message, options) => createToast(message, { ...options, variant: 'default' }),
+    info: (message, options) => createToast(message, { ...options, variant: 'info' }),
     
     // Promise toast for async operations
     promise: (promise, options = {}) => {
@@ -78,7 +78,7 @@ const toast = Object.assign(
       // Show loading toast
       const loadingId = createToast(loading, {
         ...restOptions,
-        variant: 'default',
+        variant: 'loading',
         duration: 0, // Don't auto dismiss
         dismissible: false
       })
@@ -111,13 +111,13 @@ const toast = Object.assign(
             
           createToast(message, {
             ...restOptions,
-            variant: 'destructive'
+            variant: 'error'
           })
           
           throw error
         })
     },
-
+    
     // Utility methods
     dismiss,
     dismissAll,

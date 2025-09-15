@@ -336,6 +336,7 @@ npm run lint
 MIT
 
 toast usage example in app.vue
+
 <!-- Example App.vue setup -->
 <template>
   <div id="app">

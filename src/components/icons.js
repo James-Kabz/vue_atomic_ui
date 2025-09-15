@@ -88,5 +88,39 @@ export const icons = {
   },
   x: {
     template: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>`
-  }
+  },
+  // Status
+  bell: {
+    template: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" 
+        d="M14.25 18.75a2.25 2.25 0 1 1-4.5 0m9-3v-5.25a6.75 
+        6.75 0 1 0-13.5 0v5.25m13.5 0H3.75" />
+    </svg>`
+  },
+  'alert-triangle': {
+    template: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" 
+        d="M12 9v3.75m0 3.75h.007v.008H12v-.008zM2.697 
+        16.126c-.866 1.5.217 3.374 1.948 
+        3.374h14.71c1.73 0 2.813-1.874 
+        1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 
+        0L2.697 16.126z" />
+    </svg>`
+  },
+  'alert-circle': {
+    template: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" 
+        d="M12 9v3.75m0 3.75h.007v.008H12v-.008zM21 
+        12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+    </svg>`
+  },
+  loader: {
+    template: `<svg class="animate-spin" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"></circle>
+      <path class="opacity-75" fill="currentColor" 
+        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 
+        4H4z" />
+    </svg>`
+  },
+
 };
