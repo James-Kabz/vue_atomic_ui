@@ -51,9 +51,10 @@
               </slot>
             </div>
 
-            <!-- Main Form Content -->
+            <!-- Main Form Content (router-view goes here) -->
             <div class="space-y-6">
               <slot />
+              <router-view />
             </div>
 
             <!-- Card Footer -->
@@ -108,74 +109,26 @@ import { computed } from 'vue'
 export default {
   name: 'AuthLayout',
   props: {
-    title: {
-      type: String,
-      default: null
-    },
-    subtitle: {
-      type: String,
-      default: null
-    },
-    primaryLogoPrefix: {
-      type: String,
-      default: 'e'
-    },
-    primaryLogoText: {
-      type: String,
-      default: 'HORIZON'
-    },
-    secondaryLogoPrefix: {
-      type: String,
-      default: 'e'
-    },
-    secondaryLogoText: {
-      type: String,
-      default: 'Risk & Compliance'
-    },
-    quote: {
-      type: String,
-      default: ''
-    },
-    primaryColor: {
-      type: String,
-      default: '#e74c3c'
-    },
-    backgroundColor: {
-      type: String,
-      default: '#2c2c2c'
-    },
+    title: { type: String, default: null },
+    subtitle: { type: String, default: null },
+    primaryLogoPrefix: { type: String, default: 'e' },
+    primaryLogoText: { type: String, default: 'HORIZON' },
+    secondaryLogoPrefix: { type: String, default: 'e' },
+    secondaryLogoText: { type: String, default: 'Risk & Compliance' },
+    quote: { type: String, default: '' },
+    primaryColor: { type: String, default: '#e74c3c' },
+    backgroundColor: { type: String, default: '#2c2c2c' },
     backgroundImage: {
       type: String,
       default: 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2069&q=80'
     },
-    backgroundOpacity: {
-      type: Number,
-      default: 0.4
-    },
-    companyName: {
-      type: String,
-      default: 'SOFTWARE'
-    },
-    companyType: {
-      type: String,
-      default: 'TECHNOLOGIES'
-    },
-    companyTagline: {
-      type: String,
-      default: 'People | Processes | Governance'
-    },
-    companyInitials: {
-      type: String,
-      default: 'ST'
-    },
-    appName: {
-      type: String,
-      default: 'eHorizon eBoard X'
-    },
-    appVersion: {
-      type: String,
-      default: 'Version 2.0'
-    },
+    backgroundOpacity: { type: Number, default: 0.4 },
+    companyName: { type: String, default: 'SOFTWARE' },
+    companyType: { type: String, default: 'TECHNOLOGIES' },
+    companyTagline: { type: String, default: 'People | Processes | Governance' },
+    companyInitials: { type: String, default: 'ST' },
+    appName: { type: String, default: 'eHorizon eBoard X' },
+    appVersion: { type: String, default: 'Version 2.0' },
     copyright: {
       type: String,
       default: 'Copyright © 2025 Software Technologies Limited'
@@ -189,12 +142,9 @@ export default {
       ]
     }
   },
-  setup(props) {
+  setup() {
     const currentYear = computed(() => new Date().getFullYear())
-
-    return {
-      currentYear
-    }
+    return { currentYear }
   }
 }
 </script>
