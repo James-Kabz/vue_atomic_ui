@@ -12,7 +12,7 @@
 
         <!-- Branding Section (Left Side) -->
         <div class="lg:col-span-6 text-white text-center lg:text-left space-y-6">
-          <!-- Primary Logo -->
+          <!-- Primary Logo (eHORIZON style) -->
           <div class="mb-6">
             <div class="text-4xl lg:text-6xl font-bold mb-2">
               <span :style="{ color: primaryColor }">{{ primaryLogoPrefix }}</span>
@@ -21,7 +21,7 @@
             <div class="h-0.5 w-30 mx-auto lg:mx-0" :style="{ backgroundColor: primaryColor }" />
           </div>
 
-          <!-- Secondary Logo -->
+          <!-- Secondary Logo (eBoard style) -->
           <div class="flex items-center justify-center lg:justify-start mb-6">
             <div class="flex items-center justify-center w-15 h-15 rounded-lg mr-4 text-white font-bold text-xl"
               :style="{ backgroundColor: primaryColor }">
@@ -29,25 +29,48 @@
             </div>
             <span class="text-3xl lg:text-4xl font-bold text-white">{{ secondaryLogoText }}</span>
           </div>
+
+          <!-- Quote -->
+          <div class="max-w-md mx-auto lg:mx-0">
+            <p class="text-sm lg:text-base font-light text-white/70 italic leading-relaxed">
+              <!-- "{{ quote }}" -->
+            </p>
+          </div>
         </div>
 
         <!-- Form Section (Right Side) -->
         <div class="lg:col-span-4">
-          <div class="bg-white rounded-lg shadow-xl p-6 lg:p-8 max-w-md mx-auto relative overflow-hidden">
-            <!-- Smooth transition wrapper for router-view -->
-            <router-view v-slot="{ Component, route }">
-              <transition name="form-fade" mode="out-in">
-                <keep-alive>
-                  <component :is="Component" :key="route.name" />
-                </keep-alive>
-              </transition>
-            </router-view>
+          <div class="bg-white rounded-lg shadow-xl p-6 lg:p-8 max-w-md mx-auto">
+            <!-- Card Header -->
+            <div v-if="$slots['card-header'] || title" class="mb-6">
+              <slot name="card-header">
+                <div class="text-center">
+                  <h1 class="text-2xl font-bold text-gray-900">{{ title }}</h1>
+                  <p v-if="subtitle" class="text-gray-600 mt-2">{{ subtitle }}</p>
+                </div>
+              </slot>
+            </div>
+
+            <!-- Main Form Content -->
+            <div class="space-y-6">
+              <slot />
+            </div>
+
+            <!-- Card Footer -->
+            <div v-if="$slots['card-footer']" class="mt-6">
+              <slot name="card-footer" />
+            </div>
+          </div>
+
+          <!-- Additional Links -->
+          <div v-if="$slots.links" class="mt-6 text-center">
+            <slot name="links" />
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Footer Company Branding -->
+    <!-- Footer Company Branding (Bottom Right) -->
     <div class="absolute bottom-4 right-4 text-right">
       <div class="flex items-end justify-end mb-2">
         <div class="text-right mr-3">
@@ -65,15 +88,13 @@
       </div>
     </div>
 
-    <!-- Social Media Links -->
+    <!-- Social Media Links (Bottom Left) -->
     <div class="absolute bottom-4 left-4 flex gap-2">
       <a v-for="social in socialLinks" :key="social.name" :href="social.url" :class="[
         'w-8 h-7 flex items-center justify-center rounded text-xs transition-colors',
-        social.variant === 'primary'
-          ? 'bg-blue-600 hover:bg-blue-700 text-white'
-          : social.variant === 'info'
-            ? 'bg-cyan-500 hover:bg-cyan-600 text-white'
-            : 'bg-gray-600 hover:bg-gray-700 text-white'
+        social.variant === 'primary' ? 'bg-blue-600 hover:bg-blue-700 text-white' :
+          social.variant === 'info' ? 'bg-cyan-500 hover:bg-cyan-600 text-white' :
+            'bg-gray-600 hover:bg-gray-700 text-white'
       ]">
         <i :class="social.icon" />
       </a>
@@ -177,42 +198,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-/* Smooth fade transition */
-.form-fade-enter-active,
-.form-fade-leave-active {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.form-fade-enter-from {
-  opacity: 0;
-  transform: translateY(10px);
-}
-
-.form-fade-leave-to {
-  opacity: 0;
-  transform: translateY(-10px);
-}
-
-/* Alternative: Slide transition */
-.form-slide-enter-active,
-.form-slide-leave-active {
-  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-
-.form-slide-enter-from {
-  opacity: 0;
-  transform: translateX(20px);
-}
-
-.form-slide-leave-to {
-  opacity: 0;
-  transform: translateX(-20px);
-}
-
-/* Ensure consistent height to prevent layout shifts */
-.bg-white.rounded-lg {
-  min-height: 400px;
-}
-</style>

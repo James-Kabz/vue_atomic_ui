@@ -2,7 +2,7 @@ import AuthLayout from '../layouts/AuthLayout.vue'
 
 const AuthRoutes = {
   path: '/auth',
-  component: AuthLayout,
+//   component: AuthLayout,
   meta: {
     requiresAuth: false
   },

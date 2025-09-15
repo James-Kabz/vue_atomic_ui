@@ -7,6 +7,7 @@ import Input from '../../components/Input.vue'
 import Checkbox from '../../components/Checkbox.vue'
 import Button from '../../components/Button.vue'
 import Link from '../../components/Link.vue'
+import AuthLayout from '../../layouts/AuthLayout.vue'
 
 const email = ref('')
 const password = ref('')
@@ -55,7 +56,7 @@ const isFormValid = computed(() => {
 </script>
 
 <template>
-  <!-- <AuthLayout
+  <AuthLayout
     company-initials="STL"
     company-name="SOFTWARE"
     variant="centered"
@@ -63,7 +64,7 @@ const isFormValid = computed(() => {
     app-version="1.0.0"
     secondary-logo-text="Risk & Compliance Management"
     :background-opacity="1"
-  > -->
+  >
     <div class="text-center mb-4">
       <Typography class="text-h6 text-dark mb-2">Sign In</Typography>
       <Typography size="sm" color="muted">
@@ -139,5 +140,5 @@ const isFormValid = computed(() => {
         Sign In
       </Button>
     </form>
-  <!-- </AuthLayout> -->
+  </AuthLayout>
 </template>

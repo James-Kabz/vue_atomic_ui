@@ -5,6 +5,7 @@ import Button from '../../components/Button.vue'
 import FormField from '../../components/FormField.vue'
 import Input from '../../components/Input.vue'
 import Link from '../../components/Link.vue'
+import AuthLayout from '../../layouts/AuthLayout.vue'
 
 const email = ref('')
 const companyCode = ref('')
@@ -64,7 +65,7 @@ const handleTryAgain = () => {
 </script>
 
 <template>
-  <!-- <AuthLayout
+  <AuthLayout
     company-initials="STL"
     company-name="SOFTWARE"
     variant="centered"
@@ -72,7 +73,7 @@ const handleTryAgain = () => {
     app-version="1.0.0"
     secondary-logo-text="Risk & Compliance Management"
     :background-opacity="20"
-  > -->
+  >
     <div class="w-full max-w-sm space-y-6">
       <!-- Header -->
       <div class="text-center space-y-2">
@@ -173,5 +174,5 @@ const handleTryAgain = () => {
         </Typography>
       </div>
     </div>
-  <!-- </AuthLayout> -->
+  </AuthLayout>
 </template>
