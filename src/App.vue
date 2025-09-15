@@ -1,8 +1,10 @@
 <script setup>
+import Button from './components/Button.vue';
+
 </script>
 
 <template>
-  <h1>you did it</h1>
+  <Button>Button</Button>
 </template>
 
 <style scoped></style>
