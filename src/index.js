@@ -1,7 +1,7 @@
 // src/index.js
 
 import '@fortawesome/fontawesome-free/css/all.min.css'
-import { toast } from './lib/toast'
+
 // Import components
 import Avatar from "./components/Avatar.vue"
 import Badge from "./components/Badge.vue"
@@ -80,13 +80,15 @@ import AuthLayout from "./layouts/AuthLayout.vue"
 import DefaultLayout from "./layouts/DefaultLayout.vue"
 import ErrorLayout from "./layouts/ErrorLayout.vue"
 
+// Import toast function and composable (not a component!)
+import { toast, useToaster } from './lib/toast'
+
 // Utils
 export { cn } from "./utils/cn.js"
 
 // Styles
 import "./styles/base.css"
 
-// Gather components in an object
 const components = {
   Avatar,
   Badge,
@@ -156,17 +158,20 @@ const components = {
   AuthLayout,
   DefaultLayout,
   ErrorLayout,
-  toast,
 }
 
 // Plugin installer
 const VueUI = {
   install(app, options = {}) {
     const { prefix = "" } = options
+    
     Object.keys(components).forEach((name) => {
       const componentName = prefix ? `${prefix}${name}` : name
       app.component(componentName, components[name])
     })
+    
+    app.config.globalProperties.$toast = toast
+    app.provide('toast', toast)
   },
 }
 
@@ -219,6 +224,7 @@ export {
   ModalFooter,
   Notification,
   Toast,
+  Toaster, // Export Toaster component
   Search,
   Slider,
   Stepper,
@@ -243,5 +249,7 @@ export {
   AuthLayout,
   DefaultLayout,
   ErrorLayout,
-  toast
+  // Export toast function and composable
+  toast,
+  useToaster
 }

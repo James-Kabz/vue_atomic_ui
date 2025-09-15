@@ -133,7 +133,7 @@ const toast = Object.assign(
 // Composable for components that need access to toast state
 export const useToaster = () => {
   return {
-    toasts: toasts.value,
+    toasts,
     dismiss,
     dismissAll
   }
