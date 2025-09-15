@@ -46,6 +46,7 @@
     "url": "git+https://github.com/James-Kabz/vue_atomic_ui.git"
   },
   "dependencies": {
+    "vue-router": "^4.5.1",
     "@fortawesome/fontawesome-free": "^7.0.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
