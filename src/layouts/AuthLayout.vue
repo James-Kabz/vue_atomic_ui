@@ -53,7 +53,7 @@
 
             <!-- Main Form Content -->
             <div class="space-y-6">
-              <slot />
+              <router-view />
             </div>
 
             <!-- Card Footer -->

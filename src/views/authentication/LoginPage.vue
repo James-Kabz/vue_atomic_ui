@@ -56,15 +56,6 @@ const isFormValid = computed(() => {
 </script>
 
 <template>
-  <AuthLayout
-    company-initials="STL"
-    company-name="SOFTWARE"
-    variant="centered"
-    app-name="eRisk & Compliance Management"
-    app-version="1.0.0"
-    secondary-logo-text="Risk & Compliance Management"
-    :background-opacity="1"
-  >
     <div class="text-center mb-4">
       <Typography class="text-h6 text-dark mb-2">Sign In</Typography>
       <Typography size="sm" color="muted">
@@ -140,5 +131,4 @@ const isFormValid = computed(() => {
         Sign In
       </Button>
     </form>
-  </AuthLayout>
 </template>

@@ -2,10 +2,17 @@ import AuthLayout from '../layouts/AuthLayout.vue'
 
 const AuthRoutes = {
   path: '/auth',
-//   component: AuthLayout,
-  meta: {
-    requiresAuth: false
+  component: AuthLayout,
+  props: {
+    companyInitials: 'STL',
+    companyName: 'SOFTWARE',
+    variant: 'centered',
+    appName: 'eRisk & Compliance Management',
+    appVersion: '1.0.0',
+    secondaryLogoText: 'Risk & Compliance Management',
+    backgroundOpacity: 1
   },
+  meta: { requiresAuth: false },
   children: [
     {
       name: 'login',
@@ -14,10 +21,11 @@ const AuthRoutes = {
     },
     {
       name: 'forgot-password',
-      path: '/auth/forgot-password',
+      path: 'forgot-password',
       component: () => import('../views/authentication/ForgotPasswordPage.vue')
     }
   ]
 }
+
 
 export default AuthRoutes

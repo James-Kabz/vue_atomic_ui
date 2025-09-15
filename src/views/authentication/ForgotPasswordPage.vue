@@ -65,15 +65,6 @@ const handleTryAgain = () => {
 </script>
 
 <template>
-  <AuthLayout
-    company-initials="STL"
-    company-name="SOFTWARE"
-    variant="centered"
-    app-name="eRisk & Compliance Management"
-    app-version="1.0.0"
-    secondary-logo-text="Risk & Compliance Management"
-    :background-opacity="20"
-  >
     <div class="w-full max-w-sm space-y-6">
       <!-- Header -->
       <div class="text-center space-y-2">
@@ -174,5 +165,4 @@ const handleTryAgain = () => {
         </Typography>
       </div>
     </div>
-  </AuthLayout>
 </template>
