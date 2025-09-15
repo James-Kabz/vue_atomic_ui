@@ -28,7 +28,7 @@ export default defineConfig({
       external: [
         "vue",
         "class-variance-authority",
-        "clsx", 
+        "clsx",
         "tailwind-merge"
       ],
       output: {
@@ -51,7 +51,8 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
-      "vue": "vue/dist/vue.esm-bundler.js"
+      // Remove the vue alias - this might be causing conflicts
+      // "vue": "vue/dist/vue.esm-bundler.js"
     },
   },
 })
