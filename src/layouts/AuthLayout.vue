@@ -1,13 +1,10 @@
 <template>
   <div class="min-h-screen relative flex items-center justify-center" :style="{ backgroundColor: backgroundColor }">
     <!-- Background Image -->
-    <div
-      class="absolute inset-0 bg-cover bg-center"
-      :style="{
-        backgroundImage: `url('${backgroundImage}')`,
-        opacity: backgroundOpacity
-      }"
-    />
+    <div class="absolute inset-0 bg-cover bg-center" :style="{
+      backgroundImage: `url('${backgroundImage}')`,
+      opacity: backgroundOpacity
+    }" />
 
     <!-- Main Container -->
     <div class="container mx-auto px-4 relative z-10">
@@ -26,10 +23,8 @@
 
           <!-- Secondary Logo -->
           <div class="flex items-center justify-center lg:justify-start mb-6">
-            <div
-              class="flex items-center justify-center w-15 h-15 rounded-lg mr-4 text-white font-bold text-xl"
-              :style="{ backgroundColor: primaryColor }"
-            >
+            <div class="flex items-center justify-center w-15 h-15 rounded-lg mr-4 text-white font-bold text-xl"
+              :style="{ backgroundColor: primaryColor }">
               {{ secondaryLogoPrefix }}
             </div>
             <span class="text-3xl lg:text-4xl font-bold text-white">{{ secondaryLogoText }}</span>
@@ -38,9 +33,15 @@
 
         <!-- Form Section (Right Side) -->
         <div class="lg:col-span-4">
-          <div class="bg-white rounded-lg shadow-xl p-6 lg:p-8 max-w-md mx-auto">
-            <!-- <slot /> -->
-            <router-view />
+          <div class="bg-white rounded-lg shadow-xl p-6 lg:p-8 max-w-md mx-auto relative overflow-hidden">
+            <!-- Smooth transition wrapper for router-view -->
+            <router-view v-slot="{ Component, route }">
+              <transition name="form-fade" mode="out-in">
+                <keep-alive>
+                  <component :is="Component" :key="route.name" />
+                </keep-alive>
+              </transition>
+            </router-view>
           </div>
         </div>
       </div>
@@ -66,25 +67,19 @@
 
     <!-- Social Media Links -->
     <div class="absolute bottom-4 left-4 flex gap-2">
-      <a
-        v-for="social in socialLinks"
-        :key="social.name"
-        :href="social.url"
-        :class="[
-          'w-8 h-7 flex items-center justify-center rounded text-xs transition-colors',
-          social.variant === 'primary'
-            ? 'bg-blue-600 hover:bg-blue-700 text-white'
-            : social.variant === 'info'
+      <a v-for="social in socialLinks" :key="social.name" :href="social.url" :class="[
+        'w-8 h-7 flex items-center justify-center rounded text-xs transition-colors',
+        social.variant === 'primary'
+          ? 'bg-blue-600 hover:bg-blue-700 text-white'
+          : social.variant === 'info'
             ? 'bg-cyan-500 hover:bg-cyan-600 text-white'
             : 'bg-gray-600 hover:bg-gray-700 text-white'
-        ]"
-      >
+      ]">
         <i :class="social.icon" />
       </a>
     </div>
   </div>
 </template>
-
 
 <script>
 import { computed } from 'vue'
@@ -182,3 +177,42 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+/* Smooth fade transition */
+.form-fade-enter-active,
+.form-fade-leave-active {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.form-fade-enter-from {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.form-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+/* Alternative: Slide transition */
+.form-slide-enter-active,
+.form-slide-leave-active {
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.form-slide-enter-from {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.form-slide-leave-to {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+/* Ensure consistent height to prevent layout shifts */
+.bg-white.rounded-lg {
+  min-height: 400px;
+}
+</style>

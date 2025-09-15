@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { AuthLayout, Button, FormField, Input, Link, Typography } from '@stlhorizon/vue-ui'
+import Typography from '../../components/Typography.vue'
+import Button from '../../components/Button.vue'
+import FormField from '../../components/FormField.vue'
+import Input from '../../components/Input.vue'
+import Link from '../../components/Link.vue'
 
 const email = ref('')
 const companyCode = ref('')

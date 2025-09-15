@@ -1,6 +1,12 @@
 <script setup lang="ts">
-import {  Button, Checkbox, FormField, Input, Link, Typography, Icon, toast } from '@stlhorizon/vue-ui'
 import { computed, ref } from 'vue'
+import { toast } from '../../lib/toast'
+import Typography from '../../components/Typography.vue'
+import FormField from '../../components/FormField.vue'
+import Input from '../../components/Input.vue'
+import Checkbox from '../../components/Checkbox.vue'
+import Button from '../../components/Button.vue'
+import Link from '../../components/Link.vue'
 
 const email = ref('')
 const password = ref('')
