@@ -102,91 +102,99 @@
   </div>
 </template>
 
-<script setup>
+<script>
 import { computed } from 'vue'
 
-const props = defineProps({
-  title: {
-    type: String,
-    default: null
+export default {
+  name: 'AuthLayout',
+  props: {
+    title: {
+      type: String,
+      default: null
+    },
+    subtitle: {
+      type: String,
+      default: null
+    },
+    primaryLogoPrefix: {
+      type: String,
+      default: 'e'
+    },
+    primaryLogoText: {
+      type: String,
+      default: 'HORIZON'
+    },
+    secondaryLogoPrefix: {
+      type: String,
+      default: 'e'
+    },
+    secondaryLogoText: {
+      type: String,
+      default: 'Risk & Compliance'
+    },
+    quote: {
+      type: String,
+      default: ''
+    },
+    primaryColor: {
+      type: String,
+      default: '#e74c3c'
+    },
+    backgroundColor: {
+      type: String,
+      default: '#2c2c2c'
+    },
+    backgroundImage: {
+      type: String,
+      default: 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2069&q=80'
+    },
+    backgroundOpacity: {
+      type: Number,
+      default: 0.4
+    },
+    companyName: {
+      type: String,
+      default: 'SOFTWARE'
+    },
+    companyType: {
+      type: String,
+      default: 'TECHNOLOGIES'
+    },
+    companyTagline: {
+      type: String,
+      default: 'People | Processes | Governance'
+    },
+    companyInitials: {
+      type: String,
+      default: 'ST'
+    },
+    appName: {
+      type: String,
+      default: 'eHorizon eBoard X'
+    },
+    appVersion: {
+      type: String,
+      default: 'Version 2.0'
+    },
+    copyright: {
+      type: String,
+      default: 'Copyright © 2025 Software Technologies Limited'
+    },
+    socialLinks: {
+      type: Array,
+      default: () => [
+        { name: 'linkedin', url: '#', icon: 'fab fa-linkedin-in', variant: 'primary' },
+        { name: 'facebook', url: '#', icon: 'fab fa-facebook-f', variant: 'primary' },
+        { name: 'twitter', url: '#', icon: 'fab fa-twitter', variant: 'info' }
+      ]
+    }
   },
-  subtitle: {
-    type: String,
-    default: null
-  },
-  primaryLogoPrefix: {
-    type: String,
-    default: 'e'
-  },
-  primaryLogoText: {
-    type: String,
-    default: 'HORIZON'
-  },
-  secondaryLogoPrefix: {
-    type: String,
-    default: 'e'
-  },
-  secondaryLogoText: {
-    type: String,
-    default: 'Risk & Compliance'
-  },
-  quote: {
-    type: String,
-    default: ''
-  },
-  primaryColor: {
-    type: String,
-    default: '#e74c3c'
-  },
-  backgroundColor: {
-    type: String,
-    default: '#2c2c2c'
-  },
-  backgroundImage: {
-    type: String,
-    default: 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2069&q=80'
-  },
-  backgroundOpacity: {
-    type: Number,
-    default: 0.4
-  },
-  companyName: {
-    type: String,
-    default: 'SOFTWARE'
-  },
-  companyType: {
-    type: String,
-    default: 'TECHNOLOGIES'
-  },
-  companyTagline: {
-    type: String,
-    default: 'People | Processes | Governance'
-  },
-  companyInitials: {
-    type: String,
-    default: 'ST'
-  },
-  appName: {
-    type: String,
-    default: 'eHorizon eBoard X'
-  },
-  appVersion: {
-    type: String,
-    default: 'Version 2.0'
-  },
-  copyright: {
-    type: String,
-    default: 'Copyright © 2025 Software Technologies Limited'
-  },
-  socialLinks: {
-    type: Array,
-    default: () => [
-      { name: 'linkedin', url: '#', icon: 'fab fa-linkedin-in', variant: 'primary' },
-      { name: 'facebook', url: '#', icon: 'fab fa-facebook-f', variant: 'primary' },
-      { name: 'twitter', url: '#', icon: 'fab fa-twitter', variant: 'info' }
-    ]
-  }
-})
+  setup(props) {
+    const currentYear = computed(() => new Date().getFullYear())
 
-const currentYear = new Date().getFullYear()
+    return {
+      currentYear
+    }
+  }
+}
 </script>

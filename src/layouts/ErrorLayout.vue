@@ -100,7 +100,7 @@
   </div>
 </template>
 
-<script setup>
+<script>
 import { computed } from 'vue'
 import Button from '../components/Button.vue'
 
@@ -131,185 +131,212 @@ const ErrorGenericIcon = {
   `
 }
 
-const props = defineProps({
-  errorType: {
-    type: String,
-    default: '404',
-    validator: (value) => ['404', '500', '403', 'generic'].includes(value)
+export default {
+  name: 'ErrorPage',
+  components: {
+    Button
   },
-  errorTitle: {
-    type: String,
-    default: null
+  props: {
+    errorType: {
+      type: String,
+      default: '404',
+      validator: (value) => ['404', '500', '403', 'generic'].includes(value)
+    },
+    errorTitle: {
+      type: String,
+      default: null
+    },
+    errorMessage: {
+      type: String,
+      default: null
+    },
+    errorCode: {
+      type: [String, Number],
+      default: null
+    },
+    brandName: {
+      type: String,
+      default: 'Software Technologies'
+    },
+    showLogo: {
+      type: Boolean,
+      default: true
+    },
+    showBackground: {
+      type: Boolean,
+      default: true
+    },
+    showDefaultIllustration: {
+      type: Boolean,
+      default: true
+    },
+    showDefaultActions: {
+      type: Boolean,
+      default: true
+    },
+    showHomeButton: {
+      type: Boolean,
+      default: true
+    },
+    showBackButton: {
+      type: Boolean,
+      default: true
+    },
+    showRetryButton: {
+      type: Boolean,
+      default: false
+    },
+    homeUrl: {
+      type: String,
+      default: '/'
+    },
+    homeButtonText: {
+      type: String,
+      default: 'Go Home'
+    },
+    backButtonText: {
+      type: String,
+      default: 'Go Back'
+    },
+    retryButtonText: {
+      type: String,
+      default: 'Try Again'
+    },
+    helpText: {
+      type: String,
+      default: null
+    },
+    supportUrl: {
+      type: String,
+      default: null
+    }
   },
-  errorMessage: {
-    type: String,
-    default: null
-  },
-  errorCode: {
-    type: [String, Number],
-    default: null
-  },
-  brandName: {
-    type: String,
-    default: 'Software Technologies'
-  },
-  showLogo: {
-    type: Boolean,
-    default: true
-  },
-  showBackground: {
-    type: Boolean,
-    default: true
-  },
-  showDefaultIllustration: {
-    type: Boolean,
-    default: true
-  },
-  showDefaultActions: {
-    type: Boolean,
-    default: true
-  },
-  showHomeButton: {
-    type: Boolean,
-    default: true
-  },
-  showBackButton: {
-    type: Boolean,
-    default: true
-  },
-  showRetryButton: {
-    type: Boolean,
-    default: false
-  },
-  homeUrl: {
-    type: String,
-    default: '/'
-  },
-  homeButtonText: {
-    type: String,
-    default: 'Go Home'
-  },
-  backButtonText: {
-    type: String,
-    default: 'Go Back'
-  },
-  retryButtonText: {
-    type: String,
-    default: 'Try Again'
-  },
-  helpText: {
-    type: String,
-    default: null
-  },
-  supportUrl: {
-    type: String,
-    default: null
-  }
-})
+  emits: ['retry', 'back'],
+  setup(props, { emit }) {
+    const errorDefaults = computed(() => {
+      const defaults = {
+        '404': {
+          title: 'Page Not Found',
+          message: 'Sorry, we couldn\'t find the page you\'re looking for.',
+          icon: Error404Icon
+        },
+        '500': {
+          title: 'Server Error',
+          message: 'Something went wrong on our end. Please try again later.',
+          icon: Error500Icon
+        },
+        '403': {
+          title: 'Access Denied',
+          message: 'You don\'t have permission to access this resource.',
+          icon: ErrorGenericIcon
+        },
+        'generic': {
+          title: 'Something went wrong',
+          message: 'An unexpected error occurred. Please try again.',
+          icon: ErrorGenericIcon
+        }
+      }
 
-const emit = defineEmits(['retry', 'back'])
+      return defaults[props.errorType] || defaults.generic
+    })
 
-const errorDefaults = computed(() => {
-  const defaults = {
-    '404': {
-      title: 'Page Not Found',
-      message: 'Sorry, we couldn\'t find the page you\'re looking for.',
-      icon: Error404Icon
-    },
-    '500': {
-      title: 'Server Error',
-      message: 'Something went wrong on our end. Please try again later.',
-      icon: Error500Icon
-    },
-    '403': {
-      title: 'Access Denied',
-      message: 'You don\'t have permission to access this resource.',
-      icon: ErrorGenericIcon
-    },
-    'generic': {
-      title: 'Something went wrong',
-      message: 'An unexpected error occurred. Please try again.',
-      icon: ErrorGenericIcon
+    const errorIcon = computed(() => errorDefaults.value.icon)
+
+    const errorTitle = computed(() => {
+      return props.errorTitle || errorDefaults.value.title
+    })
+
+    const errorMessage = computed(() => {
+      return props.errorMessage || errorDefaults.value.message
+    })
+
+    const goBack = () => {
+      if (window.history.length > 1) {
+        window.history.back()
+      } else {
+        window.location.href = props.homeUrl
+      }
+      emit('back')
+    }
+
+    const retry = () => {
+      window.location.reload()
+      emit('retry')
+    }
+
+    const layoutClasses = computed(() => [
+      'min-h-screen relative flex items-center justify-center',
+      'px-4 sm:px-6 lg:px-8'
+    ])
+
+    const backgroundClasses = computed(() => [
+      'absolute inset-0 -z-10'
+    ])
+
+    const contentClasses = computed(() => [
+      'w-full max-w-lg mx-auto text-center'
+    ])
+
+    const headerClasses = computed(() => [
+      'mb-8'
+    ])
+
+    const errorContentClasses = computed(() => [
+      'space-y-6'
+    ])
+
+    const illustrationClasses = computed(() => [
+      'flex justify-center mb-6'
+    ])
+
+    const iconClasses = computed(() => [
+      'w-32 h-32 text-slate-400'
+    ])
+
+    const detailsClasses = computed(() => [
+      'space-y-3'
+    ])
+
+    const titleClasses = computed(() => [
+      'text-3xl font-bold text-slate-900'
+    ])
+
+    const messageClasses = computed(() => [
+      'text-lg text-slate-600'
+    ])
+
+    const codeClasses = computed(() => [
+      'text-sm text-slate-500 font-mono'
+    ])
+
+    const actionsClasses = computed(() => [
+      'mt-8'
+    ])
+
+    const helpClasses = computed(() => [
+      'mt-6'
+    ])
+
+    return {
+      errorIcon,
+      errorTitle,
+      errorMessage,
+      goBack,
+      retry,
+      layoutClasses,
+      backgroundClasses,
+      contentClasses,
+      headerClasses,
+      errorContentClasses,
+      illustrationClasses,
+      iconClasses,
+      detailsClasses,
+      titleClasses,
+      messageClasses,
+      codeClasses,
+      actionsClasses,
+      helpClasses
     }
   }
-
-  return defaults[props.errorType] || defaults.generic
-})
-
-const errorIcon = computed(() => errorDefaults.value.icon)
-
-const errorTitle = computed(() => {
-  return props.errorTitle || errorDefaults.value.title
-})
-
-const errorMessage = computed(() => {
-  return props.errorMessage || errorDefaults.value.message
-})
-
-const goBack = () => {
-  if (window.history.length > 1) {
-    window.history.back()
-  } else {
-    window.location.href = props.homeUrl
-  }
-  emit('back')
 }
-
-const retry = () => {
-  window.location.reload()
-  emit('retry')
-}
-
-const layoutClasses = computed(() => [
-  'min-h-screen relative flex items-center justify-center',
-  'px-4 sm:px-6 lg:px-8'
-])
-
-const backgroundClasses = computed(() => [
-  'absolute inset-0 -z-10'
-])
-
-const contentClasses = computed(() => [
-  'w-full max-w-lg mx-auto text-center'
-])
-
-const headerClasses = computed(() => [
-  'mb-8'
-])
-
-const errorContentClasses = computed(() => [
-  'space-y-6'
-])
-
-const illustrationClasses = computed(() => [
-  'flex justify-center mb-6'
-])
-
-const iconClasses = computed(() => [
-  'w-32 h-32 text-slate-400'
-])
-
-const detailsClasses = computed(() => [
-  'space-y-3'
-])
-
-const titleClasses = computed(() => [
-  'text-3xl font-bold text-slate-900'
-])
-
-const messageClasses = computed(() => [
-  'text-lg text-slate-600'
-])
-
-const codeClasses = computed(() => [
-  'text-sm text-slate-500 font-mono'
-])
-
-const actionsClasses = computed(() => [
-  'mt-8'
-])
-
-const helpClasses = computed(() => [
-  'mt-6'
-])
 </script>
