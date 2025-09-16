@@ -4,6 +4,16 @@ import AuthRoutes from './AuthRoutes'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: () => import('../views/DashboardPage.vue')
+    },
+    {
+      path: '/dashboard/analytics',
+      name: 'dashboard/analytics',
+      component: () => import('../views/AnalyticsPage.vue')
+    },
     AuthRoutes
   ],
   scrollBehavior(to, from, savedPosition) {
