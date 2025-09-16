@@ -69,11 +69,11 @@ const iconClass = computed(() => {
 })
 
 const linkVariants = cva(
-  "transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 inline-flex items-center",
+  "transition-colors duration-200 inline-flex items-center",
   {
     variants: {
       variant: {
-        primary: "text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300",
+        primary: "text-blue-800 hover:text-blue-800 dark:text-blue-500 dark:hover:text-blue-400",
         secondary: "text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-300",
         muted: "text-gray-500 hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-400",
         danger: "text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300",
