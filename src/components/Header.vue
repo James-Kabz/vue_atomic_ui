@@ -92,7 +92,6 @@
           </button>
 
           <!-- Profile Dropdown Menu -->
-          <!-- Profile Dropdown Menu -->
           <div v-if="showProfile"
             class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
             <div class="p-4 border-b border-gray-200">
@@ -100,13 +99,33 @@
               <p class="text-xs text-gray-500">{{ user.email }}</p>
             </div>
             <div class="py-2">
-              <router-link v-for="item in profileMenuItems" :key="item.name" :to="{ name: item.route }"
-                class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                @click="handleProfileAction(item)"
+              <!-- Updated router-links to work like sidebar navigation -->
+              <template v-for="item in profileMenuItems" :key="item.name">
+                <router-link 
+                  v-if="item.route"
+                  :to="{ name: item.route }"
+                  :class="cn(
+                    'flex items-center px-4 py-2 text-sm transition-colors',
+                    isItemActive(item) 
+                      ? 'bg-blue-50 text-blue-700' 
+                      : 'text-gray-700 hover:bg-gray-50'
+                  )"
+                  @click="handleNavigation(item)"
                 >
-                <Icon :icon="item.icon" class="w-4 h-4 mr-3 text-gray-400" />
-                {{ item.label }}
-              </router-link>
+                  <Icon :icon="item.icon" class="w-4 h-4 mr-3 text-gray-400" />
+                  {{ item.label }}
+                </router-link>
+                
+                <!-- For non-route items (like actions) -->
+                <button 
+                  v-else
+                  @click="handleProfileAction(item)"
+                  class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                >
+                  <Icon :icon="item.icon" class="w-4 h-4 mr-3 text-gray-400" />
+                  {{ item.label }}
+                </button>
+              </template>
             </div>
             <div class="border-t border-gray-200 py-2">
               <button @click="handleLogout"
@@ -137,6 +156,7 @@ const props = defineProps({
   sidebarCollapsed: { type: Boolean, default: false },
   currentSection: { type: String, default: 'Dashboard' },
   currentPage: { type: String, default: 'Overview' },
+  currentRoute: { type: String, default: '' }, // Add currentRoute prop like sidebar
   user: {
     type: Object,
     required: true,
@@ -151,8 +171,8 @@ const props = defineProps({
   }
 })
 
-// Emits
-const emit = defineEmits(['search', 'profile-action', 'logout'])
+// Emits - Add navigate emit like sidebar
+const emit = defineEmits(['search', 'profile-action', 'logout', 'navigate'])
 
 // State
 const searchQuery = ref('')
@@ -179,6 +199,22 @@ const toggleNotifications = () => {
 const toggleProfile = () => {
   showProfile.value = !showProfile.value
   showNotifications.value = false
+}
+
+// Add navigation handler like sidebar
+const handleNavigation = (item) => {
+  emit('navigate', item)
+  showProfile.value = false
+}
+
+// Check if navigation item is active (like sidebar)
+const isItemActive = (item) => {
+  if (!item.route) return false
+  
+  if (props.currentRoute === item.route) return true
+  if (props.currentRoute.startsWith(item.route + '/')) return true
+  
+  return false
 }
 
 const handleProfileAction = (item) => {
