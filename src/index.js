@@ -1,8 +1,3 @@
-// src/index.js
-
-import '@fortawesome/fontawesome-free/css/all.min.css'
-
-// Import components
 import Avatar from "./components/Avatar.vue"
 import Badge from "./components/Badge.vue"
 import Button from "./components/Button.vue"
