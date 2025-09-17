@@ -92,13 +92,16 @@
     <div class="absolute bottom-4 left-4 flex gap-2">
       <a v-for="social in socialLinks" :key="social.name" :href="social.url" :class="[
         'w-8 h-7 flex items-center justify-center rounded text-xs transition-colors',
-        social.variant === 'primary' ? 'bg-blue-600 hover:bg-blue-700 text-white' :
-          social.variant === 'info' ? 'bg-cyan-500 hover:bg-cyan-600 text-white' :
-            'bg-gray-600 hover:bg-gray-700 text-white'
+        social.variant === 'primary'
+          ? 'bg-blue-600 hover:bg-blue-700 text-white'
+          : social.variant === 'info'
+            ? 'bg-cyan-500 hover:bg-cyan-600 text-white'
+            : 'bg-gray-600 hover:bg-gray-700 text-white'
       ]">
-        <i :class="social.icon" />
+        <font-awesome-icon :icon="['fab', social.icon]" />
       </a>
     </div>
+
   </div>
 </template>
 
@@ -183,9 +186,9 @@ export default {
     socialLinks: {
       type: Array,
       default: () => [
-        { name: 'linkedin', url: '#', icon: 'fab fa-linkedin-in', variant: 'primary' },
-        { name: 'facebook', url: '#', icon: 'fab fa-facebook-f', variant: 'primary' },
-        { name: 'twitter', url: '#', icon: 'fab fa-twitter', variant: 'info' }
+        { name: 'linkedin', url: '#', icon: 'linkedin-in', variant: 'primary' },
+        { name: 'facebook', url: '#', icon: 'facebook-f', variant: 'primary' },
+        { name: 'twitter', url: '#', icon: 'twitter', variant: 'info' }
       ]
     }
   },

@@ -15,6 +15,11 @@ const router = createRouter({
       name: 'dashboard/analytics',
       component: () => import('../views/AnalyticsPage.vue')
     },
+    {
+      path: '/table',
+      name: 'table',
+      component: () => import('../views/DataTableTest.vue')
+    },
     AuthRoutes,
     DashboardRoutes
   ],

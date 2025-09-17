@@ -5,7 +5,7 @@
       <!-- Search Input -->
       <div class="flex-1 min-w-64">
         <div class="relative">
-          <SearchIcon :class="searchIconClasses" />
+          <font-awesome-icon icon="magnifying-glass" :class="searchIconClasses" />
           <Input
             :model-value="searchQuery"
             @input="$emit('update:searchQuery', $event.target.value)"
@@ -17,7 +17,7 @@
             @click="$emit('update:searchQuery', '')"
             :class="clearSearchButtonClasses"
           >
-            <XMarkIcon class="w-4 h-4" />
+            <font-awesome-icon icon="xmark" class="w-4 h-4" />
           </Button>
         </div>
       </div>
@@ -79,7 +79,7 @@
           @click="$emit('export')"
           :class="exportButtonClasses"
         >
-          <ArrowDownTrayIcon class="w-4 h-4" />
+          <font-awesome-icon icon="download" />
           Export
         </Button>
 
@@ -89,7 +89,7 @@
           @click="$emit('add')"
           :class="addButtonClasses"
         >
-          <PlusIcon class="w-4 h-4" />
+          <font-awesome-icon icon="plus" />
           Add New
         </Button>
       </div>
@@ -109,7 +109,7 @@
             @click="removeFilter(filter.key)"
             :class="activeFilterRemoveButtonClasses"
           >
-            <XMarkIcon class="w-3 h-3" />
+            <font-awesome-icon icon="xmark" class="w-3 h-3" />
           </Button>
         </div>
       </div>
@@ -238,7 +238,7 @@ const inputVariants = cva('border border-slate-300 rounded-md focus:outline-none
 const buttonVariants = cva('rounded-md flex items-center gap-2 font-medium transition-colors', {
   variants: {
     variant: {
-      default: 'text-slate-600 hover:text-slate-800 border border-slate-300 hover:bg-slate-50',
+      default: 'text-slate-600 hover:text-slate-100 border border-slate-300 hover:bg-blue-200',
       primary: 'text-white bg-blue-600 hover:bg-blue-700 border border-blue-600',
       success: 'text-white bg-green-600 hover:bg-green-700 border border-green-600',
       ghost: 'text-slate-600 hover:text-slate-800 hover:bg-slate-100'
@@ -338,7 +338,7 @@ const searchInputClasses = computed(() =>
 )
 
 const clearSearchButtonClasses = computed(() => 
-  'absolute right-2 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1'
+  'absolute right-2 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-300 p-1'
 )
 
 const selectClasses = computed(() => 
@@ -381,7 +381,7 @@ const activeFilterTagClasses = computed(() =>
 )
 
 const activeFilterRemoveButtonClasses = computed(() => 
-  'text-blue-600 hover:text-blue-800 p-0.5'
+  'text-blue-200 hover:text-blue-200 p-0.5'
 )
 
 // Methods
