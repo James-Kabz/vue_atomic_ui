@@ -104,7 +104,7 @@
                 class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
                 @click="handleProfileAction(item)"
                 >
-                <font-awesome-icon :icon="item.icon" class="w-4 h-4 mr-3 text-gray-400" />
+                <Icon :icon="item.icon" class="w-4 h-4 mr-3 text-gray-400" />
                 {{ item.label }}
               </router-link>
             </div>
@@ -129,6 +129,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { cn } from '../utils/cn.js'
+import Icon from './Icon.vue'
 
 // Props
 const props = defineProps({

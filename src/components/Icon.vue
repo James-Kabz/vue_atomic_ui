@@ -1,6 +1,7 @@
 <template>
   <font-awesome-icon
     :icon="[prefix, icon]"
+    :size="faSize"
     :class="iconClasses"
     :aria-hidden="!ariaLabel"
     :aria-label="ariaLabel"
@@ -17,7 +18,7 @@ const props = defineProps({
     type: String,
     required: true
   },
-  prefix: { 
+  prefix: {
     type: String,
     default: 'fas'
   },
@@ -29,15 +30,16 @@ const props = defineProps({
   ariaLabel: String
 })
 
-const sizeClasses = computed(() => {
+const faSize = computed(() => {
   const sizes = {
-    xs: 'w-3 h-3',
-    sm: 'w-4 h-4',
-    md: 'w-5 h-5',
-    lg: 'w-6 h-6',
-    xl: 'w-8 h-8'
+    xs: 'xs',
+    sm: 'sm', 
+    md: 'lg',      // FontAwesome sizes: xs, sm, lg, xl, 2x, 3x, etc.
+    lg: 'xl',
+    xl: '2x',
+    xxl: '3x'
   }
-  return sizes[props.size] || sizes.md
+  return sizes[props.size] || 'lg'
 })
 
 const colorClasses = computed(() =>
@@ -45,7 +47,6 @@ const colorClasses = computed(() =>
 )
 
 const iconClasses = computed(() => [
-  sizeClasses.value,
   colorClasses.value,
   'inline-block'
 ])

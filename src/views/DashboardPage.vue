@@ -185,13 +185,6 @@ const layoutRef = ref(null)
 // Inject layout context (if needed for nested components)
 const layoutContext = inject('dashboardLayout', null)
 
-// User data
-const user = ref({
-  name: 'John Doe',
-  email: 'john.doe@example.com',
-  role: 'Administrator'
-})
-
 // Demo data
 const stats = ref([
   {

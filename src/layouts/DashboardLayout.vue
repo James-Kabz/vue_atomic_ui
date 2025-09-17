@@ -3,8 +3,10 @@
     <!-- Sidebar -->
     <Sidebar
       ref="sidebarRef"
-      :collapsed="sidebarCollapsed"
       :navigation-items="navigationItems"
+      :header="{
+        title: 'Risk & Compliance',
+      }"
       :current-route="currentRoute"
       @toggle="handleSidebarToggle"
       @navigate="handleNavigation"
@@ -17,7 +19,7 @@
       :current-section="currentSection"
       :current-page="currentPage"
       :user="user"
-      :notifications="userNotifications"
+      :profile-menu-items="profileMenuItems"
       @search="handleSearch"
       @profile-action="handleProfileAction"
       @logout="handleLogout"
@@ -36,13 +38,13 @@
 </template>
 
 <script setup>
-import { Header, Sidebar } from '@stlhorizon/vue-ui'
 import { ref, computed, provide, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import Sidebar from '../components/Sidebar.vue'
+import Header from '../components/Header.vue'
 
 const router = useRouter()
 const route = useRoute()
-
 // Props
 const props = defineProps({
   user: {
@@ -63,6 +65,13 @@ const props = defineProps({
   }
 })
 
+// State
+const sidebarRef = ref(null)
+const sidebarCollapsed = ref(false)
+const currentSection = ref(props.initialSection)
+const currentPage = ref(props.initialPage)
+const currentRoute = ref(route.path)
+
 // Emits
 const emit = defineEmits([
   'navigate',
@@ -72,28 +81,40 @@ const emit = defineEmits([
   'sidebar-toggle'
 ])
 
-// State
-const sidebarRef = ref(null)
-const sidebarCollapsed = ref(false)
-const currentSection = ref(props.initialSection)
-const currentPage = ref(props.initialPage)
-const currentRoute = ref(route.path)
+const profileMenuItems = [
+  {
+    name: 'profile',
+    label: 'Profile',
+    router: 'profile',
+    icon: 'user'
+  },
+  {
+    name: 'settings',
+    label: 'Settings',
+    router: 'settings',
+    icon: 'cog'
+  },
+]
 
 // Navigation items configuration (removed active property)
-const navigationItems = ref([
+const navigationItems = [
+  {
+    type: 'section',
+    label: 'Dashboard'
+  },
   {
     type: 'link',
     name: 'dashboard',
     label: 'Dashboard',
     route: '/dashboard',
-    icon: 'DashboardIcon'
+    icon:  'home'
   },
   {
     type: 'link',
     name: 'analytics',
     label: 'Analytics',
     route: '/analytics',
-    icon: 'ReportsIcon',
+    icon: 'user',
     badge: '2'
   },
   {
@@ -105,34 +126,19 @@ const navigationItems = ref([
     name: 'users',
     label: 'Users',
     route: '/users',
-    icon: 'UsersIcon'
+    icon: 'users'
   },
   {
     type: 'link',
     name: 'roles',
     label: 'Roles & Permissions',
     route: '/roles',
-    icon: 'SettingsIcon'
+    icon: 'cogs'
   },
-  {
-    type: 'section',
-    label: 'Settings'
-  },
-  {
-    type: 'link',
-    name: 'preferences',
-    label: 'Preferences',
-    route: '/preferences',
-    icon: 'SettingsIcon'
-  },
-  {
-    type: 'link',
-    name: 'integrations',
-    label: 'Integrations',
-    route: '/integrations',
-    icon: 'SettingsIcon'
-  }
-])
+]
+
+
+
 
 
 const updateBreadcrumbFromRoute = (routePath) => {
