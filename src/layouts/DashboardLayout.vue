@@ -85,13 +85,13 @@ const profileMenuItems = [
   {
     name: 'profile',
     label: 'Profile',
-    router: 'profile',
+    route: 'profile',
     icon: 'user'
   },
   {
     name: 'settings',
     label: 'Settings',
-    router: 'settings',
+    route: 'settings',
     icon: 'cog'
   },
 ]

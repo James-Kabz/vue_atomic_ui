@@ -103,7 +103,7 @@
               <template v-for="item in profileMenuItems" :key="item.name">
                 <router-link 
                   v-if="item.route"
-                  :to="{ name: item.route }"
+                  :to="item.route"
                   :class="cn(
                     'flex items-center px-4 py-2 text-sm transition-colors',
                     isItemActive(item) 
