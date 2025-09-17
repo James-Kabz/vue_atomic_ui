@@ -88,16 +88,44 @@ export default defineNuxtConfig({
 
 ### Global Registration (Recommended)
 
+### Font awesome icons integration
+First install the icons using this commands
+npm install @fortawesome/vue-fontawesome@latest-3         
+npm install @fortawesome/free-solid-svg-icons                            
+npm install @fortawesome/free-regular-svg-icons
+npm install @fortawesome/free-brands-svg-icons
+npm install @fortawesome/fontawesome-svg-core
+
+<!-- then import the libraries like the code below -->
+
 ```js
 // main.js
 import { createApp } from 'vue'
-import VueUI from '@stlhorizon/vue-ui'
-import '@stlhorizon/vue-ui/dist/vue-ui.css'
+import { createPinia } from 'pinia'
 import App from './App.vue'
+import router from './router'
+import VueUI from '@stlhorizon/vue-ui'
+import "@stlhorizon/vue-ui/dist/vue-ui.css"
+import VueApexCharts from 'vue3-apexcharts'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fas } from '@fortawesome/free-solid-svg-icons'
+import { far } from '@fortawesome/free-regular-svg-icons'
+import { fab } from '@fortawesome/free-brands-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+library.add(fas, far, fab) 
 
 const app = createApp(App)
-app.use(VueUI) // Auto-registers all components globally
+
+app.use(createPinia())
+app.use(router)
+
+app.component('font-awesome-icon', FontAwesomeIcon)
+app.use(VueApexCharts);
+app.use(VueUI) // register the UI 
+
 app.mount('#app')
+
 ```
 
 ### Individual Component Import
