@@ -17,6 +17,7 @@
       :current-section="currentSection"
       :current-page="currentPage"
       :user="user"
+      :notifications="userNotifications"
       @search="handleSearch"
       @profile-action="handleProfileAction"
       @logout="handleLogout"
