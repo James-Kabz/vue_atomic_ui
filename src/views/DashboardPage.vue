@@ -1,5 +1,5 @@
 <template>
-  <DashboardLayout
+  <!-- <DashboardLayout
     ref="layoutRef"
     :user="user"
     initial-section="Dashboard"
@@ -9,7 +9,7 @@
     @profile-action="handleProfileAction"
     @logout="handleLogout"
     @sidebar-toggle="handleSidebarToggle"
-  >
+  > -->
     <!-- Demo Content -->
     <div class="space-y-6">
       <!-- Page Header -->
@@ -172,12 +172,11 @@
         </div>
       </div>
     </div>
-  </DashboardLayout>
+  <!-- </DashboardLayout> -->
 </template>
 
 <script setup>
 import { ref, computed, inject } from 'vue'
-import DashboardLayout from '../layouts/DashboardLayout.vue'
 
 // Layout reference
 const layoutRef = ref(null)

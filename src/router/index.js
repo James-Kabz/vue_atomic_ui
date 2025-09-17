@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import AuthRoutes from './AuthRoutes'
+import DashboardRoutes from './DashboardRoutes'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,7 +15,8 @@ const router = createRouter({
       name: 'dashboard/analytics',
       component: () => import('../views/AnalyticsPage.vue')
     },
-    AuthRoutes
+    AuthRoutes,
+    DashboardRoutes
   ],
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) return savedPosition

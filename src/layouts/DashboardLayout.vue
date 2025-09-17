@@ -5,6 +5,7 @@
       ref="sidebarRef"
       :collapsed="sidebarCollapsed"
       :navigation-items="navigationItems"
+      :current-route="currentRoute"
       @toggle="handleSidebarToggle"
       @navigate="handleNavigation"
     />
@@ -27,16 +28,19 @@
       :style="{ marginLeft: `${sidebarWidth}px` }"
     >
       <div class="p-6">
-        <slot />
+        <router-view />
       </div>
     </main>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, provide } from 'vue'
-import Sidebar from '../components/Sidebar.vue'
-import Header from '../components/Header.vue'
+import { Header, Sidebar } from '@stlhorizon/vue-ui'
+import { ref, computed, provide, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+
+const router = useRouter()
+const route = useRoute()
 
 // Props
 const props = defineProps({
@@ -72,24 +76,23 @@ const sidebarRef = ref(null)
 const sidebarCollapsed = ref(false)
 const currentSection = ref(props.initialSection)
 const currentPage = ref(props.initialPage)
+const currentRoute = ref(route.path)
 
-// Navigation items configuration
+// Navigation items configuration (removed active property)
 const navigationItems = ref([
   {
     type: 'link',
     name: 'dashboard',
     label: 'Dashboard',
-    href: '/dashboard',
-    icon: 'DashboardIcon',
-    active: true
+    route: '/dashboard',
+    icon: 'DashboardIcon'
   },
   {
     type: 'link',
     name: 'analytics',
     label: 'Analytics',
-    href: '/analytics',
+    route: '/analytics',
     icon: 'ReportsIcon',
-    active: false,
     badge: '2'
   },
   {
@@ -100,17 +103,15 @@ const navigationItems = ref([
     type: 'link',
     name: 'users',
     label: 'Users',
-    href: '/users',
-    icon: 'UsersIcon',
-    active: false
+    route: '/users',
+    icon: 'UsersIcon'
   },
   {
     type: 'link',
     name: 'roles',
     label: 'Roles & Permissions',
-    href: '/roles',
-    icon: 'SettingsIcon',
-    active: false
+    route: '/roles',
+    icon: 'SettingsIcon'
   },
   {
     type: 'section',
@@ -120,19 +121,39 @@ const navigationItems = ref([
     type: 'link',
     name: 'preferences',
     label: 'Preferences',
-    href: '/preferences',
-    icon: 'SettingsIcon',
-    active: false
+    route: '/preferences',
+    icon: 'SettingsIcon'
   },
   {
     type: 'link',
     name: 'integrations',
     label: 'Integrations',
-    href: '/integrations',
-    icon: 'SettingsIcon',
-    active: false
+    route: '/integrations',
+    icon: 'SettingsIcon'
   }
 ])
+
+
+const updateBreadcrumbFromRoute = (routePath) => {
+  const sectionMap = {
+    '/dashboard': { section: 'Dashboard', page: 'Overview' },
+    '/analytics': { section: 'Dashboard', page: 'Analytics' },
+    '/users': { section: 'Management', page: 'Users' },
+    '/roles': { section: 'Management', page: 'Roles & Permissions' },
+    '/preferences': { section: 'Settings', page: 'Preferences' },
+    '/integrations': { section: 'Settings', page: 'Integrations' }
+  }
+
+  const breadcrumb = sectionMap[routePath] || { section: 'Dashboard', page: 'Overview' }
+  currentSection.value = breadcrumb.section
+  currentPage.value = breadcrumb.page
+}
+
+// Watch for route changes to update current route and breadcrumb
+watch(() => route.path, (newPath) => {
+  currentRoute.value = newPath
+  updateBreadcrumbFromRoute(newPath)
+}, { immediate: true })
 
 // Computed
 const sidebarWidth = computed(() => {
@@ -146,18 +167,12 @@ const handleSidebarToggle = (collapsed) => {
 }
 
 const handleNavigation = (item) => {
-  // Update active states
-  navigationItems.value.forEach(navItem => {
-    if (navItem.type === 'link') {
-      navItem.active = navItem.name === item.name
-    }
-  })
-
-  // Update current section and page
-  updateBreadcrumb(item)
-  
+  if (item.route) {
+    router.push(item.route)
+  }
   emit('navigate', item)
 }
+
 
 const updateBreadcrumb = (item) => {
   const sectionMap = {
