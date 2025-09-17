@@ -21,7 +21,23 @@
         :fieldId="fieldId"
         :hasError="hasError"
         :ariaDescribedBy="ariaDescribedBy"
+        :showPassword="showPassword"
+        :togglePasswordVisibility="togglePasswordVisibility"
       />
+      
+      <!-- Password Toggle Button (only for password fields) -->
+      <button
+        v-if="type === 'password'"
+        type="button"
+        @click="togglePasswordVisibility"
+        class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 transition-colors"
+        :aria-label="showPassword ? 'Hide password' : 'Show password'"
+      >
+        <font-awesome-icon 
+          :icon="showPassword ? 'eye-slash' : 'eye'" 
+          class="w-4 h-4" 
+        />
+      </button>
     </div>
 
     <!-- Error Message -->
@@ -40,7 +56,7 @@
         role="alert"
         aria-live="polite"
       >
-        <ExclamationCircleIcon class="w-4 h-4 flex-shrink-0 mt-0.5" />
+        <font-awesome-icon icon="exclamation-triangle" class="w-4 h-4 flex-shrink-0 mt-0.5" />
         <span>{{ error }}</span>
       </div>
     </Transition>
@@ -67,7 +83,7 @@
         v-if="success && !hasError"
         :class="cn(messageVariants({ size, intent: 'success' }))"
       >
-        <CheckCircleIcon class="w-4 h-4 flex-shrink-0 mt-0.5" />
+        <font-awesome-icon icon="check" class="w-4 h-4 flex-shrink-0 mt-0.5" />
         <span>{{ success }}</span>
       </div>
     </Transition>
@@ -75,25 +91,9 @@
 </template>
 
 <script setup>
-import { computed, useId } from "vue"
+import { computed, useId, ref } from "vue"
 import { cva } from "class-variance-authority"
 import { cn } from "../utils/cn.js"
-
-// Icons
-const ExclamationCircleIcon = {
-  template: `
-    <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
-    </svg>
-  `,
-}
-const CheckCircleIcon = {
-  template: `
-    <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-    </svg>
-  `,
-}
 
 const props = defineProps({
   label: String,
@@ -102,6 +102,7 @@ const props = defineProps({
   success: String,
   helpText: String,
   required: { type: Boolean, default: false },
+  type: { type: String, default: "text" }, // Added type prop
   size: {
     type: String,
     default: "md",
@@ -112,6 +113,11 @@ const props = defineProps({
 
 const fieldId = useId()
 const hasError = computed(() => !!props.error)
+const showPassword = ref(false)
+
+const togglePasswordVisibility = () => {
+  showPassword.value = !showPassword.value
+}
 
 const ariaDescribedBy = computed(() => {
   const ids = []
@@ -160,7 +166,7 @@ const messageVariants = cva("flex items-start gap-2", {
     size: {
       sm: "text-xs",
       md: "text-sm",
-      lg: "text-sm", // same as before
+      lg: "text-sm",
     },
     intent: {
       error: "text-red-600",

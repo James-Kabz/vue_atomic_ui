@@ -1,6 +1,6 @@
 <template>
-  <span
-    v-html="iconTemplate"
+  <font-awesome-icon
+    :icon="[prefix, icon]"
     :class="iconClasses"
     :aria-hidden="!ariaLabel"
     :aria-label="ariaLabel"
@@ -10,13 +10,16 @@
 
 <script setup>
 import { computed } from 'vue'
-
-import { icons } from './icons' 
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 const props = defineProps({
-  name: {
+  icon: {
     type: String,
     required: true
+  },
+  prefix: { 
+    type: String,
+    default: 'fas'
   },
   size: {
     type: String,
@@ -24,15 +27,6 @@ const props = defineProps({
   },
   color: String,
   ariaLabel: String
-})
-
-const iconTemplate = computed(() => {
-  const icon = icons[props.name]
-  if (!icon) {
-    console.warn(`Icon "${props.name}" not found`)
-    return ''
-  }
-  return icon.template
 })
 
 const sizeClasses = computed(() => {

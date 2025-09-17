@@ -7,7 +7,6 @@ import Input from '../../components/Input.vue'
 import Checkbox from '../../components/Checkbox.vue'
 import Button from '../../components/Button.vue'
 import Link from '../../components/Link.vue'
-import AuthLayout from '../../layouts/AuthLayout.vue'
 
 const email = ref('')
 const password = ref('')
@@ -38,11 +37,10 @@ const onSubmit = async () => {
       rememberMe: rememberMe.value
     })
 
-
     // simulate API delay
     await new Promise(resolve => setTimeout(resolve, 2000))
     // toast message
-    toast.success('Sign in successful!', {
+    toast.info('Sign in successful!', {
       description: `Welcome back ${email.value}`,
     })
   }
@@ -65,7 +63,12 @@ const isFormValid = computed(() => {
 
     <form @submit.prevent="onSubmit" class="space-y-6">
       <!-- Email -->
-      <FormField label="Email" :error="errors.email" required>
+      <FormField 
+        label="Email" 
+        :error="errors.email" 
+        type="email"
+        required
+      >
         <template #default="{ fieldId, hasError, ariaDescribedBy }">
           <Input
             placeholder="Enter your email"
@@ -79,23 +82,36 @@ const isFormValid = computed(() => {
         </template>
       </FormField>
 
-      <!-- Password -->
-      <FormField label="Password" :error="errors.password" required>
-        <template #default="{ fieldId, hasError, ariaDescribedBy }">
+      <!-- Password with Toggle -->
+      <FormField 
+        label="Password" 
+        :error="errors.password" 
+        type="password"
+        required
+      >
+        <template #default="{ fieldId, hasError, ariaDescribedBy, showPassword }">
           <Input
             placeholder="Enter your password"
             :id="fieldId"
             v-model="password"
-            type="password"
+            :type="showPassword ? 'text' : 'password'"
             :disabled="isLoading"
-            :class="hasError ? 'border-red-500' : 'border-slate-300'"
+            :class="[
+              hasError ? 'border-red-500' : 'border-slate-300',
+              'pr-10' // Add padding to accommodate the toggle button
+            ]"
             :aria-describedby="ariaDescribedBy"
           />
         </template>
       </FormField>
 
       <!-- Company Code -->
-      <FormField label="Company Code" :error="errors.companyCode" required>
+      <FormField 
+        label="Company Code" 
+        :error="errors.companyCode" 
+        type="text"
+        required
+      >
         <template #default="{ fieldId, hasError, ariaDescribedBy }">
           <Input
             placeholder="Enter your company code"

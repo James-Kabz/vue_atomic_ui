@@ -17,18 +17,18 @@
           :aria-live="toast.variant === 'error' ? 'assertive' : 'polite'"
           class="group pointer-events-auto relative flex w-full items-center justify-between space-x-4 overflow-hidden rounded-md border p-6 pr-8 shadow-lg transition-all">
           <!-- Icon -->
-          <Icon v-if="showIcon(toast)" :name="getIconName(toast)" :class="getIconClasses(toast)"
+          <Icon v-if="showIcon(toast)" :icon="getIconName(toast)" :class="getIconClasses(toast)"
             class="h-4 w-4 shrink-0" />
 
           <!-- Content -->
           <div class="flex-1 grid gap-1">
-            <div v-if="toast.title" class="text-sm font-semibold">
+            <div v-if="toast.title" class="text-lg font-extrabold">
               {{ toast.title }}
             </div>
-            <div v-if="toast.message" class="text-sm opacity-90">
+            <div v-if="toast.message" class="text-md opacity-90">
               {{ toast.message }}
             </div>
-            <div v-if="toast.description" class="text-sm opacity-90">
+            <div v-if="toast.description" class="text-md opacity-90">
               {{ toast.description }}
             </div>
 
@@ -45,7 +45,7 @@
           <!-- Close Button -->
           <button v-if="isDismissible(toast)" @click="dismiss(toast.id)"
             class="absolute right-2 top-2 rounded-md p-1 text-foreground/50 opacity-0 transition-opacity hover:text-foreground focus:opacity-100 focus:outline-none focus:ring-2 group-hover:opacity-100">
-            <Icon name="x" class="h-4 w-4" />
+            <Icon icon="x" class="h-4 w-4" />
           </button>
         </div>
       </TransitionGroup>
@@ -132,8 +132,8 @@ const iconMap = {
   default: 'bell',
   info: 'info',
   success: 'check-circle',
-  warning: 'alert-triangle',
-  error: 'alert-circle',
+  warning: 'triangle-exclamation',
+  error: 'circle-exclamation',
   loading: 'loader'
 }
 
