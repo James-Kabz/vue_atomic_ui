@@ -1,32 +1,11 @@
 <template>
-  <button
-    :class="cn(buttonVariants({ variant, size }), $attrs.class)"
-    :disabled="disabled || loading"
-    :aria-disabled="disabled || loading"
-    :aria-busy="loading"
-    v-bind="$attrs"
-  >
+  <button :class="cn(buttonVariants({ variant, size }), $attrs.class)" :disabled="disabled || loading"
+    :aria-disabled="disabled || loading" :aria-busy="loading" v-bind="$attrs">
     <!-- Loading Spinner -->
-    <svg
-      v-if="loading"
-      class="animate-spin mr-2 h-4 w-4 text-current"
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-    >
-      <circle
-        class="opacity-25"
-        cx="12"
-        cy="12"
-        r="10"
-        stroke="currentColor"
-        stroke-width="4"
-      />
-      <path
-        class="opacity-75"
-        fill="currentColor"
-        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-      />
+    <svg v-if="loading" class="animate-spin mr-2 h-4 w-4 text-current" xmlns="http://www.w3.org/2000/svg" fill="none"
+      viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
     </svg>
 
     <!-- Icon slot (only show if not loading) -->
@@ -51,13 +30,31 @@ const props = defineProps({
     type: String,
     default: 'default',
     validator: (value) =>
-      ['default', 'destructive', 'outline', 'secondary', 'ghost', 'link'].includes(value),
+      [
+        'default',
+        'destructive',
+        'outline',
+        'secondary',
+        'ghost',
+        'link',
+        'success',
+        'warning',
+        'info',
+        'subtle',
+        'dark',
+        'light',
+        'primaryOutline',
+        'destructiveOutline',
+        'successOutline',
+        'gradient',
+      ].includes(value),
+
   },
   size: {
     type: String,
     default: 'default',
     validator: (value) =>
-      ['default', 'sm', 'lg', 'icon'].includes(value),
+      ['default','xs', 'sm', 'lg', 'icon'].includes(value),
   },
   disabled: {
     type: Boolean,
@@ -85,14 +82,36 @@ const buttonVariants = cva(
         outline:
           'border border-gray-300 bg-white text-gray-900 hover:bg-gray-100',
         secondary:
-          'bg-gray-600 text-gray-900 hover:bg-gray-200',
+          'bg-gray-600 text-white hover:bg-gray-700',
         ghost:
           'bg-transparent text-gray-700 hover:bg-gray-100',
         link:
           'text-blue-600 hover:underline',
-      },
+        success:
+          'bg-green-600 text-white hover:bg-green-700',
+        warning:
+          'bg-yellow-500 text-black hover:bg-yellow-600',
+        info:
+          'bg-cyan-600 text-white hover:bg-cyan-700',
+        subtle:
+          'bg-gray-100 text-gray-800 hover:bg-gray-200',
+        dark:
+          'bg-gray-900 text-white hover:bg-black',
+        light:
+          'bg-gray-50 text-gray-800 border border-gray-200 hover:bg-gray-100',
+        primaryOutline:
+          'border border-blue-600 text-blue-600 bg-transparent hover:bg-blue-50',
+        destructiveOutline:
+          'border border-red-600 text-red-600 bg-transparent hover:bg-red-50',
+        successOutline:
+          'border border-green-600 text-green-600 bg-transparent hover:bg-green-50',
+        gradient:
+          'bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700',
+      }
+      ,
       size: {
         default: 'h-10 px-4 py-2',
+        xs: 'h-7 rounded-md px-1',
         sm: 'h-9 rounded-md px-3',
         lg: 'h-11 rounded-md px-8',
         icon: 'h-10 w-10',
