@@ -17,7 +17,7 @@
         @click="nextMonth"
         aria-label="Next Month"
       >
-        <Icon :icon="'chevron-right" class="w-5 h-5" />
+        <Icon :icon="chevron-right" class="w-5 h-5" />
       </Button>
     </div>
 
