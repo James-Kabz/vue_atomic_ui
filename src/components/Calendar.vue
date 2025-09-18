@@ -7,7 +7,7 @@
         @click="prevMonth"
         aria-label="Previous Month"
       >
-        <ChevronLeftIcon class="w-5 h-5" />
+        <Icon :icon="chevron-left" class="w-5 h-5" />
       </Button>
       <div class="text-lg font-semibold text-slate-900">
         {{ monthName }} {{ currentYear }}
@@ -17,7 +17,7 @@
         @click="nextMonth"
         aria-label="Next Month"
       >
-        <ChevronRightIcon class="w-5 h-5" />
+        <Icon :icon="'chevron-right" class="w-5 h-5" />
       </Button>
     </div>
 
@@ -67,18 +67,8 @@
 import { ref, computed } from 'vue'
 import { cn } from '../utils/cn.js'
 import Button from './Button.vue'
+import Icon from './Icon.vue'
 
-const ChevronLeftIcon = {
-  template: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-  </svg>`
-}
-
-const ChevronRightIcon = {
-  template: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-  </svg>`
-}
 
 const today = new Date()
 const currentMonth = ref(today.getMonth())
