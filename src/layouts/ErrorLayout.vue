@@ -43,6 +43,10 @@
 
         <!-- Error Details -->
         <div :class="detailsClasses">
+          <div v-if="errorCode" :class="codeClasses">
+            {{ errorCode }}
+          </div>
+
           <h1 :class="titleClasses">
             <slot name="title">{{ errorTitle }}</slot>
           </h1>
@@ -50,24 +54,19 @@
           <p :class="messageClasses">
             <slot name="message">{{ errorMessage }}</slot>
           </p>
-
-          <!-- Error Code -->
-          <div v-if="errorCode" :class="codeClasses">
-            Error Code: {{ errorCode }}
-          </div>
         </div>
 
         <!-- Actions -->
         <div v-if="$slots.actions || showDefaultActions" :class="actionsClasses">
           <slot name="actions">
-            <div class="flex flex-col sm:flex-row gap-3 justify-center">
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 v-if="showHomeButton"
-                :href="homeUrl"
+                @click="goHome"
                 variant="primary"
                 size="lg"
               >
-                <Icon icon="home" size="sm" class="mr-2" />
+                <Icon :icon="homeButtonIcon" class="w-4 h-4 mr-2" />
                 {{ homeButtonText }}
               </Button>
 
@@ -77,7 +76,7 @@
                 size="lg"
                 @click="goBack"
               >
-                <Icon icon="arrow-left" size="sm" class="mr-2" />
+                <Icon icon="arrow-left" class="w-4 h-4 mr-2" />
                 {{ backButtonText }}
               </Button>
 
@@ -87,21 +86,58 @@
                 size="lg"
                 @click="retry"
               >
-                <Icon icon="redo" size="sm" class="mr-2" />
+                <Icon icon="redo" class="w-4 h-4 mr-2" />
                 {{ retryButtonText }}
+              </Button>
+
+              <Button
+                v-if="showSupportButton"
+                variant="ghost"
+                size="lg"
+                @click="$emit('contact-support')"
+              >
+                <Icon icon="user" class="w-4 h-4 mr-2" />
+                Contact Support
               </Button>
             </div>
           </slot>
         </div>
 
-        <!-- Additional Help -->
+        <!-- Additional Info Section -->
+        <div v-if="$slots['additional-info'] || showAdditionalInfo" :class="additionalInfoClasses">
+          <slot name="additional-info">
+            <div class="mt-8 max-w-md mx-auto" v-if="additionalInfoConfig">
+              <div class="bg-white rounded-lg border border-slate-200 shadow-sm p-6">
+                <h3 class="text-lg font-semibold text-slate-900 mb-4">
+                  {{ additionalInfoConfig.title }}
+                </h3>
+                <ul class="space-y-3">
+                  <li 
+                    v-for="(item, index) in additionalInfoConfig.items" 
+                    :key="index"
+                    class="flex items-start gap-3 text-sm text-slate-600"
+                  >
+                    <Icon 
+                      :icon="item.icon" 
+                      :color="item.iconColor || 'slate-400'" 
+                      class="w-4 h-4 mt-0.5 flex-shrink-0" 
+                    />
+                    <span>{{ item.text }}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </slot>
+        </div>
+
+        <!-- Help Section -->
         <div v-if="$slots.help || helpText" :class="helpClasses">
           <slot name="help">
             <p class="text-sm text-slate-600">
               {{ helpText }}
               <a v-if="supportUrl" :href="supportUrl" class="text-blue-600 hover:text-blue-700 underline ml-1">
-                <Icon icon="question-circle" size="xs" class="mr-1" />
-                Contact Support
+                <Icon icon="question-circle" class="w-4 h-4 inline mr-1" />
+                Get Help
               </a>
             </p>
           </slot>
@@ -113,6 +149,7 @@
 
 <script>
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 import Button from '../components/Button.vue'
 import Icon from '../components/Icon.vue'
 
@@ -124,9 +161,12 @@ export default {
   },
   props: {
     errorType: {
-      type: String,
-      default: '404',
-      validator: (value) => ['404', '500', '403', '401', '400', '429', '503', 'network', 'timeout', 'generic'].includes(value)
+      type: [String, Number],
+      default: '404'
+    },
+    errorCode: {
+      type: [String, Number],
+      default: null
     },
     errorTitle: {
       type: String,
@@ -134,10 +174,6 @@ export default {
     },
     errorMessage: {
       type: String,
-      default: null
-    },
-    errorCode: {
-      type: [String, Number],
       default: null
     },
     brandName: {
@@ -172,6 +208,14 @@ export default {
       type: Boolean,
       default: false
     },
+    showSupportButton: {
+      type: Boolean,
+      default: false
+    },
+    showAdditionalInfo: {
+      type: Boolean,
+      default: false
+    },
     homeUrl: {
       type: String,
       default: '/'
@@ -197,73 +241,105 @@ export default {
       default: null
     }
   },
-  emits: ['retry', 'back'],
+  emits: ['retry', 'back', 'contact-support'],
   setup(props, { emit }) {
+    const router = useRouter()
+
     const errorConfigs = computed(() => {
       const configs = {
         '404': {
           title: 'Page Not Found',
           message: 'Sorry, we couldn\'t find the page you\'re looking for.',
           icon: 'search',
-          color: 'slate-400'
+          color: 'slate-400',
+          homeButtonIcon: 'home',
+          additionalInfo: {
+            title: 'What can you do?',
+            items: [
+              { icon: 'check', iconColor: 'green-500', text: 'Check the URL for typos' },
+              { icon: 'check', iconColor: 'green-500', text: 'Go back to the previous page' },
+              { icon: 'check', iconColor: 'green-500', text: 'Visit our homepage' }
+            ]
+          }
+        },
+        '403': {
+          title: 'Unauthorized Access',
+          message: 'You are not authorized to view this page.',
+          icon: 'ban',
+          color: 'red-500',
+          homeButtonIcon: 'lock',
+          additionalInfo: {
+            title: 'Why am I seeing this?',
+            items: [
+              { icon: 'check', iconColor: 'yellow-500', text: 'You may need to log in to access this page' },
+              { icon: 'check', iconColor: 'yellow-500', text: 'Your account might not have the required permissions' },
+              { icon: 'check', iconColor: 'yellow-500', text: 'Contact support if you believe this is an error' }
+            ]
+          }
+        },
+        '401': {
+          title: 'Authentication Required',
+          message: 'You need to log in to access this resource.',
+          icon: 'lock',
+          color: 'amber-500',
+          homeButtonIcon: 'lock',
+          additionalInfo: {
+            title: 'How to proceed?',
+            items: [
+              { icon: 'check', iconColor: 'blue-500', text: 'Log in with your credentials' },
+              { icon: 'check', iconColor: 'blue-500', text: 'Create an account if you don\'t have one' },
+              { icon: 'check', iconColor: 'blue-500', text: 'Reset your password if you forgot it' }
+            ]
+          }
         },
         '500': {
           title: 'Internal Server Error',
           message: 'Something went wrong on our end. Please try again later.',
           icon: 'server',
-          color: 'red-500'
+          color: 'red-500',
+          homeButtonIcon: 'home',
+          additionalInfo: {
+            title: 'What happened?',
+            items: [
+              { icon: 'check', iconColor: 'red-500', text: 'Our servers are experiencing issues' },
+              { icon: 'check', iconColor: 'red-500', text: 'The problem is temporary' },
+              { icon: 'check', iconColor: 'red-500', text: 'Try refreshing the page or come back later' }
+            ]
+          }
         },
         '503': {
           title: 'Service Unavailable',
           message: 'The service is temporarily unavailable. Please try again later.',
           icon: 'tools',
-          color: 'amber-500'
-        },
-        '403': {
-          title: 'Access Denied',
-          message: 'You don\'t have permission to access this resource.',
-          icon: 'ban',
-          color: 'red-500'
-        },
-        '401': {
-          title: 'Unauthorized',
-          message: 'You need to log in to access this resource.',
-          icon: 'lock',
-          color: 'amber-500'
-        },
-        '400': {
-          title: 'Bad Request',
-          message: 'The request could not be understood by the server.',
-          icon: 'exclamation-triangle',
-          color: 'amber-500'
-        },
-        '429': {
-          title: 'Too Many Requests',
-          message: 'You\'ve made too many requests. Please wait and try again.',
-          icon: 'clock',
-          color: 'amber-500'
+          color: 'amber-500',
+          homeButtonIcon: 'home',
+          additionalInfo: {
+            title: 'Service Status',
+            items: [
+              { icon: 'check', iconColor: 'amber-500', text: 'We\'re performing scheduled maintenance' },
+              { icon: 'check', iconColor: 'amber-500', text: 'Normal service will resume shortly' },
+              { icon: 'check', iconColor: 'amber-500', text: 'Check our status page for updates' }
+            ]
+          }
         },
         'network': {
           title: 'Network Error',
           message: 'Unable to connect to the server. Please check your internet connection.',
           icon: 'wifi',
-          color: 'red-500'
-        },
-        'timeout': {
-          title: 'Request Timeout',
-          message: 'The request took too long to complete. Please try again.',
-          icon: 'hourglass-half',
-          color: 'amber-500'
-        },
-        'generic': {
-          title: 'Something went wrong',
-          message: 'An unexpected error occurred. Please try again.',
-          icon: 'exclamation-circle',
-          color: 'slate-400'
+          color: 'red-500',
+          homeButtonIcon: 'home',
+          additionalInfo: {
+            title: 'Connection Issues',
+            items: [
+              { icon: 'check', iconColor: 'red-500', text: 'Check your internet connection' },
+              { icon: 'check', iconColor: 'red-500', text: 'Try refreshing the page' },
+              { icon: 'check', iconColor: 'red-500', text: 'Contact your network administrator' }
+            ]
+          }
         }
       }
 
-      return configs[props.errorType] || configs.generic
+      return configs[props.errorType] || configs['404']
     })
 
     const errorConfig = computed(() => errorConfigs.value)
@@ -276,11 +352,23 @@ export default {
       return props.errorMessage || errorConfig.value.message
     })
 
+    const homeButtonIcon = computed(() => {
+      return errorConfig.value.homeButtonIcon || 'home'
+    })
+
+    const additionalInfoConfig = computed(() => {
+      return props.showAdditionalInfo ? errorConfig.value.additionalInfo : null
+    })
+
+    const goHome = () => {
+      router.push(props.homeUrl)
+    }
+
     const goBack = () => {
       if (window.history.length > 1) {
-        window.history.back()
+        router.back()
       } else {
-        window.location.href = props.homeUrl
+        router.push(props.homeUrl)
       }
       emit('back')
     }
@@ -290,6 +378,7 @@ export default {
       emit('retry')
     }
 
+    // Computed classes
     const layoutClasses = computed(() => [
       'min-h-screen relative flex items-center justify-center',
       'px-4 sm:px-6 lg:px-8'
@@ -300,7 +389,7 @@ export default {
     ])
 
     const contentClasses = computed(() => [
-      'w-full max-w-lg mx-auto text-center'
+      'w-full max-w-2xl mx-auto text-center'
     ])
 
     const headerClasses = computed(() => [
@@ -308,7 +397,7 @@ export default {
     ])
 
     const errorContentClasses = computed(() => [
-      'space-y-6'
+      'space-y-8'
     ])
 
     const illustrationClasses = computed(() => [
@@ -320,7 +409,11 @@ export default {
     ])
 
     const detailsClasses = computed(() => [
-      'space-y-3'
+      'space-y-4'
+    ])
+
+    const codeClasses = computed(() => [
+      'text-6xl font-bold text-slate-300 mb-4'
     ])
 
     const titleClasses = computed(() => [
@@ -328,14 +421,14 @@ export default {
     ])
 
     const messageClasses = computed(() => [
-      'text-lg text-slate-600'
-    ])
-
-    const codeClasses = computed(() => [
-      'text-sm text-slate-500 font-mono'
+      'text-lg text-slate-600 max-w-lg mx-auto'
     ])
 
     const actionsClasses = computed(() => [
+      'mt-8'
+    ])
+
+    const additionalInfoClasses = computed(() => [
       'mt-8'
     ])
 
@@ -347,6 +440,9 @@ export default {
       errorConfig,
       errorTitle,
       errorMessage,
+      homeButtonIcon,
+      additionalInfoConfig,
+      goHome,
       goBack,
       retry,
       layoutClasses,
@@ -357,10 +453,11 @@ export default {
       illustrationClasses,
       iconContainerClasses,
       detailsClasses,
+      codeClasses,
       titleClasses,
       messageClasses,
-      codeClasses,
       actionsClasses,
+      additionalInfoClasses,
       helpClasses
     }
   }

@@ -82,10 +82,14 @@
             <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
               <span class="text-gray-600 text-sm font-medium">{{ userInitials }}</span>
             </div>
-            <div class="hidden md:block text-left">
+            <div class="hidden md:block text-left max-w-[160px]">
               <p class="text-sm font-medium text-gray-900">{{ user.name }}</p>
-              <p class="text-xs text-gray-500">{{ user.role }}</p>
+              <p class="text-xs text-gray-500 break-words leading-tight">
+                {{ userRoleNames }}
+              </p>
             </div>
+
+
             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
             </svg>
@@ -101,27 +105,19 @@
             <div class="py-2">
               <!-- Updated router-links to work like sidebar navigation -->
               <template v-for="item in profileMenuItems" :key="item.name">
-                <router-link 
-                  v-if="item.route"
-                  :to="item.route"
-                  :class="cn(
-                    'flex items-center px-4 py-2 text-sm transition-colors',
-                    isItemActive(item) 
-                      ? 'bg-blue-50 text-blue-700' 
-                      : 'text-gray-700 hover:bg-gray-50'
-                  )"
-                  @click="handleNavigation(item)"
-                >
+                <router-link v-if="item.route" :to="item.route" :class="cn(
+                  'flex items-center px-4 py-2 text-sm transition-colors',
+                  isItemActive(item)
+                    ? 'bg-blue-50 text-blue-700'
+                    : 'text-gray-700 hover:bg-gray-50'
+                )" @click="handleNavigation(item)">
                   <Icon :icon="item.icon" class="w-4 h-4 mr-3 text-gray-400" />
                   {{ item.label }}
                 </router-link>
-                
+
                 <!-- For non-route items (like actions) -->
-                <button 
-                  v-else
-                  @click="handleProfileAction(item)"
-                  class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                >
+                <button v-else @click="handleProfileAction(item)"
+                  class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
                   <Icon :icon="item.icon" class="w-4 h-4 mr-3 text-gray-400" />
                   {{ item.label }}
                 </button>
@@ -190,6 +186,12 @@ const userInitials = computed(() => {
     .toUpperCase()
 })
 
+const userRoleNames = computed(() => {
+  if (!props.user?.roles?.length) return 'No role'
+  return props.user.roles.map(role => role.name).join(', ')
+})
+
+
 // Methods
 const toggleNotifications = () => {
   showNotifications.value = !showNotifications.value
@@ -210,10 +212,10 @@ const handleNavigation = (item) => {
 // Check if navigation item is active (like sidebar)
 const isItemActive = (item) => {
   if (!item.route) return false
-  
+
   if (props.currentRoute === item.route) return true
   if (props.currentRoute.startsWith(item.route + '/')) return true
-  
+
   return false
 }
 
