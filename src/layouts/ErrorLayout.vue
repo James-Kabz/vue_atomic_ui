@@ -30,7 +30,14 @@
         <!-- Error Icon/Illustration -->
         <div v-if="$slots.illustration || showDefaultIllustration" :class="illustrationClasses">
           <slot name="illustration">
-            <component :is="errorIcon" :class="iconClasses" />
+            <div :class="iconContainerClasses">
+              <Icon
+                :icon="errorConfig.icon"
+                size="xxl"
+                :color="errorConfig.color"
+                :aria-label="`${errorType} error icon`"
+              />
+            </div>
           </slot>
         </div>
 
@@ -60,6 +67,7 @@
                 variant="primary"
                 size="lg"
               >
+                <Icon icon="home" size="sm" class="mr-2" />
                 {{ homeButtonText }}
               </Button>
 
@@ -69,6 +77,7 @@
                 size="lg"
                 @click="goBack"
               >
+                <Icon icon="arrow-left" size="sm" class="mr-2" />
                 {{ backButtonText }}
               </Button>
 
@@ -78,6 +87,7 @@
                 size="lg"
                 @click="retry"
               >
+                <Icon icon="redo" size="sm" class="mr-2" />
                 {{ retryButtonText }}
               </Button>
             </div>
@@ -90,6 +100,7 @@
             <p class="text-sm text-slate-600">
               {{ helpText }}
               <a v-if="supportUrl" :href="supportUrl" class="text-blue-600 hover:text-blue-700 underline ml-1">
+                <Icon icon="question-circle" size="xs" class="mr-1" />
                 Contact Support
               </a>
             </p>
@@ -103,44 +114,19 @@
 <script>
 import { computed } from 'vue'
 import Button from '../components/Button.vue'
-
-// Error icons
-const Error404Icon = {
-  template: `
-    <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="100" cy="100" r="80" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2"/>
-      <text x="100" y="110" text-anchor="middle" font-size="48" font-weight="bold" fill="#64748b">404</text>
-    </svg>
-  `
-}
-
-const Error500Icon = {
-  template: `
-    <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="100" cy="100" r="80" fill="#fef2f2" stroke="#fecaca" stroke-width="2"/>
-      <text x="100" y="110" text-anchor="middle" font-size="48" font-weight="bold" fill="#dc2626">500</text>
-    </svg>
-  `
-}
-
-const ErrorGenericIcon = {
-  template: `
-    <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
-    </svg>
-  `
-}
+import Icon from '../components/Icon.vue'
 
 export default {
   name: 'ErrorPage',
   components: {
-    Button
+    Button,
+    Icon
   },
   props: {
     errorType: {
       type: String,
       default: '404',
-      validator: (value) => ['404', '500', '403', 'generic'].includes(value)
+      validator: (value) => ['404', '500', '403', '401', '400', '429', '503', 'network', 'timeout', 'generic'].includes(value)
     },
     errorTitle: {
       type: String,
@@ -213,41 +199,81 @@ export default {
   },
   emits: ['retry', 'back'],
   setup(props, { emit }) {
-    const errorDefaults = computed(() => {
-      const defaults = {
+    const errorConfigs = computed(() => {
+      const configs = {
         '404': {
           title: 'Page Not Found',
           message: 'Sorry, we couldn\'t find the page you\'re looking for.',
-          icon: Error404Icon
+          icon: 'search',
+          color: 'slate-400'
         },
         '500': {
-          title: 'Server Error',
+          title: 'Internal Server Error',
           message: 'Something went wrong on our end. Please try again later.',
-          icon: Error500Icon
+          icon: 'server',
+          color: 'red-500'
+        },
+        '503': {
+          title: 'Service Unavailable',
+          message: 'The service is temporarily unavailable. Please try again later.',
+          icon: 'tools',
+          color: 'amber-500'
         },
         '403': {
           title: 'Access Denied',
           message: 'You don\'t have permission to access this resource.',
-          icon: ErrorGenericIcon
+          icon: 'ban',
+          color: 'red-500'
+        },
+        '401': {
+          title: 'Unauthorized',
+          message: 'You need to log in to access this resource.',
+          icon: 'lock',
+          color: 'amber-500'
+        },
+        '400': {
+          title: 'Bad Request',
+          message: 'The request could not be understood by the server.',
+          icon: 'exclamation-triangle',
+          color: 'amber-500'
+        },
+        '429': {
+          title: 'Too Many Requests',
+          message: 'You\'ve made too many requests. Please wait and try again.',
+          icon: 'clock',
+          color: 'amber-500'
+        },
+        'network': {
+          title: 'Network Error',
+          message: 'Unable to connect to the server. Please check your internet connection.',
+          icon: 'wifi',
+          color: 'red-500'
+        },
+        'timeout': {
+          title: 'Request Timeout',
+          message: 'The request took too long to complete. Please try again.',
+          icon: 'hourglass-half',
+          color: 'amber-500'
         },
         'generic': {
           title: 'Something went wrong',
           message: 'An unexpected error occurred. Please try again.',
-          icon: ErrorGenericIcon
+          icon: 'exclamation-circle',
+          color: 'slate-400'
         }
       }
 
-      return defaults[props.errorType] || defaults.generic
+      return configs[props.errorType] || configs.generic
     })
 
-    const errorIcon = computed(() => errorDefaults.value.icon)
+    const errorConfig = computed(() => errorConfigs.value)
 
     const errorTitle = computed(() => {
-      return props.errorTitle || errorDefaults.value.title
+      return props.errorTitle || errorConfig.value.title
     })
 
     const errorMessage = computed(() => {
-      return props.errorMessage || errorDefaults.value.message
+      return props.errorMessage || errorConfig.value.message
     })
 
     const goBack = () => {
@@ -289,8 +315,8 @@ export default {
       'flex justify-center mb-6'
     ])
 
-    const iconClasses = computed(() => [
-      'w-32 h-32 text-slate-400'
+    const iconContainerClasses = computed(() => [
+      'w-32 h-32 flex items-center justify-center'
     ])
 
     const detailsClasses = computed(() => [
@@ -318,7 +344,7 @@ export default {
     ])
 
     return {
-      errorIcon,
+      errorConfig,
       errorTitle,
       errorMessage,
       goBack,
@@ -329,7 +355,7 @@ export default {
       headerClasses,
       errorContentClasses,
       illustrationClasses,
-      iconClasses,
+      iconContainerClasses,
       detailsClasses,
       titleClasses,
       messageClasses,
