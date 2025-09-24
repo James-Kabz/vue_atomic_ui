@@ -6,11 +6,11 @@
       <div class="flex-1 min-w-64">
         <div class="relative">
           <font-awesome-icon icon="magnifying-glass" :class="searchIconClasses" />
-          <Input :model-value="searchQuery" @input="$emit('update:searchQuery', $event.target.value)"
+          <input :model-value="searchQuery" @input="$emit('update:searchQuery', $event.target.value)"
             :placeholder="searchPlaceholder" :class="searchInputClasses" />
-          <Button v-if="searchQuery" @click="$emit('update:searchQuery', '')" :class="clearSearchButtonClasses">
+          <button v-if="searchQuery" @click="$emit('update:searchQuery', '')" :class="clearSearchButtonClasses">
             <font-awesome-icon icon="xmark" class="w-4 h-4" />
-          </Button>
+          </button>
         </div>
       </div>
 
@@ -25,12 +25,36 @@
         </Select>
       </div>
 
-      <!-- Date Range Filter -->
-      <div v-if="showDateFilter" class="flex items-center gap-2">
-        <Input type="date" :model-value="dateFrom" @input="$emit('update:dateFrom', $event.target.value)"
+      <!-- Dynamic Date Filters -->
+      <div v-if="dateFilters.length > 0" class="flex items-center gap-2 flex-wrap">
+        <div v-for="dateFilter in dateFilters" :key="dateFilter.key" class="flex items-center gap-2">
+          <label :class="dateFilterLabelClasses">{{ dateFilter.label }}:</label>
+          <div class="flex items-center gap-1">
+            <input 
+              type="date" 
+              :model-value="dateFilter.from" 
+              @input="updateDateFilter(dateFilter.key, 'from', $event.target.value)"
+              :class="dateInputClasses" 
+              :placeholder="`From ${dateFilter.label}`"
+            />
+            <span :class="dateRangeSeparatorClasses">to</span>
+            <input 
+              type="date" 
+              :model-value="dateFilter.to" 
+              @input="updateDateFilter(dateFilter.key, 'to', $event.target.value)"
+              :class="dateInputClasses" 
+              :placeholder="`To ${dateFilter.label}`"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Legacy Date Range Filter (for backward compatibility) -->
+      <div v-if="showDateFilter && dateFilters.length === 0" class="flex items-center gap-2">
+        <input type="date" :model-value="dateFrom" @input="$emit('update:dateFrom', $event.target.value)"
           :class="dateInputClasses" />
         <span :class="dateRangeSeparatorClasses">to</span>
-        <Input type="date" :model-value="dateTo" @input="$emit('update:dateTo', $event.target.value)"
+        <input type="date" :model-value="dateTo" @input="$emit('update:dateTo', $event.target.value)"
           :class="dateInputClasses" />
       </div>
 
@@ -67,15 +91,14 @@
         <span :class="activeFiltersLabelClasses">Active filters:</span>
         <div v-for="filter in activeFiltersDisplay" :key="filter.key" :class="activeFilterTagClasses">
           <span>{{ filter.label }}: {{ filter.value }}</span>
-          <Button @click="removeFilter(filter.key)" :class="activeFilterRemoveButtonClasses">
+          <button @click="removeFilter(filter.key)" :class="activeFilterRemoveButtonClasses">
             <font-awesome-icon icon="xmark" class="w-3 h-3" />
-          </Button>
+          </button>
         </div>
       </div>
     </div>
   </div>
 </template>
-
 
 <script setup>
 import Button from './Button.vue'
@@ -84,6 +107,7 @@ import Select from './Select.vue'
 import { computed } from 'vue'
 import { cva } from 'class-variance-authority'
 import { cn } from '../utils/cn.js'
+import Icon from './Icon.vue'
 
 const props = defineProps({
   searchQuery: {
@@ -102,6 +126,7 @@ const props = defineProps({
     type: Array,
     default: () => []
   },
+  // Legacy props for backward compatibility
   showDateFilter: {
     type: Boolean,
     default: false
@@ -113,6 +138,19 @@ const props = defineProps({
   dateTo: {
     type: String,
     default: ''
+  },
+  // New dynamic date filters prop
+  dateFilters: {
+    type: Array,
+    default: () => [],
+    validator: (filters) => {
+      return filters.every(filter => 
+        filter.hasOwnProperty('key') && 
+        filter.hasOwnProperty('label') &&
+        filter.hasOwnProperty('from') &&
+        filter.hasOwnProperty('to')
+      )
+    }
   },
   showExport: {
     type: Boolean,
@@ -139,6 +177,7 @@ const emit = defineEmits([
   'update:selectedStatus',
   'update:dateFrom',
   'update:dateTo',
+  'update:dateFilters',
   'export',
   'add',
   'clear-filters'
@@ -180,7 +219,7 @@ const inputVariants = cva('border border-slate-300 rounded-md focus:outline-none
 const buttonVariants = cva('rounded-md flex items-center gap-2 font-medium transition-colors', {
   variants: {
     variant: {
-      default: 'text-slate-600 hover:text-slate-100 border border-slate-300 hover:bg-blue-200',
+      default: 'text-slate-600 hover:text-slate-800 border border-slate-300 hover:bg-slate-100',
       primary: 'text-white bg-blue-600 hover:bg-blue-700 border border-blue-600',
       success: 'text-white bg-green-600 hover:bg-green-700 border border-green-600',
       ghost: 'text-slate-600 hover:text-slate-800 hover:bg-slate-100'
@@ -210,12 +249,28 @@ const activeFiltersVariants = cva('border-b', {
   }
 })
 
+// Methods
+const updateDateFilter = (key, type, value) => {
+  const updatedFilters = [...props.dateFilters]
+  const filterIndex = updatedFilters.findIndex(f => f.key === key)
+  
+  if (filterIndex >= 0) {
+    updatedFilters[filterIndex] = {
+      ...updatedFilters[filterIndex],
+      [type]: value
+    }
+    emit('update:dateFilters', updatedFilters)
+  }
+}
+
 // Computed Properties
 const hasActiveFilters = computed(() => {
-  return props.searchQuery ||
-    props.selectedStatus ||
-    props.dateFrom ||
-    props.dateTo
+  const hasSearch = props.searchQuery
+  const hasStatus = props.selectedStatus
+  const hasLegacyDates = props.dateFrom || props.dateTo
+  const hasDynamicDates = props.dateFilters.some(filter => filter.from || filter.to)
+  
+  return hasSearch || hasStatus || hasLegacyDates || hasDynamicDates
 })
 
 const activeFiltersDisplay = computed(() => {
@@ -238,6 +293,7 @@ const activeFiltersDisplay = computed(() => {
     })
   }
 
+  // Legacy date filter
   if (props.dateFrom || props.dateTo) {
     let dateValue = ''
     if (props.dateFrom && props.dateTo) {
@@ -256,6 +312,28 @@ const activeFiltersDisplay = computed(() => {
       })
     }
   }
+
+  // Dynamic date filters
+  props.dateFilters.forEach(dateFilter => {
+    if (dateFilter.from || dateFilter.to) {
+      let dateValue = ''
+      if (dateFilter.from && dateFilter.to) {
+        dateValue = `${dateFilter.from} to ${dateFilter.to}`
+      } else if (dateFilter.from) {
+        dateValue = `From ${dateFilter.from}`
+      } else if (dateFilter.to) {
+        dateValue = `Until ${dateFilter.to}`
+      }
+
+      if (dateValue) {
+        filters.push({
+          key: `date-${dateFilter.key}`,
+          label: dateFilter.label,
+          value: dateValue
+        })
+      }
+    }
+  })
 
   return filters
 })
@@ -280,7 +358,7 @@ const searchInputClasses = computed(() =>
 )
 
 const clearSearchButtonClasses = computed(() =>
-  'absolute right-2 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-300 p-1'
+  'absolute right-2 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 hover:bg-slate-100 rounded'
 )
 
 const selectClasses = computed(() =>
@@ -291,11 +369,15 @@ const selectClasses = computed(() =>
 )
 
 const dateInputClasses = computed(() =>
-  cn(inputVariants({ size: 'md' }))
+  cn(inputVariants({ size: 'md' }), 'min-w-32')
+)
+
+const dateFilterLabelClasses = computed(() =>
+  'text-sm font-medium text-slate-700 whitespace-nowrap'
 )
 
 const dateRangeSeparatorClasses = computed(() =>
-  'text-slate-500'
+  'text-slate-500 text-sm'
 )
 
 const clearFiltersButtonClasses = computed(() =>
@@ -304,10 +386,6 @@ const clearFiltersButtonClasses = computed(() =>
 
 const exportButtonClasses = computed(() =>
   cn(buttonVariants({ variant: 'primary', size: 'md' }))
-)
-
-const addButtonClasses = computed(() =>
-  cn(buttonVariants({ variant: 'success', size: 'md' }))
 )
 
 const activeFiltersContainerClasses = computed(() =>
@@ -323,7 +401,7 @@ const activeFilterTagClasses = computed(() =>
 )
 
 const activeFilterRemoveButtonClasses = computed(() =>
-  'text-blue-200 hover:text-blue-200 p-0.5'
+  'text-blue-600 hover:text-blue-800 p-0.5 hover:bg-blue-200 rounded'
 )
 
 // Methods
@@ -332,6 +410,15 @@ const clearFilters = () => {
   emit('update:selectedStatus', '')
   emit('update:dateFrom', '')
   emit('update:dateTo', '')
+  
+  // Clear dynamic date filters
+  const clearedDateFilters = props.dateFilters.map(filter => ({
+    ...filter,
+    from: '',
+    to: ''
+  }))
+  emit('update:dateFilters', clearedDateFilters)
+  
   emit('clear-filters')
 }
 
@@ -346,6 +433,18 @@ const removeFilter = (filterKey) => {
     case 'date':
       emit('update:dateFrom', '')
       emit('update:dateTo', '')
+      break
+    default:
+      // Handle dynamic date filters
+      if (filterKey.startsWith('date-')) {
+        const dateKey = filterKey.replace('date-', '')
+        const updatedFilters = props.dateFilters.map(filter => 
+          filter.key === dateKey 
+            ? { ...filter, from: '', to: '' }
+            : filter
+        )
+        emit('update:dateFilters', updatedFilters)
+      }
       break
   }
 }

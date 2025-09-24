@@ -31,12 +31,9 @@
         <div v-if="$slots.illustration || showDefaultIllustration" :class="illustrationClasses">
           <slot name="illustration">
             <div :class="iconContainerClasses">
-              <Icon
-                :icon="errorConfig.icon"
-                size="xxl"
-                :color="errorConfig.color"
-                :aria-label="`${errorType} error icon`"
-              />
+              <div class="text-8xl" :style="{ color: errorConfig.color }">
+                {{ errorConfig.icon }}
+              </div>
             </div>
           </slot>
         </div>
@@ -56,49 +53,57 @@
           </p>
         </div>
 
+        <!-- Network Status -->
+        <div v-if="!isOnline" class="bg-red-100 border border-red-200 rounded-lg p-4 mx-auto max-w-md mb-6">
+          <div class="flex items-center justify-center gap-2 text-red-700">
+            <span class="w-3 h-3 bg-red-500 rounded-full animate-pulse"></span>
+            <span class="font-medium">No Internet Connection</span>
+          </div>
+        </div>
+
         <!-- Actions -->
         <div v-if="$slots.actions || showDefaultActions" :class="actionsClasses">
           <slot name="actions">
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button
+              <button
                 v-if="showHomeButton"
                 @click="goHome"
-                variant="primary"
-                size="lg"
+                class="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
               >
-                <Icon :icon="homeButtonIcon" class="w-4 h-4 mr-2" />
+                <span>{{ homeButtonIcon }}</span>
                 {{ homeButtonText }}
-              </Button>
+              </button>
 
-              <Button
+              <button
                 v-if="showBackButton"
-                variant="outline"
-                size="lg"
                 @click="goBack"
+                class="border border-slate-300 text-slate-700 px-6 py-3 rounded-lg font-medium hover:bg-slate-50 transition-colors flex items-center justify-center gap-2"
               >
-                <Icon icon="arrow-left" class="w-4 h-4 mr-2" />
+                <span>←</span>
                 {{ backButtonText }}
-              </Button>
+              </button>
 
-              <Button
+              <button
                 v-if="showRetryButton"
-                variant="ghost"
-                size="lg"
                 @click="retry"
+                :disabled="isRetrying || !isOnline"
+                class="border border-slate-300 text-slate-700 px-6 py-3 rounded-lg font-medium hover:bg-slate-50 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <Icon icon="redo" class="w-4 h-4 mr-2" />
-                {{ retryButtonText }}
-              </Button>
+                <span v-if="isRetrying" class="animate-spin">↻</span>
+                <span v-else>🔄</span>
+                {{ isRetrying ? 'Retrying...' : retryButtonText }}
+              </button>
 
-              <Button
+              <button
                 v-if="showSupportButton"
-                variant="ghost"
-                size="lg"
                 @click="$emit('contact-support')"
+                :disabled="reportSent"
+                class="bg-slate-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-slate-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <Icon icon="user" class="w-4 h-4 mr-2" />
-                Contact Support
-              </Button>
+                <span v-if="reportSent">✓</span>
+                <span v-else>📝</span>
+                {{ reportSent ? 'Report Sent' : 'Contact Support' }}
+              </button>
             </div>
           </slot>
         </div>
@@ -117,11 +122,9 @@
                     :key="index"
                     class="flex items-start gap-3 text-sm text-slate-600"
                   >
-                    <Icon 
-                      :icon="item.icon" 
-                      :color="item.iconColor || 'slate-400'" 
-                      class="w-4 h-4 mt-0.5 flex-shrink-0" 
-                    />
+                    <span :class="`w-4 h-4 text-${item.iconColor || 'slate-400'} flex-shrink-0 mt-0.5`">
+                      {{ item.icon }}
+                    </span>
                     <span>{{ item.text }}</span>
                   </li>
                 </ul>
@@ -136,11 +139,16 @@
             <p class="text-sm text-slate-600">
               {{ helpText }}
               <a v-if="supportUrl" :href="supportUrl" class="text-blue-600 hover:text-blue-700 underline ml-1">
-                <Icon icon="question-circle" class="w-4 h-4 inline mr-1" />
+                <span class="inline-block w-4 h-4 mr-1">❓</span>
                 Get Help
               </a>
             </p>
           </slot>
+        </div>
+
+        <!-- Error ID for debugging -->
+        <div v-if="isDev" class="text-xs text-slate-400 font-mono mt-4">
+          Error ID: {{ errorId }}
         </div>
       </div>
     </div>
@@ -148,17 +156,10 @@
 </template>
 
 <script>
-import { computed } from 'vue'
-import { useRouter } from 'vue-router'
-import Button from '../components/Button.vue'
-import Icon from '../components/Icon.vue'
+import { computed, ref, onMounted, onUnmounted, getCurrentInstance, inject } from 'vue'
 
 export default {
-  name: 'ErrorPage',
-  components: {
-    Button,
-    Icon
-  },
+  name: 'ErrorLayout',
   props: {
     errorType: {
       type: [String, Number],
@@ -243,97 +244,121 @@ export default {
   },
   emits: ['retry', 'back', 'contact-support'],
   setup(props, { emit }) {
-    const router = useRouter()
+    // Safe router injection with fallback
+    const instance = getCurrentInstance()
+    const router = inject('$router', null) || instance?.appContext.app.config.globalProperties?.$router
+
+    // State
+    const isRetrying = ref(false)
+    const reportSent = ref(false)
+    const isOnline = ref(navigator.onLine)
+    const errorId = ref(`err_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`)
+    const isDev = ref(import.meta.env.DEV)
+
+    // Network status monitoring
+    const updateOnlineStatus = () => {
+      isOnline.value = navigator.onLine
+    }
+    
+    onMounted(() => {
+      window.addEventListener('online', updateOnlineStatus)
+      window.addEventListener('offline', updateOnlineStatus)
+    })
+    
+    onUnmounted(() => {
+      window.removeEventListener('online', updateOnlineStatus)
+      window.removeEventListener('offline', updateOnlineStatus)
+    })
 
     const errorConfigs = computed(() => {
       const configs = {
         '404': {
           title: 'Page Not Found',
           message: 'Sorry, we couldn\'t find the page you\'re looking for.',
-          icon: 'search',
-          color: 'slate-400',
-          homeButtonIcon: 'home',
+          icon: '🔍',
+          color: '#64748b',
+          homeButtonIcon: '🏠',
           additionalInfo: {
             title: 'What can you do?',
             items: [
-              { icon: 'check', iconColor: 'green-500', text: 'Check the URL for typos' },
-              { icon: 'check', iconColor: 'green-500', text: 'Go back to the previous page' },
-              { icon: 'check', iconColor: 'green-500', text: 'Visit our homepage' }
+              { icon: '✓', iconColor: 'green-500', text: 'Check the URL for typos' },
+              { icon: '✓', iconColor: 'green-500', text: 'Go back to the previous page' },
+              { icon: '✓', iconColor: 'green-500', text: 'Visit our homepage' }
             ]
           }
         },
         '403': {
           title: 'Unauthorized Access',
           message: 'You are not authorized to view this page.',
-          icon: 'ban',
-          color: 'red-500',
-          homeButtonIcon: 'lock',
+          icon: '🚫',
+          color: '#ef4444',
+          homeButtonIcon: '🔐',
           additionalInfo: {
             title: 'Why am I seeing this?',
             items: [
-              { icon: 'check', iconColor: 'yellow-500', text: 'You may need to log in to access this page' },
-              { icon: 'check', iconColor: 'yellow-500', text: 'Your account might not have the required permissions' },
-              { icon: 'check', iconColor: 'yellow-500', text: 'Contact support if you believe this is an error' }
+              { icon: '⚠️', iconColor: 'yellow-500', text: 'You may need to log in to access this page' },
+              { icon: '⚠️', iconColor: 'yellow-500', text: 'Your account might not have the required permissions' },
+              { icon: '⚠️', iconColor: 'yellow-500', text: 'Contact support if you believe this is an error' }
             ]
           }
         },
         '401': {
           title: 'Authentication Required',
           message: 'You need to log in to access this resource.',
-          icon: 'lock',
-          color: 'amber-500',
-          homeButtonIcon: 'lock',
+          icon: '🔐',
+          color: '#f59e0b',
+          homeButtonIcon: '🔐',
           additionalInfo: {
             title: 'How to proceed?',
             items: [
-              { icon: 'check', iconColor: 'blue-500', text: 'Log in with your credentials' },
-              { icon: 'check', iconColor: 'blue-500', text: 'Create an account if you don\'t have one' },
-              { icon: 'check', iconColor: 'blue-500', text: 'Reset your password if you forgot it' }
+              { icon: '✓', iconColor: 'blue-500', text: 'Log in with your credentials' },
+              { icon: '✓', iconColor: 'blue-500', text: 'Create an account if you don\'t have one' },
+              { icon: '✓', iconColor: 'blue-500', text: 'Reset your password if you forgot it' }
             ]
           }
         },
         '500': {
           title: 'Internal Server Error',
           message: 'Something went wrong on our end. Please try again later.',
-          icon: 'server',
-          color: 'red-500',
-          homeButtonIcon: 'home',
+          icon: '🔧',
+          color: '#ef4444',
+          homeButtonIcon: '🏠',
           additionalInfo: {
             title: 'What happened?',
             items: [
-              { icon: 'check', iconColor: 'red-500', text: 'Our servers are experiencing issues' },
-              { icon: 'check', iconColor: 'red-500', text: 'The problem is temporary' },
-              { icon: 'check', iconColor: 'red-500', text: 'Try refreshing the page or come back later' }
+              { icon: '⚠️', iconColor: 'red-500', text: 'Our servers are experiencing issues' },
+              { icon: '⚠️', iconColor: 'red-500', text: 'The problem is temporary' },
+              { icon: '⚠️', iconColor: 'red-500', text: 'Try refreshing the page or come back later' }
             ]
           }
         },
         '503': {
           title: 'Service Unavailable',
           message: 'The service is temporarily unavailable. Please try again later.',
-          icon: 'tools',
-          color: 'amber-500',
-          homeButtonIcon: 'home',
+          icon: '🔧',
+          color: '#f59e0b',
+          homeButtonIcon: '🏠',
           additionalInfo: {
             title: 'Service Status',
             items: [
-              { icon: 'check', iconColor: 'amber-500', text: 'We\'re performing scheduled maintenance' },
-              { icon: 'check', iconColor: 'amber-500', text: 'Normal service will resume shortly' },
-              { icon: 'check', iconColor: 'amber-500', text: 'Check our status page for updates' }
+              { icon: '⚠️', iconColor: 'amber-500', text: 'We\'re performing scheduled maintenance' },
+              { icon: '⚠️', iconColor: 'amber-500', text: 'Normal service will resume shortly' },
+              { icon: '⚠️', iconColor: 'amber-500', text: 'Check our status page for updates' }
             ]
           }
         },
         'network': {
           title: 'Network Error',
           message: 'Unable to connect to the server. Please check your internet connection.',
-          icon: 'wifi',
-          color: 'red-500',
-          homeButtonIcon: 'home',
+          icon: '📶',
+          color: '#ef4444',
+          homeButtonIcon: '🏠',
           additionalInfo: {
             title: 'Connection Issues',
             items: [
-              { icon: 'check', iconColor: 'red-500', text: 'Check your internet connection' },
-              { icon: 'check', iconColor: 'red-500', text: 'Try refreshing the page' },
-              { icon: 'check', iconColor: 'red-500', text: 'Contact your network administrator' }
+              { icon: '⚠️', iconColor: 'red-500', text: 'Check your internet connection' },
+              { icon: '⚠️', iconColor: 'red-500', text: 'Try refreshing the page' },
+              { icon: '⚠️', iconColor: 'red-500', text: 'Contact your network administrator' }
             ]
           }
         }
@@ -353,28 +378,43 @@ export default {
     })
 
     const homeButtonIcon = computed(() => {
-      return errorConfig.value.homeButtonIcon || 'home'
+      return errorConfig.value.homeButtonIcon || '🏠'
     })
 
     const additionalInfoConfig = computed(() => {
       return props.showAdditionalInfo ? errorConfig.value.additionalInfo : null
     })
 
+    // Navigation functions with fallbacks
     const goHome = () => {
-      router.push(props.homeUrl)
+      if (router) {
+        router.push(props.homeUrl)
+      } else {
+        window.location.href = props.homeUrl
+      }
     }
 
     const goBack = () => {
-      if (window.history.length > 1) {
+      if (router && window.history.length > 1) {
         router.back()
+      } else if (window.history.length > 1) {
+        window.history.back()
       } else {
-        router.push(props.homeUrl)
+        goHome()
       }
       emit('back')
     }
 
-    const retry = () => {
-      window.location.reload()
+    const retry = async () => {
+      isRetrying.value = true
+      try {
+        await new Promise(resolve => setTimeout(resolve, 1000)) // Simulate retry delay
+        window.location.reload()
+      } catch (error) {
+        console.error('Retry failed:', error)
+      } finally {
+        isRetrying.value = false
+      }
       emit('retry')
     }
 
@@ -437,14 +477,26 @@ export default {
     ])
 
     return {
+      // State
+      isRetrying,
+      reportSent,
+      isOnline,
+      errorId,
+      isDev,
+      
+      // Computed
       errorConfig,
       errorTitle,
       errorMessage,
       homeButtonIcon,
       additionalInfoConfig,
+      
+      // Methods
       goHome,
       goBack,
       retry,
+      
+      // Classes
       layoutClasses,
       backgroundClasses,
       contentClasses,
