@@ -16,116 +16,196 @@
       </template>
     </DataTableHeader>
 
-    <!-- Table -->
-    <div class="overflow-x-auto">
-      <table :class="tableClasses">
-        <!-- Table Head -->
-        <thead :class="headClasses">
-          <tr>
-            <!-- Selection Column Header -->
-            <th v-if="selectable" :class="checkboxCellClasses">
-              <Checkbox
-                :modelValue="isAllSelected"
-                :indeterminate="isIndeterminate"
-                @update:modelValue="toggleSelectAll"
-              />
-            </th>
+    <!-- Loading Overlay for entire table -->
+    <div class="relative">
+      <STLLoader
+        v-if="loading"
+        :loading="true"
+        :type="loadingType"
+        :size="loadingSize"
+        :color="loadingColor"
+        :overlay="true"
+        :text="loadingText"
+        :text-position="loadingTextPosition"
+        :background-color="loadingBackground"
+        class="table-loading-overlay"
+      />
 
-            <!-- Data Column Headers -->
-            <th
-              v-for="column in columns"
-              :key="column.key"
-              :class="getHeaderCellClasses(column)"
-              @click="handleSort(column)"
-            >
-              <div class="flex items-center gap-2">
-                <span>{{ column.label }}</span>
-
-                <div v-if="column.sortable" class="flex flex-col">
-                  <svg
-                    :class="getSortIconClasses(column, 'asc')"
-                    class="w-3 h-3 transition-colors"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                  >
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
-                  </svg>
-                  <svg
-                    :class="getSortIconClasses(column, 'desc')"
-                    class="w-3 h-3 transition-colors"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                  >
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                  </svg>
+      <!-- Table -->
+      <div class="overflow-x-auto" :class="{ 'opacity-50': loading }">
+        <table :class="tableClasses">
+          <!-- Table Head -->
+          <thead :class="headClasses">
+            <tr>
+              <!-- Selection Column Header -->
+              <th v-if="selectable" :class="checkboxCellClasses">
+                <div class="flex items-center justify-center">
+                  <!-- Header loading for bulk operations -->
+                  <STLLoader
+                    v-if="bulkLoading"
+                    :loading="true"
+                    type="spin"
+                    size="small"
+                    :color="loadingColor"
+                  />
+                  <Checkbox
+                    v-else
+                    :modelValue="isAllSelected"
+                    :indeterminate="isIndeterminate"
+                    :disabled="loading || dataLoading"
+                    @update:modelValue="toggleSelectAll"
+                  />
                 </div>
-              </div>
-            </th>
+              </th>
 
-            <!-- Actions Column Header -->
-            <th v-if="$slots.actions" :class="actionsCellClasses">
-              Actions
-            </th>
-          </tr>
-        </thead>
+              <!-- Data Column Headers -->
+              <th
+                v-for="column in columns"
+                :key="column.key"
+                :class="getHeaderCellClasses(column)"
+                @click="handleSort(column)"
+              >
+                <div class="flex items-center gap-2">
+                  <span>{{ column.label }}</span>
 
-        <!-- Table Body -->
-        <tbody :class="bodyClasses">
-          <!-- Data Rows -->
-          <DataTableRow
-            v-for="(item, index) in paginatedData"
-            :key="getRowKey(item, index)"
-            :item="item"
-            :columns="columns"
-            :index="index"
-            :selectable="selectable"
-            :is-selected="isRowSelected(item)"
-            :striped="striped"
-            :hoverable="hoverable"
-            :clickable-rows="clickableRows"
-            :density="density"
-            @toggle-selection="toggleRowSelection"
-            @row-click="handleRowClick"
-          >
-            <!-- Pass through cell slots -->
-            <template
-              v-for="column in columns"
-              :key="column.key"
-              #[`cell-${column.key}`]="slotProps"
-            >
-              <slot
-                :name="`cell-${column.key}`"
-                v-bind="slotProps"
-              />
-            </template>
-
-            <!-- Pass through actions slot -->
-            <template #actions="slotProps">
-              <slot name="actions" v-bind="slotProps" />
-            </template>
-          </DataTableRow>
-
-          <!-- Empty State Row -->
-          <tr v-if="paginatedData.length === 0">
-            <td :colspan="totalColumns" :class="emptyCellClasses">
-              <slot name="empty">
-                <div class="text-center py-8">
-                  <div class="text-slate-400 mb-2">
-                    <svg class="w-12 h-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 0 1-1.125-1.125M3.375 19.5h7.5c.621 0 1.125-.504 1.125-1.125m-9.75 0V5.625m0 0A2.25 2.25 0 0 1 5.625 3.375h4.125c.621 0 1.125.504 1.125 1.125v15.75m-9.75 0h9.75" />
+                  <!-- Sort loading indicator -->
+                  <STLLoader
+                    v-if="sortLoading && sortColumn === column.key"
+                    :loading="true"
+                    type="spin"
+                    size="small"
+                    :color="loadingColor"
+                  />
+                  
+                  <!-- Sort icons -->
+                  <div v-else-if="column.sortable" class="flex flex-col">
+                    <svg
+                      :class="getSortIconClasses(column, 'asc')"
+                      class="w-3 h-3 transition-colors"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                    >
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+                    </svg>
+                    <svg
+                      :class="getSortIconClasses(column, 'desc')"
+                      class="w-3 h-3 transition-colors"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                    >
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                     </svg>
                   </div>
-                  <p class="text-slate-500">{{ emptyText }}</p>
                 </div>
-              </slot>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+              </th>
+
+              <!-- Actions Column Header -->
+              <th v-if="$slots.actions" :class="actionsCellClasses">
+                Actions
+              </th>
+            </tr>
+          </thead>
+
+          <!-- Table Body -->
+          <tbody :class="bodyClasses">
+            <!-- Data Loading State -->
+            <tr v-if="dataLoading && !loading">
+              <td :colspan="totalColumns" :class="emptyCellClasses">
+                <div class="flex justify-center items-center py-8">
+                  <STLLoader
+                    :loading="true"
+                    type="dots"
+                    size="medium"
+                    :color="loadingColor"
+                    text="Loading data..."
+                  />
+                </div>
+              </td>
+            </tr>
+
+            <!-- Data Rows -->
+            <DataTableRow
+              v-else-if="paginatedData.length > 0 && !loading"
+              v-for="(item, index) in paginatedData"
+              :key="getRowKey(item, index)"
+              :item="item"
+              :columns="columns"
+              :index="index"
+              :selectable="selectable"
+              :is-selected="isRowSelected(item)"
+              :striped="striped"
+              :hoverable="hoverable"
+              :clickable-rows="clickableRows"
+              :density="density"
+              :row-loading="rowLoading[getRowKey(item, index)]"
+              :loading-color="loadingColor"
+              @toggle-selection="toggleRowSelection"
+              @row-click="handleRowClick"
+            >
+              <!-- Pass through cell slots -->
+              <template
+                v-for="column in columns"
+                :key="column.key"
+                #[`cell-${column.key}`]="slotProps"
+              >
+                <slot
+                  :name="`cell-${column.key}`"
+                  v-bind="slotProps"
+                />
+              </template>
+
+              <!-- Pass through actions slot -->
+              <template #actions="slotProps">
+                <slot name="actions" v-bind="slotProps" />
+              </template>
+            </DataTableRow>
+
+            <!-- Empty State Row -->
+            <tr v-else-if="!loading && !dataLoading">
+              <td :colspan="totalColumns" :class="emptyCellClasses">
+                <slot name="empty">
+                  <div class="text-center py-8">
+                    <div class="text-slate-400 mb-4">
+                      <svg class="w-12 h-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 0 1-1.125-1.125M3.375 19.5h7.5c.621 0 1.125-.504 1.125-1.125m-9.75 0V5.625m0 0A2.25 2.25 0 0 1 5.625 3.375h4.125c.621 0 1.125.504 1.125 1.125v15.75m-9.75 0h9.75" />
+                      </svg>
+                    </div>
+                    <p class="text-slate-600 text-lg font-medium mb-2">{{ emptyText }}</p>
+                    <p class="text-slate-500 text-sm">Try adjusting your search or filter criteria</p>
+                  </div>
+                </slot>
+              </td>
+            </tr>
+
+            <!-- Skeleton Loading Rows -->
+            <template v-if="showSkeleton && (loading || dataLoading)">
+              <tr v-for="n in skeletonRows" :key="`skeleton-${n}`" class="animate-pulse">
+                <!-- Selection checkbox skeleton -->
+                <td v-if="selectable" :class="checkboxCellClasses">
+                  <div class="w-4 h-4 bg-slate-200 rounded"></div>
+                </td>
+                
+                <!-- Data columns skeleton -->
+                <td v-for="column in columns" :key="column.key" :class="getDataCellClasses()">
+                  <div class="h-4 bg-slate-200 rounded w-3/4"></div>
+                </td>
+                
+                <!-- Actions column skeleton -->
+                <td v-if="$slots.actions" :class="actionsCellClasses">
+                  <div class="flex gap-2 justify-center">
+                    <div class="w-6 h-6 bg-slate-200 rounded"></div>
+                    <div class="w-6 h-6 bg-slate-200 rounded"></div>
+                  </div>
+                </td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <!-- Footer/Pagination Component -->
@@ -140,8 +220,10 @@
       :selected-count="selectedItems.length"
       :variant="paginationVariant"
       :padding="paginationPadding"
-      @update:current-page="currentPage = $event"
-      @update:page-size="pageSize = $event"
+      :loading="paginationLoading"
+      :disabled="loading || dataLoading"
+      @update:current-page="handlePageChange"
+      @update:page-size="handlePageSizeChange"
     >
       <template #footer>
         <slot name="footer" />
@@ -151,13 +233,14 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, reactive } from 'vue'
 import { cva } from 'class-variance-authority'
 import { cn } from '../utils/cn.js'
 import Checkbox from './Checkbox.vue'
 import DataTableHeader from './DataTableHeader.vue'
 import DataTableRow from './DataTableRow.vue'
 import DataTablePagination from './DataTablePagination.vue'
+import STLLoader from './STLLoader.vue'
 
 const props = defineProps({
   data: {
@@ -246,10 +329,70 @@ const props = defineProps({
   paginationPadding: {
     type: String,
     default: 'normal'
+  },
+  // Loading Props
+  loading: {
+    type: Boolean,
+    default: false
+  },
+  dataLoading: {
+    type: Boolean,
+    default: false
+  },
+  sortLoading: {
+    type: Boolean,
+    default: false
+  },
+  paginationLoading: {
+    type: Boolean,
+    default: false
+  },
+  bulkLoading: {
+    type: Boolean,
+    default: false
+  },
+  rowLoading: {
+    type: Object,
+    default: () => ({})
+  },
+  loadingType: {
+    type: String,
+    default: 'dots',
+    validator: (value) => ['spin', 'pulse', 'bounce', 'ripple', 'bars', 'dots', 'ring'].includes(value)
+  },
+  loadingSize: {
+    type: String,
+    default: 'medium',
+    validator: (value) => ['small', 'medium', 'large', 'xl'].includes(value)
+  },
+  loadingColor: {
+    type: String,
+    default: '#3b82f6'
+  },
+  loadingText: {
+    type: String,
+    default: 'Loading...'
+  },
+  loadingTextPosition: {
+    type: String,
+    default: 'bottom',
+    validator: (value) => ['top', 'bottom'].includes(value)
+  },
+  loadingBackground: {
+    type: String,
+    default: 'rgba(255, 255, 255, 0.95)'
+  },
+  showSkeleton: {
+    type: Boolean,
+    default: true
+  },
+  skeletonRows: {
+    type: Number,
+    default: 5
   }
 })
 
-const emit = defineEmits(['selection-change', 'sort-change', 'row-click'])
+const emit = defineEmits(['selection-change', 'sort-change', 'row-click', 'page-change', 'page-size-change'])
 
 const currentPage = ref(1)
 const pageSize = ref(props.pageSize)
@@ -395,12 +538,14 @@ const toggleRowSelection = (item) => {
 }
 
 const toggleSelectAll = () => {
+  if (props.loading || props.dataLoading) return
+  
   const newSelection = isAllSelected.value ? [] : [...filteredData.value]
   emit('selection-change', newSelection)
 }
 
-const handleSort = (column) => {
-  if (!column.sortable) return
+const handleSort = async (column) => {
+  if (!column.sortable || props.loading || props.sortLoading) return
 
   if (sortColumn.value === column.key) {
     sortDirection.value = sortDirection.value === 'asc' ? 'desc' : 'asc'
@@ -413,7 +558,23 @@ const handleSort = (column) => {
 }
 
 const handleRowClick = (payload) => {
+  if (props.loading) return
   emit('row-click', payload)
+}
+
+const handlePageChange = async (page) => {
+  if (props.paginationLoading || props.loading) return
+  
+  currentPage.value = page
+  emit('page-change', page)
+}
+
+const handlePageSizeChange = async (size) => {
+  if (props.paginationLoading || props.loading) return
+  
+  pageSize.value = size
+  currentPage.value = 1 // Reset to first page
+  emit('page-size-change', size)
 }
 
 // Style classes using CVA
@@ -444,8 +605,22 @@ const getHeaderCellClasses = (column) => {
     densityPadding[props.density],
     'text-left text-xs font-medium text-slate-500 uppercase tracking-wider',
     {
-      'cursor-pointer hover:bg-slate-100': column.sortable
+      'cursor-pointer hover:bg-slate-100 transition-colors': column.sortable && !props.loading && !props.sortLoading,
+      'cursor-not-allowed opacity-50': props.loading || (props.sortLoading && sortColumn.value === column.key)
     }
+  )
+}
+
+const getDataCellClasses = () => {
+  const densityPadding = {
+    compact: 'px-4 py-2',
+    normal: 'px-6 py-4',
+    comfortable: 'px-8 py-6'
+  }
+
+  return cn(
+    densityPadding[props.density],
+    'whitespace-nowrap text-sm text-slate-900'
   )
 }
 
@@ -471,7 +646,7 @@ const actionsCellClasses = computed(() => {
 
   return cn(
     densityPadding[props.density],
-    'whitespace-nowrap text-sm font-medium'
+    'whitespace-nowrap text-sm font-medium text-center'
   )
 })
 
@@ -504,4 +679,45 @@ watch(() => props.selectedItems, (newSelection) => {
 watch(() => props.pageSize, (newPageSize) => {
   pageSize.value = newPageSize
 })
+
+// Expose methods for parent components
+defineExpose({
+  refresh: () => {
+    // Emit event to refresh data
+    emit('refresh')
+  },
+  goToPage: (page) => {
+    handlePageChange(page)
+  },
+  selectAll: () => {
+    toggleSelectAll()
+  },
+  clearSelection: () => {
+    emit('selection-change', [])
+  },
+  getCurrentPage: () => currentPage.value,
+  getTotalPages: () => totalPages.value,
+  getSelectedItems: () => props.selectedItems
+})
 </script>
+
+<style scoped>
+.table-loading-overlay {
+  border-radius: 0.5rem;
+  z-index: 10;
+}
+
+/* Custom skeleton animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+</style>
