@@ -1,62 +1,65 @@
 <template>
-  <div>
+  <div class="bg-white border-b border-gray-200">
     <!-- Main Filters Bar -->
     <div :class="filtersClasses">
       <!-- Search Input -->
-      <div class="flex-1 min-w-64">
-        <div class="relative">
-          <font-awesome-icon icon="magnifying-glass" :class="searchIconClasses" />
-          <input :model-value="searchQuery" @input="$emit('update:searchQuery', $event.target.value)"
-            :placeholder="searchPlaceholder" :class="searchInputClasses" />
-          <button v-if="searchQuery" @click="$emit('update:searchQuery', '')" :class="clearSearchButtonClasses">
-            <font-awesome-icon icon="xmark" class="w-4 h-4" />
+      <div class="flex-1 min-w-80 max-w-md">
+        <div class="relative group">
+          <font-awesome-icon 
+            icon="magnifying-glass" 
+            :class="searchIconClasses" 
+          />
+          <input 
+            :model-value="searchQuery" 
+            @input="$emit('update:searchQuery', $event.target.value)"
+            :placeholder="searchPlaceholder" 
+            :class="searchInputClasses" 
+          />
+          <button 
+            v-if="searchQuery" 
+            @click="$emit('update:searchQuery', '')" 
+            :class="clearSearchButtonClasses"
+          >
+            <font-awesome-icon icon="xmark" class="w-3 h-3" />
           </button>
         </div>
       </div>
 
       <!-- Status Filter -->
-      <div v-if="statusOptions.length > 0" class="min-w-32">
-        <Select :model-value="selectedStatus" @change="$emit('update:selectedStatus', $event.target.value)"
-          :class="selectClasses">
-          <option value="">All Status</option>
-          <option v-for="option in statusOptions" :key="option.value" :value="option.value">
-            {{ option.label }}
-          </option>
-        </Select>
-      </div>
-
-      <!-- Dynamic Date Filters -->
-      <div v-if="dateFilters.length > 0" class="flex items-center gap-2 flex-wrap">
-        <div v-for="dateFilter in dateFilters" :key="dateFilter.key" class="flex items-center gap-2">
-          <label :class="dateFilterLabelClasses">{{ dateFilter.label }}:</label>
-          <div class="flex items-center gap-1">
-            <input 
-              type="date" 
-              :model-value="dateFilter.from" 
-              @input="updateDateFilter(dateFilter.key, 'from', $event.target.value)"
-              :class="dateInputClasses" 
-              :placeholder="`From ${dateFilter.label}`"
-            />
-            <span :class="dateRangeSeparatorClasses">to</span>
-            <input 
-              type="date" 
-              :model-value="dateFilter.to" 
-              @input="updateDateFilter(dateFilter.key, 'to', $event.target.value)"
-              :class="dateInputClasses" 
-              :placeholder="`To ${dateFilter.label}`"
-            />
-          </div>
+      <div v-if="statusOptions.length > 0" class="min-w-36">
+        <div class="relative">
+          <Select 
+            :model-value="selectedStatus" 
+            @change="$emit('update:selectedStatus', $event.target.value)"
+            :class="selectClasses"
+          >
+            <option value="">All Status</option>
+            <option v-for="option in statusOptions" :key="option.value" :value="option.value">
+              {{ option.label }}
+            </option>
+          </Select>
+          <font-awesome-icon 
+            icon="chevron-down" 
+            class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
+          />
         </div>
       </div>
 
-      <!-- Legacy Date Range Filter (for backward compatibility) -->
-      <div v-if="showDateFilter && dateFilters.length === 0" class="flex items-center gap-2">
-        <input type="date" :model-value="dateFrom" @input="$emit('update:dateFrom', $event.target.value)"
-          :class="dateInputClasses" />
-        <span :class="dateRangeSeparatorClasses">to</span>
-        <input type="date" :model-value="dateTo" @input="$emit('update:dateTo', $event.target.value)"
-          :class="dateInputClasses" />
-      </div>
+      <!-- Advanced Filters Toggle -->
+      <button
+        @click="toggleAdvancedFilters"
+        :class="advancedFiltersToggleClasses"
+      >
+        <font-awesome-icon icon="filter" class="w-4 h-4" />
+        Filters
+        <span v-if="activeFiltersCount > 0" :class="filterCountBadgeClasses">
+          {{ activeFiltersCount }}
+        </span>
+        <font-awesome-icon 
+          :icon="showAdvancedFilters ? 'chevron-up' : 'chevron-down'" 
+          class="w-4 h-4 ml-1"
+        />
+      </button>
 
       <!-- Custom Filters Slot -->
       <div v-if="$slots.filters" class="flex items-center gap-2">
@@ -64,36 +67,112 @@
       </div>
 
       <!-- Actions -->
-      <div class="flex items-center gap-2 ml-auto">
+      <div class="flex items-center gap-3 ml-auto">
         <!-- Clear Filters -->
-        <Button v-if="hasActiveFilters" @click="clearFilters" :class="clearFiltersButtonClasses">
-          Clear Filters
+        <Button 
+          v-if="hasActiveFilters" 
+          @click="clearFilters" 
+          :class="clearFiltersButtonClasses"
+        >
+          <font-awesome-icon icon="rotate-left" class="w-4 h-4 mr-2" />
+          Clear All
         </Button>
 
         <!-- Export Button -->
-        <Button v-if="showExport" @click="$emit('export')" :class="exportButtonClasses">
-          <font-awesome-icon icon="download" />
+        <Button 
+          v-if="showExport" 
+          @click="$emit('export')" 
+          :class="exportButtonClasses"
+        >
+          <font-awesome-icon icon="download" class="w-4 h-4 mr-2" />
           Export
         </Button>
 
-        <!-- Add Button -->
+        <!-- Add Button Slot -->
         <slot name="actions">
-          <Button v-if="showAdd" variant="success" size="sm" @click="$emit('add')">
-            <Icon icon="plus" class="mr-1" /> Add
+          <Button v-if="showAdd" variant="success" size="lg" @click="$emit('add')">
+            <font-awesome-icon icon="plus" class="w-4 h-4 mr-2" />
+            Add
           </Button>
         </slot>
       </div>
     </div>
 
+    <!-- Advanced Filters Panel -->
+    <div v-if="showAdvancedFilters && dateFilters.length > 0" :class="advancedFiltersContainerClasses">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div 
+          v-for="dateFilter in dateFilters" 
+          :key="dateFilter.key" 
+          class="space-y-3"
+        >
+          <div class="flex items-center justify-between">
+            <label :class="dateFilterLabelClasses">
+              {{ dateFilter.label }}
+            </label>
+            <button
+              @click="toggleDateFilterActive(dateFilter.key)"
+              :class="getDateFilterToggleClasses(dateFilter)"
+            >
+              {{ isDateFilterActive(dateFilter) ? 'Active' : 'Inactive' }}
+            </button>
+          </div>
+          
+          <div v-if="isDateFilterActive(dateFilter)" class="flex items-center gap-3">
+            <div class="relative flex-1">
+              <font-awesome-icon 
+                icon="calendar" 
+                class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
+              />
+              <input 
+                type="date" 
+                :model-value="dateFilter.from" 
+                @input="updateDateFilter(dateFilter.key, 'from', $event.target.value)"
+                :class="dateInputClasses" 
+                :placeholder="`From ${dateFilter.label}`"
+              />
+            </div>
+            <span :class="dateRangeSeparatorClasses">to</span>
+            <div class="relative flex-1">
+              <font-awesome-icon 
+                icon="calendar" 
+                class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
+              />
+              <input 
+                type="date" 
+                :model-value="dateFilter.to" 
+                @input="updateDateFilter(dateFilter.key, 'to', $event.target.value)"
+                :class="dateInputClasses" 
+                :placeholder="`To ${dateFilter.label}`"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Active Filters Display -->
     <div v-if="activeFiltersDisplay.length > 0" :class="activeFiltersContainerClasses">
-      <div class="flex items-center gap-2 flex-wrap">
+      <div class="flex items-center gap-3 flex-wrap">
         <span :class="activeFiltersLabelClasses">Active filters:</span>
         <div v-for="filter in activeFiltersDisplay" :key="filter.key" :class="activeFilterTagClasses">
+          <font-awesome-icon :icon="filter.icon" class="w-3 h-3" />
           <span>{{ filter.label }}: {{ filter.value }}</span>
           <button @click="removeFilter(filter.key)" :class="activeFilterRemoveButtonClasses">
             <font-awesome-icon icon="xmark" class="w-3 h-3" />
           </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table Info Bar -->
+    <div v-if="showTableInfo" class="px-6 py-3 bg-gray-50 border-t border-gray-200">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <span class="text-sm text-gray-600">
+            <span class="font-medium">{{ totalItems || 0 }}</span> 
+            {{ itemLabel || 'items' }} found
+          </span>
         </div>
       </div>
     </div>
@@ -102,12 +181,10 @@
 
 <script setup>
 import Button from './Button.vue'
-import Input from './Input.vue'
 import Select from './Select.vue'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { cva } from 'class-variance-authority'
 import { cn } from '../utils/cn.js'
-import Icon from './Icon.vue'
 
 const props = defineProps({
   searchQuery: {
@@ -160,6 +237,18 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  showTableInfo: {
+    type: Boolean,
+    default: true
+  },
+  totalItems: {
+    type: Number,
+    default: 0
+  },
+  itemLabel: {
+    type: String,
+    default: 'items'
+  },
   variant: {
     type: String,
     default: 'default',
@@ -183,18 +272,21 @@ const emit = defineEmits([
   'clear-filters'
 ])
 
+// Local state
+const showAdvancedFilters = ref(false)
+
 // CVA Variants
-const filtersVariants = cva('flex flex-wrap items-center gap-4 border-b border-slate-200', {
+const filtersVariants = cva('flex flex-wrap items-center gap-4', {
   variants: {
     variant: {
-      default: 'bg-slate-50',
-      minimal: 'bg-transparent border-slate-100',
-      bordered: 'bg-slate-100 border-slate-300'
+      default: 'bg-white',
+      minimal: 'bg-transparent',
+      bordered: 'bg-gray-50'
     },
     padding: {
-      compact: 'p-2',
-      normal: 'p-4',
-      comfortable: 'p-6'
+      compact: 'px-4 py-3',
+      normal: 'px-6 py-4',
+      comfortable: 'px-8 py-6'
     }
   },
   defaultVariants: {
@@ -203,12 +295,12 @@ const filtersVariants = cva('flex flex-wrap items-center gap-4 border-b border-s
   }
 })
 
-const inputVariants = cva('border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500', {
+const inputVariants = cva('border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm', {
   variants: {
     size: {
-      sm: 'text-sm px-2 py-1',
-      md: 'text-sm px-3 py-2',
-      lg: 'text-base px-4 py-3'
+      sm: 'px-2 py-1.5',
+      md: 'px-3 py-2.5',
+      lg: 'px-4 py-3'
     }
   },
   defaultVariants: {
@@ -216,18 +308,18 @@ const inputVariants = cva('border border-slate-300 rounded-md focus:outline-none
   }
 })
 
-const buttonVariants = cva('rounded-md flex items-center gap-2 font-medium transition-colors', {
+const buttonVariants = cva('rounded-lg flex items-center font-medium transition-all', {
   variants: {
     variant: {
-      default: 'text-slate-600 hover:text-slate-800 border border-slate-300 hover:bg-slate-100',
-      primary: 'text-white bg-blue-600 hover:bg-blue-700 border border-blue-600',
-      success: 'text-white bg-green-600 hover:bg-green-700 border border-green-600',
-      ghost: 'text-slate-600 hover:text-slate-800 hover:bg-slate-100'
+      default: 'text-gray-700 hover:text-gray-900 border border-gray-200 hover:bg-gray-50 hover:border-gray-300 bg-white',
+      primary: 'text-white bg-blue-600 hover:bg-blue-700 border border-blue-600 shadow-sm',
+      success: 'text-white bg-green-600 hover:bg-green-700 border border-green-600 shadow-sm',
+      ghost: 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
     },
     size: {
-      sm: 'px-2 py-1 text-xs',
+      sm: 'px-2 py-1.5 text-xs',
       md: 'px-3 py-2 text-sm',
-      lg: 'px-4 py-3 text-base'
+      lg: 'px-4 py-2.5 text-sm'
     }
   },
   defaultVariants: {
@@ -236,20 +328,11 @@ const buttonVariants = cva('rounded-md flex items-center gap-2 font-medium trans
   }
 })
 
-const activeFiltersVariants = cva('border-b', {
-  variants: {
-    variant: {
-      default: 'px-4 py-2 bg-blue-50 border-blue-200',
-      minimal: 'px-2 py-1 bg-slate-50 border-slate-100',
-      bordered: 'px-4 py-3 bg-blue-100 border-blue-300'
-    }
-  },
-  defaultVariants: {
-    variant: 'default'
-  }
-})
-
 // Methods
+const toggleAdvancedFilters = () => {
+  showAdvancedFilters.value = !showAdvancedFilters.value
+}
+
 const updateDateFilter = (key, type, value) => {
   const updatedFilters = [...props.dateFilters]
   const filterIndex = updatedFilters.findIndex(f => f.key === key)
@@ -263,6 +346,37 @@ const updateDateFilter = (key, type, value) => {
   }
 }
 
+const toggleDateFilterActive = (key) => {
+  const updatedFilters = [...props.dateFilters]
+  const filterIndex = updatedFilters.findIndex(f => f.key === key)
+  
+  if (filterIndex >= 0) {
+    const filter = updatedFilters[filterIndex]
+    if (filter.from || filter.to) {
+      // Clear the filter
+      updatedFilters[filterIndex] = {
+        ...filter,
+        from: '',
+        to: ''
+      }
+    }
+    emit('update:dateFilters', updatedFilters)
+  }
+}
+
+const isDateFilterActive = (dateFilter) => {
+  return dateFilter.from || dateFilter.to
+}
+
+const getDateFilterToggleClasses = (dateFilter) => {
+  const isActive = isDateFilterActive(dateFilter)
+  return `text-xs px-2 py-1 rounded transition-all ${
+    isActive
+      ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+  }`
+}
+
 // Computed Properties
 const hasActiveFilters = computed(() => {
   const hasSearch = props.searchQuery
@@ -273,6 +387,15 @@ const hasActiveFilters = computed(() => {
   return hasSearch || hasStatus || hasLegacyDates || hasDynamicDates
 })
 
+const activeFiltersCount = computed(() => {
+  let count = 0
+  if (props.searchQuery) count++
+  if (props.selectedStatus) count++
+  if (props.dateFrom || props.dateTo) count++
+  count += props.dateFilters.filter(f => f.from || f.to).length
+  return count
+})
+
 const activeFiltersDisplay = computed(() => {
   const filters = []
 
@@ -280,7 +403,8 @@ const activeFiltersDisplay = computed(() => {
     filters.push({
       key: 'search',
       label: 'Search',
-      value: props.searchQuery
+      value: `"${props.searchQuery}"`,
+      icon: 'magnifying-glass'
     })
   }
 
@@ -289,7 +413,8 @@ const activeFiltersDisplay = computed(() => {
     filters.push({
       key: 'status',
       label: 'Status',
-      value: statusOption?.label || props.selectedStatus
+      value: statusOption?.label || props.selectedStatus,
+      icon: 'filter'
     })
   }
 
@@ -308,7 +433,8 @@ const activeFiltersDisplay = computed(() => {
       filters.push({
         key: 'date',
         label: 'Date Range',
-        value: dateValue
+        value: dateValue,
+        icon: 'calendar'
       })
     }
   }
@@ -329,7 +455,8 @@ const activeFiltersDisplay = computed(() => {
         filters.push({
           key: `date-${dateFilter.key}`,
           label: dateFilter.label,
-          value: dateValue
+          value: dateValue,
+          icon: 'calendar'
         })
       }
     }
@@ -347,61 +474,80 @@ const filtersClasses = computed(() =>
 )
 
 const searchIconClasses = computed(() =>
-  'absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400'
+  'absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 group-hover:text-gray-600 transition-colors'
 )
 
 const searchInputClasses = computed(() =>
   cn(
     inputVariants({ size: 'md' }),
-    'w-full pl-10 focus:border-transparent'
+    'w-full pl-10 pr-10 hover:border-gray-300'
   )
 )
 
 const clearSearchButtonClasses = computed(() =>
-  'absolute right-2 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 hover:bg-slate-100 rounded'
+  'absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1 hover:bg-gray-100 rounded-full transition-all'
 )
 
 const selectClasses = computed(() =>
   cn(
     inputVariants({ size: 'md' }),
-    'w-full focus:border-transparent'
+    'w-full pr-8 appearance-none hover:border-gray-300'
   )
 )
 
+const advancedFiltersToggleClasses = computed(() => {
+  const isActive = showAdvancedFilters.value || hasActiveFilters.value
+  return cn(
+    buttonVariants({ 
+      variant: isActive ? 'primary' : 'default', 
+      size: 'lg' 
+    }),
+    'gap-2'
+  )
+})
+
+const filterCountBadgeClasses = computed(() =>
+  'bg-white text-blue-600 text-xs px-1.5 py-0.5 rounded-full min-w-[20px] text-center font-semibold'
+)
+
+const advancedFiltersContainerClasses = computed(() =>
+  'px-6 py-4 border-t border-gray-100 bg-gray-50'
+)
+
 const dateInputClasses = computed(() =>
-  cn(inputVariants({ size: 'md' }), 'min-w-32')
+  cn(inputVariants({ size: 'md' }), 'pl-10 pr-3')
 )
 
 const dateFilterLabelClasses = computed(() =>
-  'text-sm font-medium text-slate-700 whitespace-nowrap'
+  'text-sm font-semibold text-gray-700'
 )
 
 const dateRangeSeparatorClasses = computed(() =>
-  'text-slate-500 text-sm'
+  'text-gray-500 text-sm font-medium'
 )
 
 const clearFiltersButtonClasses = computed(() =>
-  cn(buttonVariants({ variant: 'default', size: 'md' }))
+  cn(buttonVariants({ variant: 'ghost', size: 'md' }))
 )
 
 const exportButtonClasses = computed(() =>
-  cn(buttonVariants({ variant: 'primary', size: 'md' }))
+  cn(buttonVariants({ variant: 'default', size: 'lg' }))
 )
 
 const activeFiltersContainerClasses = computed(() =>
-  cn(activeFiltersVariants({ variant: props.variant }))
+  'px-6 py-3 bg-blue-50 border-t border-blue-100'
 )
 
 const activeFiltersLabelClasses = computed(() =>
-  'text-sm text-blue-700 font-medium'
+  'text-sm font-semibold text-blue-800'
 )
 
 const activeFilterTagClasses = computed(() =>
-  'flex items-center gap-1 bg-blue-100 text-blue-800 px-2 py-1 rounded-md text-sm'
+  'flex items-center gap-1.5 bg-white border border-blue-200 text-blue-800 px-3 py-1.5 rounded-full text-sm font-medium'
 )
 
 const activeFilterRemoveButtonClasses = computed(() =>
-  'text-blue-600 hover:text-blue-800 p-0.5 hover:bg-blue-200 rounded'
+  'text-blue-600 hover:text-blue-800 ml-1 hover:bg-blue-100 rounded-full p-0.5 transition-all'
 )
 
 // Methods
