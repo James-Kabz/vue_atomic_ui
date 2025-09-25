@@ -1,6 +1,6 @@
 {
   "name": "@stlhorizon/vue-ui",
-  "version": "1.7.2",
+  "version": "1.7.4",
   "private": false,
   "type": "module",
   "description": "A Vue.js component library with Tailwind CSS styling",

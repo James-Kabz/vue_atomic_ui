@@ -1,35 +1,18 @@
 <template>
   <div class="min-h-screen bg-gray-50">
     <!-- Sidebar -->
-    <Sidebar
-      ref="sidebarRef"
-      :navigation-items="navigationItems"
-      :header="{
-        title: 'Risk & Compliance',
-      }"
-      :current-route="currentRoute"
-      @toggle="handleSidebarToggle"
-      @navigate="handleNavigation"
-    />
+    <Sidebar ref="sidebarRef" :navigation-items="navigationItems" :header="{
+      title: 'Risk & Compliance',
+    }" :current-route="currentRoute" :mobile-open="mobileOpen" @toggle="handleSidebarToggle" @toggle-mobile="handleMobileToggle" @navigate="handleNavigation" />
 
     <!-- Header -->
-    <Header
-      :sidebar-width="sidebarWidth"
-      :sidebar-collapsed="sidebarCollapsed"
-      :current-section="currentSection"
-      :current-page="currentPage"
-      :user="user"
-      :profile-menu-items="profileMenuItems"
-      @search="handleSearch"
-      @profile-action="handleProfileAction"
-      @logout="handleLogout"
-    />
+    <Header :sidebar-width="sidebarWidth" :sidebar-collapsed="sidebarCollapsed" :current-section="currentSection"
+      :current-page="currentPage" :user="user" :profile-menu-items="profileMenuItems" :mobile-open="mobileOpen"
+      @search="handleSearch" @profile-action="handleProfileAction" @logout="handleLogout" @toggle-mobile-sidebar="handleMobileSidebarToggle" />
 
     <!-- Main Content -->
-    <main
-      class="transition-all duration-300 ease-in-out pt-16 min-h-screen"
-      :style="{ marginLeft: `${sidebarWidth}px` }"
-    >
+    <main class="transition-all duration-300 ease-in-out pt-16 min-h-screen"
+      :style="{ marginLeft: `${mainMarginLeft}px` }">
       <div class="p-6">
         <router-view />
       </div>
@@ -38,7 +21,7 @@
 </template>
 
 <script setup>
-import { ref, computed, provide, watch } from 'vue'
+import { ref, computed, provide, watch, onMounted, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import Sidebar from '../components/Sidebar.vue'
 import Header from '../components/Header.vue'
@@ -71,6 +54,8 @@ const sidebarCollapsed = ref(false)
 const currentSection = ref(props.initialSection)
 const currentPage = ref(props.initialPage)
 const currentRoute = ref(route.path)
+const isMobile = ref(false)
+const mobileOpen = ref(false)
 
 // Emits
 const emit = defineEmits([
@@ -107,7 +92,7 @@ const navigationItems = [
     name: 'dashboard',
     label: 'Dashboard',
     route: '/dashboard',
-    icon:  'home'
+    icon: 'home'
   },
   {
     type: 'link',
@@ -124,10 +109,30 @@ const navigationItems = [
   {
     type: 'link',
     name: 'users',
-    label: 'Users',
-    route: '/users',
-    icon: 'users'
-  },
+    label: 'User Management',
+    icon: 'users',
+    subItems: [
+      {
+        name: 'all-users',
+        label: 'All Users',
+        route: '/users',
+        icon: 'user'
+      },
+      {
+        name: 'roles',
+        label: 'Roles & Permissions',
+        route: '/users/roles',
+        icon: 'shield'
+      },
+      {
+        name: 'activity',
+        label: 'User Activity',
+        route: '/users/activity',
+        icon: 'activity'
+      }
+    ]
+  }
+  ,
   {
     type: 'link',
     name: 'roles',
@@ -167,10 +172,27 @@ const sidebarWidth = computed(() => {
   return sidebarCollapsed.value ? 64 : 256
 })
 
+const mainMarginLeft = computed(() => {
+  return isMobile.value ? 0 : sidebarWidth.value
+})
+
+// Methods
+const checkMobile = () => {
+  isMobile.value = window.innerWidth < 1024 // lg breakpoint
+}
+
 // Methods
 const handleSidebarToggle = (collapsed) => {
   sidebarCollapsed.value = collapsed
   emit('sidebar-toggle', collapsed)
+}
+
+const handleMobileSidebarToggle = () => {
+  mobileOpen.value = !mobileOpen.value
+}
+
+const handleMobileToggle = (value) => {
+  mobileOpen.value = value
 }
 
 const handleNavigation = (item) => {
@@ -207,6 +229,16 @@ const handleProfileAction = (action) => {
 const handleLogout = () => {
   emit('logout')
 }
+
+// Lifecycle
+onMounted(() => {
+  checkMobile()
+  window.addEventListener('resize', checkMobile)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobile)
+})
 
 // Public methods for external control
 const navigate = (itemName) => {
