@@ -110,15 +110,12 @@
             <label :class="dateFilterLabelClasses">
               {{ dateFilter.label }}
             </label>
-            <button
-              @click="toggleDateFilterActive(dateFilter.key)"
-              :class="getDateFilterToggleClasses(dateFilter)"
-            >
-              {{ isDateFilterActive(dateFilter) ? 'Active' : 'Inactive' }}
-            </button>
+            <span :class="getDateFilterStatusClasses(dateFilter)">
+              {{ hasDateFilterValues(dateFilter) ? 'Active' : 'Inactive' }}
+            </span>
           </div>
           
-          <div v-if="isDateFilterActive(dateFilter)" class="flex items-center gap-3">
+          <div class="flex items-center gap-3">
             <div class="relative flex-1">
               <font-awesome-icon 
                 icon="calendar" 
@@ -146,6 +143,14 @@
                 :placeholder="`To ${dateFilter.label}`"
               />
             </div>
+            <button
+              v-if="hasDateFilterValues(dateFilter)"
+              @click="clearDateFilter(dateFilter.key)"
+              :class="clearDateFilterButtonClasses"
+              title="Clear this filter"
+            >
+              <font-awesome-icon icon="xmark" class="w-4 h-4" />
+            </button>
           </div>
         </div>
       </div>
@@ -216,7 +221,7 @@ const props = defineProps({
     type: String,
     default: ''
   },
-  // New dynamic date filters prop
+  // Dynamic date filters prop (NO active property required)
   dateFilters: {
     type: Array,
     default: () => [],
@@ -328,6 +333,33 @@ const buttonVariants = cva('rounded-lg flex items-center font-medium transition-
   }
 })
 
+const hasDateFilterValues = (dateFilter) => {
+  return !!(dateFilter.from || dateFilter.to)
+}
+
+const clearDateFilter = (key) => {
+  const updatedFilters = [...props.dateFilters]
+  const filterIndex = updatedFilters.findIndex(f => f.key === key)
+  
+  if (filterIndex >= 0) {
+    updatedFilters[filterIndex] = {
+      ...updatedFilters[filterIndex],
+      from: '',
+      to: ''
+    }
+    emit('update:dateFilters', updatedFilters)
+  }
+}
+
+const getDateFilterStatusClasses = (dateFilter) => {
+  const hasValues = hasDateFilterValues(dateFilter)
+  return `text-xs px-2 py-1 rounded ${
+    hasValues
+      ? 'bg-blue-100 text-blue-700'
+      : 'bg-gray-100 text-gray-600'
+  }`
+}
+
 // Methods
 const toggleAdvancedFilters = () => {
   showAdvancedFilters.value = !showAdvancedFilters.value
@@ -344,37 +376,6 @@ const updateDateFilter = (key, type, value) => {
     }
     emit('update:dateFilters', updatedFilters)
   }
-}
-
-const toggleDateFilterActive = (key) => {
-  const updatedFilters = [...props.dateFilters]
-  const filterIndex = updatedFilters.findIndex(f => f.key === key)
-  
-  if (filterIndex >= 0) {
-    const filter = updatedFilters[filterIndex]
-    if (filter.from || filter.to) {
-      // Clear the filter
-      updatedFilters[filterIndex] = {
-        ...filter,
-        from: '',
-        to: ''
-      }
-    }
-    emit('update:dateFilters', updatedFilters)
-  }
-}
-
-const isDateFilterActive = (dateFilter) => {
-  return dateFilter.from || dateFilter.to
-}
-
-const getDateFilterToggleClasses = (dateFilter) => {
-  const isActive = isDateFilterActive(dateFilter)
-  return `text-xs px-2 py-1 rounded transition-all ${
-    isActive
-      ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
-      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-  }`
 }
 
 // Computed Properties
@@ -439,7 +440,7 @@ const activeFiltersDisplay = computed(() => {
     }
   }
 
-  // Dynamic date filters
+  // Dynamic date filters - only show those with values
   props.dateFilters.forEach(dateFilter => {
     if (dateFilter.from || dateFilter.to) {
       let dateValue = ''
@@ -524,6 +525,10 @@ const dateFilterLabelClasses = computed(() =>
 
 const dateRangeSeparatorClasses = computed(() =>
   'text-gray-500 text-sm font-medium'
+)
+
+const clearDateFilterButtonClasses = computed(() =>
+  'text-gray-400 hover:text-gray-600 p-1.5 hover:bg-gray-200 rounded-full transition-all'
 )
 
 const clearFiltersButtonClasses = computed(() =>
