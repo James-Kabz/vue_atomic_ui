@@ -1,5 +1,7 @@
 <template>
   <select
+    :id="id"
+    :name="name"
     :value="modelValue"
     @change="$emit('update:modelValue', $event.target.value)"
     :disabled="disabled"
@@ -20,6 +22,14 @@ const props = defineProps({
   modelValue: {
     type: [String, Number, Boolean],
     default: ''
+  },
+  id: {
+    type: String,
+    default: null
+  },
+  name: {
+    type: String,
+    default: null
   },
   disabled: {
     type: Boolean,
