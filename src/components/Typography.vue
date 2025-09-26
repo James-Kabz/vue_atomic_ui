@@ -2,8 +2,14 @@
   <component
     :is="tag"
     :class="typographyClasses"
+    v-bind="$attrs"
   >
     <slot />
+    <span
+      v-if="required"
+      class="text-red-600 ml-1"
+      aria-hidden="true"
+    >*</span>
   </component>
 </template>
 
@@ -16,11 +22,8 @@ const props = defineProps({
     default: 'body-md',
     validator: (value) =>
       [
-        // Body
         'body-xs', 'body-sm', 'body-md', 'body-lg',
-        // text
-        'text-xs' ,'text-sm', 'text-md', 'text-lg',
-        // Display / Heading
+        'text-xs', 'text-sm', 'text-md', 'text-lg',
         'display-sm', 'display-md', 'display-lg',
         'caption', 'overline'
       ].includes(value)
@@ -42,10 +45,15 @@ const props = defineProps({
   italic: Boolean,
   underline: Boolean,
   truncate: Boolean,
-  noWrap: Boolean
+  noWrap: Boolean,
+
+  /** 👇 New */
+  required: {
+    type: Boolean,
+    default: false
+  }
 })
 
-/* --- Tag mapping (semantic HTML) --- */
 const tag = computed(() => {
   const tagMap = {
     'body-xs': 'p',
@@ -65,34 +73,25 @@ const tag = computed(() => {
   return tagMap[props.variant] || 'p'
 })
 
-/* --- Variant → Tailwind mapping --- */
 const variantClasses = computed(() => {
   const variants = {
-    // Body text
     'body-xs': 'text-xs leading-normal',
     'body-sm': 'text-sm leading-relaxed',
     'body-md': 'text-base leading-relaxed',
     'body-lg': 'text-lg leading-relaxed',
-
-    // texts
     'text-xs': 'text-md font-semibold leading-snug',
     'text-sm': 'text-xl font-semibold leading-snug',
     'text-md': 'text-2xl font-semibold leading-snug',
     'text-lg': 'text-3xl font-bold leading-snug',
-
-    // Displays
     'display-sm': 'text-4xl font-bold leading-tight tracking-tight',
     'display-md': 'text-5xl font-bold leading-tight tracking-tight',
     'display-lg': 'text-6xl font-bold leading-tight tracking-tight',
-
-    // Extras
     caption: 'text-xs leading-normal',
     overline: 'text-xs font-medium uppercase tracking-wider leading-normal'
   }
   return variants[props.variant]
 })
 
-/* --- Color mapping --- */
 const colorClasses = computed(() => {
   const colors = {
     default: 'text-slate-900',
@@ -106,7 +105,6 @@ const colorClasses = computed(() => {
   return colors[props.color]
 })
 
-/* --- Alignment --- */
 const alignClasses = computed(() => ({
   left: 'text-left',
   center: 'text-center',
@@ -114,7 +112,6 @@ const alignClasses = computed(() => ({
   justify: 'text-justify'
 }[props.align]))
 
-/* --- Merge classes --- */
 const typographyClasses = computed(() => [
   variantClasses.value,
   colorClasses.value,

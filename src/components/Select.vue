@@ -3,6 +3,7 @@
     :value="modelValue"
     @change="$emit('update:modelValue', $event.target.value)"
     :disabled="disabled"
+    :required="required"
     :class="selectClasses"
     v-bind="$attrs"
   >
@@ -21,6 +22,10 @@ const props = defineProps({
     default: ''
   },
   disabled: {
+    type: Boolean,
+    default: false
+  },
+  required: {
     type: Boolean,
     default: false
   },

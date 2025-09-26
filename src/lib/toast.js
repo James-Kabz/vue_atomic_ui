@@ -7,7 +7,7 @@ let toastCounter = 0
 
 // Default configuration
 const defaultConfig = {
-  duration: 2000,
+  duration: 3000,
   position: 'top-center',
   dismissible: true,
   closeButton: false
