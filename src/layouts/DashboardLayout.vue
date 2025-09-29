@@ -1,132 +1,44 @@
 <template>
   <div class="min-h-screen bg-gray-50">
     <!-- Sidebar -->
-    <Sidebar ref="sidebarRef" :navigation-items="navigationItems" :header="{ title: 'Risk & Compliance' }"
-      :current-route="currentRoute" :mobile-open="mobileOpen"
-      :is-management-settings-active="isManagementSettingsActive" @toggle="handleSidebarToggle"
-      @toggle-mobile="handleMobileToggle" @navigate="handleNavigation" @open-submenu="handleOpenSubmenu"
-      @open-management-settings="handleOpenManagementSettings" />
-
-    <!-- Submenu Sidebar -->
-    <aside v-if="submenuOpen" :class="cn(
-      'fixed left-0 top-0 z-50 h-screen bg-white border-r border-gray-200 transition-all duration-300 ease-in-out overflow-y-auto shadow-xl',
-      isMobile ? 'w-full' : 'w-64',
-      submenuOpen ? 'translate-x-0' : '-translate-x-full'
-    )" :style="{ marginLeft: isMobile ? '0' : `${sidebarWidth}px` }">
-
-      <!-- Submenu Header -->
-      <div class="flex items-center justify-between p-4 border-b border-gray-200">
-        <div class="flex items-center">
-          <button @click="closeSubmenu" class="p-2 mr-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          <h3 class="text-lg font-extrabold text-gray-900">{{ currentSubmenu?.label }}</h3>
-        </div>
-      </div>
-
-      <!-- Submenu Items -->
-      <nav class="p-4 space-y-2">
-        <router-link v-for="subItem in currentSubmenu?.subItems" :key="subItem.name" :to="subItem.route"
-          @click="handleSubmenuNavigation(subItem)" :class="cn(
-            'flex items-center px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200 group relative',
-            isItemActive(subItem)
-              ? 'bg-gradient-to-br from-blue-50 to-blue-100 text-blue-700 shadow-sm border border-blue-200'
-              : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 border border-transparent'
-          )">
-          <!-- Active indicator bar -->
-          <div
-            v-if="isItemActive(subItem)"
-            class="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-blue-500 to-blue-600 rounded-r-full"
-          />
-
-          <div
-            :class="
-              cn(
-                'flex items-center justify-center w-8 h-8 rounded-lg mr-3 flex-shrink-0 transition-colors ml-2',
-                isItemActive(subItem)
-                  ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md'
-                  : 'bg-gray-100 text-gray-600 group-hover:bg-gray-200',
-              )
-            "
-          >
-            <Icon v-if="subItem.icon" :icon="subItem.icon" class="w-4 h-4" />
-          </div>
-          <span class="truncate text-md font-semibold">{{ subItem.label }}</span>
-          <span v-if="subItem.badge"
-            class="ml-auto inline-flex items-center justify-center px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800">
-            {{ subItem.badge }}
-          </span>
-        </router-link>
-      </nav>
-    </aside>
-
-    <!-- Management Settings Sidebar -->
-    <aside v-if="managementSettingsOpen" :class="cn(
-      'fixed left-0 top-0 z-50 h-screen bg-white border-r border-gray-200 transition-all duration-300 ease-in-out overflow-y-auto shadow-xl',
-      isMobile ? 'w-full' : 'ml-16 w-64',
-      managementSettingsOpen ? 'translate-x-0' : '-translate-x-full'
-    )">
-      <!-- Management Settings Header -->
-      <div class="flex items-center justify-between p-4 border-b border-gray-200">
-        <div class="flex items-center">
-          <button @click="closeManagementSettings"
-            class="p-2 mr-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          <h3 class="text-lg font-extrabold text-gray-900">Management Settings</h3>
-        </div>
-      </div>
-
-      <!-- Management Settings Items -->
-      <nav class="p-4 space-y-2">
-        <router-link v-for="setting in managementSettingsItems" :key="setting.name" :to="setting.route"
-          @click="handleManagementSettingsNavigation(setting)" :class="cn(
-            'flex items-center px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200 group relative',
-            isItemActive(setting)
-              ? 'bg-gradient-to-br from-blue-50 to-blue-100 text-blue-700 shadow-sm border border-blue-200'
-              : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 border border-transparent'
-          )">
-          <!-- Active indicator bar -->
-          <div
-            v-if="isItemActive(setting)"
-            class="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-blue-500 to-blue-600 rounded-r-full"
-          />
-
-          <div
-            :class="
-              cn(
-                'flex items-center justify-center w-8 h-8 rounded-lg mr-3 flex-shrink-0 transition-colors ml-2',
-                isItemActive(setting)
-                  ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md'
-                  : 'bg-gray-100 text-gray-600 group-hover:bg-gray-200',
-              )
-            "
-          >
-            <Icon v-if="setting.icon" :icon="setting.icon" class="w-4 h-4" />
-          </div>
-          <span class="truncate text-md font-semibold">{{ setting.label }}</span>
-        </router-link>
-      </nav>
-    </aside>
-
-    <!-- Overlay for mobile submenus -->
-    <div v-if="(submenuOpen || managementSettingsOpen) && isMobile"
-      class="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden" @click="closeAllMenus">
-    </div>
+    <Sidebar
+      ref="sidebarRef"
+      :sidebar-width="sidebarWidth"
+      :header="{ title: 'Risk & Compliance' }"
+      :navigation-items="navigationItems"
+      :management-settings="managementSettingsItems"
+      :show-management-settings="true"
+      :mobile-open="mobileOpen"
+      :is-management-settings-active="isManagementSettingsActive"
+      :current-path="currentRoute"
+      @navigate="handleNavigation"
+      @update:mobile-open="handleMobileToggle"
+    />
 
     <!-- Header -->
-    <Header :sidebar-width="sidebarWidth" :sidebar-collapsed="sidebarCollapsed" :current-section="currentSection"
-      :current-page="currentPage" :user="user" :profile-menu-items="profileMenuItems" :mobile-open="mobileOpen"
-      @search="handleSearch" @profile-action="handleProfileAction" @logout="handleLogout"
-      @toggle-mobile-sidebar="handleMobileSidebarToggle" />
+    <Header
+      :sidebar-width="sidebarWidth"
+      :current-section="currentSection"
+      :current-page="currentPage"
+      :current-route="currentRoute"
+      :user="user"
+      :notifications="[]"
+      :profile-menu-items="profileMenuItems"
+      :mobile-open="mobileOpen"
+      :organisation-name="'Risk & Compliance'"
+      :company-logo="''"
+      @search="handleSearch"
+      @profile-action="handleProfileAction"
+      @logout="handleLogout"
+      @navigate="handleNavigation"
+      @toggle-mobile-sidebar="handleMobileSidebarToggle"
+    />
 
     <!-- Main Content -->
-    <main class="transition-all duration-300 ease-in-out pt-16 min-h-screen"
-      :style="{ marginLeft: mainContentMarginLeft }">
+    <main
+      class="transition-all duration-300 ease-in-out pt-16 min-h-screen"
+      :style="{ marginLeft: sidebarRef?.contentMarginLeft + 'px' }"
+    >
       <div class="p-6">
         <router-view />
       </div>
@@ -135,12 +47,10 @@
 </template>
 
 <script setup>
-import { ref, computed, provide, watch, onMounted, onUnmounted } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import Sidebar from '../components/Sidebar.vue'
 import Header from '../components/Header.vue'
-import Icon from '../components/Icon.vue'
-import { cn } from '../utils/cn.js'
 
 const router = useRouter()
 const route = useRoute()
@@ -167,15 +77,10 @@ const props = defineProps({
 
 // State
 const sidebarRef = ref(null)
-const sidebarCollapsed = ref(false)
 const currentSection = ref(props.initialSection)
 const currentPage = ref(props.initialPage)
 const currentRoute = ref(route.path)
-const isMobile = ref(false)
 const mobileOpen = ref(false)
-const submenuOpen = ref(false)
-const currentSubmenu = ref(null)
-const managementSettingsOpen = ref(false)
 
 // Management settings items
 const managementSettingsItems = [
@@ -216,8 +121,7 @@ const emit = defineEmits([
   'navigate',
   'search',
   'profile-action',
-  'logout',
-  'sidebar-toggle'
+  'logout'
 ])
 
 const profileMenuItems = [
@@ -296,34 +200,13 @@ const navigationItems = [
 ]
 
 // Computed
-const sidebarWidth = computed(() => {
-  return sidebarCollapsed.value ? 64 : 256
-})
-
-const mainContentMarginLeft = computed(() => {
-  if (isMobile.value) return '0'
-
-  let margin = sidebarWidth.value
-  if (submenuOpen.value) margin += 256
-  if (managementSettingsOpen.value) margin += 256
-
-  return `${margin}px`
-})
+const sidebarWidth = computed(() => 130)
 
 const isManagementSettingsActive = computed(() => {
   return route.path.startsWith('/management')
 })
 
 // Methods
-const checkMobile = () => {
-  isMobile.value = window.innerWidth < 1024 // lg breakpoint
-}
-
-const handleSidebarToggle = (collapsed) => {
-  sidebarCollapsed.value = collapsed
-  emit('sidebar-toggle', collapsed)
-}
-
 const handleMobileSidebarToggle = () => {
   mobileOpen.value = !mobileOpen.value
 }
@@ -336,51 +219,7 @@ const handleNavigation = (item) => {
   if (item.route) {
     router.push(item.route)
   }
-  closeAllMenus()
   emit('navigate', item)
-}
-
-const handleOpenSubmenu = (item) => {
-  currentSubmenu.value = item
-  submenuOpen.value = true
-  if (isMobile.value) {
-    mobileOpen.value = false
-  }
-}
-
-const handleOpenManagementSettings = () => {
-  managementSettingsOpen.value = true
-  if (isMobile.value) {
-    mobileOpen.value = false
-  }
-}
-
-const closeSubmenu = () => {
-  submenuOpen.value = false
-  currentSubmenu.value = null
-}
-
-const closeManagementSettings = () => {
-  managementSettingsOpen.value = false
-}
-
-const closeAllMenus = () => {
-  closeSubmenu()
-  closeManagementSettings()
-  mobileOpen.value = false
-}
-
-const handleSubmenuNavigation = (item) => {
-  handleNavigation(item)
-}
-
-const handleManagementSettingsNavigation = (item) => {
-  handleNavigation(item)
-}
-
-const isItemActive = (item) => {
-  if (!item.route) return false
-  return route.path === item.route || route.path.startsWith(item.route + '/')
 }
 
 const updateBreadcrumbFromRoute = (routePath) => {
@@ -414,46 +253,18 @@ const handleLogout = () => {
   emit('logout')
 }
 
-// Lifecycle
-onMounted(() => {
-  checkMobile()
-  window.addEventListener('resize', checkMobile)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('resize', checkMobile)
-})
-
 // Watch for route changes
 watch(() => route.path, (newPath) => {
   currentRoute.value = newPath
   updateBreadcrumbFromRoute(newPath)
-  closeAllMenus()
 }, { immediate: true })
-
-// Provide layout context to child components
-provide('dashboardLayout', {
-  sidebarCollapsed,
-  sidebarWidth,
-  currentSection,
-  currentPage,
-  navigate: handleNavigation,
-  toggleSidebar: () => handleSidebarToggle(!sidebarCollapsed.value),
-  updateCurrentPage: (section, page) => {
-    currentSection.value = section
-    currentPage.value = page
-  }
-})
 
 // Expose methods for parent components
 defineExpose({
   navigate: handleNavigation,
-  toggleSidebar: () => handleSidebarToggle(!sidebarCollapsed.value),
   updateCurrentPage: (section, page) => {
     currentSection.value = section
     currentPage.value = page
-  },
-  sidebarCollapsed,
-  sidebarWidth
+  }
 })
 </script>

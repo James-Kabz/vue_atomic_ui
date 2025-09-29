@@ -19,14 +19,14 @@
     <!-- Sidebar -->
     <aside
       :class="cn(
-        'fixed left-0 top-0 z-40 h-screen border-r overflow-hidden flex flex-col',
+        'fixed left-0 z-40 border-r overflow-hidden flex flex-col',
         'transition-all duration-300 ease-in-out',
         'bg-white border-gray-200',
         isMobile
-          ? cn('transform', isMobileOpen ? 'translate-x-0' : '-translate-x-full')
-          : 'translate-x-0'
+          ? cn('transform h-screen', isMobileOpen ? 'translate-x-0' : '-translate-x-full')
+          : 'translate-x-0 h-[calc(100vh-4rem)]'
       )"
-      :style="{ width: sidebarWidth + 'px' }"
+      :style="{ width: sidebarWidth + 'px', top: isMobile ? '0px' : '4rem' }"
     >
       <!-- Mobile Header with Close Button -->
       <div
@@ -57,34 +57,6 @@
         </button>
       </div>
 
-      <!-- Desktop Header -->
-      <div
-        v-if="!isMobile && header"
-        class="flex items-center justify-center p-6 border-b border-gray-200 flex-shrink-0"
-      >
-        <div class="flex items-center gap-3">
-          <div
-            class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center"
-          >
-            <svg
-              class="w-6 h-6 text-white"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-              />
-            </svg>
-          </div>
-          <h2 class="text-lg font-bold text-gray-900">
-            {{ header.title }}
-          </h2>
-        </div>
-      </div>
 
       <!-- Navigation -->
       <nav class="flex-1 overflow-y-auto overflow-x-hidden p-4">
@@ -346,10 +318,10 @@
         :class="
           cn(
             'fixed z-40 bg-white border-r border-gray-200 overflow-y-auto shadow-lg',
-            isMobile ? 'left-0 w-full top-0 h-full' : 'w-64 top-16 h-[calc(100vh-4rem)]',
+            isMobile ? 'left-0 w-full top-0 h-full' : 'w-64 h-[calc(100vh-4rem)]',
           )
         "
-        :style="managementStyle"
+        :style="{ ...managementStyle, top: isMobile ? '0px' : '4rem' }"
       >
         <!-- Management Settings Header -->
         <div class="sticky top-0 z-10 bg-white border-b border-gray-200">
@@ -544,15 +516,37 @@ const hasSubItems = (item) => {
 }
 
 const handleSubmenuClick = (item) => {
-  currentSubmenu.value = item
-  submenuOpen.value = true
+  // Close any open menus
+  if (managementSettingsOpen.value) {
+    closeManagementSettings()
+  }
+  if (submenuOpen.value && currentSubmenu.value !== item) {
+    closeSubmenu()
+    setTimeout(() => {
+      currentSubmenu.value = item
+      submenuOpen.value = true
+    }, 300)
+  } else if (!submenuOpen.value) {
+    currentSubmenu.value = item
+    submenuOpen.value = true
+  } else if (currentSubmenu.value === item) {
+    closeSubmenu()
+  }
   if (isMobile.value) {
     closeMobileSidebar()
   }
 }
 
 const handleManagementSettingsClick = () => {
-  managementSettingsOpen.value = true
+  // Close any open menus
+  if (submenuOpen.value) {
+    closeSubmenu()
+  }
+  if (!managementSettingsOpen.value) {
+    managementSettingsOpen.value = true
+  } else {
+    closeManagementSettings()
+  }
   if (isMobile.value) {
     closeMobileSidebar()
   }

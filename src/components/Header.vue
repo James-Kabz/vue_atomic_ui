@@ -1,21 +1,22 @@
 <template>
-  <header
-    :class="cn(
-      'fixed top-0 right-0 z-30 bg-white border-b border-gray-200 transition-all duration-300 ease-in-out w-full md:w-auto'
-    )"
-    :style="{ left: isMobile ? '0' : `${sidebarWidth}px` }"
-  >
+  <header :class="cn(
+    'fixed top-0 z-50 bg-white border-b border-gray-200 transition-all duration-300 ease-in-out w-full'
+  )" :style="{ left: '0' }">
     <div class="flex items-center justify-between h-16 px-4 md:px-6">
       <!-- Left side - Page Title / Breadcrumb -->
       <div class="flex items-center">
+        <!-- Company Logo and Name -->
+        <div v-if="companyLogo || organisationName" class="flex items-center space-x-3 mr-4 flex-shrink-0">
+          <img v-if="companyLogo" :src="companyLogo" class="h-8 w-8 rounded-lg object-cover" alt="Company Logo" />
+          <span v-if="organisationName" class="text-lg font-bold text-gray-900 truncate max-w-[200px]">
+            {{ organisationName }}
+          </span>
+        </div>
+
+        <!-- Breadcrumb -->
         <nav class="flex items-center space-x-2 text-sm truncate">
           <span class="text-gray-500 truncate">{{ currentSection }}</span>
-          <svg
-            class="w-4 h-4 text-gray-400 flex-shrink-0"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
+          <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
           </svg>
           <span class="text-gray-900 font-medium truncate">{{ currentPage }}</span>
@@ -25,11 +26,8 @@
       <!-- Right side -->
       <div class="flex items-center space-x-3 md:space-x-4">
         <!-- Mobile Sidebar Toggle -->
-        <button
-          v-if="isMobile"
-          @click="emit('toggle-mobile-sidebar')"
-          class="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-50 transition-colors"
-        >
+        <button v-if="isMobile" @click="emit('toggle-mobile-sidebar')"
+          class="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-50 transition-colors">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
@@ -39,80 +37,50 @@
         <div class="relative" v-if="!isMobile || showMobileSearch">
           <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
-          <input
-            type="text"
-            placeholder="Search..."
+          <input type="text" placeholder="Search..."
             class="pl-10 pr-4 py-2 w-48 md:w-64 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-            v-model="searchQuery"
-          />
+            v-model="searchQuery" />
           <!-- Close search button on mobile -->
-          <button
-            v-if="isMobile"
-            class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-            @click="showMobileSearch = false"
-          >
+          <button v-if="isMobile" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            @click="showMobileSearch = false">
             ✕
           </button>
         </div>
-        <button
-          v-else-if="isMobile"
-          @click="showMobileSearch = true"
-          class="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-50 transition-colors"
-        >
+        <button v-else-if="isMobile" @click="showMobileSearch = true"
+          class="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-50 transition-colors">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
         </button>
 
         <!-- Notifications -->
-        <button
-          @click="toggleNotifications"
-          class="relative p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-50 transition-colors"
-        >
+        <button @click="toggleNotifications"
+          class="relative p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-50 transition-colors">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-5 5v-5z" />
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M13 3h2.586a1 1 0 01.707.293l6.414 6.414a1 1 0 01.293.707V19a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h4L13 3z"
-            />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M13 3h2.586a1 1 0 01.707.293l6.414 6.414a1 1 0 01.293.707V19a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h4L13 3z" />
           </svg>
-          <span
-            v-if="notificationCount > 0"
-            class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center"
-          >
+          <span v-if="notificationCount > 0"
+            class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
             {{ notificationCount }}
           </span>
         </button>
 
         <!-- Notifications Dropdown -->
-        <div
-          v-if="showNotifications"
-          class="absolute right-4 md:right-6 top-16 mt-2 w-72 md:w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50"
-        >
+        <div v-if="showNotifications"
+          class="absolute right-4 md:right-6 top-16 mt-2 w-72 md:w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
           <div class="p-4 border-b border-gray-200">
             <h3 class="text-lg font-semibold text-gray-900">Notifications</h3>
           </div>
           <div class="max-h-96 overflow-y-auto">
-            <div
-              v-for="notification in notifications"
-              :key="notification.id"
-              class="p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer"
-            >
+            <div v-for="notification in notifications" :key="notification.id"
+              class="p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer">
               <div class="flex items-start space-x-3">
                 <div class="flex-shrink-0 w-2 h-2 mt-2 bg-blue-500 rounded-full"></div>
                 <div class="flex-1">
@@ -129,10 +97,8 @@
 
         <!-- Profile Dropdown -->
         <div class="relative">
-          <button
-            @click="toggleProfile"
-            class="flex items-center space-x-2 md:space-x-3 p-2 rounded-lg hover:bg-gray-50 transition-colors"
-          >
+          <button @click="toggleProfile"
+            class="flex items-center space-x-2 md:space-x-3 p-2 rounded-lg hover:bg-gray-50 transition-colors">
             <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
               <span class="text-gray-600 text-sm font-medium">{{ userInitials }}</span>
             </div>
@@ -149,52 +115,36 @@
           </button>
 
           <!-- Dropdown -->
-          <div
-            v-if="showProfile"
-            class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50"
-          >
+          <div v-if="showProfile"
+            class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
             <div class="p-4 border-b border-gray-200">
               <p class="text-sm font-medium text-gray-900">{{ user.name }}</p>
               <p class="text-xs text-gray-500">{{ user.email }}</p>
             </div>
             <div class="py-2">
               <template v-for="item in profileMenuItems" :key="item.name">
-                <router-link
-                  v-if="item.route"
-                  :to="item.route"
-                  :class="cn(
-                    'flex items-center px-4 py-2 text-sm transition-colors',
-                    isItemActive(item)
-                      ? 'bg-blue-50 text-blue-700'
-                      : 'text-gray-700 hover:bg-gray-50'
-                  )"
-                  @click="handleNavigation(item)"
-                >
+                <router-link v-if="item.route" :to="item.route" :class="cn(
+                  'flex items-center px-4 py-2 text-sm transition-colors',
+                  isItemActive(item)
+                    ? 'bg-blue-50 text-blue-700'
+                    : 'text-gray-700 hover:bg-gray-50'
+                )" @click="handleNavigation(item)">
                   <Icon :icon="item.icon" class="w-4 h-4 mr-3 text-gray-400" />
                   {{ item.label }}
                 </router-link>
-                <button
-                  v-else
-                  @click="handleProfileAction(item)"
-                  class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                >
+                <button v-else @click="handleProfileAction(item)"
+                  class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
                   <Icon :icon="item.icon" class="w-4 h-4 mr-3 text-gray-400" />
                   {{ item.label }}
                 </button>
               </template>
             </div>
             <div class="border-t border-gray-200 py-2">
-              <button
-                @click="handleLogout"
-                class="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50"
-              >
+              <button @click="handleLogout"
+                class="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50">
                 <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a2 2 0 013-3h4a3 3 0 013 3v1"
-                  />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a2 2 0 013-3h4a3 3 0 013 3v1" />
                 </svg>
                 Sign out
               </button>
@@ -219,7 +169,9 @@ const props = defineProps({
   user: { type: Object, required: true },
   notifications: { type: Array, default: () => [] },
   profileMenuItems: { type: Array, required: true },
-  mobileOpen: { type: Boolean, default: false }
+  mobileOpen: { type: Boolean, default: false },
+  organisationName: { type: String, default: '' },
+  companyLogo: { type: String, default: '' }
 })
 
 const emit = defineEmits(['search', 'profile-action', 'logout', 'navigate', 'toggle-mobile-sidebar'])
