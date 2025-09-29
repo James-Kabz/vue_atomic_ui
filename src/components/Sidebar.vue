@@ -1,150 +1,441 @@
 <template>
   <div>
     <!-- Mobile Overlay -->
-    <div v-if="isMobileOpen && isMobile" class="fixed inset-0 z-30 lg:hidden" @click="closeMobileSidebar"></div>
+    <transition
+      enter-active-class="transition-opacity duration-300"
+      leave-active-class="transition-opacity duration-300"
+      enter-from-class="opacity-0"
+      enter-to-class="opacity-100"
+      leave-from-class="opacity-100"
+      leave-to-class="opacity-0"
+    >
+      <div
+        v-if="isMobileOpen && isMobile"
+        class="fixed inset-0 z-30 bg-black bg-opacity-50 lg:hidden"
+        @click="closeMobileSidebar"
+      />
+    </transition>
 
     <!-- Sidebar -->
-    <aside :class="cn(
-      'fixed left-0 top-0 z-40 h-screen bg-white border-r border-gray-200 transition-all duration-300 ease-in-out overflow-y-auto',
-      // Mobile behavior
-      isMobile
-        ? cn(
-          'transform',
-          isMobileOpen ? 'translate-x-0' : '-translate-x-full'
-        )
-        : 'translate-x-0',
-      // Desktop behavior
-      !isMobile && isCollapsed ? 'shadow-lg' : ''
-    )" :style="{ width: sidebarWidth + 'px' }">
+    <aside
+      :class="cn(
+        'fixed left-0 top-0 z-40 h-screen border-r overflow-hidden flex flex-col',
+        'transition-all duration-300 ease-in-out',
+        'bg-white border-gray-200',
+        isMobile
+          ? cn('transform', isMobileOpen ? 'translate-x-0' : '-translate-x-full')
+          : 'translate-x-0'
+      )"
+      :style="{ width: sidebarWidth + 'px' }"
+    >
       <!-- Mobile Header with Close Button -->
-      <div v-if="isMobile" class="flex items-center justify-between p-4 border-b border-gray-200 lg:hidden">
-        <h2 v-if="header" class="text-lg font-extrabold text-gray-900">
-          {{ isCollapsed ? header.title?.charAt(0) : header.title }}
+      <div
+        v-if="isMobile"
+        class="flex items-center justify-between p-4 border-b border-gray-200 flex-shrink-0 lg:hidden"
+      >
+        <h2 class="text-lg font-bold text-gray-900">
+          {{ header?.title }}
         </h2>
-        <button @click="closeMobileSidebar" class="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        <button
+          @click="closeMobileSidebar"
+          class="p-2 rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-colors"
+          aria-label="Close sidebar"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
           </svg>
         </button>
       </div>
 
       <!-- Desktop Header -->
-      <div v-if="!isMobile && header"
-        class="flex items-center justify-start p-4.5 border-b border-gray-200 flex-shrink-0">
-        <h2 v-if="!isCollapsed" class="font-serif-custom text-lg font-extrabold text-gray-700">
-          {{ header.title }}
-        </h2>
-
-        <div v-else class="flex items-center justify-center w-full">
-          <span class="text-xl font-bold text-gray-700">
-            {{ header.title?.charAt(0) }}
-          </span>
+      <div
+        v-if="!isMobile && header"
+        class="flex items-center justify-center p-6 border-b border-gray-200 flex-shrink-0"
+      >
+        <div class="flex items-center gap-3">
+          <div
+            class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center"
+          >
+            <svg
+              class="w-6 h-6 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+              />
+            </svg>
+          </div>
+          <h2 class="text-lg font-bold text-gray-900">
+            {{ header.title }}
+          </h2>
         </div>
       </div>
 
       <!-- Navigation -->
-      <nav :class="cn('p-4 space-y-2 flex-1', isCollapsed && !isMobile ? 'px-2' : '')">
-        <template v-for="item in navigationItems" :key="item.name">
-          <!-- Section Headers -->
-          <div v-if="item.type === 'section'" :class="cn('mt-0 mb-2', isCollapsed && !isMobile ? 'hidden' : '')">
-            <h3 class="px-1 text-md font-light text-gray-500 uppercase tracking-wider">
-              {{ item.label }}
-            </h3>
-          </div>
-
-          <!-- Navigation Links -->
-          <div v-else-if="item.type === 'link'" class="space-y-1">
-            <!-- Main Link -->
-            <div :class="cn(
-              'flex items-center justify-between rounded-lg transition-colors relative group',
-              hasSubItems(item) ? 'cursor-pointer' : '',
-              isItemActive(item)
-                ? 'bg-blue-50 text-blue-700'
-                : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
-            )">
-              <!-- Tooltip for collapsed state -->
-              <div v-if="isCollapsed && !isMobile && !hasSubItems(item)"
-                class="absolute left-full ml-2 px-1 py-1 bg-gray-900 text-white text-sm rounded opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50 whitespace-nowrap">
-                {{ item.label }}
-                <div class="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-gray-900">
+      <nav class="flex-1 overflow-y-auto overflow-x-hidden p-4">
+        <div class="space-y-2">
+          <template v-for="item in navigationItems" :key="item.name || item.label">
+            <!-- Navigation Links -->
+            <div v-if="item.type === 'link'">
+              <!-- Regular Link (no subitems) -->
+              <router-link
+                v-if="!hasSubItems(item)"
+                :to="item.route"
+                @click="handleNavigation(item)"
+                :class="cn(
+                  'flex flex-col items-center justify-center rounded-xl transition-all duration-200 group relative py-4 px-3',
+                  isItemActive(item)
+                    ? 'bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 shadow-sm'
+                    : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900 border border-transparent'
+                )"
+              >
+                <!-- Icon Container -->
+                <div
+                  :class="cn(
+                    'flex items-center justify-center rounded-lg transition-colors mb-2',
+                    'w-12 h-12',
+                    isItemActive(item)
+                      ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md'
+                      : 'text-gray-500 group-hover:text-gray-900 bg-gray-100 group-hover:bg-gray-200'
+                  )"
+                >
+                  <Icon :icon="item.icon" class="w-6 h-6" />
                 </div>
-              </div>
 
-              <router-link v-if="!hasSubItems(item)" :to="item.route" @click="handleNavigation(item)" :class="cn(
-                'flex items-center flex-1 rounded-lg transition-colors',
-                isCollapsed && !isMobile ? 'px-2 py-2 justify-center' : 'px-1 py-5'
-              )">
-                <Icon :icon="item.icon" :class="cn(
-                  'flex-shrink-0',
-                  isCollapsed && !isMobile ? 'w-5 h-5' : 'w-5 h-5 mr-2'
-                )" />
-                <span v-if="!isCollapsed || isMobile" class="truncate text-lg font-extrabold ">{{ item.label }}</span>
-                <span v-if="item.badge && (!isCollapsed || isMobile)"
-                  class="ml-auto inline-flex items-center justify-center px-3 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800">
+                <!-- Label -->
+                <span 
+                  :class="cn(
+                    'text-xs font-medium text-center',
+                    isItemActive(item) 
+                      ? 'text-blue-700 font-semibold' 
+                      : 'text-gray-500 group-hover:text-gray-900'
+                  )"
+                >
+                  {{ item.label }}
+                </span>
+
+                <!-- Badge -->
+                <span
+                  v-if="item.badge"
+                  class="absolute top-2 right-2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold rounded-full bg-red-500 text-white"
+                >
                   {{ item.badge }}
                 </span>
-                <!-- Badge dot for collapsed state -->
-                <div v-if="item.badge && isCollapsed && !isMobile"
-                  class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></div>
               </router-link>
 
               <!-- Parent item with sub-items -->
-              <div v-else @click="toggleSubItems(item.name)" :class="cn(
-                'flex items-center flex-1 cursor-pointer rounded-lg transition-colors',
-                isCollapsed && !isMobile ? 'px-2 py-2 justify-center' : 'px-1 py-2'
-              )">
-                <Icon :icon="item.icon" :class="cn(
-                  'flex-shrink-0',
-                  isCollapsed && !isMobile ? 'w-5 h-5' : 'w-5 h-5 mr-2'
-                )" />
-                <span v-if="!isCollapsed || isMobile" class="truncate text-lg font-extrabold flex-1">{{ item.label
-                }}</span>
-                <span v-if="item.badge && (!isCollapsed || isMobile)"
-                  class="inline-flex items-center justify-center px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800 mr-2">
+              <div
+                v-else
+                @click="handleSubmenuClick(item)"
+                :class="cn(
+                  'flex flex-col items-center justify-center rounded-xl transition-all duration-200 cursor-pointer group relative py-4 px-3',
+                  isItemActive(item)
+                    ? 'bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 shadow-sm'
+                    : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900 border border-transparent'
+                )"
+              >
+                <!-- Icon Container -->
+                <div
+                  :class="cn(
+                    'flex items-center justify-center rounded-lg transition-colors mb-2',
+                    'w-12 h-12',
+                    isItemActive(item)
+                      ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md'
+                      : 'text-gray-500 group-hover:text-gray-900 bg-gray-100 group-hover:bg-gray-200'
+                  )"
+                >
+                  <Icon :icon="item.icon" class="w-6 h-6" />
+                </div>
+
+                <!-- Label -->
+                <span 
+                  :class="cn(
+                    'text-xs font-medium text-center',
+                    isItemActive(item) 
+                      ? 'text-blue-700 font-semibold' 
+                      : 'text-gray-500 group-hover:text-gray-900'
+                  )"
+                >
+                  {{ item.label }}
+                </span>
+
+                <!-- Badge -->
+                <span
+                  v-if="item.badge"
+                  class="absolute top-2 right-2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold rounded-full bg-red-500 text-white"
+                >
                   {{ item.badge }}
                 </span>
-                <svg v-if="!isCollapsed || isMobile" :class="cn(
-                  'w-4 h-4 transition-transform duration-200',
-                  expandedItems.includes(item.name) ? 'rotate-90' : ''
-                )" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                </svg>
-                <!-- Badge dot for collapsed state -->
-                <div v-if="item.badge && isCollapsed && !isMobile"
-                  class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></div>
-              </div>
 
-              <!-- Tooltip for collapsed parent items -->
-              <div v-if="isCollapsed && !isMobile && hasSubItems(item)"
-                class="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-sm rounded opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50 whitespace-nowrap">
-                {{ item.label }}
-                <div class="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-gray-900">
-                </div>
+                <!-- Active indicator dot for parent items -->
+                <div
+                  v-if="isItemActive(item) && hasSubItems(item)"
+                  class="absolute top-1.5 right-1.5 w-2 h-2 bg-blue-500 rounded-full"
+                />
               </div>
             </div>
-
-            <!-- Sub-items -->
-            <div v-if="hasSubItems(item) && expandedItems.includes(item.name) && (!isCollapsed || isMobile)"
-              class="ml-6 space-y-1 border-l-2 border-gray-100 pl-4">
-              <router-link v-for="subItem in item.subItems" :key="subItem.name" :to="subItem.route"
-                @click="handleNavigation(subItem)" :class="cn(
-                  'flex items-center px-1 py-2 rounded-lg text-sm font-medium transition-colors',
-                  isItemActive(subItem)
-                    ? 'bg-blue-50 text-blue-700 border-r-2 border-blue-700'
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                )">
-                <Icon v-if="subItem.icon" :icon="subItem.icon" class="w-6 h-6 mr-1 flex-shrink-0" />
-                <span class="truncate text-md font-semibold">{{ subItem.label }}</span>
-                <span v-if="subItem.badge"
-                  class="ml-auto inline-flex items-center justify-center px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800">
-                  {{ subItem.badge }}
-                </span>
-              </router-link>
-            </div>
-          </div>
-        </template>
+          </template>
+        </div>
       </nav>
+
+      <!-- Bottom Navigation - Management Settings -->
+      <div v-if="showManagementSettings" class="border-t border-gray-200 p-4 flex-shrink-0">
+        <div
+          @click="handleManagementSettingsClick"
+          :class="cn(
+            'flex flex-col items-center justify-center rounded-xl transition-all duration-200 cursor-pointer group relative py-4 px-3',
+            isManagementSettingsActive
+              ? 'bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 shadow-sm'
+              : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900 border border-transparent'
+          )"
+        >
+          <div
+            :class="cn(
+              'flex items-center justify-center rounded-lg transition-colors mb-2',
+              'w-12 h-12',
+              isManagementSettingsActive
+                ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md'
+                : 'text-gray-500 group-hover:text-gray-900 bg-gray-100 group-hover:bg-gray-200'
+            )"
+          >
+            <Icon icon="cog" class="w-6 h-6" />
+          </div>
+          <span 
+            :class="cn(
+              'text-xs font-medium text-center',
+              isManagementSettingsActive 
+                ? 'text-blue-700 font-semibold' 
+                : 'text-gray-500 group-hover:text-gray-900'
+            )"
+          >
+            Settings
+          </span>
+
+          <!-- Active indicator dot for management settings -->
+          <div
+            v-if="isManagementSettingsActive"
+            class="absolute top-1.5 right-1.5 w-2 h-2 bg-blue-500 rounded-full"
+          />
+        </div>
+      </div>
     </aside>
+
+    <!-- Submenu Sidebar -->
+    <transition
+      enter-active-class="transition-all duration-300 ease-out"
+      leave-active-class="transition-all duration-300 ease-in"
+      enter-from-class="opacity-0 -translate-x-full"
+      enter-to-class="opacity-100 translate-x-0"
+      leave-from-class="opacity-100 translate-x-0"
+      leave-to-class="opacity-0 -translate-x-full"
+    >
+      <aside
+        v-if="submenuOpen"
+        :class="
+          cn(
+            'fixed z-40 bg-white border-r border-gray-200 overflow-y-auto shadow-lg',
+            isMobile ? 'left-0 w-full top-0 h-screen' : 'w-64 top-16 h-[calc(100vh-4rem)]',
+          )
+        "
+        :style="submenuStyle"
+      >
+        <!-- Submenu Header -->
+        <div class="sticky top-0 bg-white border-b border-gray-200 z-10">
+          <div class="flex items-center justify-between p-4">
+            <button
+              @click="closeSubmenu"
+              class="p-2 -ml-2 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+              aria-label="Close submenu"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+            </button>
+            <h3 class="flex-1 text-lg font-bold text-gray-900 ml-2">
+              {{ currentSubmenu?.label }}
+            </h3>
+          </div>
+        </div>
+
+        <!-- Submenu Items -->
+        <nav class="p-3">
+          <div class="space-y-1">
+            <router-link
+              v-for="subItem in currentSubmenu?.subItems"
+              :key="subItem.name"
+              :to="subItem.route"
+              @click="handleSubmenuNavigation(subItem)"
+              :class="
+                cn(
+                  'flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative',
+                  isItemActive(subItem)
+                    ? 'bg-gradient-to-br from-blue-50 to-blue-100 text-blue-700 shadow-sm border border-blue-200'
+                    : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 border border-transparent',
+                )
+              "
+            >
+              <!-- Active indicator bar -->
+              <div
+                v-if="isItemActive(subItem)"
+                class="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-blue-500 to-blue-600 rounded-r-full"
+              />
+
+              <div
+                :class="
+                  cn(
+                    'flex items-center justify-center w-8 h-8 rounded-lg mr-3 flex-shrink-0 transition-colors ml-2',
+                    isItemActive(subItem)
+                      ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md'
+                      : 'bg-gray-100 text-gray-600 group-hover:bg-gray-200',
+                  )
+                "
+              >
+                <Icon v-if="subItem.icon" :icon="subItem.icon" class="w-4 h-4" />
+              </div>
+              <span 
+                :class="cn(
+                  'flex-1 truncate font-semibold',
+                  isItemActive(subItem) ? 'text-blue-700' : 'text-gray-700'
+                )"
+              >
+                {{ subItem.label }}
+              </span>
+              <span
+                v-if="subItem.badge"
+                class="ml-2 inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold rounded-full bg-red-500 text-white"
+              >
+                {{ subItem.badge }}
+              </span>
+            </router-link>
+          </div>
+        </nav>
+      </aside>
+    </transition>
+
+    <!-- Management Settings Sidebar -->
+    <transition
+      enter-active-class="transition-all duration-300 ease-out"
+      leave-active-class="transition-all duration-300 ease-in"
+      enter-from-class="opacity-0 -translate-x-full"
+      enter-to-class="opacity-100 translate-x-0"
+      leave-from-class="opacity-100 translate-x-0"
+      leave-to-class="opacity-0 -translate-x-full"
+    >
+      <aside
+        v-if="managementSettingsOpen"
+        :class="
+          cn(
+            'fixed z-40 bg-white border-r border-gray-200 overflow-y-auto shadow-lg',
+            isMobile ? 'left-0 w-full top-0 h-full' : 'w-64 top-16 h-[calc(100vh-4rem)]',
+          )
+        "
+        :style="managementStyle"
+      >
+        <!-- Management Settings Header -->
+        <div class="sticky top-0 z-10 bg-white border-b border-gray-200">
+          <div class="flex items-center justify-between p-4">
+            <button
+              @click="closeManagementSettings"
+              class="p-2 -ml-2 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+              aria-label="Close management settings"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+            </button>
+            <h3 class="flex-1 text-lg font-bold text-gray-900 ml-2">Management Settings</h3>
+          </div>
+        </div>
+
+        <!-- Management Settings Items -->
+        <nav class="p-3">
+          <div class="space-y-1">
+            <router-link
+              v-for="setting in managementSettings"
+              :key="setting.name"
+              :to="setting.route"
+              @click="handleManagementSettingsNavigation(setting)"
+              :class="
+                cn(
+                  'flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative',
+                  isItemActive(setting)
+                    ? 'bg-gradient-to-br from-blue-50 to-blue-100 text-blue-700 shadow-sm border border-blue-200'
+                    : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 border border-transparent',
+                )
+              "
+            >
+              <!-- Active indicator bar -->
+              <div
+                v-if="isItemActive(setting)"
+                class="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-blue-500 to-blue-600 rounded-r-full"
+              />
+
+              <div
+                :class="
+                  cn(
+                    'flex items-center justify-center w-8 h-8 rounded-lg mr-3 flex-shrink-0 transition-colors ml-2',
+                    isItemActive(setting)
+                      ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md'
+                      : 'bg-gray-100 text-gray-600 group-hover:bg-gray-200',
+                  )
+                "
+              >
+                <Icon v-if="setting.icon" :icon="setting.icon" class="w-4 h-4" />
+              </div>
+              <span 
+                :class="cn(
+                  'flex-1 truncate font-semibold',
+                  isItemActive(setting) ? 'text-blue-700' : 'text-gray-700'
+                )"
+              >
+                {{ setting.label }}
+              </span>
+            </router-link>
+          </div>
+        </nav>
+      </aside>
+    </transition>
+
+    <!-- Overlay for mobile submenus -->
+    <transition
+      enter-active-class="transition-opacity duration-300"
+      leave-active-class="transition-opacity duration-300"
+      enter-from-class="opacity-0"
+      enter-to-class="opacity-100"
+      leave-from-class="opacity-100"
+      leave-to-class="opacity-0"
+    >
+      <div
+        v-if="(submenuOpen || managementSettingsOpen) && isMobile"
+        class="fixed inset-0 z-30 bg-black bg-opacity-50"
+        @click="closeAllMenus"
+      />
+    </transition>
   </div>
 </template>
 
@@ -157,7 +448,7 @@ import Icon from './Icon.vue'
 const props = defineProps({
   sidebarWidth: {
     type: Number,
-    default: 256
+    default: 130
   },
   header: {
     type: Object,
@@ -167,111 +458,174 @@ const props = defineProps({
     type: Array,
     required: true,
   },
-  currentRoute: {
-    type: String,
-    default: ''
+  managementSettings: {
+    type: Array,
+    default: () => []
   },
-  autoExpandActive: {
+  showManagementSettings: {
     type: Boolean,
     default: true
-  },
-  collapsed: {
-    type: Boolean,
-    default: false
   },
   mobileOpen: {
     type: Boolean,
     default: false
+  },
+  isManagementSettingsActive: {
+    type: Boolean,
+    default: false
+  },
+  currentPath: {
+    type: String,
+    default: ''
   }
 })
 
 // Emits
-const emit = defineEmits(['navigate', 'toggle-mobile', 'toggle-collapsed'])
+const emit = defineEmits([
+  'navigate',
+  'update:mobileOpen'
+])
 
-// State
-const expandedItems = ref([])
+// Internal State
 const isMobile = ref(false)
+const submenuOpen = ref(false)
+const currentSubmenu = ref(null)
+const managementSettingsOpen = ref(false)
 
 // Computed
-const isCollapsed = computed(() => props.collapsed && !isMobile.value)
 const isMobileOpen = computed(() => props.mobileOpen)
+
+const submenuStyle = computed(() => {
+  if (isMobile.value) {
+    return {}
+  }
+  return {
+    left: `${props.sidebarWidth}px`,
+  }
+})
+
+const managementStyle = computed(() => {
+  if (isMobile.value) {
+    return {}
+  }
+  return {
+    left: `${props.sidebarWidth}px`,
+  }
+})
+
+// Computed for main content margin
+const contentMarginLeft = computed(() => {
+  if (isMobile.value) {
+    return 0
+  }
+
+  let margin = props.sidebarWidth
+  if (submenuOpen.value) margin += 256
+  if (managementSettingsOpen.value) margin += 256
+
+  return margin
+})
 
 // Methods
 const handleNavigation = (item) => {
   emit('navigate', item)
-  // Close mobile sidebar on navigation
   if (isMobile.value) {
     closeMobileSidebar()
   }
+  closeAllMenus()
 }
 
 const closeMobileSidebar = () => {
-  emit('toggle-mobile', false)
+  emit('update:mobileOpen', false)
 }
 
 const hasSubItems = (item) => {
   return item.subItems && item.subItems.length > 0
 }
 
-const toggleSubItems = (itemName) => {
-  const index = expandedItems.value.indexOf(itemName)
-  if (index > -1) {
-    expandedItems.value.splice(index, 1)
-  } else {
-    expandedItems.value.push(itemName)
+const handleSubmenuClick = (item) => {
+  currentSubmenu.value = item
+  submenuOpen.value = true
+  if (isMobile.value) {
+    closeMobileSidebar()
   }
 }
 
-// Check if navigation item is active
-const isItemActive = (item) => {
-  if (!item.route) return false
-
-  if (props.currentRoute === item.route) return true
-  if (props.currentRoute.startsWith(item.route + '/')) return true
-
-  // Check if any sub-item is active
-  if (hasSubItems(item)) {
-    return item.subItems.some(subItem => isItemActive(subItem))
+const handleManagementSettingsClick = () => {
+  managementSettingsOpen.value = true
+  if (isMobile.value) {
+    closeMobileSidebar()
   }
+}
+
+const closeSubmenu = () => {
+  submenuOpen.value = false
+  setTimeout(() => {
+    currentSubmenu.value = null
+  }, 300)
+}
+
+const closeManagementSettings = () => {
+  managementSettingsOpen.value = false
+}
+
+const closeAllMenus = () => {
+  closeSubmenu()
+  closeManagementSettings()
+}
+
+const handleSubmenuNavigation = (item) => {
+  handleNavigation(item)
+}
+
+const handleManagementSettingsNavigation = (item) => {
+  handleNavigation(item)
+}
+
+// Check if navigation item is active using passed currentPath prop
+const isItemActive = (item) => {
+  const currentPath = props.currentPath
+  
+  if (!item.route) {
+    // For parent items with subItems, check if any subItem is active
+    if (item.subItems && item.subItems.length > 0) {
+      return item.subItems.some(subItem => {
+        if (!subItem.route) return false
+        return currentPath === subItem.route || currentPath.startsWith(subItem.route + '/')
+      })
+    }
+    return false
+  }
+
+  if (currentPath === item.route) return true
+  if (currentPath.startsWith(item.route + '/')) return true
 
   return false
-}
-
-// Auto-expand parent items when sub-items are active
-const autoExpandActiveItems = () => {
-  if (!props.autoExpandActive) return
-
-  props.navigationItems.forEach(item => {
-    if (hasSubItems(item)) {
-      const hasActiveSubItem = item.subItems.some(subItem => isItemActive(subItem))
-      if (hasActiveSubItem && !expandedItems.value.includes(item.name)) {
-        expandedItems.value.push(item.name)
-      }
-    }
-  })
 }
 
 // Handle responsive behavior
 const checkMobile = () => {
   const wasMobile = isMobile.value
-  isMobile.value = window.innerWidth < 1024 // lg breakpoint
+  isMobile.value = window.innerWidth < 1024
 
-  // Close mobile sidebar when switching to desktop
   if (wasMobile && !isMobile.value && isMobileOpen.value) {
     closeMobileSidebar()
   }
 }
 
-// Handle escape key to close mobile sidebar
+// Handle escape key to close mobile sidebar and menus
 const handleEscape = (event) => {
-  if (event.key === 'Escape' && isMobile.value && isMobileOpen.value) {
-    closeMobileSidebar()
+  if (event.key === 'Escape') {
+    if (submenuOpen.value || managementSettingsOpen.value) {
+      closeAllMenus()
+    } else if (isMobile.value && isMobileOpen.value) {
+      closeMobileSidebar()
+    }
   }
 }
 
 // Lifecycle
 onMounted(() => {
-  autoExpandActiveItems()
   checkMobile()
   window.addEventListener('resize', checkMobile)
   document.addEventListener('keydown', handleEscape)
@@ -282,23 +636,13 @@ onUnmounted(() => {
   document.removeEventListener('keydown', handleEscape)
 })
 
-// Watch for route changes to auto-expand
-watch(() => props.currentRoute, () => {
-  autoExpandActiveItems()
-})
-
-// Watch for mobile state changes to handle collapsed state
-watch(isMobile, (newVal) => {
-  if (newVal && props.collapsed) {
-    // When switching to mobile, ensure collapsed state is handled properly
-    emit('toggle-collapsed', false)
-  }
-})
-
-// Expose computed values for parent components
+// Expose values for parent
 defineExpose({
   isMobile,
-  isCollapsed,
-  isMobileOpen
+  isMobileOpen,
+  submenuOpen,
+  managementSettingsOpen,
+  contentMarginLeft,
+  closeAllMenus
 })
 </script>
