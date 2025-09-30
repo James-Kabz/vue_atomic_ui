@@ -5,16 +5,14 @@
     <div class="flex items-center justify-between h-16 px-4 md:px-6">
       <!-- Left side - Page Title / Breadcrumb -->
       <div class="flex items-center">
-        <!-- Company Logo and Name -->
-        <div v-if="companyLogo || organisationName" class="flex items-center space-x-3 mr-4 flex-shrink-0">
-          <img v-if="companyLogo" :src="companyLogo" class="h-8 w-8 rounded-lg object-cover" alt="Company Logo" />
-          <span v-if="organisationName" class="text-lg font-bold text-gray-900 truncate max-w-[200px]">
-            {{ organisationName }}
-          </span>
+        <!-- Organisation Info -->
+        <div v-if="organisationName" class="mr-4 flex-shrink-0 bg-gradient-to-r from-blue-50 to-indigo-50 px-3 py-2 rounded-lg border border-blue-100">
+          <p class="text-lg font-bold text-blue-900 truncate max-w-[200px]">{{ organisationName }}</p>
+          <p v-if="user.organisation?.role" class="text-xs text-blue-600 truncate font-medium">{{ user.organisation.role }}</p>
         </div>
 
         <!-- Breadcrumb -->
-        <nav class="flex items-center space-x-2 text-sm truncate">
+        <nav class="hidden md:flex items-center space-x-2 text-sm truncate">
           <span class="text-gray-500 truncate">{{ currentSection }}</span>
           <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
@@ -73,8 +71,16 @@
         </button>
 
         <!-- Notifications Dropdown -->
-        <div v-if="showNotifications"
-          class="absolute right-4 md:right-6 top-16 mt-2 w-72 md:w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+        <transition
+          enter-active-class="transition-all duration-300 ease-out"
+          leave-active-class="transition-all duration-300 ease-in"
+          enter-from-class="opacity-0 translate-y-2 scale-95"
+          enter-to-class="opacity-100 translate-y-0 scale-100"
+          leave-from-class="opacity-100 translate-y-0 scale-100"
+          leave-to-class="opacity-0 translate-y-2 scale-95"
+        >
+          <div v-if="showNotifications"
+            class="absolute right-4 md:right-6 top-16 mt-2 w-72 md:w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
           <div class="p-4 border-b border-gray-200">
             <h3 class="text-lg font-semibold text-gray-900">Notifications</h3>
           </div>
@@ -93,14 +99,15 @@
           <div class="p-4 text-center">
             <button class="text-sm text-blue-600 hover:text-blue-800">View all notifications</button>
           </div>
-        </div>
+          </div>
+        </transition>
 
         <!-- Profile Dropdown -->
         <div class="relative">
           <button @click="toggleProfile"
             class="flex items-center space-x-2 md:space-x-3 p-2 rounded-lg hover:bg-gray-50 transition-colors">
-            <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-              <span class="text-gray-600 text-sm font-medium">{{ userInitials }}</span>
+            <div class="w-8 h-8 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full flex items-center justify-center transition-colors shadow-sm">
+              <span class="text-blue-700 text-sm font-medium">{{ userInitials }}</span>
             </div>
             <!-- Hide details on mobile -->
             <div class="hidden md:block text-left max-w-[160px] truncate">
@@ -115,8 +122,16 @@
           </button>
 
           <!-- Dropdown -->
-          <div v-if="showProfile"
-            class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+          <transition
+            enter-active-class="transition-all duration-200 ease-out"
+            leave-active-class="transition-all duration-200 ease-in"
+            enter-from-class="opacity-0 translate-y-2 scale-95"
+            enter-to-class="opacity-100 translate-y-0 scale-100"
+            leave-from-class="opacity-100 translate-y-0 scale-100"
+            leave-to-class="opacity-0 translate-y-2 scale-95"
+          >
+            <div v-if="showProfile"
+              class="absolute right-0 mt-2 w-58 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
             <div class="p-4 border-b border-gray-200">
               <p class="text-sm font-medium text-gray-900">{{ user.name }}</p>
               <p class="text-xs text-gray-500">{{ user.email }}</p>
@@ -124,32 +139,62 @@
             <div class="py-2">
               <template v-for="item in profileMenuItems" :key="item.name">
                 <router-link v-if="item.route" :to="item.route" :class="cn(
-                  'flex items-center px-4 py-2 text-sm transition-colors',
+                  'flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative',
                   isItemActive(item)
-                    ? 'bg-blue-50 text-blue-700'
-                    : 'text-gray-700 hover:bg-gray-50'
+                    ? 'bg-gradient-to-br from-blue-50 to-blue-100 text-blue-700 shadow-sm border border-blue-200'
+                    : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 border border-transparent'
                 )" @click="handleNavigation(item)">
-                  <Icon :icon="item.icon" class="w-4 h-4 mr-3 text-gray-400" />
-                  {{ item.label }}
+                  <!-- Active indicator bar -->
+                  <div
+                    v-if="isItemActive(item)"
+                    class="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-blue-500 to-blue-600 rounded-r-full"
+                  />
+                  <div
+                    :class="cn(
+                      'flex items-center justify-center w-8 h-8 rounded-lg mr-3 flex-shrink-0 transition-colors ml-2',
+                      isItemActive(item)
+                        ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md'
+                        : 'bg-gray-100 text-gray-600 group-hover:bg-gray-200'
+                    )"
+                  >
+                    <Icon v-if="item.icon" :icon="item.icon" class="w-4 h-4" />
+                  </div>
+                  <span
+                    :class="cn(
+                      'flex-1 truncate font-semibold',
+                      isItemActive(item) ? 'text-blue-700' : 'text-gray-700'
+                    )"
+                  >
+                    {{ item.label }}
+                  </span>
                 </router-link>
                 <button v-else @click="handleProfileAction(item)"
-                  class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
-                  <Icon :icon="item.icon" class="w-4 h-4 mr-3 text-gray-400" />
-                  {{ item.label }}
+                  class="flex items-center w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative text-gray-700 hover:bg-gray-50 hover:text-gray-900 border border-transparent">
+                  <div class="flex items-center justify-center w-8 h-8 rounded-lg mr-3 flex-shrink-0 transition-colors ml-2 bg-gray-100 text-gray-600 group-hover:bg-gray-200">
+                    <Icon v-if="item.icon" :icon="item.icon" class="w-4 h-4" />
+                  </div>
+                  <span class="flex-1 truncate font-semibold text-gray-700">
+                    {{ item.label }}
+                  </span>
                 </button>
               </template>
             </div>
             <div class="border-t border-gray-200 py-2">
               <button @click="handleLogout"
-                class="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50">
-                <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a2 2 0 013-3h4a3 3 0 013 3v1" />
-                </svg>
-                Sign out
+                class="flex items-center w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative text-red-600 hover:bg-red-50 border border-transparent">
+                <div class="flex items-center justify-center w-8 h-8 rounded-lg mr-1 flex-shrink-0 transition-colors ml-2 bg-red-100 text-red-600 group-hover:bg-red-200">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a2 2 0 013-3h4a3 3 0 013 3v1" />
+                  </svg>
+                </div>
+                <span class="truncate font-semibold text-red-600">
+                  Sign out
+                </span>
               </button>
             </div>
           </div>
+          </transition>
         </div>
       </div>
     </div>

@@ -11,7 +11,7 @@
     >
       <div
         v-if="isMobileOpen && isMobile"
-        class="fixed inset-0 z-30 bg-black bg-opacity-50 lg:hidden"
+        class="fixed inset-0 z-30 lg:hidden"
         @click="closeMobileSidebar"
       />
     </transition>
@@ -221,7 +221,7 @@
         :class="
           cn(
             'fixed z-40 bg-white border-r border-gray-200 overflow-y-auto shadow-lg',
-            isMobile ? 'left-0 w-full top-0 h-screen' : 'w-64 top-16 h-[calc(100vh-4rem)]',
+            isMobile ? 'left-0 w-52 top-20 h-screen' : 'w-56 top-16 h-[calc(100vh-4rem)]',
           )
         "
         :style="submenuStyle"
@@ -243,7 +243,7 @@
                 />
               </svg>
             </button>
-            <h3 class="flex-1 text-lg font-bold text-gray-900 ml-2">
+            <h3 class="flex-1 text-sm font-bold text-gray-900 ml-2">
               {{ currentSubmenu?.label }}
             </h3>
           </div>
@@ -318,13 +318,13 @@
         :class="
           cn(
             'fixed z-40 bg-white border-r border-gray-200 overflow-y-auto shadow-lg',
-            isMobile ? 'left-0 w-full top-0 h-full' : 'w-64 h-[calc(100vh-4rem)]',
+            isMobile ? 'left-0 w-52 top-0 h-full' : 'w-56 h-[calc(100vh-4rem)]',
           )
         "
         :style="{ ...managementStyle, top: isMobile ? '0px' : '4rem' }"
       >
         <!-- Management Settings Header -->
-        <div class="sticky top-0 z-10 bg-white border-b border-gray-200">
+        <div class="sticky top-20 z-10 bg-white border-b border-gray-200">
           <div class="flex items-center justify-between p-4">
             <button
               @click="closeManagementSettings"
@@ -340,7 +340,7 @@
                 />
               </svg>
             </button>
-            <h3 class="flex-1 text-lg font-bold text-gray-900 ml-2">Management Settings</h3>
+            <h3 class="flex-1 text-sm font-bold text-gray-900 ml-2">Management Settings</h3>
           </div>
         </div>
 
@@ -370,7 +370,7 @@
               <div
                 :class="
                   cn(
-                    'flex items-center justify-center w-8 h-8 rounded-lg mr-3 flex-shrink-0 transition-colors ml-2',
+                    'flex items-center justify-center w-8 h-8 rounded-lg mr-3 flex-shrink-0 transition-colors',
                     isItemActive(setting)
                       ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md'
                       : 'bg-gray-100 text-gray-600 group-hover:bg-gray-200',
@@ -404,7 +404,7 @@
     >
       <div
         v-if="(submenuOpen || managementSettingsOpen) && isMobile"
-        class="fixed inset-0 z-30 bg-black bg-opacity-50"
+        class="fixed inset-0 z-30 bg-transparent"
         @click="closeAllMenus"
       />
     </transition>
@@ -504,7 +504,13 @@ const handleNavigation = (item) => {
   if (isMobile.value) {
     closeMobileSidebar()
   }
-  closeAllMenus()
+  // On mobile, always close menus after navigation
+  // On desktop, don't close submenu if navigating to a subitem, or management settings if navigating to a setting
+  const isSubmenuItem = submenuOpen.value && currentSubmenu.value && currentSubmenu.value.subItems.some(sub => sub.route === item.route)
+  const isManagementItem = managementSettingsOpen.value && props.managementSettings.some(setting => setting.route === item.route)
+  if (isMobile.value || !(isSubmenuItem || isManagementItem)) {
+    closeAllMenus()
+  }
 }
 
 const closeMobileSidebar = () => {
