@@ -111,7 +111,8 @@ const props = defineProps({
   id: String,
 })
 
-const fieldId = useId()
+const generatedId = `field-${Math.random().toString(36).slice(2, 9)}`
+const fieldId = computed(() => `${props.id || generatedId}-${Math.random().toString(36).slice(2, 5)}`)
 const hasError = computed(() => !!props.error)
 const showPassword = ref(false)
 
