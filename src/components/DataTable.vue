@@ -233,7 +233,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch, reactive } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { cva } from 'class-variance-authority'
 import { cn } from '../utils/cn.js'
 import Checkbox from './Checkbox.vue'

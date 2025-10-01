@@ -318,13 +318,13 @@
         :class="
           cn(
             'fixed z-40 bg-white border-r border-gray-200 overflow-y-auto shadow-lg',
-            isMobile ? 'left-0 w-52 top-0 h-full' : 'w-56 h-[calc(100vh-4rem)]',
+            isMobile ? 'left-0 w-52 top-20 h-full' : 'w-58 h-[calc(100vh-4rem)]',
           )
         "
-        :style="{ ...managementStyle, top: isMobile ? '0px' : '4rem' }"
+        :style="{ ...managementStyle, top: isMobile ? '55px' : '4rem' }"
       >
         <!-- Management Settings Header -->
-        <div class="sticky top-20 z-10 bg-white border-b border-gray-200">
+        <div class="sticky top-0 z-10 bg-white border-b border-gray-200">
           <div class="flex items-center justify-between p-4">
             <button
               @click="closeManagementSettings"
@@ -347,47 +347,53 @@
         <!-- Management Settings Items -->
         <nav class="p-3">
           <div class="space-y-1">
-            <router-link
-              v-for="setting in managementSettings"
-              :key="setting.name"
-              :to="setting.route"
-              @click="handleManagementSettingsNavigation(setting)"
-              :class="
-                cn(
-                  'flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative',
-                  isItemActive(setting)
-                    ? 'bg-gradient-to-br from-blue-50 to-blue-100 text-blue-700 shadow-sm border border-blue-200'
-                    : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 border border-transparent',
-                )
-              "
-            >
-              <!-- Active indicator bar -->
-              <div
-                v-if="isItemActive(setting)"
-                class="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-blue-500 to-blue-600 rounded-r-full"
-              />
-
-              <div
+            <template v-for="setting in managementSettings" :key="setting.name">
+              <!-- Section Header -->
+              <div v-if="setting.type === 'section'" class="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                {{ setting.label }}
+              </div>
+              <!-- Link Item -->
+              <router-link
+                v-else-if="setting.route"
+                :to="setting.route"
+                @click="handleManagementSettingsNavigation(setting)"
                 :class="
                   cn(
-                    'flex items-center justify-center w-8 h-8 rounded-lg mr-3 flex-shrink-0 transition-colors',
+                    'flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative',
                     isItemActive(setting)
-                      ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md'
-                      : 'bg-gray-100 text-gray-600 group-hover:bg-gray-200',
+                      ? 'bg-gradient-to-br from-blue-50 to-blue-100 text-blue-700 shadow-sm border border-blue-200'
+                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 border border-transparent',
                   )
                 "
               >
-                <Icon v-if="setting.icon" :icon="setting.icon" class="w-4 h-4" />
-              </div>
-              <span 
-                :class="cn(
-                  'flex-1 truncate font-semibold',
-                  isItemActive(setting) ? 'text-blue-700' : 'text-gray-700'
-                )"
-              >
-                {{ setting.label }}
-              </span>
-            </router-link>
+                <!-- Active indicator bar -->
+                <div
+                  v-if="isItemActive(setting)"
+                  class="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-blue-500 to-blue-600 rounded-r-full"
+                />
+
+                <div
+                  :class="
+                    cn(
+                      'flex items-center justify-center w-8 h-8 rounded-lg mr-3 flex-shrink-0 transition-colors',
+                      isItemActive(setting)
+                        ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md'
+                        : 'bg-gray-100 text-gray-600 group-hover:bg-gray-200',
+                    )
+                  "
+                >
+                  <Icon v-if="setting.icon" :icon="setting.icon" class="w-4 h-4" />
+                </div>
+                <span
+                  :class="cn(
+                    'flex-1 truncate font-semibold',
+                    isItemActive(setting) ? 'text-blue-700' : 'text-gray-700'
+                  )"
+                >
+                  {{ setting.label }}
+                </span>
+              </router-link>
+            </template>
           </div>
         </nav>
       </aside>
@@ -492,8 +498,8 @@ const contentMarginLeft = computed(() => {
   }
 
   let margin = props.sidebarWidth
-  if (submenuOpen.value) margin += 256
-  if (managementSettingsOpen.value) margin += 256
+  if (submenuOpen.value) margin += 220
+  if (managementSettingsOpen.value) margin += 220
 
   return margin
 })
