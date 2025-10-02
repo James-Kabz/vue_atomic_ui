@@ -6,12 +6,14 @@
         v-for="(tab, index) in tabs"
         :key="index"
         :id="`tab-${index}`"
-        @click="selectTab(index)"
+        @click="!props.loading && selectTab(index)"
+        :disabled="props.loading"
         :class="cn(
           tabVariants({ size: props.size, variant: props.variant }),
           activeIndex === index
             ? 'border-blue-500 text-blue-600 bg-blue-50'
-            : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
+            : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300',
+          props.loading && 'cursor-not-allowed opacity-50'
         )"
         :aria-selected="activeIndex === index"
         :aria-controls="`panel-${index}`"
@@ -29,14 +31,15 @@
 </template>
 
 <script setup>
-import { provide, ref } from "vue"
+import { provide, ref, defineEmits } from "vue"
 import { cva } from "class-variance-authority"
 import { cn } from "../utils/cn"
 
 const props = defineProps({
   defaultIndex: { type: Number, default: 0 },
   size: { type: String, default: 'md' },
-  variant: { type: String, default: 'default' }
+  variant: { type: String, default: 'default' },
+  loading: { type: Boolean, default: false }
 })
 
 const tabVariants = cva(
@@ -64,7 +67,10 @@ const tabs = ref([])
 
 const selectTab = (index) => {
   activeIndex.value = index
+  emit('tab-change', index)
 }
+
+const emit = defineEmits(['tab-change'])
 
 provide("tabsContext", {
   activeIndex,

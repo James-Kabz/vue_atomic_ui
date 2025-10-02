@@ -115,13 +115,12 @@
             <!-- Data Loading State -->
             <tr v-if="dataLoading && !loading">
               <td :colspan="totalColumns" :class="emptyCellClasses">
-                <div class="flex justify-center items-center py-8">
+                <div class="flex justify-center items-center">
                   <STLLoader
                     :loading="true"
                     type="dots"
                     size="medium"
                     :color="loadingColor"
-                    text="Loading data..."
                   />
                 </div>
               </td>

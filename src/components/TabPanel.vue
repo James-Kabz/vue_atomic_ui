@@ -5,19 +5,24 @@
     role="tabpanel"
     :aria-labelledby="`tab-${index}`"
   >
-    <slot />
+    <div v-if="loading" class="flex items-center justify-center p-8">
+      <Spinner size="lg" :label="`Loading ${props.label}`" />
+    </div>
+    <slot v-else />
   </div>
 </template>
 
 <script setup>
 import { inject, onMounted, onUnmounted, ref, watch } from "vue"
+import Spinner from "./Spinner.vue"
 
 /**
  * TabPanel component for displaying content within a tabbed interface.
  * Must be used as a child of the Tab component.
  */
 const props = defineProps({
-  label: { type: String, required: true }
+  label: { type: String, required: true },
+  loading: { type: Boolean, default: false }
 })
 
 // Inject the tabs context provided by the parent Tab component
