@@ -224,12 +224,12 @@ const validateForm = () => {
   return Object.keys(errors.value).length === 0
 }
 
-const handleSelectChange = (field, value) => {
+const handleSelectChange = async (field, value) => {
   formData.value[field.name] = value
   
-  // Call onChange handler if provided
+  // Call onChange handler if provided and wait for it to complete
   if (field.onChange && typeof field.onChange === 'function') {
-    field.onChange(value, formData.value)
+    await field.onChange(value, formData.value)
   }
 }
 
