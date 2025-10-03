@@ -1,5 +1,7 @@
 <script setup>
 import { Button, FormField, Input, Label, Modal, Select, Textarea, toast } from '@stlhorizon/vue-ui'
+import Slider from './Slider.vue'
+import DatePicker from './DatePicker.vue'
 import { ref, watch, computed } from 'vue'
 
 const props = defineProps({
@@ -26,7 +28,7 @@ const props = defineProps({
           field.name &&
           field.label &&
           field.type &&
-          ['text', 'number', 'password', 'textarea', 'select', 'checkbox'].includes(field.type),
+          ['text', 'number', 'password', 'textarea', 'select', 'checkbox', 'slider', 'date'].includes(field.type),
       )
     },
   },
@@ -55,6 +57,7 @@ const isLoading = computed(() => props.loading)
 
 const formData = ref({})
 const errors = ref({})
+const isInitialized = ref(false)
 
 // Initialize form data based on fields
 const initializeFormData = () => {
@@ -62,8 +65,8 @@ const initializeFormData = () => {
   props.fields.forEach((field) => {
     if (field.type === 'checkbox') {
       data[field.name] = false
-    } else if (field.type === 'number') {
-      data[field.name] = ''
+    } else if (field.type === 'number' || field.type === 'slider') {
+      data[field.name] = field.min !== undefined ? field.min : 0
     } else {
       data[field.name] = ''
     }
@@ -78,14 +81,38 @@ watch(
     if (props.modalType === 'edit' && newData) {
       const data = {}
       props.fields.forEach((field) => {
-        data[field.name] = newData[field.name] ?? (field.type === 'checkbox' ? false : '')
+        if (field.type === 'checkbox') {
+          data[field.name] = newData[field.name] ?? false
+        } else if (field.type === 'number' || field.type === 'slider') {
+          data[field.name] = newData[field.name] ?? (field.min !== undefined ? field.min : 0)
+        } else {
+          data[field.name] = newData[field.name] ?? ''
+        }
       })
       formData.value = data
-    } else if (props.modalType === 'create') {
+      isInitialized.value = true
+    } else if (props.modalType === 'create' && newData && !isInitialized.value) {
+      // For create mode, only initialize once from initialData
+      const data = {}
+      props.fields.forEach((field) => {
+        if (newData[field.name] !== undefined && newData[field.name] !== null) {
+          data[field.name] = newData[field.name]
+        } else if (field.type === 'checkbox') {
+          data[field.name] = false
+        } else if (field.type === 'number' || field.type === 'slider') {
+          data[field.name] = field.min !== undefined ? field.min : 0
+        } else {
+          data[field.name] = ''
+        }
+      })
+      formData.value = data
+      isInitialized.value = true
+    } else if (props.modalType === 'create' && !newData) {
       formData.value = initializeFormData()
+      isInitialized.value = false
     }
   },
-  { immediate: true },
+  { immediate: true, deep: true },
 )
 
 // Watch for modal open to reset form
@@ -95,17 +122,53 @@ watch(
     if (isOpen) {
       errors.value = {}
       if (props.modalType === 'create') {
-        formData.value = initializeFormData()
+        // Reset initialization flag when modal opens
+        isInitialized.value = false
+        if (props.initialData) {
+          // Initialize from initialData if provided
+          const data = {}
+          props.fields.forEach((field) => {
+            if (props.initialData[field.name] !== undefined && props.initialData[field.name] !== null) {
+              data[field.name] = props.initialData[field.name]
+            } else if (field.type === 'checkbox') {
+              data[field.name] = false
+            } else if (field.type === 'number' || field.type === 'slider') {
+              data[field.name] = field.min !== undefined ? field.min : 0
+            } else {
+              data[field.name] = ''
+            }
+          })
+          formData.value = data
+        } else {
+          formData.value = initializeFormData()
+        }
+        isInitialized.value = true
       }
     }
   },
+)
+
+// Watch for initialData changes after initialization (for dynamic updates from onChange handlers)
+watch(
+  () => props.initialData,
+  (newData) => {
+    if (isInitialized.value && newData) {
+      // Update formData with new values from initialData without replacing the entire object
+      Object.keys(newData).forEach((key) => {
+        if (formData.value.hasOwnProperty(key) && newData[key] !== undefined && newData[key] !== null) {
+          formData.value[key] = newData[key]
+        }
+      })
+    }
+  },
+  { deep: true },
 )
 
 const validateForm = () => {
   errors.value = {}
 
   props.fields.forEach((field) => {
-    if (field.required) {
+    if (field.required && !field.disabled) {
       const value = formData.value[field.name]
 
       // Handle different field types
@@ -114,14 +177,19 @@ const validateForm = () => {
         if (field.required && !value) {
           errors.value[field.name] = field.errorMessage || `${field.label} is required`
         }
-      } else if (field.type === 'number') {
-        // Number validation
+      } else if (field.type === 'number' || field.type === 'slider') {
+        // Number/Slider validation
         if (value === '' || value === null || value === undefined) {
           errors.value[field.name] = field.errorMessage || `${field.label} is required`
         } else if (field.min !== undefined && Number(value) < field.min) {
           errors.value[field.name] = `${field.label} must be at least ${field.min}`
         } else if (field.max !== undefined && Number(value) > field.max) {
           errors.value[field.name] = `${field.label} must be at most ${field.max}`
+        }
+      } else if (field.type === 'date') {
+        // Date validation
+        if (!value || (typeof value === 'string' && !value.trim())) {
+          errors.value[field.name] = field.errorMessage || `${field.label} is required`
         }
       } else if (field.type === 'password') {
         // Password validation
@@ -156,6 +224,25 @@ const validateForm = () => {
   return Object.keys(errors.value).length === 0
 }
 
+const handleSelectChange = (field, value) => {
+  formData.value[field.name] = value
+  
+  // Call onChange handler if provided
+  if (field.onChange && typeof field.onChange === 'function') {
+    field.onChange(value, formData.value)
+  }
+}
+
+// Watch for slider changes
+const handleSliderChange = (field, value) => {
+  formData.value[field.name] = value
+  
+  // Call onChange handler if provided
+  if (field.onChange && typeof field.onChange === 'function') {
+    field.onChange(value, formData.value)
+  }
+}
+
 const handleSubmit = async () => {
   if (!validateForm()) {
     toast.error('Please fix the validation errors before submitting')
@@ -167,9 +254,9 @@ const handleSubmit = async () => {
   props.fields.forEach((field) => {
     const value = formData.value[field.name]
 
-    if (field.type === 'number') {
+    if (field.type === 'number' || field.type === 'slider') {
       preparedData[field.name] = Number(value)
-    } else if (field.type === 'text' || field.type === 'textarea') {
+    } else if (field.type === 'text' || field.type === 'textarea' || field.type === 'date') {
       preparedData[field.name] = typeof value === 'string' ? value.trim() : value
     } else if (field.type === 'password') {
       // Keep password as-is, don't trim
@@ -189,6 +276,7 @@ const handleSubmit = async () => {
 const handleClose = () => {
   formData.value = initializeFormData()
   errors.value = {}
+  isInitialized.value = false
   emit('close')
 }
 </script>
@@ -212,7 +300,7 @@ const handleClose = () => {
       <div v-for="field in fields" :key="field.name">
         <FormField
           :label="field.label"
-          :required="field.required"
+          :required="field.required && !field.disabled"
           :error="errors[field.name]"
           :errorMessage="errors[field.name]"
           :id="`form-${entityName}-${field.name}-${Math.random().toString(36).slice(2, 5)}`"
@@ -225,7 +313,8 @@ const handleClose = () => {
               v-model="formData[field.name]"
               :type="field.type"
               :placeholder="field.placeholder"
-              :disabled="isLoading"
+              :disabled="isLoading || field.disabled"
+              :readonly="field.disabled"
               :class="hasError ? 'border-red-500' : 'border-slate-300'"
               :aria-describedby="ariaDescribedBy"
             />
@@ -236,7 +325,7 @@ const handleClose = () => {
               :id="fieldId"
               v-model="formData[field.name]"
               :placeholder="field.placeholder"
-              :disabled="isLoading"
+              :disabled="isLoading || field.disabled"
               :rows="field.rows || 3"
               :class="[
                 'w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500',
@@ -249,8 +338,9 @@ const handleClose = () => {
             <Select
               v-else-if="field.type === 'select'"
               :id="fieldId"
-              v-model="formData[field.name]"
-              :disabled="isLoading"
+              :modelValue="formData[field.name]"
+              @update:modelValue="handleSelectChange(field, $event)"
+              :disabled="isLoading || field.disabled"
               :class="[
                 'w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500',
                 hasError ? 'border-red-500' : 'border-slate-300',
@@ -269,7 +359,7 @@ const handleClose = () => {
                 :id="fieldId"
                 v-model="formData[field.name]"
                 type="checkbox"
-                :disabled="isLoading"
+                :disabled="isLoading || field.disabled"
                 class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                 :aria-describedby="ariaDescribedBy"
               />
@@ -277,6 +367,34 @@ const handleClose = () => {
                 {{ field.checkboxLabel }}
               </Label>
             </div>
+
+            <!-- Slider -->
+            <Slider
+              v-else-if="field.type === 'slider'"
+              :modelValue="formData[field.name]"
+              @update:modelValue="handleSliderChange(field, $event)"
+              :min="field.min"
+              :max="field.max"
+              :step="field.step"
+              :disabled="isLoading || field.disabled"
+            />
+
+            <!-- Date Picker -->
+            <DatePicker
+              v-else-if="field.type === 'date'"
+              :id="fieldId"
+              v-model="formData[field.name]"
+              :disabled="isLoading || field.disabled"
+              :required="field.required"
+              :min="field.min"
+              :max="field.max"
+              :placeholder="field.placeholder || 'Select date'"
+              :format="field.format || 'MM/DD/YYYY'"
+              :clearable="field.clearable !== false"
+              :showToday="field.showToday !== false"
+              :calendarPosition="field.calendarPosition || 'left-0'"
+              :aria-describedby="ariaDescribedBy"
+            />
           </template>
         </FormField>
       </div>

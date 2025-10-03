@@ -164,14 +164,12 @@
             </DataTableRow>
 
             <!-- Empty State Row -->
-            <tr v-else-if="!loading && !dataLoading">
+            <tr v-else-if="!loading && !dataLoading && hasLoaded">
               <td :colspan="totalColumns" :class="emptyCellClasses">
                 <slot name="empty">
-                  <div class="text-center py-8">
+                  <div class="text-center">
                     <div class="text-slate-400 mb-4">
-                      <svg class="w-12 h-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 0 1-1.125-1.125M3.375 19.5h7.5c.621 0 1.125-.504 1.125-1.125m-9.75 0V5.625m0 0A2.25 2.25 0 0 1 5.625 3.375h4.125c.621 0 1.125.504 1.125 1.125v15.75m-9.75 0h9.75" />
-                      </svg>
+                      <Icon name="search" class="w-12 h-12" />
                     </div>
                     <p class="text-slate-600 text-lg font-medium mb-2">{{ emptyText }}</p>
                     <p class="text-slate-500 text-sm">Try adjusting your search or filter criteria</p>
@@ -240,6 +238,7 @@ import DataTableHeader from './DataTableHeader.vue'
 import DataTableRow from './DataTableRow.vue'
 import DataTablePagination from './DataTablePagination.vue'
 import STLLoader from './STLLoader.vue'
+import Icon from './Icon.vue'
 
 const props = defineProps({
   data: {
@@ -388,6 +387,10 @@ const props = defineProps({
   skeletonRows: {
     type: Number,
     default: 5
+  },
+  hasLoaded: {
+    type: Boolean,
+    default: false
   }
 })
 

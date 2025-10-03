@@ -2,7 +2,7 @@
   <div id="app" class="min-h-screen bg-slate-50">
     <div class="container mx-auto py-8">
       <h1 class="text-3xl font-bold text-slate-900 mb-8">Vue DataTable with Filters</h1>
-
+      <DatePicker />
       <!-- DataTable with Filters -->
       <div class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
         <!-- Filters Component -->
@@ -185,6 +185,7 @@ import DataTableFilters from '../components/DataTableFilters.vue'
 import DataTableToolBar from '../components/DataTableToolBar.vue'
 import DataTable from '../components/DataTable.vue'
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash'
+import DatePicker from '../components/DatePicker.vue'
 
 // Sample data with better avatars
 const users = ref([
