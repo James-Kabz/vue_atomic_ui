@@ -10,6 +10,7 @@ import Label from "./components/Label.vue"
 import Link from "./components/Link.vue"
 import Logo from "./components/Logo.vue"
 import Option from "./components/Option.vue"
+import Progress from "./components/Progress.vue"
 import ProgressBar from "./components/ProgressBar.vue"
 import Radio from "./components/Radio.vue"
 import Select from "./components/Select.vue"
@@ -99,6 +100,7 @@ const components = {
   Link,
   Logo,
   Option,
+  Progress,
   ProgressBar,
   Radio,
   Select,
@@ -191,6 +193,7 @@ export {
   Link,
   Logo,
   Option,
+  Progress,
   ProgressBar,
   Radio,
   Select,

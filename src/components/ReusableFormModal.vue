@@ -1,8 +1,16 @@
 <script setup>
-import { Button, FormField, Input, Label, Modal, Select, Textarea, toast } from '@stlhorizon/vue-ui'
+// import { Button, FormField, Input, Label, Select, Textarea, toast } from '@stlhorizon/vue-ui'
+import Modal from './Modal.vue'
 import Slider from './Slider.vue'
 import DatePicker from './DatePicker.vue'
 import { ref, watch, computed } from 'vue'
+import FormField from './FormField.vue'
+import Input from './Input.vue'
+import Textarea from './Textarea.vue'
+import Select from './Select.vue'
+import Button from './Button.vue'
+import { toast } from '../lib/toast'
+import Label from './Label.vue'
 
 const props = defineProps({
   modelValue: {
@@ -43,6 +51,15 @@ const props = defineProps({
   customValidation: {
     type: Function,
     default: null,
+  },
+  modalSize: {
+    type: String,
+    default: '4xl',
+    validator: (value) => ['sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', 'full'].includes(value)
+  },
+  modalResizable: {
+    type: Boolean,
+    default: false,
   },
 })
 
@@ -282,7 +299,7 @@ const handleClose = () => {
 </script>
 
 <template>
-  <Modal v-model="isOpen" :showClose="true" :closeOnBackdrop="true" @close="handleClose">
+  <Modal v-model="isOpen" :showClose="true" :closeOnBackdrop="true" :size="modalSize" :resizable="modalResizable" @close="handleClose">
     <div class="mb-4">
       <h2 class="text-lg font-semibold text-gray-900">
         {{ modalType === 'create' ? `Add New ${entityName}` : `Edit ${entityName}` }}
