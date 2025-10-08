@@ -1,230 +1,125 @@
 <template>
   <div class="relative w-full">
+    <!-- Input Field -->
     <div class="relative">
-      <input
-        :id="id"
-        ref="inputRef"
-        :value="formattedValue"
-        type="text"
-        :placeholder="placeholder"
-        :class="inputClasses"
-        :disabled="disabled"
-        :required="required"
-        :readonly="readonly"
-        @click="toggleCalendar"
-        @focus="showCalendar = true"
-        @blur="handleBlur"
-        @input="handleManualInput"
-      />
-      <button
-        type="button"
-        :disabled="disabled"
-        class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-        @click="toggleCalendar"
-        tabindex="-1"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="18"
-          height="18"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
-          <line x1="16" x2="16" y1="2" y2="6" />
-          <line x1="8" x2="8" y1="2" y2="6" />
-          <line x1="3" x2="21" y1="10" y2="10" />
+      <input :id="id" type="text" :value="displayValue" @click="toggleCalendar" readonly :disabled="disabled"
+        :placeholder="placeholder" :required="required" :aria-describedby="ariaDescribedby"
+        class="w-full px-3 py-2 pr-10 border border-slate-300 rounded-md bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer disabled:bg-slate-50 disabled:text-slate-500 disabled:cursor-not-allowed" />
+
+      <!-- Calendar Icon -->
+      <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+        <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
         </svg>
-      </button>
-      
-      <button
-        v-if="clearable && modelValue && !disabled"
-        type="button"
-        class="absolute right-10 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-900 transition-colors"
-        @click.stop="clearDate"
-        tabindex="-1"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <circle cx="12" cy="12" r="10" />
-          <path d="m15 9-6 6" />
-          <path d="m9 9 6 6" />
+      </div>
+
+      <!-- Clear Button -->
+      <button v-if="clearable && displayValue && !disabled" type="button" @click.stop="clearDate"
+        class="absolute right-9 top-1/2 -translate-y-1/2 p-1 hover:bg-slate-100 rounded" aria-label="Clear date">
+        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
         </svg>
       </button>
     </div>
 
-    <Transition
-      enter-active-class="transition ease-out duration-200"
-      enter-from-class="opacity-0 translate-y-1"
-      enter-to-class="opacity-100 translate-y-0"
-      leave-active-class="transition ease-in duration-150"
-      leave-from-class="opacity-100 translate-y-0"
-      leave-to-class="opacity-0 translate-y-1"
-    >
-      <div
-        v-if="showCalendar"
-        ref="calendarRef"
-        class="absolute z-50 mt-2 p-3 bg-white border border-gray-300 rounded-md shadow-lg"
-        :class="calendarPosition"
-      >
-        <div class="flex items-center justify-between mb-3">
-          <button
-            type="button"
-            class="p-1 hover:bg-accent rounded transition-colors"
-            @click="previousMonth"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="m15 18-6-6 6-6" />
+    <!-- Calendar Dropdown -->
+    <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95"
+      enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75"
+      leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
+      <div v-if="isOpen"
+        :class="['absolute z-[9999] mt-2 bg-white border border-slate-200 rounded-lg shadow-lg p-4', calendarPosition]"
+        @click.stop>
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-4">
+          <button type="button" class="p-2 rounded-lg hover:bg-slate-100 transition-colors" @click="prevMonth"
+            aria-label="Previous Month">
+            <svg class="w-5 h-5 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 18l-6-6 6-6" />
             </svg>
           </button>
-          
-          <div class="flex gap-2">
-            <select
-              v-model="viewMonth"
-              class="px-2 py-1 text-sm font-medium bg-background border border-input rounded hover:bg-accent transition-colors"
-            >
-              <option v-for="(month, index) in monthNames" :key="index" :value="index">
-                {{ month }}
-              </option>
-            </select>
-            
-            <select
-              v-model="viewYear"
-              class="px-2 py-1 text-sm font-medium bg-white border border-gray-300 rounded hover:bg-gray-100 transition-colors"
-            >
-              <option v-for="year in yearRange" :key="year" :value="year">
-                {{ year }}
-              </option>
-            </select>
+
+          <div class="text-base font-semibold text-slate-900">
+            {{ monthName }} {{ currentYear }}
           </div>
-          
-          <button
-            type="button"
-            class="p-1 hover:bg-gray-100 rounded transition-colors"
-            @click="nextMonth"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="m9 18 6-6-6-6" />
+
+          <button type="button" class="p-2 rounded-lg hover:bg-slate-100 transition-colors" @click="nextMonth"
+            aria-label="Next Month">
+            <svg class="w-5 h-5 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 18l6-6-6-6" />
             </svg>
           </button>
         </div>
 
+        <!-- Weekdays -->
         <div class="grid grid-cols-7 gap-1 mb-2">
-          <div
-            v-for="day in weekDays"
-            :key="day"
-            class="text-center text-xs font-medium text-gray-500 py-2"
-          >
+          <div v-for="day in weekdays" :key="day" class="text-center text-xs font-medium text-slate-600 py-1">
             {{ day }}
           </div>
         </div>
 
+        <!-- Calendar Grid -->
         <div class="grid grid-cols-7 gap-1">
-          <button
-            v-for="date in calendarDays"
-            :key="date.date"
-            type="button"
-            :disabled="isDateDisabled(date)"
-            :class="[
-              'aspect-square p-0 text-sm rounded hover:bg-gray-100 transition-colors',
-              {
-                'text-gray-400': !date.isCurrentMonth,
-                'bg-blue-600 text-white hover:bg-blue-700': isSelectedDate(date),
-                'bg-gray-100 font-semibold': isToday(date) && !isSelectedDate(date),
-                'opacity-50 cursor-not-allowed': isDateDisabled(date)
-              }
-            ]"
-            @click="selectDate(date)"
-          >
-            {{ date.day }}
+          <!-- Previous month days -->
+          <div v-for="(day, index) in leadingDays" :key="'prev-' + index"
+            class="text-center text-sm text-slate-300 py-2">
+            {{ day }}
+          </div>
+
+          <!-- Current month days -->
+          <button v-for="day in daysInMonth" :key="day" type="button" @click="selectDate(day)"
+            :disabled="isDateDisabled(day)" :class="[
+              'w-9 h-9 rounded-lg text-sm font-medium transition-colors',
+              isToday(day) && !isSelected(day) ? 'bg-blue-50 text-blue-600 border border-blue-200' : '',
+              isSelected(day) ? 'bg-blue-500 text-white hover:bg-blue-600' : 'text-slate-700 hover:bg-slate-100',
+              isDateDisabled(day) ? 'text-slate-300 cursor-not-allowed hover:bg-transparent' : 'cursor-pointer'
+            ]">
+            {{ day }}
           </button>
+
+          <!-- Next month days -->
+          <div v-for="(day, index) in trailingDays" :key="'next-' + index"
+            class="text-center text-sm text-slate-300 py-2">
+            {{ day }}
+          </div>
         </div>
 
-        <div v-if="showToday" class="mt-3 pt-3 border-t border-gray-300">
-          <button
-            type="button"
-            class="w-full px-3 py-2 text-sm font-medium bg-gray-200 hover:bg-gray-300 rounded transition-colors"
-            @click="selectToday"
-          >
+        <!-- Footer with Today button -->
+        <div v-if="showToday" class="mt-4 pt-3 border-t border-slate-200">
+          <button type="button" @click="selectToday"
+            class="w-full px-3 py-2 text-sm font-medium text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
             Today
           </button>
         </div>
       </div>
-    </Transition>
+    </transition>
+
+    <!-- Backdrop to close calendar -->
+    <div v-if="isOpen" class="fixed inset-0 z-[9998]" @click="closeCalendar" />
   </div>
 </template>
 
 <script setup>
-import { computed, ref, watch, onMounted, onBeforeUnmount } from 'vue'
-import { cva } from 'class-variance-authority'
-import { cn } from '../utils/cn.js'
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
 
 const props = defineProps({
-  modelValue: String,
   id: String,
+  modelValue: [String, Date],
   disabled: Boolean,
   required: Boolean,
-  readonly: {
-    type: Boolean,
-    default: true
-  },
-  clearable: {
-    type: Boolean,
-    default: true
-  },
-  min: String,
-  max: String,
+  min: [String, Date],
+  max: [String, Date],
   placeholder: {
     type: String,
     default: 'Select date'
   },
   format: {
     type: String,
-    default: 'MM/DD/YYYY',
-    validator: (value) => ['MM/DD/YYYY', 'DD/MM/YYYY', 'YYYY-MM-DD'].includes(value)
+    default: 'MM/DD/YYYY'
   },
-  variant: {
-    type: String,
-    default: 'default',
-    validator: (value) => ['default', 'outline', 'ghost'].includes(value)
-  },
-  size: {
-    type: String,
-    default: 'default',
-    validator: (value) => ['sm', 'default', 'lg'].includes(value)
+  clearable: {
+    type: Boolean,
+    default: true
   },
   showToday: {
     type: Boolean,
@@ -232,264 +127,203 @@ const props = defineProps({
   },
   calendarPosition: {
     type: String,
-    default: 'left-0',
-    validator: (value) => ['left-0', 'right-0'].includes(value)
-  }
+    default: 'left-0'
+  },
+  ariaDescribedby: String
 })
 
 const emit = defineEmits(['update:modelValue'])
 
-const inputRef = ref(null)
-const calendarRef = ref(null)
-const showCalendar = ref(false)
-const viewMonth = ref(new Date().getMonth())
-const viewYear = ref(new Date().getFullYear())
+const isOpen = ref(false)
+const today = new Date()
+const currentMonth = ref(today.getMonth())
+const currentYear = ref(today.getFullYear())
+const selectedDate = ref(null)
 
-const monthNames = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December'
-]
+const weekdays = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
 
-const weekDays = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
+const monthName = computed(() =>
+  new Date(currentYear.value, currentMonth.value).toLocaleString('default', {
+    month: 'long'
+  })
+)
 
-const yearRange = computed(() => {
-  const currentYear = new Date().getFullYear()
-  const start = currentYear - 100
-  const end = currentYear + 10
-  return Array.from({ length: end - start + 1 }, (_, i) => start + i)
+const daysInMonth = computed(() => {
+  return new Date(currentYear.value, currentMonth.value + 1, 0).getDate()
 })
 
-const formattedValue = computed(() => {
-  if (!props.modelValue) return ''
-  
-  const date = new Date(props.modelValue)
-  if (isNaN(date.getTime())) return props.modelValue
-  
-  const day = String(date.getDate()).padStart(2, '0')
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const year = date.getFullYear()
-  
-  switch (props.format) {
-    case 'DD/MM/YYYY':
-      return `${day}/${month}/${year}`
-    case 'YYYY-MM-DD':
-      return `${year}-${month}-${day}`
-    case 'MM/DD/YYYY':
-    default:
-      return `${month}/${day}/${year}`
-  }
+const firstDayOfMonth = computed(() => {
+  return new Date(currentYear.value, currentMonth.value, 1).getDay()
 })
 
-const calendarDays = computed(() => {
-  const firstDay = new Date(viewYear.value, viewMonth.value, 1)
-  const lastDay = new Date(viewYear.value, viewMonth.value + 1, 0)
-  const prevLastDay = new Date(viewYear.value, viewMonth.value, 0)
-  
-  const firstDayWeekday = firstDay.getDay()
-  const lastDayDate = lastDay.getDate()
-  const prevLastDayDate = prevLastDay.getDate()
-  
-  const days = []
-  
-  // Previous month days
-  for (let i = firstDayWeekday - 1; i >= 0; i--) {
-    days.push({
-      day: prevLastDayDate - i,
-      month: viewMonth.value - 1,
-      year: viewMonth.value === 0 ? viewYear.value - 1 : viewYear.value,
-      isCurrentMonth: false,
-      date: new Date(
-        viewMonth.value === 0 ? viewYear.value - 1 : viewYear.value,
-        viewMonth.value === 0 ? 11 : viewMonth.value - 1,
-        prevLastDayDate - i
-      )
-    })
-  }
-  
-  // Current month days
-  for (let i = 1; i <= lastDayDate; i++) {
-    days.push({
-      day: i,
-      month: viewMonth.value,
-      year: viewYear.value,
-      isCurrentMonth: true,
-      date: new Date(viewYear.value, viewMonth.value, i)
-    })
-  }
-  
-  // Next month days
-  const remainingDays = 42 - days.length // 6 rows × 7 days
-  for (let i = 1; i <= remainingDays; i++) {
-    days.push({
-      day: i,
-      month: viewMonth.value + 1,
-      year: viewMonth.value === 11 ? viewYear.value + 1 : viewYear.value,
-      isCurrentMonth: false,
-      date: new Date(
-        viewMonth.value === 11 ? viewYear.value + 1 : viewYear.value,
-        viewMonth.value === 11 ? 0 : viewMonth.value + 1,
-        i
-      )
-    })
-  }
-  
-  return days
+const leadingDays = computed(() => {
+  const prevMonthDays = new Date(currentYear.value, currentMonth.value, 0).getDate()
+  const count = firstDayOfMonth.value
+  return Array.from({ length: count }, (_, i) => prevMonthDays - count + i + 1)
 })
 
-const inputVariants = cva(
-  'flex w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer',
-  {
-    variants: {
-      variant: {
-        default: 'border-gray-300',
-        outline: 'border-2 border-blue-600',
-        ghost: 'border-transparent bg-transparent'
-      },
-      size: {
-        sm: 'h-9 px-2 pr-8 text-xs',
-        default: 'h-10 px-3 pr-10',
-        lg: 'h-11 px-4 pr-12 text-base'
-      }
+const trailingDays = computed(() => {
+  const totalCells = leadingDays.value.length + daysInMonth.value
+  const remaining = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7)
+  return Array.from({ length: remaining }, (_, i) => i + 1)
+})
+
+const displayValue = computed(() => {
+  if (!selectedDate.value) return ''
+  return formatDate(selectedDate.value)
+})
+
+function formatDate(date) {
+  if (!date) return ''
+  const d = new Date(date)
+  const month = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  const year = d.getFullYear()
+
+  return props.format
+    .replace('MM', month)
+    .replace('DD', day)
+    .replace('YYYY', year)
+}
+
+function parseDate(value) {
+  if (!value) return null
+  if (value instanceof Date) return value
+
+  // Parse date string in local timezone to avoid offset issues
+  if (typeof value === 'string') {
+    const parts = value.split('-')
+    if (parts.length === 3) {
+      const year = parseInt(parts[0], 10)
+      const month = parseInt(parts[1], 10) - 1
+      const day = parseInt(parts[2], 10)
+      return new Date(year, month, day)
     }
   }
-)
 
-const inputClasses = computed(() => 
-  cn(inputVariants({ variant: props.variant, size: props.size }))
-)
-
-function toggleCalendar() {
-  if (!props.disabled) {
-    showCalendar.value = !showCalendar.value
-  }
+  // Fallback to regular Date parsing
+  const date = new Date(value)
+  return isNaN(date.getTime()) ? null : date
 }
 
-function selectDate(dateObj) {
-  if (isDateDisabled(dateObj)) return
-  
-  const date = dateObj.date
-  const isoString = date.toISOString().split('T')[0]
-  emit('update:modelValue', isoString)
-  showCalendar.value = false
-}
-
-function selectToday() {
-  const today = new Date()
-  const isoString = today.toISOString().split('T')[0]
-  emit('update:modelValue', isoString)
-  showCalendar.value = false
-}
-
-function clearDate() {
-  emit('update:modelValue', '')
-  showCalendar.value = false
-}
-
-function isSelectedDate(dateObj) {
-  if (!props.modelValue) return false
-  const selected = new Date(props.modelValue)
-  const date = dateObj.date
+function isToday(day) {
   return (
-    selected.getFullYear() === date.getFullYear() &&
-    selected.getMonth() === date.getMonth() &&
-    selected.getDate() === date.getDate()
+    today.getDate() === day &&
+    today.getMonth() === currentMonth.value &&
+    today.getFullYear() === currentYear.value
   )
 }
 
-function isToday(dateObj) {
-  const today = new Date()
-  const date = dateObj.date
+function isSelected(day) {
+  if (!selectedDate.value) return false
+  const date = new Date(selectedDate.value)
   return (
-    today.getFullYear() === date.getFullYear() &&
-    today.getMonth() === date.getMonth() &&
-    today.getDate() === date.getDate()
+    date.getDate() === day &&
+    date.getMonth() === currentMonth.value &&
+    date.getFullYear() === currentYear.value
   )
 }
 
-function isDateDisabled(dateObj) {
-  const date = dateObj.date
-  
+function isDateDisabled(day) {
+  const date = new Date(currentYear.value, currentMonth.value, day)
+
   if (props.min) {
-    const minDate = new Date(props.min)
-    if (date < minDate) return true
+    const minDate = parseDate(props.min)
+    if (minDate && date < minDate) return true
   }
-  
+
   if (props.max) {
-    const maxDate = new Date(props.max)
-    if (date > maxDate) return true
+    const maxDate = parseDate(props.max)
+    if (maxDate && date > maxDate) return true
   }
-  
+
   return false
 }
 
-function previousMonth() {
-  if (viewMonth.value === 0) {
-    viewMonth.value = 11
-    viewYear.value--
+function toggleCalendar() {
+  if (props.disabled) return
+  isOpen.value = !isOpen.value
+}
+
+function closeCalendar() {
+  isOpen.value = false
+}
+
+function prevMonth() {
+  if (currentMonth.value === 0) {
+    currentMonth.value = 11
+    currentYear.value--
   } else {
-    viewMonth.value--
+    currentMonth.value--
   }
 }
 
 function nextMonth() {
-  if (viewMonth.value === 11) {
-    viewMonth.value = 0
-    viewYear.value++
+  if (currentMonth.value === 11) {
+    currentMonth.value = 0
+    currentYear.value++
   } else {
-    viewMonth.value++
+    currentMonth.value++
   }
 }
 
-function handleManualInput(event) {
-  if (props.readonly) return
+function selectDate(day) {
+  if (isDateDisabled(day)) return
+
+  const date = new Date(currentYear.value, currentMonth.value, day)
+  selectedDate.value = date
   
-  const value = event.target.value
-  // Allow manual typing if not readonly
-  emit('update:modelValue', value)
-}
+  // Format date in local timezone to avoid timezone offset issues
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const dayStr = String(date.getDate()).padStart(2, '0')
+  const dateString = `${year}-${month}-${dayStr}`
+  
+  emit('update:modelValue', dateString)
 
-function handleBlur(event) {
+  // Close calendar after selection
   setTimeout(() => {
-    if (calendarRef.value && !calendarRef.value.contains(document.activeElement)) {
-      showCalendar.value = false
-    }
-  }, 200)
+    isOpen.value = false
+  }, 150)
 }
 
-function handleClickOutside(event) {
-  if (
-    inputRef.value &&
-    calendarRef.value &&
-    !inputRef.value.contains(event.target) &&
-    !calendarRef.value.contains(event.target)
-  ) {
-    showCalendar.value = false
-  }
+function selectToday() {
+  currentMonth.value = today.getMonth()
+  currentYear.value = today.getFullYear()
+  selectDate(today.getDate())
 }
 
-watch(() => props.modelValue, (newValue) => {
-  if (newValue) {
-    const date = new Date(newValue)
-    if (!isNaN(date.getTime())) {
-      viewMonth.value = date.getMonth()
-      viewYear.value = date.getFullYear()
+function clearDate() {
+  selectedDate.value = null
+  emit('update:modelValue', '')
+}
+
+// Watch for external changes
+watch(() => props.modelValue, (newVal) => {
+  if (newVal) {
+    const date = parseDate(newVal)
+    if (date) {
+      selectedDate.value = date
+      currentMonth.value = date.getMonth()
+      currentYear.value = date.getFullYear()
     }
+  } else {
+    selectedDate.value = null
   }
-})
+}, { immediate: true })
+
+// Handle Escape key to close calendar
+function handleEscape(e) {
+  if (e.key === 'Escape' && isOpen.value) {
+    closeCalendar()
+  }
+}
 
 onMounted(() => {
-  document.addEventListener('click', handleClickOutside)
-  
-  if (props.modelValue) {
-    const date = new Date(props.modelValue)
-    if (!isNaN(date.getTime())) {
-      viewMonth.value = date.getMonth()
-      viewYear.value = date.getFullYear()
-    }
-  }
+  document.addEventListener('keydown', handleEscape)
 })
 
 onBeforeUnmount(() => {
-  document.removeEventListener('click', handleClickOutside)
+  document.removeEventListener('keydown', handleEscape)
 })
 </script>

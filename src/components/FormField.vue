@@ -17,14 +17,24 @@
 
     <!-- Input Wrapper -->
     <div class="relative">
+      <DatePicker
+        v-if="type === 'date'"
+        :id="fieldId"
+        :modelValue="modelValue"
+        @update:modelValue="emit('update:modelValue', $event)"
+        :disabled="false"
+        :required="required"
+        :class="hasError ? 'border-red-500' : ''"
+      />
       <slot
+        v-else
         :fieldId="fieldId"
         :hasError="hasError"
         :ariaDescribedBy="ariaDescribedBy"
         :showPassword="showPassword"
         :togglePasswordVisibility="togglePasswordVisibility"
       />
-      
+
       <!-- Password Toggle Button (only for password fields) -->
       <button
         v-if="type === 'password'"
@@ -33,9 +43,9 @@
         class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 transition-colors"
         :aria-label="showPassword ? 'Hide password' : 'Show password'"
       >
-        <font-awesome-icon 
-          :icon="showPassword ? 'eye-slash' : 'eye'" 
-          class="w-4 h-4" 
+        <font-awesome-icon
+          :icon="showPassword ? 'eye-slash' : 'eye'"
+          class="w-4 h-4"
         />
       </button>
     </div>
@@ -94,6 +104,7 @@
 import { computed, useId, ref } from "vue"
 import { cva } from "class-variance-authority"
 import { cn } from "../utils/cn.js"
+import DatePicker from "./DatePicker.vue"
 
 const props = defineProps({
   label: String,
@@ -103,6 +114,7 @@ const props = defineProps({
   helpText: String,
   required: { type: Boolean, default: false },
   type: { type: String, default: "text" }, // Added type prop
+  modelValue: [String, Date],
   size: {
     type: String,
     default: "md",
@@ -110,6 +122,8 @@ const props = defineProps({
   },
   id: String,
 })
+
+const emit = defineEmits(['update:modelValue'])
 
 const generatedId = `field-${Math.random().toString(36).slice(2, 9)}`
 const fieldId = computed(() => `${props.id || generatedId}-${Math.random().toString(36).slice(2, 5)}`)

@@ -14,12 +14,9 @@
         @click="toggle(index)"
       >
         <div class="flex items-center flex-1 min-w-0">
-          <component v-if="item.icon" :is="item.icon" :class="iconClasses" />
-
-          <div class="flex-1 text-left">
-            <h3 :class="titleClasses">{{ item.title }}</h3>
-            <p v-if="item.subtitle" :class="subtitleClasses">{{ item.subtitle }}</p>
-          </div>
+          <slot :name="`header-${index}`" :item="item" :index="index" :isExpanded="isExpanded(index)">
+            <div v-if="item.title" v-html="item.title" />
+          </slot>
         </div>
 
         <div :class="chevronClasses(index)">
@@ -31,9 +28,9 @@
       <Transition
         enter-active-class="transition-all duration-300 ease-out"
         enter-from-class="opacity-0 max-h-0"
-        enter-to-class="opacity-100 max-h-96"
+        enter-to-class="opacity-100 max-h-[600px]"
         leave-active-class="transition-all duration-200 ease-in"
-        leave-from-class="opacity-100 max-h-96"
+        leave-from-class="opacity-100 max-h-[600px]"
         leave-to-class="opacity-0 max-h-0"
       >
         <div
@@ -43,8 +40,10 @@
           :aria-labelledby="`header-${item.id || index}`"
           role="region"
         >
-          <slot :name="item.slot || `item-${index}`" :item="item" :index="index">
-            <div v-if="item.content" v-html="item.content" />
+          <slot :name="`content-${index}`" :item="item" :index="index">
+            <slot name="content" :item="item" :index="index">
+              <div v-if="item.content" v-html="item.content" />
+            </slot>
           </slot>
         </div>
       </Transition>
@@ -57,7 +56,6 @@ import { computed, ref, watch } from 'vue'
 import { cva } from 'class-variance-authority'
 import { cn } from '../utils/cn.js'
 
-// Inline icon component
 const ChevronDownIcon = {
   template: `
     <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -97,7 +95,6 @@ const expandedItems = ref(
     : (typeof props.modelValue === 'number' ? [props.modelValue] : [])
 )
 
-// ✅ Toggle logic
 const toggle = (index) => {
   if (props.disabled || props.items[index]?.disabled) return
 
@@ -120,103 +117,65 @@ const toggle = (index) => {
 
 const isExpanded = (index) => expandedItems.value.includes(index)
 
-// --------------------
-// Variants & Classes
-// --------------------
-
 const accordionVariants = cva('w-full', {
   variants: {
     variant: {
-      default: 'divide-y divide-slate-200',
-      bordered: 'space-y-2',
-      filled: 'space-y-2',
+      default: 'space-y-1',
+      bordered: 'space-y-3',
+      filled: 'space-y-3',
       flush: 'divide-y divide-slate-200'
     }
   }
 })
 
-const itemVariants = cva('', {
+const itemVariants = cva('transition-all duration-200', {
   variants: {
     variant: {
-      default: '',
-      bordered: 'border border-slate-200 rounded-lg overflow-hidden',
-      filled: 'bg-slate-50 border border-slate-200 rounded-lg overflow-hidden',
+      default: 'bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md',
+      bordered: 'border-2 border-slate-200 rounded-xl overflow-hidden hover:border-blue-300',
+      filled: 'bg-gradient-to-br from-slate-50 to-white border border-slate-200 rounded-xl overflow-hidden shadow-sm',
       flush: ''
     }
   }
 })
 
 const headerVariants = cva(
-  'flex items-center w-full text-left transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
+  'flex items-center justify-between w-full text-left transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
   {
     variants: {
       variant: {
         default: 'hover:bg-slate-50',
-        bordered: 'hover:bg-slate-50',
-        filled: 'hover:bg-white/50',
+        bordered: 'hover:bg-blue-50/50',
+        filled: 'hover:bg-white/70',
         flush: 'hover:bg-slate-50'
       },
       size: {
-        sm: 'p-3',
-        md: 'p-4',
-        lg: 'p-6'
+        sm: 'px-4 py-3',
+        md: 'px-5 py-4',
+        lg: 'px-6 py-5'
       }
     }
   }
 )
 
-const titleVariants = cva('text-slate-900', {
-  variants: {
-    size: {
-      sm: 'text-sm font-medium',
-      md: 'text-base font-medium',
-      lg: 'text-lg font-medium'
-    }
-  }
-})
-
-const subtitleVariants = cva('text-slate-500 mt-1', {
-  variants: {
-    size: {
-      sm: 'text-xs',
-      md: 'text-sm',
-      lg: 'text-base'
-    }
-  }
-})
-
-const iconVariants = cva('mr-3 text-slate-400', {
-  variants: {
-    size: {
-      sm: 'w-4 h-4',
-      md: 'w-5 h-5',
-      lg: 'w-6 h-6'
-    }
-  }
-})
-
-const chevronVariants = cva('ml-4 text-slate-400 transition-transform duration-200', {
+const chevronVariants = cva('ml-4 flex-shrink-0 text-slate-400 transition-all duration-200', {
   variants: {
     expanded: {
-      true: 'rotate-180',
+      true: 'rotate-180 text-blue-500',
       false: ''
     }
   }
 })
 
-const contentVariants = cva('overflow-hidden text-slate-600 border-t border-slate-200', {
+const contentVariants = cva('overflow-hidden text-slate-600 bg-white', {
   variants: {
     size: {
-      sm: 'p-3 text-sm',
-      md: 'p-4 text-sm',
-      lg: 'p-6 text-base'
+      sm: 'px-4 py-3 text-sm',
+      md: 'px-5 py-4 text-sm',
+      lg: 'px-6 py-5 text-base'
     }
   }
 })
-
-// --------------------
-// Computed Classes
-// --------------------
 
 const accordionClasses = computed(() =>
   cn(accordionVariants({ variant: props.variant }))
@@ -229,22 +188,11 @@ const itemClasses = computed(() =>
 const headerClasses = (index) =>
   cn(
     headerVariants({ variant: props.variant, size: props.size }),
-    (props.variant === 'bordered' && isExpanded(index)) && 'bg-slate-50',
-    (props.variant === 'filled' && isExpanded(index)) && 'bg-white',
+    isExpanded(index) && props.variant === 'bordered' && 'bg-blue-50/30 border-blue-300',
+    isExpanded(index) && props.variant === 'filled' && 'bg-white',
+    isExpanded(index) && props.variant === 'default' && 'bg-slate-50',
     (props.disabled || props.items[index]?.disabled) && 'cursor-not-allowed opacity-50'
   )
-
-const titleClasses = computed(() =>
-  cn(titleVariants({ size: props.size }))
-)
-
-const subtitleClasses = computed(() =>
-  cn(subtitleVariants({ size: props.size }))
-)
-
-const iconClasses = computed(() =>
-  cn(iconVariants({ size: props.size }))
-)
 
 const chevronClasses = (index) =>
   cn(chevronVariants({ expanded: isExpanded(index) }))
@@ -252,10 +200,6 @@ const chevronClasses = (index) =>
 const contentClasses = computed(() =>
   cn(contentVariants({ size: props.size }))
 )
-
-// --------------------
-// Sync with modelValue
-// --------------------
 
 watch(
   () => props.modelValue,
