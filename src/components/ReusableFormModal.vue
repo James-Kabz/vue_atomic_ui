@@ -36,7 +36,7 @@ const props = defineProps({
           field.name &&
           field.label &&
           field.type &&
-          ['text', 'number', 'password', 'textarea', 'select', 'checkbox', 'slider', 'date'].includes(field.type),
+          ['text', 'number', 'password', 'textarea', 'select', 'checkbox', 'slider', 'date', 'color'].includes(field.type),
       )
     },
   },
@@ -323,9 +323,9 @@ const handleClose = () => {
           :id="`form-${entityName}-${field.name}-${Math.random().toString(36).slice(2, 5)}`"
         >
           <template #default="{ fieldId, hasError, ariaDescribedBy }">
-            <!-- Text/Number/Password Input -->
+            <!-- Text/Number/Password/Color Input -->
             <Input
-              v-if="field.type === 'text' || field.type === 'number' || field.type === 'password'"
+              v-if="field.type === 'text' || field.type === 'number' || field.type === 'password' || field.type === 'color'"
               :id="fieldId"
               v-model="formData[field.name]"
               :type="field.type"
