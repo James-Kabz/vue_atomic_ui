@@ -73,18 +73,18 @@ const badgeVariants = cva(
     variants: {
       variant: {
         default:
-          'border-transparent bg-primary text-primary-foreground hover:bg-primary/80',
+          'border-transparent bg-blue-500 text-white hover:bg-blue-600',
         secondary:
-          'border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80',
+          'border-transparent bg-gray-500 text-white hover:bg-gray-600',
         destructive:
-          'border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80',
+          'border-transparent bg-red-500 text-white hover:bg-red-600',
         outline: 'text-foreground border',
         success:
-          'border-transparent bg-green-600 text-white hover:bg-green-700',
+          'border-transparent bg-green-500 text-white hover:bg-green-600',
         warning:
-          'border-transparent bg-yellow-500 text-black hover:bg-yellow-600',
+          'border-transparent bg-yellow-300 text-gray-900 hover:bg-yellow-400',
         info:
-          'border-transparent bg-cyan-600 text-white hover:bg-cyan-700',
+          'border-transparent bg-cyan-500 text-white hover:bg-cyan-600',
         ghost:
           'bg-transparent text-gray-700 hover:bg-gray-100',
         link:
@@ -96,13 +96,13 @@ const badgeVariants = cva(
         light:
           'bg-gray-50 text-gray-800 border border-gray-200 hover:bg-gray-100',
         primaryOutline:
-          'border border-blue-600 text-blue-600 bg-transparent hover:bg-blue-50',
+          'border border-blue-500 text-blue-500 bg-transparent hover:bg-blue-50',
         destructiveOutline:
-          'border border-red-600 text-red-600 bg-transparent hover:bg-red-50',
+          'border border-red-500 text-red-500 bg-transparent hover:bg-red-50',
         successOutline:
-          'border border-green-600 text-green-600 bg-transparent hover:bg-green-50',
+          'border border-green-500 text-green-500 bg-transparent hover:bg-green-50',
         gradient:
-          'bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700',
+          'bg-gradient-to-r from-blue-400 to-purple-500 text-white hover:from-blue-500 hover:to-purple-600',
       },
       size: {
         sm: 'px-2 py-0.5 text-xs',
