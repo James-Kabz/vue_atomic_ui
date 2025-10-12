@@ -15,11 +15,31 @@
         <!-- Links -->
         <div>
           <slot name="links">
-            <Typography variant="h6" class="mb-4">Quick Links</Typography>
+            <Typography
+              variant="h6"
+              class="mb-4"
+            >
+              Quick Links
+            </Typography>
             <div class="space-y-2">
-              <Link href="#" class="block text-gray-600 hover:text-gray-900">About</Link>
-              <Link href="#" class="block text-gray-600 hover:text-gray-900">Services</Link>
-              <Link href="#" class="block text-gray-600 hover:text-gray-900">Contact</Link>
+              <Link
+                href="#"
+                class="block text-gray-600 hover:text-gray-900"
+              >
+                About
+              </Link>
+              <Link
+                href="#"
+                class="block text-gray-600 hover:text-gray-900"
+              >
+                Services
+              </Link>
+              <Link
+                href="#"
+                class="block text-gray-600 hover:text-gray-900"
+              >
+                Contact
+              </Link>
             </div>
           </slot>
         </div>
@@ -27,13 +47,30 @@
         <!-- Social -->
         <div>
           <slot name="social">
-            <Typography variant="h6" class="mb-4">Follow Us</Typography>
+            <Typography
+              variant="h6"
+              class="mb-4"
+            >
+              Follow Us
+            </Typography>
             <div class="flex space-x-4">
-              <Link href="#" class="text-gray-600 hover:text-gray-900">
-                <Icon name="twitter" class="h-5 w-5" />
+              <Link
+                href="#"
+                class="text-gray-600 hover:text-gray-900"
+              >
+                <Icon
+                  name="twitter"
+                  class="h-5 w-5"
+                />
               </Link>
-              <Link href="#" class="text-gray-600 hover:text-gray-900">
-                <Icon name="github" class="h-5 w-5" />
+              <Link
+                href="#"
+                class="text-gray-600 hover:text-gray-900"
+              >
+                <Icon
+                  name="github"
+                  class="h-5 w-5"
+                />
               </Link>
             </div>
           </slot>
@@ -50,8 +87,18 @@
         </slot>
         <slot name="legal">
           <div class="flex space-x-6 mt-4 md:mt-0">
-            <Link href="#" class="text-gray-600 hover:text-gray-900">Privacy</Link>
-            <Link href="#" class="text-gray-600 hover:text-gray-900">Terms</Link>
+            <Link
+              href="#"
+              class="text-gray-600 hover:text-gray-900"
+            >
+              Privacy
+            </Link>
+            <Link
+              href="#"
+              class="text-gray-600 hover:text-gray-900"
+            >
+              Terms
+            </Link>
           </div>
         </slot>
       </div>

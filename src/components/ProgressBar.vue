@@ -8,7 +8,10 @@
       :aria-valuemin="0"
       :aria-valuemax="100"
     />
-    <span v-if="showLabel" :class="labelClasses">
+    <span
+      v-if="showLabel"
+      :class="labelClasses"
+    >
       {{ clampedValue }}%
     </span>
   </div>

@@ -7,9 +7,16 @@
     role="menuitem"
     @click="handleClick"
   >
-    <Icon v-if="icon" :name="icon" class="mr-2 h-4 w-4" />
+    <Icon
+      v-if="icon"
+      :name="icon"
+      class="mr-2 h-4 w-4"
+    />
     <slot />
-    <span v-if="shortcut" class="ml-auto text-xs tracking-widest opacity-60">
+    <span
+      v-if="shortcut"
+      class="ml-auto text-xs tracking-widest opacity-60"
+    >
       {{ shortcut }}
     </span>
   </component>

@@ -11,8 +11,15 @@
       <span>{{ step }}</span>
     </div>
     <div class="ml-2">
-      <div class="font-medium">{{ title }}</div>
-      <div v-if="description" class="text-sm text-slate-400">{{ description }}</div>
+      <div class="font-medium">
+        {{ title }}
+      </div>
+      <div
+        v-if="description"
+        class="text-sm text-slate-400"
+      >
+        {{ description }}
+      </div>
     </div>
   </div>
 </template>

@@ -32,13 +32,19 @@
       />
 
       <!-- Table -->
-      <div class="overflow-x-auto" :class="{ 'opacity-50': loading }">
+      <div
+        class="overflow-x-auto"
+        :class="{ 'opacity-50': loading }"
+      >
         <table :class="tableClasses">
           <!-- Table Head -->
           <thead :class="headClasses">
             <tr>
               <!-- Selection Column Header -->
-              <th v-if="selectable" :class="checkboxCellClasses">
+              <th
+                v-if="selectable"
+                :class="checkboxCellClasses"
+              >
                 <div class="flex items-center justify-center">
                   <!-- Header loading for bulk operations -->
                   <STLLoader
@@ -50,10 +56,10 @@
                   />
                   <Checkbox
                     v-else
-                    :modelValue="isAllSelected"
+                    :model-value="isAllSelected"
                     :indeterminate="isIndeterminate"
                     :disabled="loading || dataLoading"
-                    @update:modelValue="toggleSelectAll"
+                    @update:model-value="toggleSelectAll"
                   />
                 </div>
               </th>
@@ -78,7 +84,10 @@
                   />
                   
                   <!-- Sort icons -->
-                  <div v-else-if="column.sortable" class="flex flex-col">
+                  <div
+                    v-else-if="column.sortable"
+                    class="flex flex-col"
+                  >
                     <svg
                       :class="getSortIconClasses(column, 'asc')"
                       class="w-3 h-3 transition-colors"
@@ -87,7 +96,11 @@
                       stroke-width="1.5"
                       stroke="currentColor"
                     >
-                      <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="m4.5 15.75 7.5-7.5 7.5 7.5"
+                      />
                     </svg>
                     <svg
                       :class="getSortIconClasses(column, 'desc')"
@@ -97,14 +110,21 @@
                       stroke-width="1.5"
                       stroke="currentColor"
                     >
-                      <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                      />
                     </svg>
                   </div>
                 </div>
               </th>
 
               <!-- Actions Column Header -->
-              <th v-if="$slots.actions" :class="actionsCellClasses">
+              <th
+                v-if="$slots.actions"
+                :class="actionsCellClasses"
+              >
                 Actions
               </th>
             </tr>
@@ -114,7 +134,10 @@
           <tbody :class="bodyClasses">
             <!-- Data Loading State -->
             <tr v-if="dataLoading && !loading">
-              <td :colspan="totalColumns" :class="emptyCellClasses">
+              <td
+                :colspan="totalColumns"
+                :class="emptyCellClasses"
+              >
                 <div class="flex justify-center items-center">
                   <STLLoader
                     :loading="true"
@@ -128,8 +151,8 @@
 
             <!-- Data Rows -->
             <DataTableRow
-              v-else-if="paginatedData.length > 0 && !loading"
               v-for="(item, index) in paginatedData"
+              v-else-if="paginatedData.length > 0 && !loading"
               :key="getRowKey(item, index)"
               :item="item"
               :columns="columns"
@@ -159,20 +182,33 @@
 
               <!-- Pass through actions slot -->
               <template #actions="slotProps">
-                <slot name="actions" v-bind="slotProps" />
+                <slot
+                  name="actions"
+                  v-bind="slotProps"
+                />
               </template>
             </DataTableRow>
 
             <!-- Empty State Row -->
             <tr v-else-if="!loading && !dataLoading && hasLoaded">
-              <td :colspan="totalColumns" :class="emptyCellClasses">
+              <td
+                :colspan="totalColumns"
+                :class="emptyCellClasses"
+              >
                 <slot name="empty">
                   <div class="text-center">
                     <div class="text-slate-400 mb-4">
-                      <Icon name="search" class="w-12 h-12" />
+                      <Icon
+                        name="search"
+                        class="w-12 h-12"
+                      />
                     </div>
-                    <p class="text-slate-600 text-lg font-medium mb-2">{{ emptyText }}</p>
-                    <p class="text-slate-500 text-sm">Try adjusting your search or filter criteria</p>
+                    <p class="text-slate-600 text-lg font-medium mb-2">
+                      {{ emptyText }}
+                    </p>
+                    <p class="text-slate-500 text-sm">
+                      Try adjusting your search or filter criteria
+                    </p>
                   </div>
                 </slot>
               </td>
@@ -180,22 +216,36 @@
 
             <!-- Skeleton Loading Rows -->
             <template v-if="showSkeleton && (loading || dataLoading)">
-              <tr v-for="n in skeletonRows" :key="`skeleton-${n}`" class="animate-pulse">
+              <tr
+                v-for="n in skeletonRows"
+                :key="`skeleton-${n}`"
+                class="animate-pulse"
+              >
                 <!-- Selection checkbox skeleton -->
-                <td v-if="selectable" :class="checkboxCellClasses">
-                  <div class="w-4 h-4 bg-slate-200 rounded"></div>
+                <td
+                  v-if="selectable"
+                  :class="checkboxCellClasses"
+                >
+                  <div class="w-4 h-4 bg-slate-200 rounded" />
                 </td>
                 
                 <!-- Data columns skeleton -->
-                <td v-for="column in columns" :key="column.key" :class="getDataCellClasses()">
-                  <div class="h-4 bg-slate-200 rounded w-3/4"></div>
+                <td
+                  v-for="column in columns"
+                  :key="column.key"
+                  :class="getDataCellClasses()"
+                >
+                  <div class="h-4 bg-slate-200 rounded w-3/4" />
                 </td>
                 
                 <!-- Actions column skeleton -->
-                <td v-if="$slots.actions" :class="actionsCellClasses">
+                <td
+                  v-if="$slots.actions"
+                  :class="actionsCellClasses"
+                >
                   <div class="flex gap-2 justify-center">
-                    <div class="w-6 h-6 bg-slate-200 rounded"></div>
-                    <div class="w-6 h-6 bg-slate-200 rounded"></div>
+                    <div class="w-6 h-6 bg-slate-200 rounded" />
+                    <div class="w-6 h-6 bg-slate-200 rounded" />
                   </div>
                 </td>
               </tr>

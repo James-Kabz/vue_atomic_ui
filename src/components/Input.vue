@@ -1,7 +1,13 @@
 <template>
   <div class="relative">
-    <div v-if="iconLeft" class="absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
-      <component :is="iconLeft" :class="iconClasses" />
+    <div
+      v-if="iconLeft"
+      class="absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none"
+    >
+      <component
+        :is="iconLeft"
+        :class="iconClasses"
+      />
     </div>
 
     <input
@@ -21,19 +27,29 @@
       @blur="handleBlur"
       @focus="handleFocus"
       @keydown="handleKeydown"
-    />
+    >
 
-    <div v-if="iconRight || clearable" class="absolute right-3 top-1/2 transform -translate-y-1/2">
+    <div
+      v-if="iconRight || clearable"
+      class="absolute right-3 top-1/2 transform -translate-y-1/2"
+    >
       <button
         v-if="clearable && modelValue && !disabled"
-        @click="handleClear"
         class="text-slate-400 hover:text-slate-600 transition-colors"
         type="button"
         :aria-label="clearLabel"
+        @click="handleClear"
       >
-        <Icon name="x-mark" class="w-5 h-5" />
+        <Icon
+          name="x-mark"
+          class="w-5 h-5"
+        />
       </button>
-      <component v-else-if="iconRight" :is="iconRight" :class="iconClasses" />
+      <component
+        :is="iconRight"
+        v-else-if="iconRight"
+        :class="iconClasses"
+      />
     </div>
   </div>
 </template>

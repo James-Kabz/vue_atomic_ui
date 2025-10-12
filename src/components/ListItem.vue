@@ -1,28 +1,47 @@
 <template>
-  <li :class="itemClasses" :role="role">
+  <li
+    :class="itemClasses"
+    :role="role"
+  >
     <component
       :is="href ? 'a' : 'div'"
       :href="href"
       :class="contentClasses"
       @click="handleClick"
     >
-      <div v-if="$slots.icon || icon" class="flex-shrink-0">
+      <div
+        v-if="$slots.icon || icon"
+        class="flex-shrink-0"
+      >
         <slot name="icon">
-          <Icon v-if="icon" :name="icon" class="h-5 w-5" />
+          <Icon
+            v-if="icon"
+            :name="icon"
+            class="h-5 w-5"
+          />
         </slot>
       </div>
       
       <div class="flex-1 min-w-0">
-        <div v-if="title" class="text-sm font-medium text-foreground">
+        <div
+          v-if="title"
+          class="text-sm font-medium text-foreground"
+        >
           {{ title }}
         </div>
-        <div v-if="description" class="text-sm text-muted-foreground">
+        <div
+          v-if="description"
+          class="text-sm text-muted-foreground"
+        >
           {{ description }}
         </div>
         <slot />
       </div>
       
-      <div v-if="$slots.action" class="flex-shrink-0">
+      <div
+        v-if="$slots.action"
+        class="flex-shrink-0"
+      >
         <slot name="action" />
       </div>
     </component>

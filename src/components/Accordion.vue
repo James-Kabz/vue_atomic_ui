@@ -7,15 +7,23 @@
     >
       <!-- Header -->
       <button
+        :id="`header-${item.id || index}`"
         :class="headerClasses(index)"
         :aria-expanded="isExpanded(index)"
         :aria-controls="`panel-${item.id || index}`"
-        :id="`header-${item.id || index}`"
         @click="toggle(index)"
       >
         <div class="flex items-center flex-1 min-w-0">
-          <slot :name="`header-${index}`" :item="item" :index="index" :isExpanded="isExpanded(index)">
-            <div v-if="item.title" v-html="item.title" />
+          <slot
+            :name="`header-${index}`"
+            :item="item"
+            :index="index"
+            :is-expanded="isExpanded(index)"
+          >
+            <div
+              v-if="item.title"
+              v-html="item.title"
+            />
           </slot>
         </div>
 
@@ -35,14 +43,25 @@
       >
         <div
           v-if="isExpanded(index)"
-          :class="contentClasses"
           :id="`panel-${item.id || index}`"
+          :class="contentClasses"
           :aria-labelledby="`header-${item.id || index}`"
           role="region"
         >
-          <slot :name="`content-${index}`" :item="item" :index="index">
-            <slot name="content" :item="item" :index="index">
-              <div v-if="item.content" v-html="item.content" />
+          <slot
+            :name="`content-${index}`"
+            :item="item"
+            :index="index"
+          >
+            <slot
+              name="content"
+              :item="item"
+              :index="index"
+            >
+              <div
+                v-if="item.content"
+                v-html="item.content"
+              />
             </slot>
           </slot>
         </div>

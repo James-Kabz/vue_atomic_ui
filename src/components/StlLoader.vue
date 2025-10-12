@@ -14,12 +14,18 @@
     }"
   >
     <!-- Optional backdrop -->
-    <div v-if="overlay" class="stl-loader__backdrop"></div>
+    <div
+      v-if="overlay"
+      class="stl-loader__backdrop"
+    />
     
     <!-- Loader container -->
     <div class="stl-loader__container">
       <!-- Text above loader -->
-      <div v-if="text && textPosition === 'top'" class="stl-loader__text stl-loader__text--top">
+      <div
+        v-if="text && textPosition === 'top'"
+        class="stl-loader__text stl-loader__text--top"
+      >
         {{ text }}
       </div>
 
@@ -27,67 +33,88 @@
       <div 
         v-if="type === 'spin'" 
         class="stl-loader__spin"
-      ></div>
+      />
       
       <!-- Pulse Loader -->
       <div 
         v-else-if="type === 'pulse'" 
         class="stl-loader__pulse"
-      ></div>
+      />
       
       <!-- Bounce Loader -->
-      <div v-else-if="type === 'bounce'" class="stl-loader__bounce">
+      <div
+        v-else-if="type === 'bounce'"
+        class="stl-loader__bounce"
+      >
         <div 
-          class="stl-loader__bounce-dot" 
           v-for="i in 3" 
-          :key="i"
+          :key="i" 
+          class="stl-loader__bounce-dot"
           :style="{ animationDelay: `${(i - 1) * 0.1}s` }"
-        ></div>
+        />
       </div>
       
       <!-- Ripple Loader -->
-      <div v-else-if="type === 'ripple'" class="stl-loader__ripple">
+      <div
+        v-else-if="type === 'ripple'"
+        class="stl-loader__ripple"
+      >
         <div 
-          class="stl-loader__ripple-ring" 
           v-for="i in 2" 
-          :key="i"
+          :key="i" 
+          class="stl-loader__ripple-ring"
           :style="{ animationDelay: `${(i - 1) * 0.5}s` }"
-        ></div>
+        />
       </div>
       
       <!-- Bars Loader -->
-      <div v-else-if="type === 'bars'" class="stl-loader__bars">
+      <div
+        v-else-if="type === 'bars'"
+        class="stl-loader__bars"
+      >
         <div 
-          class="stl-loader__bar" 
           v-for="i in 5" 
-          :key="i"
+          :key="i" 
+          class="stl-loader__bar"
           :style="{ animationDelay: `${(i - 1) * 0.1}s` }"
-        ></div>
+        />
       </div>
       
       <!-- Dots Loader -->
-      <div v-else-if="type === 'dots'" class="stl-loader__dots">
+      <div
+        v-else-if="type === 'dots'"
+        class="stl-loader__dots"
+      >
         <div 
-          class="stl-loader__dot" 
           v-for="i in 3" 
-          :key="i"
+          :key="i" 
+          class="stl-loader__dot"
           :style="{ animationDelay: `${(i - 1) * 0.16}s` }"
-        ></div>
+        />
       </div>
       
       <!-- Ring Loader -->
-      <div v-else-if="type === 'ring'" class="stl-loader__ring">
-        <div class="stl-loader__ring-track"></div>
-        <div class="stl-loader__ring-fill"></div>
+      <div
+        v-else-if="type === 'ring'"
+        class="stl-loader__ring"
+      >
+        <div class="stl-loader__ring-track" />
+        <div class="stl-loader__ring-fill" />
       </div>
 
       <!-- Spinner with text -->
-      <div v-else-if="type === 'spinner-text'" class="stl-loader__spinner-text">
-        <div class="stl-loader__spinner"></div>
+      <div
+        v-else-if="type === 'spinner-text'"
+        class="stl-loader__spinner-text"
+      >
+        <div class="stl-loader__spinner" />
       </div>
 
       <!-- Text below loader -->
-      <div v-if="text && textPosition === 'bottom'" class="stl-loader__text stl-loader__text--bottom">
+      <div
+        v-if="text && textPosition === 'bottom'"
+        class="stl-loader__text stl-loader__text--bottom"
+      >
         {{ text }}
       </div>
     </div>

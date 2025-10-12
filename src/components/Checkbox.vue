@@ -13,22 +13,37 @@
         :class="checkboxClasses"
         :aria-describedby="ariaDescribedBy"
         @change="handleChange"
-      />
+      >
 
       <!-- Custom checkbox indicator -->
-      <div :class="indicatorClasses" @click="handleIndicatorClick">
-        <CheckIcon v-if="isChecked && !indeterminate" class="w-3 h-3" />
-        <MinusIcon v-else-if="indeterminate" class="w-3 h-3" />
+      <div
+        :class="indicatorClasses"
+        @click="handleIndicatorClick"
+      >
+        <CheckIcon
+          v-if="isChecked && !indeterminate"
+          class="w-3 h-3"
+        />
+        <MinusIcon
+          v-else-if="indeterminate"
+          class="w-3 h-3"
+        />
       </div>
     </div>
 
     <!-- Label & optional description container -->
     <div class="flex-1">
-      <label :for="checkboxId" :class="labelClasses">
+      <label
+        :for="checkboxId"
+        :class="labelClasses"
+      >
         <slot>{{ label }}</slot>
       </label>
 
-      <p v-if="description" :class="descriptionClasses">
+      <p
+        v-if="description"
+        :class="descriptionClasses"
+      >
         {{ description }}
       </p>
     </div>

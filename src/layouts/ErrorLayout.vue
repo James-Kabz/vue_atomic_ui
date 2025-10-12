@@ -1,7 +1,10 @@
 <template>
   <div :class="layoutClasses">
     <!-- Background -->
-    <div v-if="showBackground" :class="backgroundClasses">
+    <div
+      v-if="showBackground"
+      :class="backgroundClasses"
+    >
       <slot name="background">
         <div class="absolute inset-0 bg-gradient-to-br from-slate-50 to-slate-100" />
       </slot>
@@ -10,7 +13,10 @@
     <!-- Content -->
     <div :class="contentClasses">
       <!-- Header/Logo -->
-      <div v-if="$slots.header || showLogo" :class="headerClasses">
+      <div
+        v-if="$slots.header || showLogo"
+        :class="headerClasses"
+      >
         <slot name="header">
           <div class="flex justify-center">
             <slot name="logo">
@@ -28,10 +34,16 @@
       <!-- Error Content -->
       <div :class="errorContentClasses">
         <!-- Error Icon/Illustration -->
-        <div v-if="$slots.illustration || showDefaultIllustration" :class="illustrationClasses">
+        <div
+          v-if="$slots.illustration || showDefaultIllustration"
+          :class="illustrationClasses"
+        >
           <slot name="illustration">
             <div :class="iconContainerClasses">
-              <div class="text-8xl" :style="{ color: errorConfig.color }">
+              <div
+                class="text-8xl"
+                :style="{ color: errorConfig.color }"
+              >
                 {{ errorConfig.icon }}
               </div>
             </div>
@@ -40,35 +52,48 @@
 
         <!-- Error Details -->
         <div :class="detailsClasses">
-          <div v-if="errorCode" :class="codeClasses">
+          <div
+            v-if="errorCode"
+            :class="codeClasses"
+          >
             {{ errorCode }}
           </div>
 
           <h1 :class="titleClasses">
-            <slot name="title">{{ errorTitle }}</slot>
+            <slot name="title">
+              {{ errorTitle }}
+            </slot>
           </h1>
 
           <p :class="messageClasses">
-            <slot name="message">{{ errorMessage }}</slot>
+            <slot name="message">
+              {{ errorMessage }}
+            </slot>
           </p>
         </div>
 
         <!-- Network Status -->
-        <div v-if="!isOnline" class="bg-red-100 border border-red-200 rounded-lg p-4 mx-auto max-w-md mb-6">
+        <div
+          v-if="!isOnline"
+          class="bg-red-100 border border-red-200 rounded-lg p-4 mx-auto max-w-md mb-6"
+        >
           <div class="flex items-center justify-center gap-2 text-red-700">
-            <span class="w-3 h-3 bg-red-500 rounded-full animate-pulse"></span>
+            <span class="w-3 h-3 bg-red-500 rounded-full animate-pulse" />
             <span class="font-medium">No Internet Connection</span>
           </div>
         </div>
 
         <!-- Actions -->
-        <div v-if="$slots.actions || showDefaultActions" :class="actionsClasses">
+        <div
+          v-if="$slots.actions || showDefaultActions"
+          :class="actionsClasses"
+        >
           <slot name="actions">
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
               <button
                 v-if="showHomeButton"
-                @click="goHome"
                 class="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+                @click="goHome"
               >
                 <span>{{ homeButtonIcon }}</span>
                 {{ homeButtonText }}
@@ -76,8 +101,8 @@
 
               <button
                 v-if="showBackButton"
-                @click="goBack"
                 class="border border-slate-300 text-slate-700 px-6 py-3 rounded-lg font-medium hover:bg-slate-50 transition-colors flex items-center justify-center gap-2"
+                @click="goBack"
               >
                 <span>←</span>
                 {{ backButtonText }}
@@ -85,20 +110,23 @@
 
               <button
                 v-if="showRetryButton"
-                @click="retry"
                 :disabled="isRetrying || !isOnline"
                 class="border border-slate-300 text-slate-700 px-6 py-3 rounded-lg font-medium hover:bg-slate-50 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                @click="retry"
               >
-                <span v-if="isRetrying" class="animate-spin">↻</span>
+                <span
+                  v-if="isRetrying"
+                  class="animate-spin"
+                >↻</span>
                 <span v-else>🔄</span>
                 {{ isRetrying ? 'Retrying...' : retryButtonText }}
               </button>
 
               <button
                 v-if="showSupportButton"
-                @click="$emit('contact-support')"
                 :disabled="reportSent"
                 class="bg-slate-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-slate-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                @click="$emit('contact-support')"
               >
                 <span v-if="reportSent">✓</span>
                 <span v-else>📝</span>
@@ -109,9 +137,15 @@
         </div>
 
         <!-- Additional Info Section -->
-        <div v-if="$slots['additional-info'] || showAdditionalInfo" :class="additionalInfoClasses">
+        <div
+          v-if="$slots['additional-info'] || showAdditionalInfo"
+          :class="additionalInfoClasses"
+        >
           <slot name="additional-info">
-            <div class="mt-8 max-w-md mx-auto" v-if="additionalInfoConfig">
+            <div
+              v-if="additionalInfoConfig"
+              class="mt-8 max-w-md mx-auto"
+            >
               <div class="bg-white rounded-lg border border-slate-200 shadow-sm p-6">
                 <h3 class="text-lg font-semibold text-slate-900 mb-4">
                   {{ additionalInfoConfig.title }}
@@ -134,11 +168,18 @@
         </div>
 
         <!-- Help Section -->
-        <div v-if="$slots.help || helpText" :class="helpClasses">
+        <div
+          v-if="$slots.help || helpText"
+          :class="helpClasses"
+        >
           <slot name="help">
             <p class="text-sm text-slate-600">
               {{ helpText }}
-              <a v-if="supportUrl" :href="supportUrl" class="text-blue-600 hover:text-blue-700 underline ml-1">
+              <a
+                v-if="supportUrl"
+                :href="supportUrl"
+                class="text-blue-600 hover:text-blue-700 underline ml-1"
+              >
                 <span class="inline-block w-4 h-4 mr-1">❓</span>
                 Get Help
               </a>
@@ -147,7 +188,10 @@
         </div>
 
         <!-- Error ID for debugging -->
-        <div v-if="isDev" class="text-xs text-slate-400 font-mono mt-4">
+        <div
+          v-if="isDev"
+          class="text-xs text-slate-400 font-mono mt-4"
+        >
           Error ID: {{ errorId }}
         </div>
       </div>

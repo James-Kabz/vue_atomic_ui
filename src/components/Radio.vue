@@ -8,7 +8,10 @@
       :class="radioClasses"
       @click="select"
     >
-      <div v-if="isSelected" :class="indicatorClasses" />
+      <div
+        v-if="isSelected"
+        :class="indicatorClasses"
+      />
     </button>
     <label 
       v-if="label" 

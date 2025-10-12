@@ -1,5 +1,8 @@
 <template>
-  <div class="relative" ref="searchRef">
+  <div
+    ref="searchRef"
+    class="relative"
+  >
     <!-- Input -->
     <div class="relative">
       <!-- Left Icon -->
@@ -18,7 +21,7 @@
         @focus="handleFocus"
         @blur="handleBlur"
         @keydown="handleKeydown"
-      />
+      >
 
       <!-- Right Actions -->
       <div
@@ -28,15 +31,18 @@
         <!-- Clear -->
         <button
           v-if="!loading && clearable"
-          @click="handleClear"
           class="text-slate-400 hover:text-slate-600 transition-colors p-1 rounded-full hover:bg-slate-100"
           :aria-label="clearLabel"
+          @click="handleClear"
         >
           <XMarkIcon class="w-4 h-4" />
         </button>
 
         <!-- Loading -->
-        <div v-else-if="loading" class="animate-spin">
+        <div
+          v-else-if="loading"
+          class="animate-spin"
+        >
           <LoadingIcon class="w-4 h-4 text-slate-400" />
         </div>
       </div>
@@ -56,7 +62,10 @@
         :class="resultsClasses"
       >
         <!-- Results -->
-        <div v-if="results.length > 0" class="max-h-64 overflow-y-auto">
+        <div
+          v-if="results.length > 0"
+          class="max-h-64 overflow-y-auto"
+        >
           <button
             v-for="(result, index) in results"
             :key="result.id || index"
@@ -65,8 +74,8 @@
             @mouseenter="focusedIndex = index"
           >
             <component
-              v-if="result.icon"
               :is="result.icon"
+              v-if="result.icon"
               class="w-4 h-4 mr-3 flex-shrink-0"
             />
 
@@ -82,7 +91,10 @@
               />
             </div>
 
-            <div v-if="result.category" class="text-xs text-slate-400 ml-3">
+            <div
+              v-if="result.category"
+              class="text-xs text-slate-400 ml-3"
+            >
               {{ result.category }}
             </div>
           </button>
@@ -97,7 +109,10 @@
         </div>
 
         <!-- Footer Slot -->
-        <div v-if="$slots.footer" class="border-t border-slate-200 p-2">
+        <div
+          v-if="$slots.footer"
+          class="border-t border-slate-200 p-2"
+        >
           <slot name="footer" />
         </div>
       </div>

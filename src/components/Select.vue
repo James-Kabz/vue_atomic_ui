@@ -3,11 +3,11 @@
     :id="id"
     :name="name"
     :value="modelValue"
-    @change="$emit('update:modelValue', $event.target.value)"
     :disabled="disabled"
     :required="required"
     :class="selectClasses"
     v-bind="$attrs"
+    @change="$emit('update:modelValue', $event.target.value)"
   >
     <slot />
   </select>

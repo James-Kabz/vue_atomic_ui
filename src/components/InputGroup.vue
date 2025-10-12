@@ -1,10 +1,16 @@
 <template>
   <div :class="groupClasses">
-    <div v-if="$slots.prefix" class="flex items-center px-3 bg-muted border border-r-0 rounded-l-md">
+    <div
+      v-if="$slots.prefix"
+      class="flex items-center px-3 bg-muted border border-r-0 rounded-l-md"
+    >
       <slot name="prefix" />
     </div>
     <slot />
-    <div v-if="$slots.suffix" class="flex items-center px-3 bg-muted border border-l-0 rounded-r-md">
+    <div
+      v-if="$slots.suffix"
+      class="flex items-center px-3 bg-muted border border-l-0 rounded-r-md"
+    >
       <slot name="suffix" />
     </div>
   </div>

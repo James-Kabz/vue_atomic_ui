@@ -5,8 +5,14 @@
     role="tabpanel"
     :aria-labelledby="`tab-${index}`"
   >
-    <div v-if="loading" class="flex items-center justify-center p-8">
-      <Spinner size="lg" :label="`Loading ${props.label}`" />
+    <div
+      v-if="loading"
+      class="flex items-center justify-center p-8"
+    >
+      <Spinner
+        size="lg"
+        :label="`Loading ${props.label}`"
+      />
     </div>
     <slot v-else />
   </div>

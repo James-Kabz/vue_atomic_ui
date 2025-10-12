@@ -6,7 +6,10 @@
       :aria-expanded="isOpen"
       @click="toggle"
     >
-      <slot name="header" :isOpen="isOpen" />
+      <slot
+        name="header"
+        :is-open="isOpen"
+      />
       <ChevronDownIcon
         :class="cn('w-5 h-5 transition-transform ml-2', { 'rotate-180': isOpen })"
       />
@@ -21,8 +24,14 @@
       leave-from-class="opacity-100 max-h-96"
       leave-to-class="opacity-0 max-h-0"
     >
-      <div v-if="isOpen" :class="contentClasses">
-        <slot name="content" :isOpen="isOpen" />
+      <div
+        v-if="isOpen"
+        :class="contentClasses"
+      >
+        <slot
+          name="content"
+          :is-open="isOpen"
+        />
       </div>
     </Transition>
   </div>

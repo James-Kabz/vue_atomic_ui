@@ -1,16 +1,42 @@
 <template>
-  <button :class="cn(buttonVariants({ variant, size }), $attrs.class)" :disabled="disabled || loading"
-    :aria-disabled="disabled || loading" :aria-busy="loading" v-bind="$attrs">
+  <button
+    :class="cn(buttonVariants({ variant, size }), $attrs.class)"
+    :disabled="disabled || loading"
+    :aria-disabled="disabled || loading"
+    :aria-busy="loading"
+    v-bind="$attrs"
+  >
     <!-- Loading Spinner -->
-    <svg v-if="loading" class="animate-spin mr-2 h-4 w-4 text-current" xmlns="http://www.w3.org/2000/svg" fill="none"
-      viewBox="0 0 24 24">
-      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
-      <path class="opacity-75" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="4"
-        d="M4 12a8 8 0 018-8" />
+    <svg
+      v-if="loading"
+      class="animate-spin mr-2 h-4 w-4 text-current"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <circle
+        class="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        stroke-width="4"
+      />
+      <path
+        class="opacity-75"
+        fill="none"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-width="4"
+        d="M4 12a8 8 0 018-8"
+      />
     </svg>
 
     <!-- Icon slot (only show if not loading) -->
-    <slot v-if="!loading" name="icon" />
+    <slot
+      v-if="!loading"
+      name="icon"
+    />
 
     <!-- Button content -->
     <span v-if="loading && loadingText">{{ loadingText }}</span>

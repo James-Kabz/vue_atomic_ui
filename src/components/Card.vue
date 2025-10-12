@@ -1,19 +1,34 @@
 <template>
-  <div :class="cn(cardVariants({ variant, padding, hoverable, clickable, loading }))" @click="handleClick">
+  <div
+    :class="cn(cardVariants({ variant, padding, hoverable, clickable, loading }))"
+    @click="handleClick"
+  >
     <!-- Header -->
-    <div v-if="$slots.header || title || subtitle" :class="cn(headerVariants({ padding }))">
+    <div
+      v-if="$slots.header || title || subtitle"
+      :class="cn(headerVariants({ padding }))"
+    >
       <slot name="header">
         <div class="flex items-start justify-between">
           <div class="flex-1 min-w-0">
-            <h3 v-if="title" :class="titleClasses">
+            <h3
+              v-if="title"
+              :class="titleClasses"
+            >
               {{ title }}
             </h3>
-            <p v-if="subtitle" :class="subtitleClasses">
+            <p
+              v-if="subtitle"
+              :class="subtitleClasses"
+            >
               {{ subtitle }}
             </p>
           </div>
 
-          <div v-if="$slots.actions" class="flex-shrink-0 ml-4">
+          <div
+            v-if="$slots.actions"
+            class="flex-shrink-0 ml-4"
+          >
             <slot name="actions" />
           </div>
         </div>
@@ -21,19 +36,33 @@
     </div>
 
     <!-- Image -->
-    <div v-if="$slots.image || image" :class="cn(imageContainerVariants({ padding }))">
+    <div
+      v-if="$slots.image || image"
+      :class="cn(imageContainerVariants({ padding }))"
+    >
       <slot name="image">
-        <img v-if="image" :src="image" :alt="imageAlt" :class="imageClasses" />
+        <img
+          v-if="image"
+          :src="image"
+          :alt="imageAlt"
+          :class="imageClasses"
+        >
       </slot>
     </div>
 
     <!-- Content -->
-    <div v-if="$slots.default" :class="cn(contentVariants({ padding }))">
+    <div
+      v-if="$slots.default"
+      :class="cn(contentVariants({ padding }))"
+    >
       <slot />
     </div>
 
     <!-- Footer -->
-    <div v-if="$slots.footer" :class="cn(footerVariants({ padding }))">
+    <div
+      v-if="$slots.footer"
+      :class="cn(footerVariants({ padding }))"
+    >
       <slot name="footer" />
     </div>
   </div>

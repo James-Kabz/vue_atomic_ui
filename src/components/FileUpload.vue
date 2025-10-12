@@ -15,35 +15,50 @@
         :accept="accept"
         class="hidden"
         @change="handleFileSelect"
-      />
+      >
       
       <div class="flex flex-col items-center justify-center py-6">
-        <Icon name="upload" class="h-8 w-8 text-muted-foreground mb-2" />
+        <Icon
+          name="upload"
+          class="h-8 w-8 text-muted-foreground mb-2"
+        />
         <p class="text-sm text-muted-foreground text-center">
           <span class="font-semibold">Click to upload</span> or drag and drop
         </p>
-        <p v-if="accept" class="text-xs text-muted-foreground mt-1">
+        <p
+          v-if="accept"
+          class="text-xs text-muted-foreground mt-1"
+        >
           {{ accept }}
         </p>
       </div>
     </div>
     
-    <div v-if="files.length > 0" class="mt-4 space-y-2">
+    <div
+      v-if="files.length > 0"
+      class="mt-4 space-y-2"
+    >
       <div
         v-for="(file, index) in files"
         :key="index"
         class="flex items-center justify-between p-2 bg-muted rounded-md"
       >
         <div class="flex items-center space-x-2">
-          <Icon name="file" class="h-4 w-4 text-muted-foreground" />
+          <Icon
+            name="file"
+            class="h-4 w-4 text-muted-foreground"
+          />
           <span class="text-sm">{{ file.name }}</span>
           <span class="text-xs text-muted-foreground">({{ formatFileSize(file.size) }})</span>
         </div>
         <button
-          @click="removeFile(index)"
           class="text-muted-foreground hover:text-foreground"
+          @click="removeFile(index)"
         >
-          <Icon name="x" class="h-4 w-4" />
+          <Icon
+            name="x"
+            class="h-4 w-4"
+          />
         </button>
       </div>
     </div>

@@ -37,9 +37,9 @@
           {{ header?.title }}
         </h2>
         <button
-          @click="closeMobileSidebar"
           class="p-2 rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-colors"
           aria-label="Close sidebar"
+          @click="closeMobileSidebar"
         >
           <svg
             class="w-5 h-5"
@@ -61,20 +61,23 @@
       <!-- Navigation -->
       <nav class="flex-1 overflow-y-auto overflow-x-hidden p-4">
         <div class="space-y-2">
-          <template v-for="item in navigationItems" :key="item.name || item.label">
+          <template
+            v-for="item in navigationItems"
+            :key="item.name || item.label"
+          >
             <!-- Navigation Links -->
             <div v-if="item.type === 'link'">
               <!-- Regular Link (no subitems) -->
               <router-link
                 v-if="!hasSubItems(item)"
                 :to="item.route"
-                @click="handleNavigation(item)"
                 :class="cn(
                   'flex flex-col items-center justify-center rounded-xl transition-all duration-200 group relative py-4 px-3',
                   isItemActive(item)
                     ? 'bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 shadow-sm'
                     : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900 border border-transparent'
                 )"
+                @click="handleNavigation(item)"
               >
                 <!-- Icon Container -->
                 <div
@@ -86,7 +89,10 @@
                       : 'text-gray-500 group-hover:text-gray-900 bg-gray-100 group-hover:bg-gray-200'
                   )"
                 >
-                  <Icon :icon="item.icon" class="w-6 h-6" />
+                  <Icon
+                    :icon="item.icon"
+                    class="w-6 h-6"
+                  />
                 </div>
 
                 <!-- Label -->
@@ -113,13 +119,13 @@
               <!-- Parent item with sub-items -->
               <div
                 v-else
-                @click="handleSubmenuClick(item)"
                 :class="cn(
                   'flex flex-col items-center justify-center rounded-xl transition-all duration-200 cursor-pointer group relative py-4 px-3',
                   isItemActive(item)
                     ? 'bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 shadow-sm'
                     : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900 border border-transparent'
                 )"
+                @click="handleSubmenuClick(item)"
               >
                 <!-- Icon Container -->
                 <div
@@ -131,7 +137,10 @@
                       : 'text-gray-500 group-hover:text-gray-900 bg-gray-100 group-hover:bg-gray-200'
                   )"
                 >
-                  <Icon :icon="item.icon" class="w-6 h-6" />
+                  <Icon
+                    :icon="item.icon"
+                    class="w-6 h-6"
+                  />
                 </div>
 
                 <!-- Label -->
@@ -166,15 +175,18 @@
       </nav>
 
       <!-- Bottom Navigation - Management Settings -->
-      <div v-if="showManagementSettings" class="border-t border-gray-200 p-4 flex-shrink-0">
+      <div
+        v-if="showManagementSettings"
+        class="border-t border-gray-200 p-4 flex-shrink-0"
+      >
         <div
-          @click="handleManagementSettingsClick"
           :class="cn(
             'flex flex-col items-center justify-center rounded-xl transition-all duration-200 cursor-pointer group relative py-4 px-3',
             isManagementSettingsActive
               ? 'bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 shadow-sm'
               : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900 border border-transparent'
           )"
+          @click="handleManagementSettingsClick"
         >
           <div
             :class="cn(
@@ -185,7 +197,10 @@
                 : 'text-gray-500 group-hover:text-gray-900 bg-gray-100 group-hover:bg-gray-200'
             )"
           >
-            <Icon icon="cog" class="w-6 h-6" />
+            <Icon
+              icon="cog"
+              class="w-6 h-6"
+            />
           </div>
           <span 
             :class="cn(
@@ -230,11 +245,16 @@
         <div class="sticky top-0 bg-white border-b border-gray-200 z-10">
           <div class="flex items-center justify-between p-4">
             <button
-              @click="closeSubmenu"
               class="p-2 -ml-2 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors"
               aria-label="Close submenu"
+              @click="closeSubmenu"
             >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -256,7 +276,6 @@
               v-for="subItem in currentSubmenu?.subItems"
               :key="subItem.name"
               :to="subItem.route"
-              @click="handleSubmenuNavigation(subItem)"
               :class="
                 cn(
                   'flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative',
@@ -265,6 +284,7 @@
                     : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 border border-transparent',
                 )
               "
+              @click="handleSubmenuNavigation(subItem)"
             >
               <!-- Active indicator bar -->
               <div
@@ -282,7 +302,11 @@
                   )
                 "
               >
-                <Icon v-if="subItem.icon" :icon="subItem.icon" class="w-4 h-4" />
+                <Icon
+                  v-if="subItem.icon"
+                  :icon="subItem.icon"
+                  class="w-4 h-4"
+                />
               </div>
               <span 
                 :class="cn(
@@ -327,11 +351,16 @@
         <div class="sticky top-0 z-10 bg-white border-b border-gray-200">
           <div class="flex items-center justify-between p-4">
             <button
-              @click="closeManagementSettings"
               class="p-2 -ml-2 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors"
               aria-label="Close management settings"
+              @click="closeManagementSettings"
             >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -340,23 +369,30 @@
                 />
               </svg>
             </button>
-            <h3 class="flex-1 text-sm font-bold text-gray-900 ml-2">Management Settings</h3>
+            <h3 class="flex-1 text-sm font-bold text-gray-900 ml-2">
+              Management Settings
+            </h3>
           </div>
         </div>
 
         <!-- Management Settings Items -->
         <nav class="p-3">
           <div class="space-y-1">
-            <template v-for="setting in managementSettings" :key="setting.name">
+            <template
+              v-for="setting in managementSettings"
+              :key="setting.name"
+            >
               <!-- Section Header -->
-              <div v-if="setting.type === 'section'" class="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+              <div
+                v-if="setting.type === 'section'"
+                class="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider"
+              >
                 {{ setting.label }}
               </div>
               <!-- Link Item -->
               <router-link
                 v-else-if="setting.route"
                 :to="setting.route"
-                @click="handleManagementSettingsNavigation(setting)"
                 :class="
                   cn(
                     'flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative',
@@ -365,6 +401,7 @@
                       : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 border border-transparent',
                   )
                 "
+                @click="handleManagementSettingsNavigation(setting)"
               >
                 <!-- Active indicator bar -->
                 <div
@@ -382,7 +419,11 @@
                     )
                   "
                 >
-                  <Icon v-if="setting.icon" :icon="setting.icon" class="w-4 h-4" />
+                  <Icon
+                    v-if="setting.icon"
+                    :icon="setting.icon"
+                    class="w-4 h-4"
+                  />
                 </div>
                 <span
                   :class="cn(

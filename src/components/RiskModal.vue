@@ -135,11 +135,11 @@ watch(
 <template>
   <Modal
     v-model="isOpen"
-    :showClose="true"
-    :closeOnBackdrop="true"
-    @close="handleClose"
+    :show-close="true"
+    :close-on-backdrop="true"
     size="full"
     :resizable="true"
+    @close="handleClose"
   >
     <!-- Modal Header with Gradient -->
     <div class="bg-gradient-to-r from-slate-50 to-slate-100 border-b border-slate-200 px-8 py-6">
@@ -148,7 +148,10 @@ watch(
           <div
             class="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg"
           >
-            <Icon icon="shield-virus" class="w-6 h-6 text-white" />
+            <Icon
+              icon="shield-virus"
+              class="w-6 h-6 text-white"
+            />
           </div>
           <div class="flex-1">
             <h2 class="text-3xl font-bold text-slate-800 mb-2">
@@ -166,12 +169,15 @@ watch(
     <div class="bg-white border-b border-slate-200 px-8 py-4 shadow-sm">
       <div class="max-w-8xl mx-auto flex justify-end">
         <Button
-          @click="handleAddMatrix"
           variant="success"
           size="default"
+          @click="handleAddMatrix"
         >
           <template #icon>
-            <Icon icon="plus" class="w-4 h-4" />
+            <Icon
+              icon="plus"
+              class="w-4 h-4"
+            />
           </template>
           Add Risk Matrix
         </Button>
@@ -181,7 +187,10 @@ watch(
     <!-- Matrix Accordion -->
     <div class="p-8 bg-gradient-to-br from-slate-50 to-white min-h-[600px]">
       <div class="max-w-8xl mx-auto">
-        <Accordion :items="accordionItems" variant="bordered" />
+        <Accordion
+          :items="accordionItems"
+          variant="bordered"
+        />
       </div>
     </div>
   </Modal>

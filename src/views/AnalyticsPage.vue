@@ -18,24 +18,38 @@
     <!-- Header right content -->
     <template #header-right>
       <button class="p-2 rounded-lg text-gray-600 hover:bg-gray-100 relative">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-5-5 5-5h-5m-6 10v-2a3 3 0 10-6 0v2h6z" />
+        <svg
+          class="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 17h5l-5-5 5-5h-5m-6 10v-2a3 3 0 10-6 0v2h6z"
+          />
         </svg>
-        <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+        <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full" />
       </button>
     </template>
 
     <!-- Main content -->
     <div class="space-y-6">
       <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
-        <h2 class="text-2xl font-bold text-gray-900 mb-4">Welcome to Dashboard</h2>
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">
+          Welcome to Dashboard
+        </h2>
         <p class="text-gray-600">
           This is a demo of the Vue Dashboard Layout package. The sidebar can be collapsed,
           and all components are fully customizable through props and slots.
         </p>
         
         <div class="mt-6 p-4 bg-blue-50 rounded-lg">
-          <h3 class="font-semibold text-blue-900 mb-2">Features:</h3>
+          <h3 class="font-semibold text-blue-900 mb-2">
+            Features:
+          </h3>
           <ul class="text-blue-800 space-y-1">
             <li>• Responsive design with mobile support</li>
             <li>• Collapsible sidebar with smooth transitions</li>

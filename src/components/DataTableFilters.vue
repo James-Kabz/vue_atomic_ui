@@ -11,30 +11,42 @@
           />
           <input 
             :model-value="searchQuery" 
-            @input="$emit('update:searchQuery', $event.target.value)"
-            :placeholder="searchPlaceholder" 
+            :placeholder="searchPlaceholder"
             :class="searchInputClasses" 
-          />
+            @input="$emit('update:searchQuery', $event.target.value)" 
+          >
           <button 
             v-if="searchQuery" 
-            @click="$emit('update:searchQuery', '')" 
-            :class="clearSearchButtonClasses"
+            :class="clearSearchButtonClasses" 
+            @click="$emit('update:searchQuery', '')"
           >
-            <font-awesome-icon icon="xmark" class="w-3 h-3" />
+            <font-awesome-icon
+              icon="xmark"
+              class="w-3 h-3"
+            />
           </button>
         </div>
       </div>
 
       <!-- Status Filter -->
-      <div v-if="statusOptions.length > 0" class="min-w-36">
+      <div
+        v-if="statusOptions.length > 0"
+        class="min-w-36"
+      >
         <div class="relative">
           <Select 
             :model-value="selectedStatus" 
-            @change="$emit('update:selectedStatus', $event.target.value)"
             :class="selectClasses"
+            @change="$emit('update:selectedStatus', $event.target.value)"
           >
-            <option value="">All Status</option>
-            <option v-for="option in statusOptions" :key="option.value" :value="option.value">
+            <option value="">
+              All Status
+            </option>
+            <option
+              v-for="option in statusOptions"
+              :key="option.value"
+              :value="option.value"
+            >
               {{ option.label }}
             </option>
           </Select>
@@ -47,12 +59,18 @@
 
       <!-- Advanced Filters Toggle -->
       <button
-        @click="toggleAdvancedFilters"
         :class="advancedFiltersToggleClasses"
+        @click="toggleAdvancedFilters"
       >
-        <font-awesome-icon icon="filter" class="w-4 h-4" />
+        <font-awesome-icon
+          icon="filter"
+          class="w-4 h-4"
+        />
         Filters
-        <span v-if="activeFiltersCount > 0" :class="filterCountBadgeClasses">
+        <span
+          v-if="activeFiltersCount > 0"
+          :class="filterCountBadgeClasses"
+        >
           {{ activeFiltersCount }}
         </span>
         <font-awesome-icon 
@@ -62,7 +80,10 @@
       </button>
 
       <!-- Custom Filters Slot -->
-      <div v-if="$slots.filters" class="flex items-center gap-2">
+      <div
+        v-if="$slots.filters"
+        class="flex items-center gap-2"
+      >
         <slot name="filters" />
       </div>
 
@@ -71,27 +92,41 @@
         <!-- Clear Filters -->
         <Button 
           v-if="hasActiveFilters" 
-          @click="clearFilters" 
-          :class="clearFiltersButtonClasses"
+          :class="clearFiltersButtonClasses" 
+          @click="clearFilters"
         >
-          <font-awesome-icon icon="rotate-left" class="w-4 h-4 mr-2" />
+          <font-awesome-icon
+            icon="rotate-left"
+            class="w-4 h-4 mr-2"
+          />
           Clear All
         </Button>
 
         <!-- Export Button -->
         <Button 
           v-if="showExport" 
-          @click="$emit('export')" 
-          :class="exportButtonClasses"
+          :class="exportButtonClasses" 
+          @click="$emit('export')"
         >
-          <font-awesome-icon icon="download" class="w-4 h-4 mr-2" />
+          <font-awesome-icon
+            icon="download"
+            class="w-4 h-4 mr-2"
+          />
           Export
         </Button>
 
         <!-- Add Button Slot -->
         <slot name="actions">
-          <Button v-if="showAdd" variant="success" size="lg" @click="$emit('add')">
-            <font-awesome-icon icon="plus" class="w-4 h-4 mr-2" />
+          <Button
+            v-if="showAdd"
+            variant="success"
+            size="lg"
+            @click="$emit('add')"
+          >
+            <font-awesome-icon
+              icon="plus"
+              class="w-4 h-4 mr-2"
+            />
             Add
           </Button>
         </slot>
@@ -99,7 +134,10 @@
     </div>
 
     <!-- Advanced Filters Panel -->
-    <div v-if="showAdvancedFilters && dateFilters.length > 0" :class="advancedFiltersContainerClasses">
+    <div
+      v-if="showAdvancedFilters && dateFilters.length > 0"
+      :class="advancedFiltersContainerClasses"
+    >
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div 
           v-for="dateFilter in dateFilters" 
@@ -124,10 +162,10 @@
               <input 
                 type="date" 
                 :model-value="dateFilter.from" 
+                :class="dateInputClasses"
+                :placeholder="`From ${dateFilter.label}`" 
                 @input="updateDateFilter(dateFilter.key, 'from', $event.target.value)"
-                :class="dateInputClasses" 
-                :placeholder="`From ${dateFilter.label}`"
-              />
+              >
             </div>
             <span :class="dateRangeSeparatorClasses">to</span>
             <div class="relative flex-1">
@@ -138,18 +176,21 @@
               <input 
                 type="date" 
                 :model-value="dateFilter.to" 
+                :class="dateInputClasses"
+                :placeholder="`To ${dateFilter.label}`" 
                 @input="updateDateFilter(dateFilter.key, 'to', $event.target.value)"
-                :class="dateInputClasses" 
-                :placeholder="`To ${dateFilter.label}`"
-              />
+              >
             </div>
             <button
               v-if="hasDateFilterValues(dateFilter)"
-              @click="clearDateFilter(dateFilter.key)"
               :class="clearDateFilterButtonClasses"
               title="Clear this filter"
+              @click="clearDateFilter(dateFilter.key)"
             >
-              <font-awesome-icon icon="xmark" class="w-4 h-4" />
+              <font-awesome-icon
+                icon="xmark"
+                class="w-4 h-4"
+              />
             </button>
           </div>
         </div>
@@ -157,21 +198,40 @@
     </div>
 
     <!-- Active Filters Display -->
-    <div v-if="activeFiltersDisplay.length > 0" :class="activeFiltersContainerClasses">
+    <div
+      v-if="activeFiltersDisplay.length > 0"
+      :class="activeFiltersContainerClasses"
+    >
       <div class="flex items-center gap-3 flex-wrap">
         <span :class="activeFiltersLabelClasses">Active filters:</span>
-        <div v-for="filter in activeFiltersDisplay" :key="filter.key" :class="activeFilterTagClasses">
-          <font-awesome-icon :icon="filter.icon" class="w-3 h-3" />
+        <div
+          v-for="filter in activeFiltersDisplay"
+          :key="filter.key"
+          :class="activeFilterTagClasses"
+        >
+          <font-awesome-icon
+            :icon="filter.icon"
+            class="w-3 h-3"
+          />
           <span>{{ filter.label }}: {{ filter.value }}</span>
-          <button @click="removeFilter(filter.key)" :class="activeFilterRemoveButtonClasses">
-            <font-awesome-icon icon="xmark" class="w-3 h-3" />
+          <button
+            :class="activeFilterRemoveButtonClasses"
+            @click="removeFilter(filter.key)"
+          >
+            <font-awesome-icon
+              icon="xmark"
+              class="w-3 h-3"
+            />
           </button>
         </div>
       </div>
     </div>
 
     <!-- Table Info Bar -->
-    <div v-if="showTableInfo" class="px-6 py-3 bg-gray-50 border-t border-gray-200">
+    <div
+      v-if="showTableInfo"
+      class="px-6 py-3 bg-gray-50 border-t border-gray-200"
+    >
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-4">
           <span class="text-sm text-gray-600">

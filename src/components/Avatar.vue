@@ -6,11 +6,18 @@
       :alt="alt" 
       :class="imageClasses"
       @error="handleImageError"
-    />
-    <span v-else-if="initials" :class="initialsClasses">
+    >
+    <span
+      v-else-if="initials"
+      :class="initialsClasses"
+    >
       {{ initials }}
     </span>
-    <Icon v-else name="User" :class="iconClasses" />
+    <Icon
+      v-else
+      name="User"
+      :class="iconClasses"
+    />
   </div>
 </template>
 

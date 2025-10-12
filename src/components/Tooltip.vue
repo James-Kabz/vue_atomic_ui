@@ -1,5 +1,9 @@
 <template>
-  <div class="relative inline-block" @mouseenter="show" @mouseleave="hide">
+  <div
+    class="relative inline-block"
+    @mouseenter="show"
+    @mouseleave="hide"
+  >
     <slot />
     <Transition
       enter-active-class="transition-opacity duration-200"

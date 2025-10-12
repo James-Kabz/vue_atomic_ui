@@ -1,51 +1,87 @@
 <!-- components/Toaster.vue -->
 <template>
   <Teleport to="body">
-    <div :class="cn(
-      containerClasses,
-      'fixed z-[100] flex max-h-screen w-full p-4 md:max-w-[420px]'
-    )">
-
-      <TransitionGroup enter-active-class="transition-all duration-300 ease-out"
+    <div
+      :class="cn(
+        containerClasses,
+        'fixed z-[100] flex max-h-screen w-full p-4 md:max-w-[420px]'
+      )"
+    >
+      <TransitionGroup
+        enter-active-class="transition-all duration-300 ease-out"
         enter-from-class="transform translate-x-full opacity-0 scale-95"
         enter-to-class="transform translate-x-0 opacity-100 scale-100"
         leave-active-class="transition-all duration-200 ease-in"
         leave-from-class="transform translate-x-0 opacity-100 scale-100"
-        leave-to-class="transform translate-x-full opacity-0 scale-95" move-class="transition-all duration-200"
-        tag="div" class="space-y-2">
-        <div v-for="toast in toasts" :key="toast.id" :class="toastClasses(toast)" role="alert"
+        leave-to-class="transform translate-x-full opacity-0 scale-95"
+        move-class="transition-all duration-200"
+        tag="div"
+        class="space-y-2"
+      >
+        <div
+          v-for="toast in toasts"
+          :key="toast.id"
+          :class="toastClasses(toast)"
+          role="alert"
           :aria-live="toast.variant === 'error' ? 'assertive' : 'polite'"
-          class="group pointer-events-auto relative flex w-full items-center justify-between space-x-4 overflow-hidden rounded-md border p-6 pr-8 shadow-lg transition-all">
+          class="group pointer-events-auto relative flex w-full items-center justify-between space-x-4 overflow-hidden rounded-md border p-6 pr-8 shadow-lg transition-all"
+        >
           <!-- Icon -->
-          <Icon v-if="showIcon(toast)" :icon="getIconName(toast)" :class="getIconClasses(toast)"
-            class="h-4 w-4 shrink-0" />
+          <Icon
+            v-if="showIcon(toast)"
+            :icon="getIconName(toast)"
+            :class="getIconClasses(toast)"
+            class="h-4 w-4 shrink-0"
+          />
 
           <!-- Content -->
           <div class="flex-1 grid gap-1">
-            <div v-if="toast.title" class="text-lg font-extrabold">
+            <div
+              v-if="toast.title"
+              class="text-lg font-extrabold"
+            >
               {{ toast.title }}
             </div>
-            <div v-if="toast.message" class="text-md opacity-90">
+            <div
+              v-if="toast.message"
+              class="text-md opacity-90"
+            >
               {{ toast.message }}
             </div>
-            <div v-if="toast.description" class="text-md opacity-90">
+            <div
+              v-if="toast.description"
+              class="text-md opacity-90"
+            >
               {{ toast.description }}
             </div>
 
             <!-- Custom component slot -->
-            <component v-if="toast.component" :is="toast.component" v-bind="toast.componentProps" />
+            <component
+              :is="toast.component"
+              v-if="toast.component"
+              v-bind="toast.componentProps"
+            />
           </div>
 
           <!-- Action Button -->
-          <button v-if="toast.action" @click="toast.action.onClick"
-            class="inline-flex h-8 shrink-0 items-center justify-center rounded-md border bg-transparent px-3 text-xs font-medium ring-offset-background transition-colors hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
+          <button
+            v-if="toast.action"
+            class="inline-flex h-8 shrink-0 items-center justify-center rounded-md border bg-transparent px-3 text-xs font-medium ring-offset-background transition-colors hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+            @click="toast.action.onClick"
+          >
             {{ toast.action.label }}
           </button>
 
           <!-- Close Button -->
-          <button v-if="isDismissible(toast)" @click="dismiss(toast.id)"
-            class="absolute right-2 top-2 rounded-md p-1 text-foreground/50 opacity-0 transition-opacity hover:text-foreground focus:opacity-100 focus:outline-none focus:ring-2 group-hover:opacity-100">
-            <Icon icon="x" class="h-4 w-4" />
+          <button
+            v-if="isDismissible(toast)"
+            class="absolute right-2 top-2 rounded-md p-1 text-foreground/50 opacity-0 transition-opacity hover:text-foreground focus:opacity-100 focus:outline-none focus:ring-2 group-hover:opacity-100"
+            @click="dismiss(toast.id)"
+          >
+            <Icon
+              icon="x"
+              class="h-4 w-4"
+            />
           </button>
         </div>
       </TransitionGroup>

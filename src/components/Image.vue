@@ -7,12 +7,24 @@
       :loading="loading"
       @load="handleLoad"
       @error="handleError"
-    />
-    <div v-if="isLoading" :class="placeholderClasses">
-      <Spinner v-if="showSpinner" size="sm" />
+    >
+    <div
+      v-if="isLoading"
+      :class="placeholderClasses"
+    >
+      <Spinner
+        v-if="showSpinner"
+        size="sm"
+      />
     </div>
-    <div v-if="hasError" :class="errorClasses">
-      <Icon name="ImageOff" class="h-8 w-8 text-muted-foreground" />
+    <div
+      v-if="hasError"
+      :class="errorClasses"
+    >
+      <Icon
+        name="ImageOff"
+        class="h-8 w-8 text-muted-foreground"
+      />
       <span class="text-sm text-muted-foreground">Failed to load image</span>
     </div>
   </div>

@@ -1,29 +1,48 @@
 <template>
-  <div v-if="showPagination || $slots.footer" :class="footerClasses">
+  <div
+    v-if="showPagination || $slots.footer"
+    :class="footerClasses"
+  >
     <div class="flex items-center justify-between">
       <!-- Selection Info -->
-      <div v-if="selectable && selectedCount > 0" class="text-sm text-slate-600">
+      <div
+        v-if="selectable && selectedCount > 0"
+        class="text-sm text-slate-600"
+      >
         {{ selectedCount }} of {{ total }} selected
       </div>
-      <div v-else class="text-sm text-slate-600">
+      <div
+        v-else
+        class="text-sm text-slate-600"
+      >
         Showing {{ startItem }} to {{ endItem }} of {{ total }} entries
       </div>
 
       <!-- Custom Footer Slot -->
-      <div v-if="$slots.footer" class="flex items-center gap-4">
+      <div
+        v-if="$slots.footer"
+        class="flex items-center gap-4"
+      >
         <slot name="footer" />
       </div>
 
       <!-- Pagination Controls -->
-      <div v-if="showPagination" class="flex items-center gap-4">
+      <div
+        v-if="showPagination"
+        class="flex items-center gap-4"
+      >
         <!-- Page Size Selector -->
         <div class="flex items-center gap-2">
-          <Label for="pageSize" :class="labelClasses" :inline="true">Show:</Label>
+          <Label
+            for="pageSize"
+            :class="labelClasses"
+            :inline="true"
+          >Show:</Label>
           <Select
             id="pageSize"
             :model-value="pageSize.toString()"
-            @update:modelValue="val => $emit('update:pageSize', parseInt(val))"
             :class="selectClasses"
+            @update:model-value="val => $emit('update:pageSize', parseInt(val))"
           >
             <Option
               v-for="size in pageSizeOptions"
@@ -39,24 +58,44 @@
           <!-- First Page -->
           <button
             :disabled="currentPage === 1"
-            @click="$emit('update:currentPage', 1)"
             :class="getPageButtonClasses(false, currentPage === 1)"
             title="First page"
+            @click="$emit('update:currentPage', 1)"
           >
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" d="m18.75 4.5-7.5 7.5 7.5 7.5m-6-15L5.25 12l7.5 7.5" />
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m18.75 4.5-7.5 7.5 7.5 7.5m-6-15L5.25 12l7.5 7.5"
+              />
             </svg>
           </button>
 
           <!-- Previous Page -->
           <button
             :disabled="currentPage === 1"
-            @click="$emit('update:currentPage', currentPage - 1)"
             :class="getPageButtonClasses(false, currentPage === 1)"
             title="Previous page"
+            @click="$emit('update:currentPage', currentPage - 1)"
           >
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15.75 19.5L8.25 12l7.5-7.5"
+              />
             </svg>
           </button>
 
@@ -65,8 +104,8 @@
             <button
               v-for="page in visiblePages"
               :key="page"
-              @click="$emit('update:currentPage', page)"
               :class="getPageButtonClasses(page === currentPage, false)"
+              @click="$emit('update:currentPage', page)"
             >
               {{ page }}
             </button>
@@ -75,24 +114,44 @@
           <!-- Next Page -->
           <button
             :disabled="currentPage === totalPages"
-            @click="$emit('update:currentPage', currentPage + 1)"
             :class="getPageButtonClasses(false, currentPage === totalPages)"
             title="Next page"
+            @click="$emit('update:currentPage', currentPage + 1)"
           >
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
             </svg>
           </button>
 
           <!-- Last Page -->
           <button
             :disabled="currentPage === totalPages"
-            @click="$emit('update:currentPage', totalPages)"
             :class="getPageButtonClasses(false, currentPage === totalPages)"
             title="Last page"
+            @click="$emit('update:currentPage', totalPages)"
           >
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5" />
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5"
+              />
             </svg>
           </button>
         </div>

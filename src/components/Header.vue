@@ -1,21 +1,44 @@
 <template>
-  <header :class="cn(
-    'fixed top-0 z-50 bg-white border-b border-gray-200 transition-all duration-300 ease-in-out w-full'
-  )" :style="{ left: '0' }">
+  <header
+    :class="cn(
+      'fixed top-0 z-50 bg-white border-b border-gray-200 transition-all duration-300 ease-in-out w-full'
+    )"
+    :style="{ left: '0' }"
+  >
     <div class="flex items-center justify-between h-16 px-4 md:px-6">
       <!-- Left side - Page Title / Breadcrumb -->
       <div class="flex items-center">
         <!-- Organisation Info -->
-        <div v-if="organisationName" class="mr-4 flex-shrink-0 bg-gradient-to-r from-blue-50 to-indigo-50 px-3 py-2 rounded-lg border border-blue-100">
-          <p class="text-lg font-bold text-blue-900 truncate max-w-[200px]">{{ organisationName }}</p>
-          <p v-if="user.organisation?.role" class="text-xs text-blue-600 truncate font-medium">{{ user.organisation.role }}</p>
+        <div
+          v-if="organisationName"
+          class="mr-4 flex-shrink-0 bg-gradient-to-r from-blue-50 to-indigo-50 px-3 py-2 rounded-lg border border-blue-100"
+        >
+          <p class="text-lg font-bold text-blue-900 truncate max-w-[200px]">
+            {{ organisationName }}
+          </p>
+          <p
+            v-if="user.organisation?.role"
+            class="text-xs text-blue-600 truncate font-medium"
+          >
+            {{ user.organisation.role }}
+          </p>
         </div>
 
         <!-- Breadcrumb -->
         <nav class="hidden md:flex items-center space-x-2 text-sm truncate">
           <span class="text-gray-500 truncate">{{ currentSection }}</span>
-          <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          <svg
+            class="w-4 h-4 text-gray-400 flex-shrink-0"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7"
+            />
           </svg>
           <span class="text-gray-900 font-medium truncate">{{ currentPage }}</span>
         </nav>
@@ -24,48 +47,109 @@
       <!-- Right side -->
       <div class="flex items-center space-x-3 md:space-x-4">
         <!-- Mobile Sidebar Toggle -->
-        <button v-if="isMobile" @click="emit('toggle-mobile-sidebar')"
-          class="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-50 transition-colors">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        <button
+          v-if="isMobile"
+          class="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-50 transition-colors"
+          @click="emit('toggle-mobile-sidebar')"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
           </svg>
         </button>
 
         <!-- Search -->
-        <div class="relative" v-if="!isMobile || showMobileSearch">
+        <div
+          v-if="!isMobile || showMobileSearch"
+          class="relative"
+        >
           <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            <svg
+              class="w-4 h-4 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
             </svg>
           </div>
-          <input type="text" placeholder="Search..."
+          <input
+            v-model="searchQuery"
+            type="text"
+            placeholder="Search..."
             class="pl-10 pr-4 py-2 w-48 md:w-64 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-            v-model="searchQuery" />
+          >
           <!-- Close search button on mobile -->
-          <button v-if="isMobile" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-            @click="showMobileSearch = false">
+          <button
+            v-if="isMobile"
+            class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            @click="showMobileSearch = false"
+          >
             ✕
           </button>
         </div>
-        <button v-else-if="isMobile" @click="showMobileSearch = true"
-          class="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-50 transition-colors">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        <button
+          v-else-if="isMobile"
+          class="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-50 transition-colors"
+          @click="showMobileSearch = true"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
           </svg>
         </button>
 
         <!-- Notifications -->
-        <button @click="toggleNotifications"
-          class="relative p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-50 transition-colors">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-5 5v-5z" />
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M13 3h2.586a1 1 0 01.707.293l6.414 6.414a1 1 0 01.293.707V19a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h4L13 3z" />
+        <button
+          class="relative p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-50 transition-colors"
+          @click="toggleNotifications"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 17h5l-5 5v-5z"
+            />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 3h2.586a1 1 0 01.707.293l6.414 6.414a1 1 0 01.293.707V19a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h4L13 3z"
+            />
           </svg>
-          <span v-if="notificationCount > 0"
-            class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+          <span
+            v-if="notificationCount > 0"
+            class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center"
+          >
             {{ notificationCount }}
           </span>
         </button>
@@ -79,45 +163,72 @@
           leave-from-class="opacity-100 translate-y-0 scale-100"
           leave-to-class="opacity-0 translate-y-2 scale-95"
         >
-          <div v-if="showNotifications"
-            class="absolute right-4 md:right-6 top-16 mt-2 w-72 md:w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
-          <div class="p-4 border-b border-gray-200">
-            <h3 class="text-lg font-semibold text-gray-900">Notifications</h3>
-          </div>
-          <div class="max-h-96 overflow-y-auto">
-            <div v-for="notification in notifications" :key="notification.id"
-              class="p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer">
-              <div class="flex items-start space-x-3">
-                <div class="flex-shrink-0 w-2 h-2 mt-2 bg-blue-500 rounded-full"></div>
-                <div class="flex-1">
-                  <p class="text-sm text-gray-900">{{ notification.title }}</p>
-                  <p class="text-xs text-gray-500 mt-1">{{ notification.time }}</p>
+          <div
+            v-if="showNotifications"
+            class="absolute right-4 md:right-6 top-16 mt-2 w-72 md:w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50"
+          >
+            <div class="p-4 border-b border-gray-200">
+              <h3 class="text-lg font-semibold text-gray-900">
+                Notifications
+              </h3>
+            </div>
+            <div class="max-h-96 overflow-y-auto">
+              <div
+                v-for="notification in notifications"
+                :key="notification.id"
+                class="p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer"
+              >
+                <div class="flex items-start space-x-3">
+                  <div class="flex-shrink-0 w-2 h-2 mt-2 bg-blue-500 rounded-full" />
+                  <div class="flex-1">
+                    <p class="text-sm text-gray-900">
+                      {{ notification.title }}
+                    </p>
+                    <p class="text-xs text-gray-500 mt-1">
+                      {{ notification.time }}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="p-4 text-center">
-            <button class="text-sm text-blue-600 hover:text-blue-800">View all notifications</button>
-          </div>
+            <div class="p-4 text-center">
+              <button class="text-sm text-blue-600 hover:text-blue-800">
+                View all notifications
+              </button>
+            </div>
           </div>
         </transition>
 
         <!-- Profile Dropdown -->
         <div class="relative">
-          <button @click="toggleProfile"
-            class="flex items-center space-x-2 md:space-x-3 p-2 rounded-lg hover:bg-gray-50 transition-colors">
+          <button
+            class="flex items-center space-x-2 md:space-x-3 p-2 rounded-lg hover:bg-gray-50 transition-colors"
+            @click="toggleProfile"
+          >
             <div class="w-8 h-8 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full flex items-center justify-center transition-colors shadow-sm">
               <span class="text-blue-700 text-sm font-medium">{{ userInitials }}</span>
             </div>
             <!-- Hide details on mobile -->
             <div class="hidden md:block text-left max-w-[160px] truncate">
-              <p class="text-sm font-medium text-gray-900 truncate">{{ user.name }}</p>
+              <p class="text-sm font-medium text-gray-900 truncate">
+                {{ user.name }}
+              </p>
               <p class="text-xs text-gray-500 truncate leading-tight">
                 {{ userRoleNames }}
               </p>
             </div>
-            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            <svg
+              class="w-4 h-4 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              />
             </svg>
           </button>
 
@@ -130,70 +241,106 @@
             leave-from-class="opacity-100 translate-y-0 scale-100"
             leave-to-class="opacity-0 translate-y-2 scale-95"
           >
-            <div v-if="showProfile"
-              class="absolute right-0 mt-2 w-58 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
-            <div class="p-4 border-b border-gray-200">
-              <p class="text-sm font-medium text-gray-900">{{ user.name }}</p>
-              <p class="text-xs text-gray-500">{{ user.email }}</p>
-            </div>
-            <div class="py-2">
-              <template v-for="item in profileMenuItems" :key="item.name">
-                <router-link v-if="item.route" :to="item.route" :class="cn(
-                  'flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative',
-                  isItemActive(item)
-                    ? 'bg-gradient-to-br from-blue-50 to-blue-100 text-blue-700 shadow-sm border border-blue-200'
-                    : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 border border-transparent'
-                )" @click="handleNavigation(item)">
-                  <!-- Active indicator bar -->
-                  <div
-                    v-if="isItemActive(item)"
-                    class="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-blue-500 to-blue-600 rounded-r-full"
-                  />
-                  <div
+            <div
+              v-if="showProfile"
+              class="absolute right-0 mt-2 w-58 bg-white rounded-lg shadow-lg border border-gray-200 z-50"
+            >
+              <div class="p-4 border-b border-gray-200">
+                <p class="text-sm font-medium text-gray-900">
+                  {{ user.name }}
+                </p>
+                <p class="text-xs text-gray-500">
+                  {{ user.email }}
+                </p>
+              </div>
+              <div class="py-2">
+                <template
+                  v-for="item in profileMenuItems"
+                  :key="item.name"
+                >
+                  <router-link
+                    v-if="item.route"
+                    :to="item.route"
                     :class="cn(
-                      'flex items-center justify-center w-8 h-8 rounded-lg mr-3 flex-shrink-0 transition-colors ml-2',
+                      'flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative',
                       isItemActive(item)
-                        ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md'
-                        : 'bg-gray-100 text-gray-600 group-hover:bg-gray-200'
+                        ? 'bg-gradient-to-br from-blue-50 to-blue-100 text-blue-700 shadow-sm border border-blue-200'
+                        : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 border border-transparent'
                     )"
+                    @click="handleNavigation(item)"
                   >
-                    <Icon v-if="item.icon" :icon="item.icon" class="w-4 h-4" />
-                  </div>
-                  <span
-                    :class="cn(
-                      'flex-1 truncate font-semibold',
-                      isItemActive(item) ? 'text-blue-700' : 'text-gray-700'
-                    )"
+                    <!-- Active indicator bar -->
+                    <div
+                      v-if="isItemActive(item)"
+                      class="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-blue-500 to-blue-600 rounded-r-full"
+                    />
+                    <div
+                      :class="cn(
+                        'flex items-center justify-center w-8 h-8 rounded-lg mr-3 flex-shrink-0 transition-colors ml-2',
+                        isItemActive(item)
+                          ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md'
+                          : 'bg-gray-100 text-gray-600 group-hover:bg-gray-200'
+                      )"
+                    >
+                      <Icon
+                        v-if="item.icon"
+                        :icon="item.icon"
+                        class="w-4 h-4"
+                      />
+                    </div>
+                    <span
+                      :class="cn(
+                        'flex-1 truncate font-semibold',
+                        isItemActive(item) ? 'text-blue-700' : 'text-gray-700'
+                      )"
+                    >
+                      {{ item.label }}
+                    </span>
+                  </router-link>
+                  <button
+                    v-else
+                    class="flex items-center w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative text-gray-700 hover:bg-gray-50 hover:text-gray-900 border border-transparent"
+                    @click="handleProfileAction(item)"
                   >
-                    {{ item.label }}
-                  </span>
-                </router-link>
-                <button v-else @click="handleProfileAction(item)"
-                  class="flex items-center w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative text-gray-700 hover:bg-gray-50 hover:text-gray-900 border border-transparent">
-                  <div class="flex items-center justify-center w-8 h-8 rounded-lg mr-3 flex-shrink-0 transition-colors ml-2 bg-gray-100 text-gray-600 group-hover:bg-gray-200">
-                    <Icon v-if="item.icon" :icon="item.icon" class="w-4 h-4" />
+                    <div class="flex items-center justify-center w-8 h-8 rounded-lg mr-3 flex-shrink-0 transition-colors ml-2 bg-gray-100 text-gray-600 group-hover:bg-gray-200">
+                      <Icon
+                        v-if="item.icon"
+                        :icon="item.icon"
+                        class="w-4 h-4"
+                      />
+                    </div>
+                    <span class="flex-1 truncate font-semibold text-gray-700">
+                      {{ item.label }}
+                    </span>
+                  </button>
+                </template>
+              </div>
+              <div class="border-t border-gray-200 py-2">
+                <button
+                  class="flex items-center w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative text-red-600 hover:bg-red-50 border border-transparent"
+                  @click="handleLogout"
+                >
+                  <div class="flex items-center justify-center w-8 h-8 rounded-lg mr-1 flex-shrink-0 transition-colors ml-2 bg-red-100 text-red-600 group-hover:bg-red-200">
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a2 2 0 013-3h4a3 3 0 013 3v1"
+                      />
+                    </svg>
                   </div>
-                  <span class="flex-1 truncate font-semibold text-gray-700">
-                    {{ item.label }}
+                  <span class="truncate font-semibold text-red-600">
+                    Sign out
                   </span>
                 </button>
-              </template>
+              </div>
             </div>
-            <div class="border-t border-gray-200 py-2">
-              <button @click="handleLogout"
-                class="flex items-center w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative text-red-600 hover:bg-red-50 border border-transparent">
-                <div class="flex items-center justify-center w-8 h-8 rounded-lg mr-1 flex-shrink-0 transition-colors ml-2 bg-red-100 text-red-600 group-hover:bg-red-200">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a2 2 0 013-3h4a3 3 0 013 3v1" />
-                  </svg>
-                </div>
-                <span class="truncate font-semibold text-red-600">
-                  Sign out
-                </span>
-              </button>
-            </div>
-          </div>
           </transition>
         </div>
       </div>

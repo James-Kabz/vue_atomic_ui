@@ -1,7 +1,15 @@
 <template>
-  <nav :aria-label="ariaLabel" class="flex" :class="breadcrumbClasses">
+  <nav
+    :aria-label="ariaLabel"
+    class="flex"
+    :class="breadcrumbClasses"
+  >
     <ol class="flex items-center space-x-1">
-      <li v-for="(item, index) in items" :key="index" class="flex items-center">
+      <li
+        v-for="(item, index) in items"
+        :key="index"
+        class="flex items-center"
+      >
         <component
           :is="item.href ? 'a' : 'span'"
           :href="item.href"

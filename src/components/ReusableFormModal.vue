@@ -299,7 +299,14 @@ const handleClose = () => {
 </script>
 
 <template>
-  <Modal v-model="isOpen" :showClose="true" :closeOnBackdrop="true" :size="modalSize" :resizable="modalResizable" @close="handleClose">
+  <Modal
+    v-model="isOpen"
+    :show-close="true"
+    :close-on-backdrop="true"
+    :size="modalSize"
+    :resizable="modalResizable"
+    @close="handleClose"
+  >
     <div class="mb-4">
       <h2 class="text-lg font-semibold text-gray-900">
         {{ modalType === 'create' ? `Add New ${entityName}` : `Edit ${entityName}` }}
@@ -313,14 +320,20 @@ const handleClose = () => {
       </p>
     </div>
 
-    <form @submit.prevent="handleSubmit" class="space-y-4">
-      <div v-for="field in fields" :key="field.name">
+    <form
+      class="space-y-4"
+      @submit.prevent="handleSubmit"
+    >
+      <div
+        v-for="field in fields"
+        :key="field.name"
+      >
         <FormField
+          :id="`form-${entityName}-${field.name}-${Math.random().toString(36).slice(2, 5)}`"
           :label="field.label"
           :required="field.required && !field.disabled"
           :error="errors[field.name]"
-          :errorMessage="errors[field.name]"
-          :id="`form-${entityName}-${field.name}-${Math.random().toString(36).slice(2, 5)}`"
+          :error-message="errors[field.name]"
         >
           <template #default="{ fieldId, hasError, ariaDescribedBy }">
             <!-- Text/Number/Password/Color Input -->
@@ -355,23 +368,35 @@ const handleClose = () => {
             <Select
               v-else-if="field.type === 'select'"
               :id="fieldId"
-              :modelValue="formData[field.name]"
-              @update:modelValue="handleSelectChange(field, $event)"
+              :model-value="formData[field.name]"
               :disabled="isLoading || field.disabled"
               :class="[
                 'w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500',
                 hasError ? 'border-red-500' : 'border-slate-300',
               ]"
               :aria-describedby="ariaDescribedBy"
+              @update:model-value="handleSelectChange(field, $event)"
             >
-              <option value="" disabled>{{ field.placeholder || 'Select an option' }}</option>
-              <option v-for="option in field.options" :key="option.value" :value="option.value">
+              <option
+                value=""
+                disabled
+              >
+                {{ field.placeholder || 'Select an option' }}
+              </option>
+              <option
+                v-for="option in field.options"
+                :key="option.value"
+                :value="option.value"
+              >
                 {{ option.label }}
               </option>
             </Select>
 
             <!-- Checkbox -->
-            <div v-else-if="field.type === 'checkbox'" class="flex items-center">
+            <div
+              v-else-if="field.type === 'checkbox'"
+              class="flex items-center"
+            >
               <Input
                 :id="fieldId"
                 v-model="formData[field.name]"
@@ -380,7 +405,10 @@ const handleClose = () => {
                 class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                 :aria-describedby="ariaDescribedBy"
               />
-              <Label :for="fieldId" class="ml-2 text-sm text-gray-700">
+              <Label
+                :for="fieldId"
+                class="ml-2 text-sm text-gray-700"
+              >
                 {{ field.checkboxLabel }}
               </Label>
             </div>
@@ -388,12 +416,12 @@ const handleClose = () => {
             <!-- Slider -->
             <Slider
               v-else-if="field.type === 'slider'"
-              :modelValue="formData[field.name]"
-              @update:modelValue="handleSliderChange(field, $event)"
+              :model-value="formData[field.name]"
               :min="field.min"
               :max="field.max"
               :step="field.step"
               :disabled="isLoading || field.disabled"
+              @update:model-value="handleSliderChange(field, $event)"
             />
 
             <!-- Date Picker -->
@@ -408,8 +436,8 @@ const handleClose = () => {
               :placeholder="field.placeholder || 'Select date'"
               :format="field.format || 'MM/DD/YYYY'"
               :clearable="field.clearable !== false"
-              :showToday="field.showToday !== false"
-              :calendarPosition="field.calendarPosition || 'left-0 bottom-full'"
+              :show-today="field.showToday !== false"
+              :calendar-position="field.calendarPosition || 'left-0 bottom-full'"
               :aria-describedby="ariaDescribedBy"
             />
           </template>
@@ -417,10 +445,20 @@ const handleClose = () => {
       </div>
 
       <div class="flex justify-end gap-3 pt-4">
-        <Button type="button" @click="handleClose" variant="outline" :disabled="isLoading">
+        <Button
+          type="button"
+          variant="outline"
+          :disabled="isLoading"
+          @click="handleClose"
+        >
           Cancel
         </Button>
-        <Button type="submit" :disabled="isLoading" :loading="isLoading" variant="default">
+        <Button
+          type="submit"
+          :disabled="isLoading"
+          :loading="isLoading"
+          variant="default"
+        >
           {{ modalType === 'create' ? `Create ${entityName}` : `Update ${entityName}` }}
         </Button>
       </div>

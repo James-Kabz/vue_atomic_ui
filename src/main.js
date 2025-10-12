@@ -19,7 +19,7 @@ library.add(
     fab,
 
 )
-app.component('font-awesome-icon', FontAwesomeIcon)
+app.component('FontAwesomeIcon', FontAwesomeIcon)
 // app.use(createPinia())
 app.use(router)
 

@@ -4,10 +4,13 @@
     @click="handleRowClick"
   >
     <!-- Selection Column -->
-    <td v-if="selectable" :class="checkboxCellClasses">
+    <td
+      v-if="selectable"
+      :class="checkboxCellClasses"
+    >
       <Checkbox
-        :modelValue="isSelected"
-        @update:modelValue="$emit('toggle-selection', item)"
+        :model-value="isSelected"
+        @update:model-value="$emit('toggle-selection', item)"
       />
     </td>
 
@@ -29,8 +32,15 @@
     </td>
 
     <!-- Actions Column -->
-    <td v-if="$slots.actions" :class="actionsCellClasses">
-      <slot name="actions" :item="item" :index="index" />
+    <td
+      v-if="$slots.actions"
+      :class="actionsCellClasses"
+    >
+      <slot
+        name="actions"
+        :item="item"
+        :index="index"
+      />
     </td>
   </tr>
 </template>

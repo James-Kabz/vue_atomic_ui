@@ -1,21 +1,26 @@
 <template>
-  <div id="app" class="min-h-screen bg-slate-50">
+  <div
+    id="app"
+    class="min-h-screen bg-slate-50"
+  >
     <div class="container mx-auto py-8">
-      <h1 class="text-3xl font-bold text-slate-900 mb-8">Vue DataTable with Filters</h1>
+      <h1 class="text-3xl font-bold text-slate-900 mb-8">
+        Vue DataTable with Filters
+      </h1>
       <DatePicker />
       <!-- DataTable with Filters -->
       <div class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
         <!-- Filters Component -->
         <DataTableFilters
-          v-model:searchQuery="searchQuery"
-          v-model:selectedStatus="selectedStatus"
-          v-model:dateFrom="dateFrom"
-          v-model:dateTo="dateTo"
-          :statusOptions="statusOptions"
-          :showDateFilter="true"
-          :showExport="true"
-          :showAdd="true"
-          searchPlaceholder="Search users..."
+          v-model:search-query="searchQuery"
+          v-model:selected-status="selectedStatus"
+          v-model:date-from="dateFrom"
+          v-model:date-to="dateTo"
+          :status-options="statusOptions"
+          :show-date-filter="true"
+          :show-export="true"
+          :show-add="true"
+          search-placeholder="Search users..."
           @export="handleExport"
           @add="handleAddUser"
           @clear-filters="clearAllFilters"
@@ -26,27 +31,37 @@
               v-model="departmentFilter"
               class="px-3 py-2 border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              <option value="">All Departments</option>
-              <option value="Engineering">Engineering</option>
-              <option value="Marketing">Marketing</option>
-              <option value="Sales">Sales</option>
-              <option value="Design">Design</option>
+              <option value="">
+                All Departments
+              </option>
+              <option value="Engineering">
+                Engineering
+              </option>
+              <option value="Marketing">
+                Marketing
+              </option>
+              <option value="Sales">
+                Sales
+              </option>
+              <option value="Design">
+                Design
+              </option>
             </select>
           </template>
         </DataTableFilters>
 
         <!-- Toolbar Component -->
         <DataTableToolBar
-          :selectedItems="selectedUsers"
-          :totalItems="filteredUsers.length"
-          :bulkActions="bulkActions"
+          :selected-items="selectedUsers"
+          :total-items="filteredUsers.length"
+          :bulk-actions="bulkActions"
           :density="density"
-          :toggleableColumns="allColumns"
-          :visibleColumns="visibleColumns"
-          :isRefreshing="isRefreshing"
-          :showDensityToggle="true"
-          :showColumnToggle="true"
-          :showRefresh="true"
+          :toggleable-columns="allColumns"
+          :visible-columns="visibleColumns"
+          :is-refreshing="isRefreshing"
+          :show-density-toggle="true"
+          :show-column-toggle="true"
+          :show-refresh="true"
           @bulk-action="handleBulkAction"
           @update:density="handleDensityChange"
           @toggle-column="handleColumnToggle"
@@ -55,9 +70,9 @@
           <template #actions>
             <!-- Additional toolbar actions -->
             <button
-              @click="handleBulkExport"
               :disabled="selectedUsers.length === 0"
               class="px-3 py-2 text-sm text-slate-600 hover:text-slate-800 border border-slate-300 rounded-md hover:bg-slate-50 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              @click="handleBulkExport"
             >
               <font-awesome-icon icon="download" />
               Export Selected
@@ -70,14 +85,14 @@
           :data="filteredUsers"
           :columns="visibleColumnObjects"
           :selectable="true"
-          :selectedItems="selectedUsers"
+          :selected-items="selectedUsers"
           :striped="true"
           :hoverable="true"
-          :clickableRows="true"
-          :pageSize="pageSize"
-          :showPagination="true"
+          :clickable-rows="true"
+          :page-size="pageSize"
+          :show-pagination="true"
           :density="density"
-          emptyText="No users found"
+          empty-text="No users found"
           @selection-change="selectedUsers = $event"
           @sort-change="handleSort"
           @row-click="handleRowClick"
@@ -90,10 +105,14 @@
                 :alt="item.name"
                 class="w-8 h-8 rounded-full mr-3"
                 @error="handleImageError"
-              />
+              >
               <div>
-                <div class="font-medium text-slate-900">{{ item.name }}</div>
-                <div class="text-xs text-slate-500">ID: {{ item.id }}</div>
+                <div class="font-medium text-slate-900">
+                  {{ item.name }}
+                </div>
+                <div class="text-xs text-slate-500">
+                  ID: {{ item.id }}
+                </div>
               </div>
             </div>
           </template>
@@ -107,7 +126,7 @@
                     'w-2 h-2 rounded-full',
                     value === 'active' ? 'bg-green-500' : 'bg-red-500'
                   ]"
-                ></span>
+                />
                 {{ value }}
               </span>
             </span>
@@ -131,23 +150,23 @@
           <template #actions="{ item }">
             <div class="flex items-center gap-2 justify-center">
               <button
-                @click="viewUser(item)"
                 class="p-1 text-slate-400 hover:text-blue-600 rounded"
                 title="View details"
+                @click="viewUser(item)"
               >
                 <font-awesome-icon icon="eye" />
               </button>
               <button
-                @click="editUser(item)"
                 class="p-1 text-slate-400 hover:text-blue-600 rounded"
                 title="Edit user"
+                @click="editUser(item)"
               >
                 <font-awesome-icon icon="pen" />
               </button>
               <button
-                @click="deleteUser(item)"
                 class="p-1 text-slate-400 hover:text-red-600 rounded"
                 title="Delete user"
+                @click="deleteUser(item)"
               >
                 <font-awesome-icon icon="trash" />
               </button>
@@ -158,7 +177,9 @@
 
       <!-- Debug Info -->
       <div class="mt-8 p-4 bg-slate-100 rounded-lg">
-        <h3 class="font-medium text-slate-900 mb-2">Debug Info:</h3>
+        <h3 class="font-medium text-slate-900 mb-2">
+          Debug Info:
+        </h3>
         <div class="text-sm text-slate-600 space-y-1">
           <div>Search Query: "{{ searchQuery }}"</div>
           <div>Selected Status: "{{ selectedStatus }}"</div>
@@ -172,7 +193,11 @@
       </div>
 
       <!-- Status Messages -->
-      <div v-if="statusMessage" class="mt-4 p-4 rounded-lg" :class="statusMessageClass">
+      <div
+        v-if="statusMessage"
+        class="mt-4 p-4 rounded-lg"
+        :class="statusMessageClass"
+      >
         {{ statusMessage }}
       </div>
     </div>

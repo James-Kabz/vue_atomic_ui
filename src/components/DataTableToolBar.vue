@@ -2,7 +2,10 @@
   <div :class="toolbarClasses">
     <!-- Left side - Selection actions -->
     <div class="flex items-center gap-3">
-      <div v-if="selectedCount > 0" class="flex items-center gap-3">
+      <div
+        v-if="selectedCount > 0"
+        class="flex items-center gap-3"
+      >
         <span class="text-sm text-slate-600">
           {{ selectedCount }} selected
         </span>
@@ -12,17 +15,24 @@
           <Button
             v-for="action in bulkActions"
             :key="action.key"
-            @click="$emit('bulk-action', { action: action.key, items: selectedItems })"
             :class="getBulkActionClasses(action)"
+            @click="$emit('bulk-action', { action: action.key, items: selectedItems })"
           >
-            <font-awesome-icon :icon="action.icon" v-if="action.icon" class="w-4 h-4" />
+            <font-awesome-icon
+              v-if="action.icon"
+              :icon="action.icon"
+              class="w-4 h-4"
+            />
             {{ action.label }}
           </Button>
         </div>
       </div>
 
       <!-- Default info when no selection -->
-      <div v-else-if="totalItems > 0" :class="itemCountClasses">
+      <div
+        v-else-if="totalItems > 0"
+        :class="itemCountClasses"
+      >
         {{ totalItems }} {{ totalItems === 1 ? 'item' : 'items' }}
       </div>
     </div>
@@ -30,28 +40,40 @@
     <!-- Right side - View controls and actions -->
     <div class="flex items-center gap-3">
       <!-- View density toggle -->
-      <div v-if="showDensityToggle" :class="densityToggleClasses">
+      <div
+        v-if="showDensityToggle"
+        :class="densityToggleClasses"
+      >
         <button
           v-for="density in densityOptions"
           :key="density.value"
-          @click="$emit('update:density', density.value)"
           :class="getDensityButtonClasses(density.value)"
           :title="density.label"
           type="button"
+          @click="$emit('update:density', density.value)"
         >
-          <font-awesome-icon :icon="density.icon" class="w-4 h-4" />
+          <font-awesome-icon
+            :icon="density.icon"
+            class="w-4 h-4"
+          />
         </button>
       </div>
 
       <!-- Column visibility toggle -->
-      <div v-if="showColumnToggle" class="relative">
+      <div
+        v-if="showColumnToggle"
+        class="relative"
+      >
         <button
-          @click.stop="toggleColumnMenu"
+          ref="columnToggleButton"
           :class="columnToggleButtonClasses"
           type="button"
-          ref="columnToggleButton"
+          @click.stop="toggleColumnMenu"
         >
-          <font-awesome-icon icon="columns" class="w-4 h-4" />
+          <font-awesome-icon
+            icon="columns"
+            class="w-4 h-4"
+          />
           <span>Columns</span>
         </button>
 
@@ -76,9 +98,9 @@
                   <input
                     type="checkbox"
                     :checked="isColumnVisible(column.key)"
-                    @change="toggleColumn(column.key, $event.target.checked)"
                     :class="checkboxClasses"
-                  />
+                    @change="toggleColumn(column.key, $event.target.checked)"
+                  >
                   <span :class="labelClasses">
                     {{ column.label }}
                   </span>
@@ -92,17 +114,23 @@
       <!-- Refresh button -->
       <button
         v-if="showRefresh"
-        @click="$emit('refresh')"
         :disabled="isRefreshing"
         :class="getRefreshButtonClasses()"
         type="button"
+        @click="$emit('refresh')"
       >
-        <font-awesome-icon icon="sync" :class="getRefreshIconClasses()" />
+        <font-awesome-icon
+          icon="sync"
+          :class="getRefreshIconClasses()"
+        />
         <span>Refresh</span>
       </button>
 
       <!-- Custom actions -->
-      <div v-if="$slots.actions" class="flex items-center gap-2">
+      <div
+        v-if="$slots.actions"
+        class="flex items-center gap-2"
+      >
         <slot name="actions" />
       </div>
     </div>

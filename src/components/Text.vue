@@ -1,5 +1,8 @@
 <template>
-  <component :is="as" :class="textClasses">
+  <component
+    :is="as"
+    :class="textClasses"
+  >
     <slot />
   </component>
 </template>

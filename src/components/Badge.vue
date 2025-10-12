@@ -1,7 +1,11 @@
 <template>
   <span :class="cn(badgeVariants({ variant, size, shape }), $attrs.class)">
     <!-- Icon -->
-    <component v-if="icon" :is="icon" :class="iconClasses" />
+    <component
+      :is="icon"
+      v-if="icon"
+      :class="iconClasses"
+    />
 
     <!-- Default slot -->
     <slot />
@@ -9,9 +13,9 @@
     <!-- Dismiss button -->
     <button
       v-if="dismissible"
-      @click="handleDismiss"
       class="ml-1 hover:bg-black/10 rounded-full p-0.5 transition-colors"
       :aria-label="dismissLabel"
+      @click="handleDismiss"
     >
       <XMarkIcon class="w-3 h-3" />
     </button>

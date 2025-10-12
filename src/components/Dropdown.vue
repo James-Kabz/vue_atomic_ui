@@ -1,14 +1,20 @@
 <template>
-  <div class="relative" ref="dropdownRef">
+  <div
+    ref="dropdownRef"
+    class="relative"
+  >
     <button
       :class="triggerClasses"
-      @click="toggleDropdown"
       :aria-expanded="isOpen"
       :aria-haspopup="true"
+      @click="toggleDropdown"
     >
       <slot name="trigger">
         <span>{{ triggerText }}</span>
-        <Icon name="chevron-down" class="ml-2 h-4 w-4" />
+        <Icon
+          name="chevron-down"
+          class="ml-2 h-4 w-4"
+        />
       </slot>
     </button>
     

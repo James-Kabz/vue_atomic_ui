@@ -14,15 +14,28 @@
       :aria-live="variant === 'destructive' ? 'assertive' : 'polite'"
     >
       <div class="flex items-start space-x-3">
-        <div v-if="showIcon" class="flex-shrink-0">
-          <Icon :name="iconName" :class="iconClasses" />
+        <div
+          v-if="showIcon"
+          class="flex-shrink-0"
+        >
+          <Icon
+            :name="iconName"
+            :class="iconClasses"
+          />
         </div>
         
         <div class="flex-1 min-w-0">
-          <div v-if="title" class="text-sm font-medium">
+          <div
+            v-if="title"
+            class="text-sm font-medium"
+          >
             {{ title }}
           </div>
-          <div v-if="message" class="text-sm" :class="{ 'mt-1': title }">
+          <div
+            v-if="message"
+            class="text-sm"
+            :class="{ 'mt-1': title }"
+          >
             {{ message }}
           </div>
           <slot />
@@ -30,10 +43,13 @@
         
         <button
           v-if="dismissible"
-          @click="dismiss"
           class="flex-shrink-0 rounded-md p-1.5 hover:bg-black/5 focus:outline-none focus:ring-2 focus:ring-offset-2"
+          @click="dismiss"
         >
-          <Icon name="x" class="h-4 w-4" />
+          <Icon
+            name="x"
+            class="h-4 w-4"
+          />
         </button>
       </div>
     </div>

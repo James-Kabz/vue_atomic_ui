@@ -11,7 +11,7 @@
     <div
       v-if="orientation === 'vertical'"
       class="absolute left-3 top-0 w-0.5 h-full bg-slate-200"
-    ></div>
+    />
 
     <!-- Dot / Icon -->
     <div
@@ -19,7 +19,7 @@
     >
       <slot name="icon">
         <!-- Default dot -->
-        <div class="w-2 h-2 rounded-full bg-blue-500"></div>
+        <div class="w-2 h-2 rounded-full bg-blue-500" />
       </slot>
     </div>
 
@@ -31,10 +31,17 @@
       ]"
     >
       <h3 class="text-slate-900 font-medium">
-        <slot name="title">{{ title }}</slot>
+        <slot name="title">
+          {{ title }}
+        </slot>
       </h3>
-      <p v-if="subtitle" class="text-slate-500 text-sm">
-        <slot name="subtitle">{{ subtitle }}</slot>
+      <p
+        v-if="subtitle"
+        class="text-slate-500 text-sm"
+      >
+        <slot name="subtitle">
+          {{ subtitle }}
+        </slot>
       </p>
       <div class="mt-2 text-slate-600 text-sm">
         <slot />

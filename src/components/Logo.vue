@@ -5,8 +5,11 @@
       :src="src" 
       :alt="alt || 'Logo'" 
       :class="imageClasses"
-    />
-    <div v-else :class="textClasses">
+    >
+    <div
+      v-else
+      :class="textClasses"
+    >
       {{ text || 'Logo' }}
     </div>
   </div>

@@ -14,13 +14,22 @@
     >
       <div class="flex items-start gap-3">
         <!-- Icon -->
-        <div v-if="showIcon" class="flex-shrink-0 mt-0.5">
-          <component :is="iconComponent" :class="iconClasses" />
+        <div
+          v-if="showIcon"
+          class="flex-shrink-0 mt-0.5"
+        >
+          <component
+            :is="iconComponent"
+            :class="iconClasses"
+          />
         </div>
 
         <!-- Content -->
         <div class="flex-1 min-w-0">
-          <h4 v-if="title" class="font-medium text-sm mb-1">
+          <h4
+            v-if="title"
+            class="font-medium text-sm mb-1"
+          >
             {{ title }}
           </h4>
 
@@ -29,7 +38,10 @@
           </div>
 
           <!-- Actions -->
-          <div v-if="$slots.actions || actions.length > 0" class="mt-3 flex gap-2">
+          <div
+            v-if="$slots.actions || actions.length > 0"
+            class="mt-3 flex gap-2"
+          >
             <slot name="actions">
               <Button
                 v-for="action in actions"
@@ -47,9 +59,9 @@
         <!-- Dismiss button -->
         <button
           v-if="dismissible"
-          @click="handleDismiss"
           :class="dismissButtonClasses"
           :aria-label="dismissLabel"
+          @click="handleDismiss"
         >
           <XMarkIcon class="w-4 h-4" />
         </button>

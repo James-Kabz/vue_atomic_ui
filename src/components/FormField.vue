@@ -7,11 +7,18 @@
       :class="cn(labelVariants({ size }))"
     >
       {{ label }}
-      <span v-if="required" class="text-red-500 ml-1" aria-label="required">*</span>
+      <span
+        v-if="required"
+        class="text-red-500 ml-1"
+        aria-label="required"
+      >*</span>
     </label>
 
     <!-- Description -->
-    <p v-if="description" :class="cn(descriptionVariants({ size }))">
+    <p
+      v-if="description"
+      :class="cn(descriptionVariants({ size }))"
+    >
       {{ description }}
     </p>
 
@@ -20,28 +27,28 @@
       <DatePicker
         v-if="type === 'date'"
         :id="fieldId"
-        :modelValue="modelValue"
-        @update:modelValue="emit('update:modelValue', $event)"
+        :model-value="modelValue"
         :disabled="false"
         :required="required"
         :class="hasError ? 'border-red-500' : ''"
+        @update:model-value="emit('update:modelValue', $event)"
       />
       <slot
         v-else
-        :fieldId="fieldId"
-        :hasError="hasError"
-        :ariaDescribedBy="ariaDescribedBy"
-        :showPassword="showPassword"
-        :togglePasswordVisibility="togglePasswordVisibility"
+        :field-id="fieldId"
+        :has-error="hasError"
+        :aria-described-by="ariaDescribedBy"
+        :show-password="showPassword"
+        :toggle-password-visibility="togglePasswordVisibility"
       />
 
       <!-- Password Toggle Button (only for password fields) -->
       <button
         v-if="type === 'password'"
         type="button"
-        @click="togglePasswordVisibility"
         class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 transition-colors"
         :aria-label="showPassword ? 'Hide password' : 'Show password'"
+        @click="togglePasswordVisibility"
       >
         <font-awesome-icon
           :icon="showPassword ? 'eye-slash' : 'eye'"
@@ -66,7 +73,10 @@
         role="alert"
         aria-live="polite"
       >
-        <font-awesome-icon icon="exclamation-triangle" class="w-4 h-4 flex-shrink-0 mt-0.5" />
+        <font-awesome-icon
+          icon="exclamation-triangle"
+          class="w-4 h-4 flex-shrink-0 mt-0.5"
+        />
         <span>{{ error }}</span>
       </div>
     </Transition>
@@ -93,7 +103,10 @@
         v-if="success && !hasError"
         :class="cn(messageVariants({ size, intent: 'success' }))"
       >
-        <font-awesome-icon icon="check" class="w-4 h-4 flex-shrink-0 mt-0.5" />
+        <font-awesome-icon
+          icon="check"
+          class="w-4 h-4 flex-shrink-0 mt-0.5"
+        />
         <span>{{ success }}</span>
       </div>
     </Transition>
@@ -136,8 +149,8 @@ const togglePasswordVisibility = () => {
 
 const ariaDescribedBy = computed(() => {
   const ids = []
-  if (props.error) ids.push(`${fieldId}-error`)
-  else if (props.helpText) ids.push(`${fieldId}-help`)
+  if (props.error) ids.push(`${fieldId.value}-error`)
+  else if (props.helpText) ids.push(`${fieldId.value}-help`)
   return ids.length > 0 ? ids.join(" ") : undefined
 })
 

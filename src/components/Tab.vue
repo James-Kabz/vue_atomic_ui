@@ -1,12 +1,14 @@
 <template>
   <div class="w-full">
     <!-- Tab headers -->
-    <div class="flex space-x-1 border-b border-slate-200" role="tablist">
+    <div
+      class="flex space-x-1 border-b border-slate-200"
+      role="tablist"
+    >
       <button
         v-for="(tab, index) in tabs"
-        :key="index"
         :id="`tab-${index}`"
-        @click="!props.loading && selectTab(index)"
+        :key="index"
         :disabled="props.loading"
         :class="cn(
           tabVariants({ size: props.size, variant: props.variant }),
@@ -18,6 +20,7 @@
         :aria-selected="activeIndex === index"
         :aria-controls="`panel-${index}`"
         role="tab"
+        @click="!props.loading && selectTab(index)"
       >
         {{ tab.label }}
       </button>

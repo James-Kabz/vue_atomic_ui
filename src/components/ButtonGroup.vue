@@ -1,5 +1,9 @@
 <template>
-  <div :class="groupClasses" role="group" :aria-label="ariaLabel">
+  <div
+    :class="groupClasses"
+    role="group"
+    :aria-label="ariaLabel"
+  >
     <slot />
   </div>
 </template>

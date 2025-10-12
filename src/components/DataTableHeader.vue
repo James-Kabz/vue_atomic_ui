@@ -1,13 +1,29 @@
 <template>
-  <div v-if="title || description || $slots.header" :class="headerClasses">
+  <div
+    v-if="title || description || $slots.header"
+    :class="headerClasses"
+  >
     <slot name="header">
       <div class="flex items-start justify-between">
         <div>
-          <Typography v-if="title" :class="titleClasses">{{ title }}</Typography>
-          <Typography v-if="description" :class="descriptionClasses">{{ description }}</Typography>
+          <Typography
+            v-if="title"
+            :class="titleClasses"
+          >
+            {{ title }}
+          </Typography>
+          <Typography
+            v-if="description"
+            :class="descriptionClasses"
+          >
+            {{ description }}
+          </Typography>
         </div>
         
-        <div v-if="$slots.filters" class="flex items-center gap-2">
+        <div
+          v-if="$slots.filters"
+          class="flex items-center gap-2"
+        >
           <slot name="filters" />
         </div>
       </div>

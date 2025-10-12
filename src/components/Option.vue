@@ -1,5 +1,9 @@
 <template>
-  <option :value="value" :disabled="disabled" :selected="selected">
+  <option
+    :value="value"
+    :disabled="disabled"
+    :selected="selected"
+  >
     <slot>{{ label }}</slot>
   </option>
 </template>

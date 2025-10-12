@@ -8,9 +8,17 @@
     :class="cn(linkVariants({ variant, size, underline, block, disabled }), $attrs.class)"
     @click="handleClick"
   >
-    <Icon v-if="icon && iconPosition === 'left'" :name="icon" :class="iconClass" />
+    <Icon
+      v-if="icon && iconPosition === 'left'"
+      :name="icon"
+      :class="iconClass"
+    />
     <slot />
-    <Icon v-if="icon && iconPosition === 'right'" :name="icon" :class="iconClass" />
+    <Icon
+      v-if="icon && iconPosition === 'right'"
+      :name="icon"
+      :class="iconClass"
+    />
     <Icon
       v-if="external && showExternalIcon"
       name="external-link"

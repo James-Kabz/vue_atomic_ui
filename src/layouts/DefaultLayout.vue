@@ -14,8 +14,15 @@
       </template>
       <template #actions>
         <slot name="header-actions">
-          <Button variant="ghost" size="sm">Sign In</Button>
-          <Button size="sm">Get Started</Button>
+          <Button
+            variant="ghost"
+            size="sm"
+          >
+            Sign In
+          </Button>
+          <Button size="sm">
+            Get Started
+          </Button>
         </slot>
       </template>
     </Header>
@@ -23,7 +30,10 @@
     <!-- Main Content -->
     <main class="flex-1">
       <!-- Breadcrumb -->
-      <div v-if="showBreadcrumb" class="bg-white border-b border-gray-200">
+      <div
+        v-if="showBreadcrumb"
+        class="bg-white border-b border-gray-200"
+      >
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <slot name="breadcrumb">
             <Breadcrumb :items="breadcrumbItems" />
