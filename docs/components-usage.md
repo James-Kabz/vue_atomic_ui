@@ -860,7 +860,7 @@ A small label component for displaying status, tags, or counts with multiple var
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `variant` | `String` | `'default'` | Visual style (default, secondary, destructive, outline, success, warning, info, ghost, link, subtle, dark, light, primaryOutline, destructiveOutline, successOutline, gradient) |
+| `variant` | `String` | `'default'` | Visual style (default, secondary, destructive, primary, outline, success, warning, info, ghost, link, subtle, dark, light, primaryOutline, destructiveOutline, successOutline, gradient) |
 | `size` | `String` | `'md'` | Size variant (sm, md, lg) |
 | `shape` | `String` | `'rounded'` | Shape variant (rounded, pill, square) |
 | `icon` | `String \| Object` | `null` | Icon component |
@@ -885,6 +885,8 @@ A small label component for displaying status, tags, or counts with multiple var
 <template>
   <div class="space-x-2">
     <Badge variant="default">New</Badge>
+    <Badge variant="primary">Primary</Badge>
+    <Badge variant="secondary">Secondary</Badge>
     <Badge variant="success" size="sm">Active</Badge>
     <Badge variant="warning" shape="pill">Pending</Badge>
     <Badge variant="destructive" icon="ExclamationIcon">Error</Badge>

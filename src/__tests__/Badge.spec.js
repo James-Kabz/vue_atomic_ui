@@ -6,7 +6,7 @@ describe('Badge', () => {
   it('renders with default props', () => {
     const wrapper = mount(Badge)
     expect(wrapper.classes()).toContain('inline-flex')
-    expect(wrapper.classes()).toContain('bg-blue-500')
+    expect(wrapper.classes()).toContain('bg-blue-50')
   })
 
   it('displays slot content', () => {
@@ -22,28 +22,35 @@ describe('Badge', () => {
     const wrapper = mount(Badge, {
       props: { variant: 'destructive' }
     })
-    expect(wrapper.classes()).toContain('bg-red-500')
+    expect(wrapper.classes()).toContain('bg-red-50')
+  })
+
+  it('applies primary variant classes', () => {
+    const wrapper = mount(Badge, {
+      props: { variant: 'primary' }
+    })
+    expect(wrapper.classes()).toContain('bg-blue-50')
   })
 
   it('applies success variant classes', () => {
     const wrapper = mount(Badge, {
       props: { variant: 'success' }
     })
-    expect(wrapper.classes()).toContain('bg-green-500')
+    expect(wrapper.classes()).toContain('bg-green-50')
   })
 
   it('applies warning variant classes', () => {
     const wrapper = mount(Badge, {
       props: { variant: 'warning' }
     })
-    expect(wrapper.classes()).toContain('bg-yellow-300')
+    expect(wrapper.classes()).toContain('bg-yellow-50')
   })
 
   it('applies info variant classes', () => {
     const wrapper = mount(Badge, {
       props: { variant: 'info' }
     })
-    expect(wrapper.classes()).toContain('bg-cyan-500')
+    expect(wrapper.classes()).toContain('bg-blue-50')
   })
 
   it('applies ghost variant classes', () => {
