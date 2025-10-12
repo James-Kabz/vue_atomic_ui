@@ -17,7 +17,7 @@
       :aria-label="dismissLabel"
       @click="handleDismiss"
     >
-      <XMarkIcon class="w-3 h-3" />
+      <Icon icon="xmark" class="w-3 h-3" />
     </button>
   </span>
 </template>
@@ -26,26 +26,18 @@
 import { computed } from 'vue'
 import { cva } from 'class-variance-authority'
 import { cn } from '../utils/cn.js'
+import Icon from './Icon.vue'
 
 defineOptions({
   inheritAttrs: false
 })
-
-// Icon component (could be moved to /icons folder)
-const XMarkIcon = {
-  template: `
-    <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-    </svg>
-  `
-}
 
 const props = defineProps({
   variant: {
     type: String,
     default: 'default',
     validator: (value) =>
-      ['default', 'secondary', 'destructive', 'outline'].includes(value)
+      ['default', 'secondary', 'destructive', 'outline', 'success', 'warning', 'info', 'ghost', 'link', 'subtle', 'dark', 'light', 'primaryOutline', 'destructiveOutline', 'successOutline', 'gradient'].includes(value)
   },
   size: {
     type: String,
@@ -86,7 +78,31 @@ const badgeVariants = cva(
           'border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80',
         destructive:
           'border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80',
-        outline: 'text-foreground border'
+        outline: 'text-foreground border',
+        success:
+          'border-transparent bg-green-600 text-white hover:bg-green-700',
+        warning:
+          'border-transparent bg-yellow-500 text-black hover:bg-yellow-600',
+        info:
+          'border-transparent bg-cyan-600 text-white hover:bg-cyan-700',
+        ghost:
+          'bg-transparent text-gray-700 hover:bg-gray-100',
+        link:
+          'text-blue-600 hover:underline',
+        subtle:
+          'bg-gray-100 text-gray-800 hover:bg-gray-200',
+        dark:
+          'bg-gray-900 text-white hover:bg-black',
+        light:
+          'bg-gray-50 text-gray-800 border border-gray-200 hover:bg-gray-100',
+        primaryOutline:
+          'border border-blue-600 text-blue-600 bg-transparent hover:bg-blue-50',
+        destructiveOutline:
+          'border border-red-600 text-red-600 bg-transparent hover:bg-red-50',
+        successOutline:
+          'border border-green-600 text-green-600 bg-transparent hover:bg-green-50',
+        gradient:
+          'bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700',
       },
       size: {
         sm: 'px-2 py-0.5 text-xs',
