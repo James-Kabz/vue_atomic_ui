@@ -171,10 +171,11 @@ const iconClasses = computed(() => {
 })
 
 const inputClasses = computed(() => [
-  'block w-full rounded-lg border bg-white transition-colors duration-200',
+  'block rounded-lg border bg-white transition-colors duration-200',
   'focus:outline-none focus:ring-2 focus:ring-offset-0',
   'disabled:bg-slate-50 disabled:text-slate-500 disabled:cursor-not-allowed',
   'placeholder:text-slate-400',
+  props.type === 'color' ? 'w-20 h-12 cursor-pointer' : 'w-full',
   sizeClasses.value,
   variantClasses.value,
   {

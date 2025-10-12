@@ -28,7 +28,7 @@
       enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75"
       leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
       <div v-if="isOpen"
-        :class="['absolute z-[9999] mt-2 bg-white border border-slate-200 rounded-lg shadow-lg p-4', calendarPosition]"
+        :class="['absolute z-[9999] mb-2 bg-white border border-slate-200 rounded-lg shadow-lg p-4', calendarPosition]"
         @click.stop>
         <!-- Header -->
         <div class="flex items-center justify-between mb-4">
@@ -127,7 +127,7 @@ const props = defineProps({
   },
   calendarPosition: {
     type: String,
-    default: 'left-0'
+    default: 'left-0 bottom-full'
   },
   ariaDescribedby: String
 })

@@ -409,7 +409,7 @@ const handleClose = () => {
               :format="field.format || 'MM/DD/YYYY'"
               :clearable="field.clearable !== false"
               :showToday="field.showToday !== false"
-              :calendarPosition="field.calendarPosition || 'left-0'"
+              :calendarPosition="field.calendarPosition || 'left-0 bottom-full'"
               :aria-describedby="ariaDescribedBy"
             />
           </template>
