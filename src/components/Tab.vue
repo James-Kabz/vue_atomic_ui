@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-import { provide, ref, defineEmits } from "vue"
+import { provide, ref } from "vue"
 import { cva } from "class-variance-authority"
 import { cn } from "../utils/cn"
 

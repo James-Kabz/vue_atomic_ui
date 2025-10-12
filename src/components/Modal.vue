@@ -9,7 +9,7 @@
         <div
           :class="cn(modalVariants({ size }), resizable ? 'resize' : '')"
           :style="resizable ? 'min-width: 400px; min-height: 200px;' : ''">
-          <button v-if="showClose" @click="closeModal"
+          <button v-if="showClose" @click="closeModal" aria-label="Close"
             class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
             <Icon icon="x" class="h-4 w-4" />
             <span class="sr-only">Close</span>
@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import { watch } from 'vue'
+import { watch, onUnmounted } from 'vue'
 import { cva } from 'class-variance-authority'
 import { cn } from '@/utils/cn'
 import Icon from './Icon.vue'
@@ -87,19 +87,29 @@ const handleBackdropClick = (event) => {
   }
 }
 
-// Handle escape key
+// Handle escape key - FIXED VERSION
+let handleEscape = null
+
 watch(() => props.modelValue, (isOpen) => {
   if (isOpen) {
-    const handleEscape = (event) => {
+    handleEscape = (event) => {
       if (event.key === 'Escape') {
         closeModal()
       }
     }
     document.addEventListener('keydown', handleEscape)
-
-    return () => {
+  } else {
+    if (handleEscape) {
       document.removeEventListener('keydown', handleEscape)
+      handleEscape = null
     }
+  }
+}, { immediate: true })
+
+onUnmounted(() => {
+  if (handleEscape) {
+    document.removeEventListener('keydown', handleEscape)
+    handleEscape = null
   }
 })
 </script>
