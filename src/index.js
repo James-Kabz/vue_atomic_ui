@@ -85,7 +85,7 @@ export { cn } from "./utils/cn.js"
 
 // Styles
 import "./styles/base.css"
-import STLLoader from "./components/STLLoader.vue"
+import STLLoader from "./components/StlLoader.vue"
 
 const components = {
   Avatar,
