@@ -287,8 +287,8 @@ import Checkbox from './Checkbox.vue'
 import DataTableHeader from './DataTableHeader.vue'
 import DataTableRow from './DataTableRow.vue'
 import DataTablePagination from './DataTablePagination.vue'
-import STLLoader from './STLLoader.vue'
 import Icon from './Icon.vue'
+import STLLoader from './STLLoader.vue'
 
 const props = defineProps({
   data: {
