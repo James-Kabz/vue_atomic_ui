@@ -122,8 +122,6 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
-
 // Define component props
 defineProps({
   loading: {
