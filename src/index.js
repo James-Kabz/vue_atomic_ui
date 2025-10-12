@@ -20,7 +20,6 @@ import Text from "./components/Text.vue"
 import Textarea from "./components/Textarea.vue"
 import Tooltip from "./components/Tooltip.vue"
 import Typography from "./components/Typography.vue"
-import STLLoader from "./components/STLLoader.vue"
 
 import Alert from "./components/Alert.vue"
 import Breadcrumb from "./components/Breadcrumb.vue"
@@ -86,6 +85,7 @@ export { cn } from "./utils/cn.js"
 
 // Styles
 import "./styles/base.css"
+import STLLoader from "./components/STLLoader.vue"
 
 const components = {
   Avatar,
