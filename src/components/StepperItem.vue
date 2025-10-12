@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-const props = defineProps({
+defineProps({
   step: { type: Number, required: true },
   title: { type: String, required: true },
   description: { type: String, default: "" },

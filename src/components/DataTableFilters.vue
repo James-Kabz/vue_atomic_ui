@@ -286,11 +286,11 @@ const props = defineProps({
     type: Array,
     default: () => [],
     validator: (filters) => {
-      return filters.every(filter => 
-        filter.hasOwnProperty('key') && 
-        filter.hasOwnProperty('label') &&
-        filter.hasOwnProperty('from') &&
-        filter.hasOwnProperty('to')
+      return filters.every(filter =>
+        Object.prototype.hasOwnProperty.call(filter, 'key') &&
+        Object.prototype.hasOwnProperty.call(filter, 'label') &&
+        Object.prototype.hasOwnProperty.call(filter, 'from') &&
+        Object.prototype.hasOwnProperty.call(filter, 'to')
       )
     }
   },

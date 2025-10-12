@@ -1,6 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { createApp } from 'vue'
 import Input from '../../components/Input.vue'
 import Button from '../../components/Button.vue'
 import Select from '../../components/Select.vue'

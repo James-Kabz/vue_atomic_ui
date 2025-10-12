@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-const props = defineProps({
+defineProps({
   value: {
     type: [String, Number, Boolean],
     required: true

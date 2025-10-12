@@ -173,13 +173,6 @@ const sizeClasses = computed(() => {
   return sizes[props.size]
 })
 
-const variantClasses = computed(() => {
-  const variants = {
-    default: 'border-slate-300 text-blue-600 focus:ring-blue-500',
-    error: 'border-red-300 text-red-600 focus:ring-red-500'
-  }
-  return variants[props.variant]
-})
 
 const checkboxClasses = computed(() => [
   'absolute inset-0 w-full h-full opacity-0 cursor-pointer',

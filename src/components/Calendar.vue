@@ -288,13 +288,6 @@ function parseDate(value) {
   return isNaN(date.getTime()) ? null : date
 }
 
-function isToday(day) {
-  return (
-    today.getDate() === day &&
-    today.getMonth() === currentMonth.value &&
-    today.getFullYear() === currentYear.value
-  )
-}
 
 function isSelected(day) {
   if (!selectedDate.value) return false

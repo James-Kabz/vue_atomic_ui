@@ -209,7 +209,6 @@ import { ref, computed } from 'vue'
 import DataTableFilters from '../components/DataTableFilters.vue'
 import DataTableToolBar from '../components/DataTableToolBar.vue'
 import DataTable from '../components/DataTable.vue'
-import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash'
 import DatePicker from '../components/DatePicker.vue'
 
 // Sample data with better avatars

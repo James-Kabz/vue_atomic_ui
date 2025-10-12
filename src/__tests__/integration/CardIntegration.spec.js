@@ -3,7 +3,6 @@ import { mount } from '@vue/test-utils'
 import Card from '../../components/Card.vue'
 import Button from '../../components/Button.vue'
 import Badge from '../../components/Badge.vue'
-import Avatar from '../../components/Avatar.vue'
 
 // Mock Icon component
 vi.mock('../../components/Icon.vue', () => ({

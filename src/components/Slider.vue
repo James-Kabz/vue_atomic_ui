@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-const props = defineProps({
+defineProps({
   modelValue: { type: [Number, String], default: 0 },
   min: { type: Number, default: 0 },
   max: { type: Number, default: 100 },

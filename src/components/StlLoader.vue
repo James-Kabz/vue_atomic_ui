@@ -125,7 +125,7 @@
 import { defineProps } from 'vue'
 
 // Define component props
-const props = defineProps({
+defineProps({
   loading: {
     type: Boolean,
     default: true

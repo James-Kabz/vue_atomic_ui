@@ -338,26 +338,6 @@ const refreshData = () => {
   // You would typically make API calls here
 }
 
-const handleNavigation = (item) => {
-  console.log('Navigated to:', item.name)
-}
-
-const handleSearch = (query) => {
-  console.log('Search query:', query)
-}
-
-const handleProfileAction = (action) => {
-  console.log('Profile action:', action.name)
-}
-
-const handleLogout = () => {
-  console.log('User logged out')
-  // Handle logout logic
-}
-
-const handleSidebarToggle = (collapsed) => {
-  console.log('Sidebar toggled:', collapsed)
-}
 
 const getStatusColor = (status) => {
   const colors = {

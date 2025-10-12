@@ -61,13 +61,13 @@
 
           <h1 :class="titleClasses">
             <slot name="title">
-              {{ errorTitle }}
+              {{ title }}
             </slot>
           </h1>
 
           <p :class="messageClasses">
             <slot name="message">
-              {{ errorMessage }}
+              {{ message }}
             </slot>
           </p>
         </div>
@@ -413,11 +413,11 @@ export default {
 
     const errorConfig = computed(() => errorConfigs.value)
 
-    const errorTitle = computed(() => {
+    const title = computed(() => {
       return props.errorTitle || errorConfig.value.title
     })
 
-    const errorMessage = computed(() => {
+    const message = computed(() => {
       return props.errorMessage || errorConfig.value.message
     })
 
@@ -530,8 +530,8 @@ export default {
       
       // Computed
       errorConfig,
-      errorTitle,
-      errorMessage,
+      title,
+      message,
       homeButtonIcon,
       additionalInfoConfig,
       

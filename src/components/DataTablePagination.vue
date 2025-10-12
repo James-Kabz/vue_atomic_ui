@@ -222,7 +222,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['update:currentPage', 'update:pageSize'])
+defineEmits(['update:currentPage', 'update:pageSize'])
 
 // CVA variants
 const footerVariants = cva('border-t border-slate-200', {

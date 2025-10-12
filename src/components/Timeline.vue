@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-const props = defineProps({
+defineProps({
   orientation: {
     type: String,
     default: 'vertical',

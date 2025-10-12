@@ -723,7 +723,7 @@ const getSortIconClasses = (column, direction) => cn(
 )
 
 // Watch for external changes
-watch(() => props.selectedItems, (newSelection) => {
+watch(() => props.selectedItems, () => {
   // Handle external selection changes if needed
 }, { deep: true })
 

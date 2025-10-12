@@ -17,14 +17,13 @@ vi.mock('../../components/Icon.vue', () => ({
 describe('Modal Integration', () => {
   it('handles modal with form submission', async () => {
     let submittedData = null
-    let modalClosed = false
 
     const TestModal = {
       components: { Modal, Input, Button },
       template: `
         <div>
           <Button @click="showModal = true">Open Modal</Button>
-          <Modal v-model="showModal" @close="modalClosed = true">
+          <Modal v-model="showModal">
             <template #default>
               <h2>Create Account</h2>
               <form @submit.prevent="submitForm">
@@ -42,7 +41,6 @@ describe('Modal Integration', () => {
       data() {
         return {
           showModal: false,
-          modalClosed: false,
           form: { name: '', email: '' }
         }
       },

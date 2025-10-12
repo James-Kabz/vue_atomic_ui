@@ -1,17 +1,16 @@
-<script setup lang="ts">
+<script setup>
 import { ref, computed } from 'vue'
 import Typography from '../../components/Typography.vue'
 import Button from '../../components/Button.vue'
 import FormField from '../../components/FormField.vue'
 import Input from '../../components/Input.vue'
 import Link from '../../components/Link.vue'
-import AuthLayout from '../../layouts/AuthLayout.vue'
 
 const email = ref('')
 const companyCode = ref('')
 const isLoading = ref(false)
 const isSubmitted = ref(false)
-const errors = ref<{ email?: string; companyCode?: string }>({})
+const errors = ref({})
 
 const onSubmit = async () => {
   errors.value = {} // reset
@@ -65,104 +64,150 @@ const handleTryAgain = () => {
 </script>
 
 <template>
-    <div class="w-full max-w-sm space-y-6">
-      <!-- Header -->
-      <div class="text-center space-y-2">
-        <Typography variant="display-sm" class="text-slate-900">
-          Forgot Password?
-        </Typography>
-        <Typography variant="body-sm" class="text-slate-600">
-          Enter your email and company code to receive a password reset link.
-        </Typography>
-      </div>
+  <div class="w-full max-w-sm space-y-6">
+    <!-- Header -->
+    <div class="text-center space-y-2">
+      <Typography
+        variant="display-sm"
+        class="text-slate-900"
+      >
+        Forgot Password?
+      </Typography>
+      <Typography
+        variant="body-sm"
+        class="text-slate-600"
+      >
+        Enter your email and company code to receive a password reset link.
+      </Typography>
+    </div>
 
-      <!-- Success Message -->
-      <div v-if="isSubmitted" class="text-center space-y-4">
-        <div class="mx-auto w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-          <svg class="w-6 h-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-        </div>
-
-        <div class="space-y-2">
-          <Typography variant="text-sm" class="text-slate-900 font-semibold">
-            Reset Link Sent!
-          </Typography>
-          <Typography variant="body-sm" class="text-slate-600">
-            We've sent a password reset link to {{ email }}. Please check your email and follow the instructions.
-          </Typography>
-        </div>
-
-        <div class="pt-4 space-y-3">
-          <Typography variant="body-sm" class="text-slate-600">
-            Didn't receive the email? Check your spam folder or try again.
-          </Typography>
-
-          <Button
-            variant="default"
-            size="sm"
-            @click="handleTryAgain"
-            class="mx-auto"
-          >
-            Try Again
-          </Button>
-        </div>
-      </div>
-
-      <!-- Form -->
-      <form v-else @submit.prevent="onSubmit" class="space-y-6">
-        <!-- Email -->
-        <FormField label="Email" :error="errors.email" required>
-          <template #default="{ fieldId, hasError, ariaDescribedBy }">
-            <Input
-              placeholder="Enter your email address"
-              :id="fieldId"
-              v-model="email"
-              type="email"
-              :class="hasError ? 'border-red-500' : 'border-slate-300'"
-              :aria-describedby="ariaDescribedBy"
-              :disabled="isLoading"
-            />
-          </template>
-        </FormField>
-
-        <!-- Company Code -->
-        <FormField label="Company Code" :error="errors.companyCode" required>
-          <template #default="{ fieldId, hasError, ariaDescribedBy }">
-            <Input
-              placeholder="Enter your company code"
-              :id="fieldId"
-              v-model="companyCode"
-              type="text"
-              :class="hasError ? 'border-red-500' : 'border-slate-300'"
-              :aria-describedby="ariaDescribedBy"
-              :disabled="isLoading"
-            />
-          </template>
-        </FormField>
-
-        <!-- Submit Button -->
-        <Button
-          type="submit"
-          :disabled="!isFormValid"
-          :loading="isLoading"
-          loading-text="Sending..."
-          variant="default"
-          size="default"
-          class="w-full"
+    <!-- Success Message -->
+    <div
+      v-if="isSubmitted"
+      class="text-center space-y-4"
+    >
+      <div class="mx-auto w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+        <svg
+          class="w-6 h-6 text-green-600"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="2"
+          stroke="currentColor"
         >
-          Send Reset Link
-        </Button>
-      </form>
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+      </div>
 
-      <!-- Back to Login -->
-      <div class="text-center">
-        <Typography variant="body-sm" class="text-slate-600">
-          Remember your password?
-          <Link href="/" class="text-blue-600 hover:text-blue-500 font-medium ml-1">
-            Back to Sign In
-          </Link>
+      <div class="space-y-2">
+        <Typography
+          variant="text-sm"
+          class="text-slate-900 font-semibold"
+        >
+          Reset Link Sent!
         </Typography>
+        <Typography
+          variant="body-sm"
+          class="text-slate-600"
+        >
+          We've sent a password reset link to {{ email }}. Please check your email and follow the instructions.
+        </Typography>
+      </div>
+
+      <div class="pt-4 space-y-3">
+        <Typography
+          variant="body-sm"
+          class="text-slate-600"
+        >
+          Didn't receive the email? Check your spam folder or try again.
+        </Typography>
+
+        <Button
+          variant="default"
+          size="sm"
+          class="mx-auto"
+          @click="handleTryAgain"
+        >
+          Try Again
+        </Button>
       </div>
     </div>
+
+    <!-- Form -->
+    <form
+      v-else
+      class="space-y-6"
+      @submit.prevent="onSubmit"
+    >
+      <!-- Email -->
+      <FormField
+        label="Email"
+        :error="errors.email"
+        required
+      >
+        <template #default="{ fieldId, hasError, ariaDescribedBy }">
+          <Input
+            :id="fieldId"
+            v-model="email"
+            placeholder="Enter your email address"
+            type="email"
+            :class="hasError ? 'border-red-500' : 'border-slate-300'"
+            :aria-describedby="ariaDescribedBy"
+            :disabled="isLoading"
+          />
+        </template>
+      </FormField>
+
+      <!-- Company Code -->
+      <FormField
+        label="Company Code"
+        :error="errors.companyCode"
+        required
+      >
+        <template #default="{ fieldId, hasError, ariaDescribedBy }">
+          <Input
+            :id="fieldId"
+            v-model="companyCode"
+            placeholder="Enter your company code"
+            type="text"
+            :class="hasError ? 'border-red-500' : 'border-slate-300'"
+            :aria-describedby="ariaDescribedBy"
+            :disabled="isLoading"
+          />
+        </template>
+      </FormField>
+
+      <!-- Submit Button -->
+      <Button
+        type="submit"
+        :disabled="!isFormValid"
+        :loading="isLoading"
+        loading-text="Sending..."
+        variant="default"
+        size="default"
+        class="w-full"
+      >
+        Send Reset Link
+      </Button>
+    </form>
+
+    <!-- Back to Login -->
+    <div class="text-center">
+      <Typography
+        variant="body-sm"
+        class="text-slate-600"
+      >
+        Remember your password?
+        <Link
+          href="/"
+          class="text-blue-600 hover:text-blue-500 font-medium ml-1"
+        >
+          Back to Sign In
+        </Link>
+      </Typography>
+    </div>
+  </div>
 </template>

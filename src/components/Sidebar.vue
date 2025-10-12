@@ -459,7 +459,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { cn } from '../utils/cn.js'
 import Icon from './Icon.vue'
 

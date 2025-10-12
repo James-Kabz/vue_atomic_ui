@@ -228,7 +228,7 @@ export default {
       ]
     }
   },
-  setup(props) {
+  setup() {
     const currentYear = computed(() => new Date().getFullYear())
 
     return {

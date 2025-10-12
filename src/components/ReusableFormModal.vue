@@ -172,7 +172,7 @@ watch(
     if (isInitialized.value && newData) {
       // Update formData with new values from initialData without replacing the entire object
       Object.keys(newData).forEach((key) => {
-        if (formData.value.hasOwnProperty(key) && newData[key] !== undefined && newData[key] !== null) {
+        if (Object.prototype.hasOwnProperty.call(formData.value, key) && newData[key] !== undefined && newData[key] !== null) {
           formData.value[key] = newData[key]
         }
       })
