@@ -1,3 +1,173 @@
+# STL Horizon Vue Atomic UI Library
+
+A comprehensive Vue.js component library with Tailwind CSS styling, featuring automated testing, semantic versioning, and CI/CD pipelines.
+
+## Development & Release Workflow
+
+### Development
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Run tests
+npm run test:unit
+
+# Run tests with coverage
+npm run test:coverage
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+### Commit Convention
+
+This project uses [Conventional Commits](https://conventionalcommits.org/) for automatic semantic versioning:
+
+```bash
+# Features (minor version bump: 1.2.3 → 1.3.0)
+git commit -m "feat: add new component"
+
+# Bug fixes (patch version bump: 1.2.3 → 1.2.4)
+git commit -m "fix: resolve button click issue"
+
+# Breaking changes (major version bump: 1.2.3 → 2.0.0)
+git commit -m "feat!: redesign component API
+
+BREAKING CHANGE: component props have changed"
+
+# Other changes (patch version bump)
+git commit -m "docs: update component documentation"
+git commit -m "refactor: improve component performance"
+git commit -m "test: add component tests"
+```
+
+### Automatic Versioning & Publishing
+
+The project uses GitHub Actions for automated semantic versioning and NPM publishing:
+
+- **Triggers**: Push to `main` branch after tests pass
+- **Version Bumps**:
+  - `major`: Breaking changes (BREAKING CHANGE or `!:` in commit)
+  - `minor`: New features (`feat:` commits)
+  - `patch`: Bug fixes (`fix:` commits) or other changes
+- **Process**:
+  1. Run comprehensive test suite
+  2. Analyze commits since last release
+  3. Bump version automatically
+  4. Create git tag and commit
+  5. Publish to NPM with public access
+
+## Testing
+
+This library includes comprehensive testing with both unit and integration tests.
+
+### Test Structure
+
+```
+src/__tests__/
+├── *.spec.js                    # Unit tests for individual components
+└── integration/                 # Integration tests for component combinations
+    ├── FormIntegration.spec.js
+    ├── ModalIntegration.spec.js
+    ├── CardIntegration.spec.js
+    └── NavigationIntegration.spec.js
+```
+
+### Testing Types
+
+#### Unit Tests
+- Individual component functionality
+- Props, events, and styling validation
+- Accessibility testing
+- Error handling
+
+#### Integration Tests
+- **Form Integration**: Complete form workflows with Input, Button, Select, Checkbox
+- **Modal Integration**: Modal with form submission and alert interactions
+- **Card Integration**: Cards with headers, content, footers, and actions
+- **Navigation Integration**: Dropdown menus and breadcrumb navigation
+
+### CI/CD Pipeline
+
+The project uses GitHub Actions for automated testing and releases:
+
+- **Triggers**: Push/PR to `main` and `develop` branches
+- **Node.js versions**: 18.x, 20.x, 22.x
+- **Checks**: Linting, unit tests, integration tests, build verification
+- **Coverage**: Uploaded to Codecov with 70% threshold requirements
+- **Release**: Automatic semantic versioning and NPM publishing
+
+### Coverage Requirements
+
+- Branches: 70%
+- Functions: 70%
+- Lines: 70%
+- Statements: 70%
+
+### Running Tests Locally
+
+```bash
+# Run all tests
+npm run test:unit
+
+# Run tests once (CI mode)
+npm run test:unit:run
+
+# Run with coverage
+npm run test:coverage
+
+# Run only integration tests
+npm run test:unit -- --testPathPattern=integration
+
+# Run specific test file
+npm run test:unit -- Button.spec.js
+```
+
+### Test Configuration
+
+- **Framework**: Vitest with jsdom environment
+- **Coverage**: V8 provider with HTML, JSON, and text reports
+- **Mocking**: FontAwesome icons and other external dependencies
+- **Assertions**: Built-in Vitest matchers
+
+### Writing Tests
+
+When adding new components, follow these patterns:
+
+1. **Unit Tests**: Test component props, events, slots, and styling
+2. **Integration Tests**: Test component combinations and workflows
+3. **Accessibility**: Include ARIA attributes and keyboard navigation tests
+4. **Edge Cases**: Test disabled states, loading states, and error conditions
+
+Example test structure:
+```javascript
+import { describe, it, expect } from 'vitest'
+import { mount } from '@vue/test-utils'
+import Component from '../components/Component.vue'
+
+describe('Component', () => {
+  it('renders with default props', () => {
+    const wrapper = mount(Component)
+    expect(wrapper.exists()).toBe(true)
+  })
+
+  it('handles user interactions', async () => {
+    const wrapper = mount(Component)
+    await wrapper.find('button').trigger('click')
+    expect(wrapper.emitted('click')).toHaveLength(1)
+  })
+})
+```
+
+---
+
 # Component Usage Documentation
 
 This document provides comprehensive usage examples and API reference for all Vue components in the STL Horizon Vue Atomic UI library.
@@ -1807,3 +1977,105 @@ import Icon from '@/components/Icon.vue'
 ```
 
 <!-- Additional components (DataTableCell, DataTableFilters, DataTableHeader, DataTablePagination, DataTableRow, DataTableToolBar, FileUpload, Footer, Header, InputGroup, Link, ListItem, Logo, MainNavigation, MenuItem, ModalBody, ModalFooter, ModalHeader, Notification, Option, ProgressBar, RiskModal, Search, Sidebar, Stepper, StepperItem, STLLoader, Tab, TabPanel, Text, Timeline, TimelineItem, Toast, Tooltip, Typography) follow the same pattern. For these components, refer to their source code for props, events, and slots. -->
+
+## Testing
+
+This library includes comprehensive testing with both unit and integration tests to ensure reliability and maintainability.
+
+### Test Structure
+
+```
+src/__tests__/
+├── *.spec.js                    # Unit tests for individual components
+└── integration/                 # Integration tests for component combinations
+    ├── FormIntegration.spec.js
+    ├── ModalIntegration.spec.js
+    ├── CardIntegration.spec.js
+    └── NavigationIntegration.spec.js
+```
+
+### Testing Types
+
+#### Unit Tests
+- Individual component functionality
+- Props, events, and styling validation
+- Accessibility testing
+- Error handling
+
+#### Integration Tests
+- **Form Integration**: Complete form workflows with Input, Button, Select, Checkbox
+- **Modal Integration**: Modal with form submission and alert interactions
+- **Card Integration**: Cards with headers, content, footers, and actions
+- **Navigation Integration**: Dropdown menus and breadcrumb navigation
+
+### CI/CD Pipeline
+
+The project uses GitHub Actions for automated testing:
+
+- **Triggers**: Push/PR to `main` and `develop` branches
+- **Node.js versions**: 18.x, 20.x, 22.x
+- **Checks**: Linting, unit tests, integration tests, build verification
+- **Coverage**: Uploaded to Codecov with 70% threshold requirements
+- **Release**: Automatic NPM publishing on main branch pushes
+
+### Coverage Requirements
+
+- Branches: 70%
+- Functions: 70%
+- Lines: 70%
+- Statements: 70%
+
+### Running Tests Locally
+
+```bash
+# Run all tests
+npm run test:unit
+
+# Run tests once (CI mode)
+npm run test:unit:run
+
+# Run with coverage
+npm run test:coverage
+
+# Run only integration tests
+npm run test:unit -- --testPathPattern=integration
+
+# Run specific test file
+npm run test:unit -- Button.spec.js
+```
+
+### Test Configuration
+
+- **Framework**: Vitest with jsdom environment
+- **Coverage**: V8 provider with HTML, JSON, and text reporters
+- **Mocking**: FontAwesome icons and other external dependencies
+- **Assertions**: Built-in Vitest matchers
+
+### Writing Tests
+
+When adding new components, follow these patterns:
+
+1. **Unit Tests**: Test component props, events, slots, and styling
+2. **Integration Tests**: Test component combinations and workflows
+3. **Accessibility**: Include ARIA attributes and keyboard navigation tests
+4. **Edge Cases**: Test disabled states, loading states, and error conditions
+
+Example test structure:
+```javascript
+import { describe, it, expect } from 'vitest'
+import { mount } from '@vue/test-utils'
+import Component from '../components/Component.vue'
+
+describe('Component', () => {
+  it('renders with default props', () => {
+    const wrapper = mount(Component)
+    expect(wrapper.exists()).toBe(true)
+  })
+
+  it('handles user interactions', async () => {
+    const wrapper = mount(Component)
+    await wrapper.find('button').trigger('click')
+    expect(wrapper.emitted('click')).toHaveLength(1)
+  })
+})
+```
