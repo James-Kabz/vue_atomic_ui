@@ -288,7 +288,7 @@ import DataTableHeader from './DataTableHeader.vue'
 import DataTableRow from './DataTableRow.vue'
 import DataTablePagination from './DataTablePagination.vue'
 import Icon from './Icon.vue'
-import STLLoader from './STLLoader.vue'
+import { STLLoader } from '../index.js'
 
 const props = defineProps({
   data: {
