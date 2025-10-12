@@ -444,7 +444,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['selection-change', 'sort-change', 'row-click', 'page-change', 'page-size-change'])
+const emit = defineEmits(['selection-change', 'sort-change', 'row-click', 'page-change', 'page-size-change', 'refresh'])
 
 const currentPage = ref(1)
 const pageSize = ref(props.pageSize)

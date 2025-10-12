@@ -31,6 +31,7 @@ import { cn } from '../utils/cn.js'
 const props = defineProps({
   modelValue: null,
   value: {
+    type: [String, Number, Boolean],
     required: true
   },
   label: String,

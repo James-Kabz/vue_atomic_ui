@@ -45,15 +45,15 @@
         :class="densityToggleClasses"
       >
         <button
-          v-for="density in densityOptions"
-          :key="density.value"
-          :class="getDensityButtonClasses(density.value)"
-          :title="density.label"
+          v-for="option in densityOptions"
+          :key="option.value"
+          :class="getDensityButtonClasses(option.value)"
+          :title="option.label"
           type="button"
-          @click="$emit('update:density', density.value)"
+          @click="$emit('update:density', option.value)"
         >
           <font-awesome-icon
-            :icon="density.icon"
+            :icon="option.icon"
             class="w-4 h-4"
           />
         </button>

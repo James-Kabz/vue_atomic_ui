@@ -22,8 +22,9 @@
           >
             <div
               v-if="item.title"
-              v-html="item.title"
-            />
+            >
+              {{ item.title }}
+            </div>
           </slot>
         </div>
 
@@ -60,8 +61,9 @@
             >
               <div
                 v-if="item.content"
-                v-html="item.content"
-              />
+              >
+                {{ item.content }}
+              </div>
             </slot>
           </slot>
         </div>

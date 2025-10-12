@@ -82,13 +82,15 @@
             <div class="flex-1 text-left">
               <div
                 class="font-medium text-slate-900"
-                v-html="highlightMatch(result.title)"
-              />
+              >
+                {{ highlightMatch(result.title) }}
+              </div>
               <div
                 v-if="result.description"
                 class="text-sm text-slate-500 truncate"
-                v-html="highlightMatch(result.description)"
-              />
+              >
+                {{ highlightMatch(result.description) }}
+              </div>
             </div>
 
             <div
@@ -244,7 +246,7 @@ const handleKeydown = (e) => {
 const highlightMatch = (text) => {
   if (!props.highlightMatches || !props.modelValue || !text) return text
   const regex = new RegExp(`(${props.modelValue})`, 'gi')
-  return text.replace(regex, '<mark class="bg-yellow-200">$1</mark>')
+  return text.replace(regex, '$1')
 }
 
 // Variants

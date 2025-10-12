@@ -24,7 +24,6 @@ const props = defineProps({
   },
   entityName: {
     type: String,
-    required: true,
     default: 'Item',
   },
   fields: {
