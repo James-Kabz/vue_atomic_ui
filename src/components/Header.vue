@@ -17,10 +17,10 @@
             {{ organisationName }}
           </p>
           <p
-            v-if="user.organisation?.role"
+            v-if="user.organisations?.role"
             class="text-xs text-blue-600 truncate font-medium"
           >
-            {{ user.organisation.role }}
+            {{ user.organisations.role }}
           </p>
         </div>
 
