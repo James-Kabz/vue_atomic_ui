@@ -19,7 +19,7 @@
       
       <div class="flex flex-col items-center justify-center py-6">
         <Icon
-          name="upload"
+          icon="upload"
           class="h-8 w-8 text-muted-foreground mb-2"
         />
         <p class="text-sm text-muted-foreground text-center">
@@ -41,11 +41,11 @@
       <div
         v-for="(file, index) in files"
         :key="index"
-        class="flex items-center justify-between p-2 bg-muted rounded-md"
+        class="flex items-center justify-between p-2 bg-gray-300 rounded-md"
       >
         <div class="flex items-center space-x-2">
           <Icon
-            name="file"
+            icon="file"
             class="h-4 w-4 text-muted-foreground"
           />
           <span class="text-sm">{{ file.name }}</span>
@@ -56,7 +56,7 @@
           @click="removeFile(index)"
         >
           <Icon
-            name="x"
+            icon="x"
             class="h-4 w-4"
           />
         </button>
@@ -89,21 +89,25 @@ const isDragOver = ref(false)
 const fileInput = ref(null)
 
 const dropzoneVariants = cva(
-  'border-2 border-dashed rounded-lg cursor-pointer transition-colors hover:bg-muted/50',
+  'border-2 border-dashed rounded-lg cursor-pointer transition-all duration-200',
   {
     variants: {
       variant: {
-        default: 'border-muted-foreground/25',
-        dashed: 'border-primary/50'
+        default: 'border-muted-foreground/25 hover:border-muted-foreground/50 hover:bg-muted/30',
+        dashed: 'border-primary/50 hover:border-primary/70 hover:bg-primary/10'
       }
     }
   }
 )
 
-const dropzoneClasses = computed(() => 
+const dropzoneClasses = computed(() =>
   cn(
     dropzoneVariants({ variant: props.variant }),
-    isDragOver.value && 'border-primary bg-primary/5'
+    {
+      'border-green-500 bg-green-50/50': files.value.length > 0 && !isDragOver.value,
+      'border-blue-500 bg-blue-50/50 ring-2 ring-blue-200/50': isDragOver.value,
+      'border-green-500 bg-green-50/50': files.value.length > 0 && isDragOver.value
+    }
   )
 )
 

@@ -85,7 +85,7 @@ export { cn } from "./utils/cn.js"
 
 // Styles
 import "./styles/base.css"
-import STLLoader from "./components/StlLoader.vue"
+import Loader from "./components/Loader.vue"
 
 const components = {
   Avatar,
@@ -110,7 +110,7 @@ const components = {
   Textarea,
   Tooltip,
   Typography,
-  STLLoader,
+  Loader,
   Alert,
   Breadcrumb,
   ButtonGroup,
@@ -203,7 +203,7 @@ export {
   Textarea,
   Tooltip,
   Typography,
-  STLLoader,
+  Loader,
   Alert,
   Breadcrumb,
   ButtonGroup,

@@ -18,7 +18,7 @@
 
     <!-- Loading Overlay for entire table -->
     <div class="relative">
-      <STLLoader
+      <Loader
         v-if="loading"
         :loading="true"
         :type="loadingType"
@@ -47,7 +47,7 @@
               >
                 <div class="flex items-center justify-center">
                   <!-- Header loading for bulk operations -->
-                  <STLLoader
+                  <Loader
                     v-if="bulkLoading"
                     :loading="true"
                     type="spin"
@@ -75,7 +75,7 @@
                   <span>{{ column.label }}</span>
 
                   <!-- Sort loading indicator -->
-                  <STLLoader
+                  <Loader
                     v-if="sortLoading && sortColumn === column.key"
                     :loading="true"
                     type="spin"
@@ -139,7 +139,7 @@
                 :class="emptyCellClasses"
               >
                 <div class="flex justify-center items-center">
-                  <STLLoader
+                  <Loader
                     :loading="true"
                     type="dots"
                     size="medium"
@@ -288,7 +288,7 @@ import DataTableHeader from './DataTableHeader.vue'
 import DataTableRow from './DataTableRow.vue'
 import DataTablePagination from './DataTablePagination.vue'
 import Icon from './Icon.vue'
-import { STLLoader } from '../index.js'
+import Loader from './Loader.vue'
 
 const props = defineProps({
   data: {

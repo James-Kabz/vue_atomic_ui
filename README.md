@@ -1987,7 +1987,7 @@ import Icon from '@/components/Icon.vue'
 </script>
 ```
 
-<!-- Additional components (DataTableCell, DataTableFilters, DataTableHeader, DataTablePagination, DataTableRow, DataTableToolBar, FileUpload, Footer, Header, InputGroup, Link, ListItem, Logo, MainNavigation, MenuItem, ModalBody, ModalFooter, ModalHeader, Notification, Option, ProgressBar, RiskModal, Search, Sidebar, Stepper, StepperItem, STLLoader, Tab, TabPanel, Text, Timeline, TimelineItem, Toast, Tooltip, Typography) follow the same pattern. For these components, refer to their source code for props, events, and slots. -->
+<!-- Additional components (DataTableCell, DataTableFilters, DataTableHeader, DataTablePagination, DataTableRow, DataTableToolBar, FileUpload, Footer, Header, InputGroup, Link, ListItem, Logo, MainNavigation, MenuItem, ModalBody, ModalFooter, ModalHeader, Notification, Option, ProgressBar, RiskModal, Search, Sidebar, Stepper, StepperItem, Loader, Tab, TabPanel, Text, Timeline, TimelineItem, Toast, Tooltip, Typography) follow the same pattern. For these components, refer to their source code for props, events, and slots. -->
 
 ## Testing
 
