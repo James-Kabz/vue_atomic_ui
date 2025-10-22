@@ -106,7 +106,7 @@ const dropzoneClasses = computed(() =>
     {
       'border-green-500 bg-green-50/50': files.value.length > 0 && !isDragOver.value,
       'border-blue-500 bg-blue-50/50 ring-2 ring-blue-200/50': isDragOver.value,
-      'border-green-500 bg-green-50/50': files.value.length > 0 && isDragOver.value
+      'border-green-600 bg-green-100/50 ring-2 ring-green-200/50': files.value.length > 0 && isDragOver.value
     }
   )
 )
