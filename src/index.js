@@ -79,7 +79,7 @@ import ErrorLayout from "./layouts/ErrorLayout.vue"
 
 // Import toast function and composable (not a component!)
 import { toast, useToaster } from './lib/toast'
-
+import { tooltip } from "./directives/tooltip.js"
 // Utils
 export { cn } from "./utils/cn.js"
 
@@ -173,6 +173,9 @@ const VueUI = {
     
     app.config.globalProperties.$toast = toast
     app.provide('toast', toast)
+
+    app.config.globalProperties.$tooltip = tooltip
+    app.provide('tooltip', tooltip)
   },
 }
 
@@ -254,5 +257,6 @@ export {
   ErrorLayout,
   // Export toast function and composable
   toast,
-  useToaster
+  useToaster,
+  tooltip
 }

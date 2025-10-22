@@ -242,51 +242,66 @@ const validateForm = () => {
 
 const handleSelectChange = async (field, value) => {
   formData.value[field.name] = value
-  
+
   // Call onChange handler if provided and wait for it to complete
   if (field.onChange && typeof field.onChange === 'function') {
-    await field.onChange(value, formData.value)
+    try {
+      await field.onChange(value, formData.value)
+    } catch (error) {
+      console.error('Error in onChange handler:', error)
+      toast.error('An error occurred while processing the change')
+    }
   }
 }
 
 // Watch for slider changes
 const handleSliderChange = (field, value) => {
   formData.value[field.name] = value
-  
+
   // Call onChange handler if provided
   if (field.onChange && typeof field.onChange === 'function') {
-    field.onChange(value, formData.value)
+    try {
+      field.onChange(value, formData.value)
+    } catch (error) {
+      console.error('Error in onChange handler:', error)
+      toast.error('An error occurred while processing the change')
+    }
   }
 }
 
 const handleSubmit = async () => {
-  if (!validateForm()) {
-    toast.error('Please fix the validation errors before submitting')
-    return
-  }
-
-  // Prepare form data - trim strings and convert numbers
-  const preparedData = {}
-  props.fields.forEach((field) => {
-    const value = formData.value[field.name]
-
-    if (field.type === 'number' || field.type === 'slider') {
-      preparedData[field.name] = Number(value)
-    } else if (field.type === 'text' || field.type === 'textarea' || field.type === 'date') {
-      preparedData[field.name] = typeof value === 'string' ? value.trim() : value
-    } else if (field.type === 'password') {
-      // Keep password as-is, don't trim
-      preparedData[field.name] = value
-    } else {
-      preparedData[field.name] = value
+  try {
+    if (!validateForm()) {
+      toast.error('Please fix the validation errors before submitting')
+      return
     }
-  })
 
-  emit('submit', {
-    formData: preparedData,
-    modalType: props.modalType,
-    originalData: props.initialData,
-  })
+    // Prepare form data - trim strings and convert numbers
+    const preparedData = {}
+    props.fields.forEach((field) => {
+      const value = formData.value[field.name]
+
+      if (field.type === 'number' || field.type === 'slider') {
+        preparedData[field.name] = Number(value)
+      } else if (field.type === 'text' || field.type === 'textarea' || field.type === 'date') {
+        preparedData[field.name] = typeof value === 'string' ? value.trim() : value
+      } else if (field.type === 'password') {
+        // Keep password as-is, don't trim
+        preparedData[field.name] = value
+      } else {
+        preparedData[field.name] = value
+      }
+    })
+
+    emit('submit', {
+      formData: preparedData,
+      modalType: props.modalType,
+      originalData: props.initialData,
+    })
+  } catch (error) {
+    console.error('Error during form submission:', error)
+    toast.error('An error occurred during submission')
+  }
 }
 
 const handleClose = () => {
