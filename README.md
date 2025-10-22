@@ -170,10 +170,71 @@ describe('Component', () => {
 
 # Component Usage Documentation
 
-This document provides comprehensive usage examples and API reference for all Vue components in the STL Horizon Vue Atomic UI library.
+This document provides comprehensive usage examples and API reference for all Vue components and directives in the STL Horizon Vue Atomic UI library.
+
+## Tooltip Directive
+
+A custom Vue directive for displaying tooltips on hover with customizable positioning and styling.
+
+### Usage
+
+```vue
+<template>
+  <div>
+    <!-- Basic tooltip -->
+    <Button v-tooltip="'This is a tooltip'">Hover me</Button>
+
+    <!-- Tooltip with position modifier -->
+    <Button v-tooltip.bottom="'Tooltip at bottom'">Hover me</Button>
+    <Button v-tooltip.left="'Tooltip on left'">Hover me</Button>
+    <Button v-tooltip.right="'Tooltip on right'">Hover me</Button>
+    <Button v-tooltip.top="'Tooltip on top'">Hover me</Button>
+  </div>
+</template>
+
+<script setup>
+import Button from '@/components/Button.vue'
+</script>
+```
+
+### Position Modifiers
+
+- `v-tooltip` or `v-tooltip.top` - Tooltip appears above the element
+- `v-tooltip.bottom` - Tooltip appears below the element
+- `v-tooltip.left` - Tooltip appears to the left of the element
+- `v-tooltip.right` - Tooltip appears to the right of the element
+
+### Features
+
+- **Automatic positioning**: Tooltips are positioned automatically based on available space
+- **Smooth animations**: Fade in/out transitions for better UX
+- **Arrow indicators**: Visual arrows pointing to the target element
+- **Accessibility**: Proper ARIA attributes and keyboard support
+- **Customizable styling**: Black background with white text, easily customizable via CSS
+- **Event handling**: Shows on mouseenter, hides on mouseleave and click
+
+### Styling
+
+The tooltip uses the following default styles:
+- Background: Semi-transparent black (`rgba(0, 0, 0, 0.9)`)
+- Text color: White
+- Padding: 6px 12px
+- Border radius: 4px
+- Font size: 14px
+- Z-index: 9999
+
+You can customize the appearance by targeting the `.tooltip-custom` class in your CSS.
+
+### Implementation Details
+
+The directive creates a tooltip element dynamically and positions it relative to the viewport. It includes cleanup on component unmount to prevent memory leaks.
+
+or else import in the main.js as 
+### app.directive('tooltip', tooltip)
 
 ## Table of Contents
 
+- [Tooltip Directive](#tooltip-directive)
 - [Accordion](#accordion)
 - [AccordionItem](#accordionitem)
 - [Alert](#alert)
