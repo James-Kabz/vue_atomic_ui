@@ -3,21 +3,24 @@
     <!-- Main Filters Bar -->
     <div :class="filtersClasses">
       <!-- Search Input -->
-      <div class="flex-1 min-w-80 max-w-md">
+      <div
+        v-if="showSearch"
+        class="flex-1 min-w-80 max-w-md"
+      >
         <div class="relative group">
           <Icon
-            icon="magnifying-glass" 
-            :class="searchIconClasses" 
+            icon="magnifying-glass"
+            :class="searchIconClasses"
           />
-          <input 
-            :model-value="searchQuery" 
+          <input
+            :model-value="searchQuery"
             :placeholder="searchPlaceholder"
-            :class="searchInputClasses" 
-            @input="$emit('update:searchQuery', $event.target.value)" 
+            :class="searchInputClasses"
+            @input="$emit('update:searchQuery', $event.target.value)"
           >
-          <button 
-            v-if="searchQuery" 
-            :class="clearSearchButtonClasses" 
+          <button
+            v-if="searchQuery"
+            :class="clearSearchButtonClasses"
             @click="$emit('update:searchQuery', '')"
           >
             <Icon
@@ -30,12 +33,12 @@
 
       <!-- Status Filter -->
       <div
-        v-if="statusOptions.length > 0"
+        v-if="showFilters && statusOptions.length > 0"
         class="min-w-36"
       >
         <div class="relative">
-          <Select 
-            :model-value="selectedStatus" 
+          <Select
+            :model-value="selectedStatus"
             :class="selectClasses"
             @change="$emit('update:selectedStatus', $event.target.value)"
           >
@@ -51,7 +54,7 @@
             </option>
           </Select>
           <Icon
-            icon="chevron-down" 
+            icon="chevron-down"
             class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
           />
         </div>
@@ -59,6 +62,7 @@
 
       <!-- Advanced Filters Toggle -->
       <button
+        v-if="showFilters"
         :class="advancedFiltersToggleClasses"
         @click="toggleAdvancedFilters"
       >
@@ -74,7 +78,7 @@
           {{ activeFiltersCount }}
         </span>
         <Icon
-          :icon="showAdvancedFilters ? 'chevron-up' : 'chevron-down'" 
+          :icon="showAdvancedFilters ? 'chevron-up' : 'chevron-down'"
           class="w-4 h-4 ml-1"
         />
       </button>
@@ -135,7 +139,7 @@
 
     <!-- Advanced Filters Panel -->
     <div
-      v-if="showAdvancedFilters && dateFilters.length > 0"
+      v-if="showFilters && showAdvancedFilters && dateFilters.length > 0"
       :class="advancedFiltersContainerClasses"
     >
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -199,7 +203,7 @@
 
     <!-- Active Filters Display -->
     <div
-      v-if="activeFiltersDisplay.length > 0"
+      v-if="showFilters && activeFiltersDisplay.length > 0"
       :class="activeFiltersContainerClasses"
     >
       <div class="flex items-center gap-3 flex-wrap">
@@ -304,6 +308,14 @@ const props = defineProps({
     default: false
   },
   showTableInfo: {
+    type: Boolean,
+    default: true
+  },
+  showSearch: {
+    type: Boolean,
+    default: true
+  },
+  showFilters: {
     type: Boolean,
     default: true
   },
