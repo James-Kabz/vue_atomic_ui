@@ -10,17 +10,17 @@
       <div class="flex items-center">
         <!-- Organisation Info -->
         <div
-          v-if="organisationName"
+          v-if="currentOrganisation"
           class="mr-4 flex-shrink-0 bg-gradient-to-r from-blue-50 to-indigo-50 px-3 py-2 rounded-lg border border-blue-100"
         >
           <p class="text-lg font-bold text-blue-900 truncate max-w-[200px]">
-            {{ organisationName }}
+            {{ currentOrganisation.organisation_name }}
           </p>
           <p
-            v-if="user.organisation?.role"
+            v-if="currentOrganisation.role"
             class="text-xs text-blue-600 truncate font-medium"
           >
-            {{ user.organisation.role }}
+            {{ currentOrganisation.role }}
           </p>
         </div>
 
@@ -362,7 +362,7 @@ const props = defineProps({
   notifications: { type: Array, default: () => [] },
   profileMenuItems: { type: Array, required: true },
   mobileOpen: { type: Boolean, default: false },
-  organisationName: { type: String, default: '' },
+  currentOrganisation: { type: Object, default: null },
   companyLogo: { type: String, default: '' }
 })
 
