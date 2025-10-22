@@ -5,7 +5,7 @@
       <!-- Search Input -->
       <div class="flex-1 min-w-80 max-w-md">
         <div class="relative group">
-          <font-awesome-icon 
+          <Icon
             icon="magnifying-glass" 
             :class="searchIconClasses" 
           />
@@ -20,7 +20,7 @@
             :class="clearSearchButtonClasses" 
             @click="$emit('update:searchQuery', '')"
           >
-            <font-awesome-icon
+            <Icon
               icon="xmark"
               class="w-3 h-3"
             />
@@ -50,7 +50,7 @@
               {{ option.label }}
             </option>
           </Select>
-          <font-awesome-icon 
+          <Icon
             icon="chevron-down" 
             class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
           />
@@ -62,7 +62,7 @@
         :class="advancedFiltersToggleClasses"
         @click="toggleAdvancedFilters"
       >
-        <font-awesome-icon
+        <Icon
           icon="filter"
           class="w-4 h-4"
         />
@@ -73,7 +73,7 @@
         >
           {{ activeFiltersCount }}
         </span>
-        <font-awesome-icon 
+        <Icon
           :icon="showAdvancedFilters ? 'chevron-up' : 'chevron-down'" 
           class="w-4 h-4 ml-1"
         />
@@ -95,7 +95,7 @@
           :class="clearFiltersButtonClasses" 
           @click="clearFilters"
         >
-          <font-awesome-icon
+          <Icon
             icon="rotate-left"
             class="w-4 h-4 mr-2"
           />
@@ -108,7 +108,7 @@
           :class="exportButtonClasses" 
           @click="$emit('export')"
         >
-          <font-awesome-icon
+          <Icon
             icon="download"
             class="w-4 h-4 mr-2"
           />
@@ -123,7 +123,7 @@
             size="lg"
             @click="$emit('add')"
           >
-            <font-awesome-icon
+            <Icon
               icon="plus"
               class="w-4 h-4 mr-2"
             />
@@ -155,7 +155,7 @@
           
           <div class="flex items-center gap-3">
             <div class="relative flex-1">
-              <font-awesome-icon 
+              <Icon
                 icon="calendar" 
                 class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
               />
@@ -169,7 +169,7 @@
             </div>
             <span :class="dateRangeSeparatorClasses">to</span>
             <div class="relative flex-1">
-              <font-awesome-icon 
+              <Icon 
                 icon="calendar" 
                 class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
               />
@@ -187,7 +187,7 @@
               title="Clear this filter"
               @click="clearDateFilter(dateFilter.key)"
             >
-              <font-awesome-icon
+              <Icon
                 icon="xmark"
                 class="w-4 h-4"
               />
@@ -209,7 +209,7 @@
           :key="filter.key"
           :class="activeFilterTagClasses"
         >
-          <font-awesome-icon
+          <Icon
             :icon="filter.icon"
             class="w-3 h-3"
           />
@@ -218,7 +218,7 @@
             :class="activeFilterRemoveButtonClasses"
             @click="removeFilter(filter.key)"
           >
-            <font-awesome-icon
+            <Icon
               icon="xmark"
               class="w-3 h-3"
             />
@@ -250,6 +250,7 @@ import Select from './Select.vue'
 import { computed, ref } from 'vue'
 import { cva } from 'class-variance-authority'
 import { cn } from '../utils/cn.js'
+import Icon from './Icon.vue'
 
 const props = defineProps({
   searchQuery: {

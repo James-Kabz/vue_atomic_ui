@@ -207,7 +207,7 @@
                       {{ emptyText }}
                     </p>
                     <p class="text-slate-500 text-sm">
-                      Try adjusting your search or filter criteria
+                      {{ emptySubtitle }}
                     </p>
                   </div>
                 </slot>
@@ -347,6 +347,10 @@ const props = defineProps({
   emptyText: {
     type: String,
     default: 'No data available'
+  },
+  emptySubtitle: {
+    type: String,
+    default: 'Try adjusting your search or filter criteria'
   },
   rowKey: {
     type: String,
