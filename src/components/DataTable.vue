@@ -567,6 +567,7 @@ defineExpose({
               </template>
             </DataTableRow>
 
+            
             <!-- Empty State Row -->
             <tr v-else-if="!loading && !dataLoading">
               <td :colspan="totalColumns" :class="emptyCellClasses">
