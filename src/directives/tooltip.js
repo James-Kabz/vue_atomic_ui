@@ -8,7 +8,7 @@ export const tooltip = {
     tooltipEl.textContent = binding.value
     tooltipEl.className = 'tooltip-custom'
     tooltipEl.style.cssText = `
-      position: absolute;
+      position: fixed;
       z-index: 9999;
       background-color: rgba(0, 0, 0, 0.9);
       color: white;
@@ -41,6 +41,12 @@ export const tooltip = {
       const rect = el.getBoundingClientRect()
       const tooltipRect = tooltipEl.getBoundingClientRect()
 
+      // Check if element is visible in viewport
+      if (rect.width === 0 || rect.height === 0) {
+        tooltipEl.style.opacity = '0'
+        return
+      }
+
       let top, left
 
       switch (position) {
@@ -61,18 +67,26 @@ export const tooltip = {
           top = rect.top - tooltipRect.height - 8
       }
 
+      // Ensure tooltip stays within viewport
+      const padding = 8
+      left = Math.max(padding, Math.min(left, window.innerWidth - tooltipRect.width - padding))
+      top = Math.max(padding, Math.min(top, window.innerHeight - tooltipRect.height - padding))
+
       tooltipEl.style.left = `${left}px`
       tooltipEl.style.top = `${top}px`
     }
 
-    const showTooltip = () => {
-      document.body.appendChild(tooltipEl)
-
-      repositionTooltip()
+    const updateArrowPosition = () => {
+      const arrowBase = `
+        position: absolute;
+        width: 0;
+        height: 0;
+        border-style: solid;
+      `
 
       switch (position) {
         case 'bottom':
-          arrow.style.cssText += `
+          arrow.style.cssText = arrowBase + `
             border-width: 0 5px 5px 5px;
             border-color: transparent transparent rgba(0, 0, 0, 0.9) transparent;
             top: -5px;
@@ -81,7 +95,7 @@ export const tooltip = {
           `
           break
         case 'left':
-          arrow.style.cssText += `
+          arrow.style.cssText = arrowBase + `
             border-width: 5px 0 5px 5px;
             border-color: transparent transparent transparent rgba(0, 0, 0, 0.9);
             right: -5px;
@@ -90,7 +104,7 @@ export const tooltip = {
           `
           break
         case 'right':
-          arrow.style.cssText += `
+          arrow.style.cssText = arrowBase + `
             border-width: 5px 5px 5px 0;
             border-color: transparent rgba(0, 0, 0, 0.9) transparent transparent;
             left: -5px;
@@ -99,7 +113,7 @@ export const tooltip = {
           `
           break
         default: // top
-          arrow.style.cssText += `
+          arrow.style.cssText = arrowBase + `
             border-width: 5px 5px 0 5px;
             border-color: rgba(0, 0, 0, 0.9) transparent transparent transparent;
             bottom: -5px;
@@ -107,19 +121,28 @@ export const tooltip = {
             transform: translateX(-50%);
           `
       }
+    }
+
+    const showTooltip = () => {
+      document.body.appendChild(tooltipEl)
+      updateArrowPosition()
+      repositionTooltip()
 
       setTimeout(() => {
         tooltipEl.style.opacity = '1'
       }, 10)
 
-      // Add scroll listener to reposition tooltip
+      // Add scroll listener to reposition tooltip - listen on window and all parent scroll containers
       window.addEventListener('scroll', repositionTooltip, true)
+      
+      // Also add a resize listener
+      window.addEventListener('resize', repositionTooltip)
     }
 
     const hideTooltip = () => {
       tooltipEl.style.opacity = '0'
-      // Remove scroll listener
       window.removeEventListener('scroll', repositionTooltip, true)
+      window.removeEventListener('resize', repositionTooltip)
       setTimeout(() => {
         if (tooltipEl.parentNode) {
           document.body.removeChild(tooltipEl)
@@ -138,7 +161,10 @@ export const tooltip = {
 
   updated(el, binding) {
     if (el._tooltipEl) {
-      el._tooltipEl.firstChild.textContent = binding.value || ''
+      const textNode = el._tooltipEl.firstChild
+      if (textNode && textNode.nodeType === Node.TEXT_NODE) {
+        textNode.textContent = binding.value || ''
+      }
     }
   },
 
@@ -155,6 +181,7 @@ export const tooltip = {
     }
     if (el._tooltipRepositionFn) {
       window.removeEventListener('scroll', el._tooltipRepositionFn, true)
+      window.removeEventListener('resize', el._tooltipRepositionFn)
     }
   }
 }
