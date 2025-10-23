@@ -131,7 +131,6 @@ const handleDataSourceChange = (value) => {
 }
 
 const handleCellHover = (data) => {
-  console.log('Cell hovered:', data)
 }
 
 const handleChartTypeChange = (value) => {
