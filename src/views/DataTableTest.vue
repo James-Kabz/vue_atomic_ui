@@ -13,7 +13,6 @@
         <!-- Filters Component -->
         <DataTableFilters
           v-model:search-query="searchQuery"
-          v-model:selected-status="selectedStatus"
           v-model:date-from="dateFrom"
           v-model:date-to="dateTo"
           :status-options="statusOptions"

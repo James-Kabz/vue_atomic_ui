@@ -31,7 +31,37 @@
         </div>
       </div>
 
-      <!-- Status Filter -->
+      <!-- Dynamic Select Filters -->
+      <div
+        v-for="filter in selectFilters"
+        :key="filter.key"
+        class="min-w-36"
+      >
+        <div class="relative">
+          <Select
+            :model-value="filter.value"
+            :class="selectClasses"
+            @change="updateSelectFilter(filter.key, $event.target.value)"
+          >
+            <option value="">
+              {{ filter.placeholder || `All ${filter.label}` }}
+            </option>
+            <option
+              v-for="option in filter.options"
+              :key="option.value"
+              :value="option.value"
+            >
+              {{ option.label }}
+            </option>
+          </Select>
+          <Icon
+            icon="chevron-down"
+            class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
+          />
+        </div>
+      </div>
+
+      <!-- Legacy Status Filter (for backward compatibility) -->
       <div
         v-if="showFilters && statusOptions.length > 0"
         class="min-w-36"
@@ -62,7 +92,7 @@
 
       <!-- Advanced Filters Toggle -->
       <button
-        v-if="showFilters"
+        v-if="showFilters && (dateFilters.length > 0 || hasAdvancedFilters)"
         :class="advancedFiltersToggleClasses"
         @click="toggleAdvancedFilters"
       >
@@ -139,10 +169,11 @@
 
     <!-- Advanced Filters Panel -->
     <div
-      v-if="showFilters && showAdvancedFilters && dateFilters.length > 0"
+      v-if="showFilters && showAdvancedFilters"
       :class="advancedFiltersContainerClasses"
     >
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Date Range Filters -->
         <div 
           v-for="dateFilter in dateFilters" 
           :key="dateFilter.key" 
@@ -196,6 +227,110 @@
                 class="w-4 h-4"
               />
             </button>
+          </div>
+        </div>
+
+        <!-- Number Range Filters -->
+        <div 
+          v-for="numberFilter in numberFilters" 
+          :key="numberFilter.key" 
+          class="space-y-3"
+        >
+          <div class="flex items-center justify-between">
+            <label :class="dateFilterLabelClasses">
+              {{ numberFilter.label }}
+            </label>
+            <span :class="getNumberFilterStatusClasses(numberFilter)">
+              {{ hasNumberFilterValues(numberFilter) ? 'Active' : 'Inactive' }}
+            </span>
+          </div>
+          
+          <div class="flex items-center gap-3">
+            <div class="relative flex-1">
+              <input 
+                type="number" 
+                :model-value="numberFilter.min" 
+                :class="dateInputClasses"
+                :placeholder="`Min ${numberFilter.label}`" 
+                :step="numberFilter.step || 1"
+                @input="updateNumberFilter(numberFilter.key, 'min', $event.target.value)"
+              >
+            </div>
+            <span :class="dateRangeSeparatorClasses">to</span>
+            <div class="relative flex-1">
+              <input 
+                type="number" 
+                :model-value="numberFilter.max" 
+                :class="dateInputClasses"
+                :placeholder="`Max ${numberFilter.label}`" 
+                :step="numberFilter.step || 1"
+                @input="updateNumberFilter(numberFilter.key, 'max', $event.target.value)"
+              >
+            </div>
+            <button
+              v-if="hasNumberFilterValues(numberFilter)"
+              :class="clearDateFilterButtonClasses"
+              title="Clear this filter"
+              @click="clearNumberFilter(numberFilter.key)"
+            >
+              <Icon
+                icon="xmark"
+                class="w-4 h-4"
+              />
+            </button>
+          </div>
+        </div>
+
+        <!-- Multi-Select Filters -->
+        <div 
+          v-for="multiFilter in multiSelectFilters" 
+          :key="multiFilter.key" 
+          class="space-y-3"
+        >
+          <div class="flex items-center justify-between">
+            <label :class="dateFilterLabelClasses">
+              {{ multiFilter.label }}
+            </label>
+            <span :class="getMultiSelectFilterStatusClasses(multiFilter)">
+              {{ hasMultiSelectFilterValues(multiFilter) ? `${multiFilter.selected.length} selected` : 'None' }}
+            </span>
+          </div>
+          
+          <div class="relative">
+            <Select
+              :model-value="''"
+              :class="selectClasses"
+              @change="toggleMultiSelectOption(multiFilter.key, $event.target.value)"
+            >
+              <option value="">Select {{ multiFilter.label }}</option>
+              <option
+                v-for="option in multiFilter.options"
+                :key="option.value"
+                :value="option.value"
+              >
+                {{ option.label }}
+              </option>
+            </Select>
+            <Icon
+              icon="chevron-down"
+              class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
+            />
+          </div>
+          
+          <div v-if="multiFilter.selected.length > 0" class="flex flex-wrap gap-2 mt-2">
+            <span
+              v-for="selectedValue in multiFilter.selected"
+              :key="selectedValue"
+              class="inline-flex items-center gap-1 bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full"
+            >
+              {{ getMultiSelectOptionLabel(multiFilter, selectedValue) }}
+              <button
+                @click="removeMultiSelectOption(multiFilter.key, selectedValue)"
+                class="hover:bg-blue-200 rounded-full p-0.5"
+              >
+                <Icon icon="xmark" class="w-3 h-3" />
+              </button>
+            </span>
           </div>
         </div>
       </div>
@@ -265,6 +400,7 @@ const props = defineProps({
     type: String,
     default: 'Search...'
   },
+  // Legacy props for backward compatibility
   selectedStatus: {
     type: String,
     default: ''
@@ -273,7 +409,6 @@ const props = defineProps({
     type: Array,
     default: () => []
   },
-  // Legacy props for backward compatibility
   showDateFilter: {
     type: Boolean,
     default: false
@@ -286,7 +421,20 @@ const props = defineProps({
     type: String,
     default: ''
   },
-  // Dynamic date filters prop (NO active property required)
+  // NEW: Dynamic select filters (category, status, etc.)
+  selectFilters: {
+    type: Array,
+    default: () => [],
+    validator: (filters) => {
+      return filters.every(filter =>
+        Object.prototype.hasOwnProperty.call(filter, 'key') &&
+        Object.prototype.hasOwnProperty.call(filter, 'label') &&
+        Object.prototype.hasOwnProperty.call(filter, 'options') &&
+        Object.prototype.hasOwnProperty.call(filter, 'value')
+      )
+    }
+  },
+  // Date range filters
   dateFilters: {
     type: Array,
     default: () => [],
@@ -296,6 +444,32 @@ const props = defineProps({
         Object.prototype.hasOwnProperty.call(filter, 'label') &&
         Object.prototype.hasOwnProperty.call(filter, 'from') &&
         Object.prototype.hasOwnProperty.call(filter, 'to')
+      )
+    }
+  },
+  // NEW: Number range filters (price, age, score, etc.)
+  numberFilters: {
+    type: Array,
+    default: () => [],
+    validator: (filters) => {
+      return filters.every(filter =>
+        Object.prototype.hasOwnProperty.call(filter, 'key') &&
+        Object.prototype.hasOwnProperty.call(filter, 'label') &&
+        Object.prototype.hasOwnProperty.call(filter, 'min') &&
+        Object.prototype.hasOwnProperty.call(filter, 'max')
+      )
+    }
+  },
+  // NEW: Multi-select filters
+  multiSelectFilters: {
+    type: Array,
+    default: () => [],
+    validator: (filters) => {
+      return filters.every(filter =>
+        Object.prototype.hasOwnProperty.call(filter, 'key') &&
+        Object.prototype.hasOwnProperty.call(filter, 'label') &&
+        Object.prototype.hasOwnProperty.call(filter, 'options') &&
+        Object.prototype.hasOwnProperty.call(filter, 'selected')
       )
     }
   },
@@ -345,6 +519,9 @@ const emit = defineEmits([
   'update:dateFrom',
   'update:dateTo',
   'update:dateFilters',
+  'update:selectFilters',
+  'update:numberFilters',
+  'update:multiSelectFilters',
   'export',
   'add',
   'clear-filters'
@@ -406,59 +583,136 @@ const buttonVariants = cva('rounded-lg flex items-center font-medium transition-
   }
 })
 
+// Select Filter Methods
+const updateSelectFilter = (key, value) => {
+  const updatedFilters = props.selectFilters.map(filter =>
+    filter.key === key ? { ...filter, value } : filter
+  )
+  emit('update:selectFilters', updatedFilters)
+}
+
+// Date Filter Methods
 const hasDateFilterValues = (dateFilter) => {
   return !!(dateFilter.from || dateFilter.to)
 }
 
 const clearDateFilter = (key) => {
-  const updatedFilters = [...props.dateFilters]
-  const filterIndex = updatedFilters.findIndex(f => f.key === key)
-  
-  if (filterIndex >= 0) {
-    updatedFilters[filterIndex] = {
-      ...updatedFilters[filterIndex],
-      from: '',
-      to: ''
-    }
-    emit('update:dateFilters', updatedFilters)
-  }
+  const updatedFilters = props.dateFilters.map(f =>
+    f.key === key ? { ...f, from: '', to: '' } : f
+  )
+  emit('update:dateFilters', updatedFilters)
 }
 
 const getDateFilterStatusClasses = (dateFilter) => {
   const hasValues = hasDateFilterValues(dateFilter)
   return `text-xs px-2 py-1 rounded ${
-    hasValues
-      ? 'bg-blue-100 text-blue-700'
-      : 'bg-gray-100 text-gray-600'
+    hasValues ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'
   }`
 }
 
-// Methods
+const updateDateFilter = (key, type, value) => {
+  const updatedFilters = props.dateFilters.map(f =>
+    f.key === key ? { ...f, [type]: value } : f
+  )
+  emit('update:dateFilters', updatedFilters)
+}
+
+// Number Filter Methods
+const hasNumberFilterValues = (numberFilter) => {
+  return !!(numberFilter.min || numberFilter.max)
+}
+
+const clearNumberFilter = (key) => {
+  const updatedFilters = props.numberFilters.map(f =>
+    f.key === key ? { ...f, min: '', max: '' } : f
+  )
+  emit('update:numberFilters', updatedFilters)
+}
+
+const getNumberFilterStatusClasses = (numberFilter) => {
+  const hasValues = hasNumberFilterValues(numberFilter)
+  return `text-xs px-2 py-1 rounded ${
+    hasValues ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'
+  }`
+}
+
+const updateNumberFilter = (key, type, value) => {
+  const updatedFilters = props.numberFilters.map(f =>
+    f.key === key ? { ...f, [type]: value } : f
+  )
+  emit('update:numberFilters', updatedFilters)
+}
+
+// Multi-Select Filter Methods
+const hasMultiSelectFilterValues = (multiFilter) => {
+  return multiFilter.selected && multiFilter.selected.length > 0
+}
+
+const getMultiSelectFilterStatusClasses = (multiFilter) => {
+  const hasValues = hasMultiSelectFilterValues(multiFilter)
+  return `text-xs px-2 py-1 rounded ${
+    hasValues ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'
+  }`
+}
+
+const toggleMultiSelectOption = (key, value) => {
+  if (!value) return
+  
+  const updatedFilters = props.multiSelectFilters.map(filter => {
+    if (filter.key === key) {
+      const selected = filter.selected || []
+      const isSelected = selected.includes(value)
+      return {
+        ...filter,
+        selected: isSelected
+          ? selected.filter(v => v !== value)
+          : [...selected, value]
+      }
+    }
+    return filter
+  })
+  emit('update:multiSelectFilters', updatedFilters)
+}
+
+const removeMultiSelectOption = (key, value) => {
+  const updatedFilters = props.multiSelectFilters.map(filter => {
+    if (filter.key === key) {
+      return {
+        ...filter,
+        selected: filter.selected.filter(v => v !== value)
+      }
+    }
+    return filter
+  })
+  emit('update:multiSelectFilters', updatedFilters)
+}
+
+const getMultiSelectOptionLabel = (multiFilter, value) => {
+  const option = multiFilter.options.find(opt => opt.value === value)
+  return option ? option.label : value
+}
+
+// General Methods
 const toggleAdvancedFilters = () => {
   showAdvancedFilters.value = !showAdvancedFilters.value
 }
 
-const updateDateFilter = (key, type, value) => {
-  const updatedFilters = [...props.dateFilters]
-  const filterIndex = updatedFilters.findIndex(f => f.key === key)
-  
-  if (filterIndex >= 0) {
-    updatedFilters[filterIndex] = {
-      ...updatedFilters[filterIndex],
-      [type]: value
-    }
-    emit('update:dateFilters', updatedFilters)
-  }
-}
+const hasAdvancedFilters = computed(() => {
+  return props.numberFilters.length > 0 || props.multiSelectFilters.length > 0
+})
 
 // Computed Properties
 const hasActiveFilters = computed(() => {
   const hasSearch = props.searchQuery
   const hasStatus = props.selectedStatus
   const hasLegacyDates = props.dateFrom || props.dateTo
-  const hasDynamicDates = props.dateFilters.some(filter => filter.from || filter.to)
+  const hasSelectFilters = props.selectFilters.some(f => f.value)
+  const hasDynamicDates = props.dateFilters.some(f => f.from || f.to)
+  const hasNumberFilters = props.numberFilters.some(f => f.min || f.max)
+  const hasMultiSelectFilters = props.multiSelectFilters.some(f => f.selected && f.selected.length > 0)
   
-  return hasSearch || hasStatus || hasLegacyDates || hasDynamicDates
+  return hasSearch || hasStatus || hasLegacyDates || hasSelectFilters || 
+         hasDynamicDates || hasNumberFilters || hasMultiSelectFilters
 })
 
 const activeFiltersCount = computed(() => {
@@ -466,13 +720,17 @@ const activeFiltersCount = computed(() => {
   if (props.searchQuery) count++
   if (props.selectedStatus) count++
   if (props.dateFrom || props.dateTo) count++
+  count += props.selectFilters.filter(f => f.value).length
   count += props.dateFilters.filter(f => f.from || f.to).length
+  count += props.numberFilters.filter(f => f.min || f.max).length
+  count += props.multiSelectFilters.filter(f => f.selected && f.selected.length > 0).length
   return count
 })
 
 const activeFiltersDisplay = computed(() => {
   const filters = []
 
+  // Search filter
   if (props.searchQuery && props.searchQuery.trim()) {
     filters.push({
       key: 'search',
@@ -482,6 +740,7 @@ const activeFiltersDisplay = computed(() => {
     })
   }
 
+  // Legacy status filter
   if (props.selectedStatus) {
     const statusOption = props.statusOptions.find(opt => opt.value === props.selectedStatus)
     filters.push({
@@ -491,6 +750,19 @@ const activeFiltersDisplay = computed(() => {
       icon: 'filter'
     })
   }
+
+  // Select filters
+  props.selectFilters.forEach(filter => {
+    if (filter.value) {
+      const option = filter.options.find(opt => opt.value === filter.value)
+      filters.push({
+        key: `select-${filter.key}`,
+        label: filter.label,
+        value: option?.label || filter.value,
+        icon: 'filter'
+      })
+    }
+  })
 
   // Legacy date filter
   if (props.dateFrom || props.dateTo) {
@@ -513,7 +785,7 @@ const activeFiltersDisplay = computed(() => {
     }
   }
 
-  // Dynamic date filters - only show those with values
+  // Dynamic date filters
   props.dateFilters.forEach(dateFilter => {
     if (dateFilter.from || dateFilter.to) {
       let dateValue = ''
@@ -533,6 +805,45 @@ const activeFiltersDisplay = computed(() => {
           icon: 'calendar'
         })
       }
+    }
+  })
+
+  // Number filters
+  props.numberFilters.forEach(numberFilter => {
+    if (numberFilter.min || numberFilter.max) {
+      let numberValue = ''
+      if (numberFilter.min && numberFilter.max) {
+        numberValue = `${numberFilter.min} to ${numberFilter.max}`
+      } else if (numberFilter.min) {
+        numberValue = `Min ${numberFilter.min}`
+      } else if (numberFilter.max) {
+        numberValue = `Max ${numberFilter.max}`
+      }
+
+      if (numberValue) {
+        filters.push({
+          key: `number-${numberFilter.key}`,
+          label: numberFilter.label,
+          value: numberValue,
+          icon: 'hashtag'
+        })
+      }
+    }
+  })
+
+  // Multi-select filters
+  props.multiSelectFilters.forEach(multiFilter => {
+    if (multiFilter.selected && multiFilter.selected.length > 0) {
+      const labels = multiFilter.selected.map(value => {
+        const option = multiFilter.options.find(opt => opt.value === value)
+        return option ? option.label : value
+      })
+      filters.push({
+        key: `multi-${multiFilter.key}`,
+        label: multiFilter.label,
+        value: labels.join(', '),
+        icon: 'list'
+      })
     }
   })
 
@@ -628,14 +939,21 @@ const activeFilterRemoveButtonClasses = computed(() =>
   'text-blue-600 hover:text-blue-800 ml-1 hover:bg-blue-100 rounded-full p-0.5 transition-all'
 )
 
-// Methods
+// Clear all filters
 const clearFilters = () => {
   emit('update:searchQuery', '')
   emit('update:selectedStatus', '')
   emit('update:dateFrom', '')
   emit('update:dateTo', '')
   
-  // Clear dynamic date filters
+  // Clear select filters
+  const clearedSelectFilters = props.selectFilters.map(filter => ({
+    ...filter,
+    value: ''
+  }))
+  emit('update:selectFilters', clearedSelectFilters)
+  
+  // Clear date filters
   const clearedDateFilters = props.dateFilters.map(filter => ({
     ...filter,
     from: '',
@@ -643,9 +961,25 @@ const clearFilters = () => {
   }))
   emit('update:dateFilters', clearedDateFilters)
   
+  // Clear number filters
+  const clearedNumberFilters = props.numberFilters.map(filter => ({
+    ...filter,
+    min: '',
+    max: ''
+  }))
+  emit('update:numberFilters', clearedNumberFilters)
+  
+  // Clear multi-select filters
+  const clearedMultiSelectFilters = props.multiSelectFilters.map(filter => ({
+    ...filter,
+    selected: []
+  }))
+  emit('update:multiSelectFilters', clearedMultiSelectFilters)
+  
   emit('clear-filters')
 }
 
+// Remove individual filter
 const removeFilter = (filterKey) => {
   switch (filterKey) {
     case 'search':
@@ -659,15 +993,37 @@ const removeFilter = (filterKey) => {
       emit('update:dateTo', '')
       break
     default:
-      // Handle dynamic date filters
-      if (filterKey.startsWith('date-')) {
+      // Handle select filters
+      if (filterKey.startsWith('select-')) {
+        const selectKey = filterKey.replace('select-', '')
+        const updatedFilters = props.selectFilters.map(filter => 
+          filter.key === selectKey ? { ...filter, value: '' } : filter
+        )
+        emit('update:selectFilters', updatedFilters)
+      }
+      // Handle date filters
+      else if (filterKey.startsWith('date-')) {
         const dateKey = filterKey.replace('date-', '')
         const updatedFilters = props.dateFilters.map(filter => 
-          filter.key === dateKey 
-            ? { ...filter, from: '', to: '' }
-            : filter
+          filter.key === dateKey ? { ...filter, from: '', to: '' } : filter
         )
         emit('update:dateFilters', updatedFilters)
+      }
+      // Handle number filters
+      else if (filterKey.startsWith('number-')) {
+        const numberKey = filterKey.replace('number-', '')
+        const updatedFilters = props.numberFilters.map(filter => 
+          filter.key === numberKey ? { ...filter, min: '', max: '' } : filter
+        )
+        emit('update:numberFilters', updatedFilters)
+      }
+      // Handle multi-select filters
+      else if (filterKey.startsWith('multi-')) {
+        const multiKey = filterKey.replace('multi-', '')
+        const updatedFilters = props.multiSelectFilters.map(filter => 
+          filter.key === multiKey ? { ...filter, selected: [] } : filter
+        )
+        emit('update:multiSelectFilters', updatedFilters)
       }
       break
   }
