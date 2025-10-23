@@ -199,7 +199,7 @@
                   <div class="text-center">
                     <div class="text-slate-400 mb-4">
                       <Icon
-                        name="search"
+                        icon="search"
                         class="w-12 h-12"
                       />
                     </div>
