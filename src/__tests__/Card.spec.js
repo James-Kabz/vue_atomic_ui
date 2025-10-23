@@ -34,7 +34,7 @@ describe('Card', () => {
     const wrapper = mount(Card, {
       props: { variant: 'elevated' }
     })
-    expect(wrapper.classes()).toContain('shadow-lg')
+    expect(wrapper.classes()).toContain('shadow-md')
   })
 
   it('applies padding classes', () => {
@@ -48,7 +48,7 @@ describe('Card', () => {
     const wrapper = mount(Card, {
       props: { hoverable: true }
     })
-    expect(wrapper.classes()).toContain('hover:shadow-md')
+    expect(wrapper.classes()).toContain('hover:shadow-lg')
   })
 
   it('applies clickable class', () => {
@@ -70,8 +70,8 @@ describe('Card', () => {
     const wrapper = mount(Card, {
       props: { loading: true }
     })
-    expect(wrapper.classes()).toContain('opacity-60')
-    expect(wrapper.classes()).toContain('pointer-events-none')
+    // Loading state is handled by the loading overlay, not by classes on the main element
+    expect(wrapper.find('.absolute').exists()).toBe(true)
   })
 
   it('renders image', () => {

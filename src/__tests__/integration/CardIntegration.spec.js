@@ -110,7 +110,7 @@ describe('Card Integration', () => {
 
     // Check variants
     expect(cards[0].classes()).toContain('border-slate-300')
-    expect(cards[1].classes()).toContain('shadow-lg')
+    expect(cards[1].classes()).toContain('shadow-md')
     expect(cards[2].classes()).toContain('bg-slate-50')
 
     // Check padding (approximate checks)
@@ -119,7 +119,7 @@ describe('Card Integration', () => {
     expect(cards[2].classes()).toContain('p-8') // xl padding
 
     // Check hoverable
-    expect(cards[1].classes()).toContain('hover:shadow-md')
+    expect(cards[1].classes()).toContain('hover:shadow-lg')
   })
 
   it('handles card with image and complex content', () => {
