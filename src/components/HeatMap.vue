@@ -8,16 +8,34 @@
     >
       <defs>
         <!-- Define gradient for smooth color transitions -->
-        <linearGradient id="heatmapGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" :style="`stop-color:${colorScale[0]};stop-opacity:1`" />
-          <stop offset="50%" :style="`stop-color:${colorScale[1]};stop-opacity:1`" />
-          <stop offset="100%" :style="`stop-color:${colorScale[2]};stop-opacity:1`" />
+        <linearGradient
+          id="heatmapGradient"
+          x1="0%"
+          y1="0%"
+          x2="100%"
+          y2="100%"
+        >
+          <stop
+            offset="0%"
+            :style="`stop-color:${colorScale[0]};stop-opacity:1`"
+          />
+          <stop
+            offset="50%"
+            :style="`stop-color:${colorScale[1]};stop-opacity:1`"
+          />
+          <stop
+            offset="100%"
+            :style="`stop-color:${colorScale[2]};stop-opacity:1`"
+          />
         </linearGradient>
       </defs>
 
       <!-- Grid cells -->
       <g>
-        <template v-for="(row, rowIndex) in data" :key="`row-${rowIndex}`">
+        <template
+          v-for="(row, rowIndex) in data"
+          :key="`row-${rowIndex}`"
+        >
           <rect
             v-for="(cell, colIndex) in row"
             :key="`cell-${rowIndex}-${colIndex}`"
@@ -108,7 +126,10 @@
 
       <!-- Bubbles -->
       <g v-if="bubbles && bubbles.length">
-        <g v-for="(bubble, index) in bubbles" :key="`bubble-group-${index}`">
+        <g
+          v-for="(bubble, index) in bubbles"
+          :key="`bubble-group-${index}`"
+        >
           <circle
             :cx="getBubbleX(bubble)"
             :cy="getBubbleY(bubble)"

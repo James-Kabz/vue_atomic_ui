@@ -46,7 +46,10 @@
       </g>
 
       <!-- Legend -->
-      <g v-if="showLegend" :transform="`translate(0, ${size + 20})`">
+      <g
+        v-if="showLegend"
+        :transform="`translate(0, ${size + 20})`"
+      >
         <g
           v-for="(slice, index) in slices"
           :key="`legend-${index}`"
@@ -98,7 +101,6 @@
 
 <script setup>
 import { computed, ref } from 'vue'
-import { cn } from '../utils/cn.js'
 
 const props = defineProps({
   data: {
@@ -259,13 +261,13 @@ const getSliceColor = (index) => {
   return props.colors[index % props.colors.length]
 }
 
-const getLabelX = (slice, index) => {
+const getLabelX = (slice) => {
   const midAngle = (slice.startAngle + slice.endAngle) / 2
   const labelRadius = radius.value * 0.7
   return centerX.value + Math.cos(midAngle) * labelRadius
 }
 
-const getLabelY = (slice, index) => {
+const getLabelY = (slice) => {
   const midAngle = (slice.startAngle + slice.endAngle) / 2
   const labelRadius = radius.value * 0.7
   return centerY.value + Math.sin(midAngle) * labelRadius

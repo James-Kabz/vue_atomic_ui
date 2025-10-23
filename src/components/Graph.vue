@@ -70,7 +70,7 @@
 import { cva } from 'class-variance-authority'
 import { cn } from '../utils/cn.js'
 
-const props = defineProps({
+defineProps({
   variant: {
     type: String,
     default: 'default',

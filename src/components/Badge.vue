@@ -17,7 +17,10 @@
       :aria-label="dismissLabel"
       @click="handleDismiss"
     >
-      <Icon icon="xmark" class="w-3 h-3" />
+      <Icon
+        icon="xmark"
+        class="w-3 h-3"
+      />
     </button>
   </span>
 </template>

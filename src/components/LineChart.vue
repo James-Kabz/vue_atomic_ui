@@ -110,7 +110,6 @@
 
 <script setup>
 import { computed, ref } from 'vue'
-import { cn } from '../utils/cn.js'
 
 const props = defineProps({
   data: {

@@ -302,7 +302,9 @@
               :class="selectClasses"
               @change="toggleMultiSelectOption(multiFilter.key, $event.target.value)"
             >
-              <option value="">Select {{ multiFilter.label }}</option>
+              <option value="">
+                Select {{ multiFilter.label }}
+              </option>
               <option
                 v-for="option in multiFilter.options"
                 :key="option.value"
@@ -317,7 +319,10 @@
             />
           </div>
           
-          <div v-if="multiFilter.selected.length > 0" class="flex flex-wrap gap-2 mt-2">
+          <div
+            v-if="multiFilter.selected.length > 0"
+            class="flex flex-wrap gap-2 mt-2"
+          >
             <span
               v-for="selectedValue in multiFilter.selected"
               :key="selectedValue"
@@ -325,10 +330,13 @@
             >
               {{ getMultiSelectOptionLabel(multiFilter, selectedValue) }}
               <button
-                @click="removeMultiSelectOption(multiFilter.key, selectedValue)"
                 class="hover:bg-blue-200 rounded-full p-0.5"
+                @click="removeMultiSelectOption(multiFilter.key, selectedValue)"
               >
-                <Icon icon="xmark" class="w-3 h-3" />
+                <Icon
+                  icon="xmark"
+                  class="w-3 h-3"
+                />
               </button>
             </span>
           </div>

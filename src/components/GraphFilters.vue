@@ -45,9 +45,15 @@
             :class="selectClasses"
             @change="handleChartTypeChange"
           >
-            <option value="bar">Bar Chart</option>
-            <option value="line">Line Chart</option>
-            <option value="pie">Pie Chart</option>
+            <option value="bar">
+              Bar Chart
+            </option>
+            <option value="line">
+              Line Chart
+            </option>
+            <option value="pie">
+              Pie Chart
+            </option>
           </Select>
           <Icon
             icon="chart-bar"
@@ -67,7 +73,9 @@
             :class="selectClasses"
             @change="handleDataSourceChange"
           >
-            <option value="">All Sources</option>
+            <option value="">
+              All Sources
+            </option>
             <option
               v-for="source in dataSources"
               :key="source.value"
