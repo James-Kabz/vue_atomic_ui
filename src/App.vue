@@ -17,11 +17,9 @@ import Loader from './components/Loader.vue';
 import Icon from './components/Icon.vue';
 import { ref, computed } from 'vue';
 import { toast } from './lib/toast.js';
-import HeatMap from './components/HeatMap.vue'
 import Graph from './components/Graph.vue'
 import BarChart from './components/BarChart.vue'
 import LineChart from './components/LineChart.vue'
-import PieChart from './components/PieChart.vue'
 import GraphFilters from './components/GraphFilters.vue'
 import DataTableTest from './views/DataTableTest.vue';
 
@@ -41,22 +39,6 @@ const barLabels = ref(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'])
 const lineData = ref([100, 120, 140, 110, 160, 180, 200])
 const lineLabels = ref(['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7'])
 
-const heatMapData = ref([
-  [10, 20, 30, 40, 50, 60, 70],
-  [15, 25, 35, 45, 55, 65, 75],
-  [20, 30, 40, 50, 60, 70, 80],
-  [25, 35, 45, 55, 65, 75, 85],
-  [30, 40, 50, 60, 70, 80, 90],
-  [35, 45, 55, 65, 75, 85, 95]
-])
-
-const heatMapBubbles = ref([
-  { px: 100, py: 50, radius: 15, color: '#ff6b6b', tooltip: 'High Risk Area' },
-  { px: 250, py: 120, radius: 10, color: '#4ecdc4', tooltip: 'Low Risk Zone' },
-  { px: 350, py: 200, radius: 20, color: '#45b7d1', tooltip: 'Critical Point' }
-])
-const pieData = ref([35, 25, 20, 15, 5])
-const pieLabels = ref(['Product A', 'Product B', 'Product C', 'Product D', 'Others'])
 
 // Data sources for filters
 const dataSources = ref([
@@ -129,9 +111,6 @@ const handleDataSourceChange = (value) => {
   // Here you would typically fetch new data based on the source
 }
 
-const handleCellHover = (data) => {
-  console.log('Cell hovered:', data)
-}
 
 
 const refreshChartData = () => {
@@ -145,10 +124,6 @@ const handleBarHover = (data) => {
 
 const handlePointHover = (data) => {
   console.log('Point hovered:', data)
-}
-
-const handleSliceHover = (data) => {
-  console.log('Slice hovered:', data)
 }
 
 const toggleLoading = () => {
@@ -976,69 +951,6 @@ const currentPath = computed(() => `#${currentSection.value}`);
                   :height="300"
                   @point-hover="handlePointHover"
                 />
-              </Graph>
-            </div>
-
-            <!-- Pie Chart Example -->
-            <div class="space-y-4">
-              <h3 class="text-xl font-semibold">
-                Pie Chart with Legend
-              </h3>
-              <Graph
-                title="Market Share"
-                variant="elevated"
-              >
-                <PieChart
-                  :data="pieData"
-                  :labels="pieLabels"
-                  :donut="true"
-                  :show-legend="true"
-                  :size="400"
-                  @slice-hover="handleSliceHover"
-                />
-
-                <template #footer>
-                  <div class="text-center text-sm text-gray-600">
-                    Total market value: ${{ pieData.reduce((a, b) => a + b, 0).toLocaleString() }}
-                  </div>
-                </template>
-              </Graph>
-            </div>
-
-            <!-- Heat Map Example -->
-            <div class="space-y-4">
-              <h3 class="text-xl font-semibold">
-                Heat Map with Bubbles
-              </h3>
-              <Graph
-                title="Activity Heat Map"
-                description="Weekly activity patterns with bubble overlay"
-              >
-                <template #filters>
-                  <GraphFilters
-                    :show-date-filter="true"
-                    @update:date-from="dateFrom = $event"
-                    @update:date-to="dateTo = $event"
-                    @refresh="refreshChartData"
-                  />
-                </template>
-
-                <HeatMap
-                  :data="heatMapData"
-                  :bubbles="heatMapBubbles"
-                  :width="600"
-                  :height="300"
-                  :min-value="0"
-                  :max-value="100"
-                  @cell-hover="handleCellHover"
-                />
-
-                <template #legend>
-                  <div class="text-sm text-gray-600">
-                    <p><strong>Heat Map:</strong> Color intensity shows activity levels</p>
-                    <p><strong>Bubbles:</strong> Size represents magnitude of activity</p>
-                  </div>
-                </template>
               </Graph>
             </div>
           </section>
