@@ -444,7 +444,7 @@ const props = defineProps({
   },
   hasLoaded: {
     type: Boolean,
-    default: false
+    default: true
   }
 })
 
