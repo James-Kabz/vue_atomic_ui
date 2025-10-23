@@ -571,9 +571,9 @@ defineExpose({
             <tr v-else-if="!loading && !dataLoading">
               <td :colspan="totalColumns" :class="emptyCellClasses">
                 <slot name="empty">
-                  <div class="text-center">
-                    <div class="text-slate-400 mb-4">
-                      <Icon icon="search" class="w-12 h-12" />
+                  <div class="flex flex-col items-center justify-center py-12">
+                    <div class="text-slate-400 mb-4 flex justify-center">
+                      <Icon icon="search" class="w-16 h-16" />
                     </div>
                     <p class="text-slate-600 text-lg font-medium mb-2">
                       {{ emptyText }}
