@@ -469,6 +469,7 @@ const tableContainerVariants = cva('bg-white border border-slate-200 rounded-lg 
   }
 })
 
+
 const tableVariants = cva('min-w-full', {
   variants: {
     variant: {
