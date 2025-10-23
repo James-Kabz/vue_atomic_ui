@@ -58,6 +58,12 @@ import TabPanel from "./components/TabPanel.vue"
 import Accordion from "./components/Accordion.vue"
 import AccordionItem from "./components/AccordionItem.vue"
 import Calendar from "./components/Calendar.vue"
+import Graph from "./components/Graph.vue"
+import BarChart from "./components/BarChart.vue"
+import LineChart from "./components/LineChart.vue"
+import PieChart from "./components/PieChart.vue"
+import GraphFilters from "./components/GraphFilters.vue"
+import HeatMap from "./components/HeatMap.vue"
 import DataTable from "./components/DataTable.vue"
 import DataTableHeader from "./components/DataTableHeader.vue"
 import DataTableRow from "./components/DataTableRow.vue"
@@ -140,8 +146,14 @@ const components = {
   StepperItem,
   Tab,
   TabPanel,
+  BarChart,
+  LineChart,
+  HeatMap,
+  GraphFilters,
+  PieChart,
   Accordion,
   AccordionItem,
+  Graph,
   Calendar,
   DataTable,
   DataTableHeader,
@@ -232,11 +244,17 @@ export {
   Toast,
   Search,
   Slider,
+  BarChart,
+  HeatMap,
+  GraphFilters,
+  LineChart,
+  PieChart,
   Stepper,
   StepperItem,
   Tab,
   TabPanel,
   Accordion,
+  Graph,
   AccordionItem,
   Calendar,
   DataTable,

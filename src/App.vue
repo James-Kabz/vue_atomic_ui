@@ -17,6 +17,12 @@ import Loader from './components/Loader.vue';
 import Icon from './components/Icon.vue';
 import { ref, computed } from 'vue';
 import { toast } from './lib/toast.js';
+import HeatMap from './components/HeatMap.vue'
+import Graph from './components/Graph.vue'
+import BarChart from './components/BarChart.vue'
+import LineChart from './components/LineChart.vue'
+import PieChart from './components/PieChart.vue'
+import GraphFilters from './components/GraphFilters.vue'
 import DataTableTest from './views/DataTableTest.vue';
 
 // Reactive data for examples
@@ -24,6 +30,41 @@ const buttonLoading = ref(false);
 const inputValue = ref('');
 const modalOpen = ref(false);
 const selectValue = ref('');
+const chartType = ref('bar')
+const selectedDataSource = ref('')
+const dateFrom = ref('')
+const dateTo = ref('')
+
+// Chart data
+const barData = ref([120, 150, 180, 90, 200, 160])
+const barLabels = ref(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'])
+
+const lineData = ref([100, 120, 140, 110, 160, 180, 200])
+const lineLabels = ref(['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7'])
+
+const heatMapData = ref([
+  [10, 20, 30, 40, 50, 60, 70],
+  [15, 25, 35, 45, 55, 65, 75],
+  [20, 30, 40, 50, 60, 70, 80],
+  [25, 35, 45, 55, 65, 75, 85],
+  [30, 40, 50, 60, 70, 80, 90],
+  [35, 45, 55, 65, 75, 85, 95]
+])
+
+const heatMapBubbles = ref([
+  { px: 100, py: 50, radius: 15, color: '#ff6b6b', tooltip: 'High Risk Area' },
+  { px: 250, py: 120, radius: 10, color: '#4ecdc4', tooltip: 'Low Risk Zone' },
+  { px: 350, py: 200, radius: 20, color: '#45b7d1', tooltip: 'Critical Point' }
+])
+const pieData = ref([35, 25, 20, 15, 5])
+const pieLabels = ref(['Product A', 'Product B', 'Product C', 'Product D', 'Others'])
+
+// Data sources for filters
+const dataSources = ref([
+  { value: 'sales', label: 'Sales Data' },
+  { value: 'marketing', label: 'Marketing Data' },
+  { value: 'finance', label: 'Financial Data' }
+])
 const checkboxValue = ref(false);
 const radioValue = ref('');
 const textareaValue = ref('');
@@ -57,6 +98,7 @@ const navigationItems = ref([
   { label: 'Data', icon: 'table-cells', route: '#data', type: 'link' },
   { label: 'Feedback', icon: 'comment-dots', route: '#feedback', type: 'link' },
   { label: 'Layout', icon: 'th-large', route: '#layout', type: 'link' },
+  { label: 'Graphs', icon: 'chart-bar', route: '#graphs', type: 'link' },
   { label: 'Loaders', icon: 'spinner', route: '#loaders', type: 'link' },
 ]);
 
@@ -81,6 +123,38 @@ const startProgress = () => {
     }
   }, 200);
 };
+
+const handleDataSourceChange = (value) => {
+  selectedDataSource.value = value
+  console.log('Data source changed:', value)
+  // Here you would typically fetch new data based on the source
+}
+
+const handleCellHover = (data) => {
+  console.log('Cell hovered:', data)
+}
+
+const handleChartTypeChange = (value) => {
+  chartType.value = value
+  console.log('Chart type changed:', value)
+}
+
+const refreshChartData = () => {
+  console.log('Refreshing chart data...')
+  // Here you would refresh the chart data
+}
+
+const handleBarHover = (data) => {
+  console.log('Bar hovered:', data)
+}
+
+const handlePointHover = (data) => {
+  console.log('Point hovered:', data)
+}
+
+const handleSliceHover = (data) => {
+  console.log('Slice hovered:', data)
+}
 
 const toggleLoading = () => {
   loading.value = !loading.value;
@@ -115,41 +189,29 @@ const currentPath = computed(() => `#${currentSection.value}`);
     <aside class="fixed left-0 top-0 z-40 h-screen w-52 border-r bg-white border-gray-200 overflow-y-auto">
       <nav class="p-4">
         <div class="space-y-2">
-          <button
-            v-for="item in navigationItems"
-            :key="item.label"
-            :class="[
-              'w-full flex flex-col items-center justify-center rounded-xl transition-all duration-200 group relative py-4 px-3',
-              currentPath === item.route
-                ? 'bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 shadow-sm'
-                : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900 border border-transparent'
-            ]"
-            @click="handleSidebarNavigate(item)"
-          >
+          <button v-for="item in navigationItems" :key="item.label" :class="[
+            'w-full flex flex-col items-center justify-center rounded-xl transition-all duration-200 group relative py-4 px-3',
+            currentPath === item.route
+              ? 'bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 shadow-sm'
+              : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900 border border-transparent'
+          ]" @click="handleSidebarNavigate(item)">
             <!-- Icon Container -->
-            <div
-              :class="[
-                'flex items-center justify-center rounded-lg transition-colors mb-2 w-12 h-12',
-                currentPath === item.route
-                  ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md'
-                  : 'text-gray-500 group-hover:text-gray-900 bg-gray-100 group-hover:bg-gray-200'
-              ]"
-            >
-              <Icon
-                :icon="item.icon"
-                class="w-6 h-6"
-              />
+            <div :class="[
+              'flex items-center justify-center rounded-lg transition-colors mb-2 w-12 h-12',
+              currentPath === item.route
+                ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md'
+                : 'text-gray-500 group-hover:text-gray-900 bg-gray-100 group-hover:bg-gray-200'
+            ]">
+              <Icon :icon="item.icon" class="w-6 h-6" />
             </div>
 
             <!-- Label -->
-            <span 
-              :class="[
-                'text-xs font-medium text-center',
-                currentPath === item.route
-                  ? 'text-blue-700 font-semibold' 
-                  : 'text-gray-500 group-hover:text-gray-900'
-              ]"
-            >
+            <span :class="[
+              'text-xs font-medium text-center',
+              currentPath === item.route
+                ? 'text-blue-700 font-semibold'
+                : 'text-gray-500 group-hover:text-gray-900'
+            ]">
               {{ item.label }}
             </span>
           </button>
@@ -200,7 +262,8 @@ const currentPath = computed(() => `#${currentSection.value}`);
                   <Button size="lg">Large</Button>
                   <Button size="icon" @click="showToast">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                     </svg>
                   </Button>
                 </div>
@@ -229,7 +292,8 @@ const currentPath = computed(() => `#${currentSection.value}`);
                   <Input v-model="inputValue" placeholder="With clear button" clearable />
                   <Input v-model="inputValue" type="email" placeholder="Email input" />
                   <Input v-model="inputValue" type="password" placeholder="Password input" />
-                  <Input v-model="inputValue" variant="error" placeholder="Error state" error="This field is required" />
+                  <Input v-model="inputValue" variant="error" placeholder="Error state"
+                    error="This field is required" />
                   <Input v-model="inputValue" variant="success" placeholder="Success state" />
                   <Input v-model="inputValue" size="sm" placeholder="Small size" />
                   <Input v-model="inputValue" size="lg" placeholder="Large size" />
@@ -254,7 +318,8 @@ const currentPath = computed(() => `#${currentSection.value}`);
                   <div class="space-y-2">
                     <Checkbox v-model="checkboxValue" label="Basic checkbox" />
                     <Checkbox v-model="checkboxValue" label="Disabled checkbox" disabled />
-                    <Checkbox v-model="checkboxValue" label="With description" description="This is a description for the checkbox." />
+                    <Checkbox v-model="checkboxValue" label="With description"
+                      description="This is a description for the checkbox." />
                     <Checkbox v-model="checkboxValue" size="sm" label="Small checkbox" />
                     <Checkbox v-model="checkboxValue" size="lg" label="Large checkbox" />
                   </div>
@@ -281,7 +346,8 @@ const currentPath = computed(() => `#${currentSection.value}`);
                 <Textarea v-model="textareaValue" placeholder="Basic textarea" />
                 <Textarea v-model="textareaValue" placeholder="Textarea with auto-resize" auto-resize />
                 <Textarea v-model="textareaValue" :rows="5" placeholder="Textarea with 5 rows" />
-                <Textarea v-model="textareaValue" variant="error" placeholder="Error state textarea" error="This field is required" />
+                <Textarea v-model="textareaValue" variant="error" placeholder="Error state textarea"
+                  error="This field is required" />
                 <Textarea v-model="textareaValue" variant="success" placeholder="Success state textarea" />
                 <Textarea v-model="textareaValue" size="sm" placeholder="Small textarea" />
                 <Textarea v-model="textareaValue" size="lg" placeholder="Large textarea" />
@@ -302,15 +368,8 @@ const currentPath = computed(() => `#${currentSection.value}`);
             <!-- File Upload -->
             <div class="space-y-4">
               <h3 class="text-xl font-semibold">FileUpload Component</h3>
-              <FileUpload
-                multiple
-                accept=".jpg,.png,.pdf"
-                @files-selected="handleFilesSelected"
-              >
-                <Icon
-                  icon="upload"
-                  class="h-8 w-8 text-muted-foreground mb-2"
-                />
+              <FileUpload multiple accept=".jpg,.png,.pdf" @files-selected="handleFilesSelected">
+                <Icon icon="upload" class="h-8 w-8 text-muted-foreground mb-2" />
               </FileUpload>
             </div>
           </section>
@@ -327,7 +386,8 @@ const currentPath = computed(() => `#${currentSection.value}`);
                 <Alert variant="success" title="Success Alert" message="Operation completed successfully!" />
                 <Alert variant="warning" title="Warning Alert" message="Please be cautious with this action." />
                 <Alert variant="error" title="Error Alert" message="Something went wrong. Please try again." />
-                <Alert variant="destructive" title="Destructive Alert" message="This action cannot be undone." dismissible />
+                <Alert variant="destructive" title="Destructive Alert" message="This action cannot be undone."
+                  dismissible />
               </div>
             </div>
 
@@ -485,6 +545,96 @@ const currentPath = computed(() => `#${currentSection.value}`);
                   </div>
                 </div>
               </div>
+            </div>
+          </section>
+
+          <!-- Graphs Section -->
+          <section id="graphs" class="space-y-8">
+            <h2 class="text-3xl font-bold border-b pb-4">Graph Components</h2>
+
+            <!-- Bar Chart Example -->
+            <div class="space-y-4">
+              <h3 class="text-xl font-semibold">Bar Chart with Filters</h3>
+              <Graph title="Sales Overview" description="Monthly sales data">
+                <template #filters>
+                  <GraphFilters :data-sources="dataSources" @update:dataSource="handleDataSourceChange"
+                    @refresh="refreshChartData" />
+                </template>
+
+                <BarChart :data="barData" :labels="barLabels"
+                  :colors="['#3b82f6', '#ef4444', '#10b981', '#f59e0b']" :width="600" :height="400"
+                  @bar-hover="handleBarHover" />
+
+                <template #legend>
+                  <div class="flex items-center gap-4 text-sm">
+                    <div class="flex items-center gap-2">
+                      <div class="w-3 h-3 bg-blue-500 rounded"></div>
+                      <span>Sales</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <div class="w-3 h-3 bg-red-500 rounded"></div>
+                      <span>Expenses</span>
+                    </div>
+                  </div>
+                </template>
+              </Graph>
+            </div>
+
+            <!-- Line Chart Example -->
+            <div class="space-y-4">
+              <h3 class="text-xl font-semibold">Line Chart with Date Filters</h3>
+              <Graph title="Revenue Trend" variant="outlined">
+                <template #filters>
+                  <GraphFilters :show-chart-type-filter="false" :show-date-filter="true"
+                    @update:dateFrom="dateFrom = $event" @update:dateTo="dateTo = $event" />
+                </template>
+
+                <LineChart :data="lineData" :labels="lineLabels" :fill-area="true" :colors="['#8b5cf6']"
+                  :width="600" :height="300" @point-hover="handlePointHover" />
+              </Graph>
+            </div>
+
+            <!-- Pie Chart Example -->
+            <div class="space-y-4">
+              <h3 class="text-xl font-semibold">Pie Chart with Legend</h3>
+              <Graph title="Market Share" variant="elevated">
+                <PieChart :data="pieData" :labels="pieLabels" :donut="true" :show-legend="true" :size="400"
+                  @slice-hover="handleSliceHover" />
+
+                <template #footer>
+                  <div class="text-center text-sm text-gray-600">
+                    Total market value: ${{pieData.reduce((a, b) => a + b, 0).toLocaleString()}}
+                  </div>
+                </template>
+              </Graph>
+            </div>
+
+            <!-- Heat Map Example -->
+            <div class="space-y-4">
+              <h3 class="text-xl font-semibold">Heat Map with Bubbles</h3>
+              <Graph title="Activity Heat Map" description="Weekly activity patterns with bubble overlay">
+                <template #filters>
+                  <GraphFilters :show-date-filter="true" @update:dateFrom="dateFrom = $event"
+                    @update:dateTo="dateTo = $event" @refresh="refreshChartData" />
+                </template>
+
+                <HeatMap
+                  :data="heatMapData"
+                  :bubbles="heatMapBubbles"
+                  :width="600"
+                  :height="300"
+                  :min-value="0"
+                  :max-value="100"
+                  @cell-hover="handleCellHover"
+                />
+
+                <template #legend>
+                  <div class="text-sm text-gray-600">
+                    <p><strong>Heat Map:</strong> Color intensity shows activity levels</p>
+                    <p><strong>Bubbles:</strong> Size represents magnitude of activity</p>
+                  </div>
+                </template>
+              </Graph>
             </div>
           </section>
         </div>
