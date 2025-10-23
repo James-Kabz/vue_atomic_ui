@@ -35,8 +35,8 @@ export const tooltip = {
     el._tooltipArrow = arrow
     el._tooltipPosition = position
 
-    const showTooltip = () => {
-      document.body.appendChild(tooltipEl)
+    const repositionTooltip = () => {
+      if (!tooltipEl.parentNode) return
 
       const rect = el.getBoundingClientRect()
       const tooltipRect = tooltipEl.getBoundingClientRect()
@@ -47,6 +47,31 @@ export const tooltip = {
         case 'bottom':
           left = rect.left + rect.width / 2 - tooltipRect.width / 2
           top = rect.bottom + 8
+          break
+        case 'left':
+          left = rect.left - tooltipRect.width - 8
+          top = rect.top + rect.height / 2 - tooltipRect.height / 2
+          break
+        case 'right':
+          left = rect.right + 8
+          top = rect.top + rect.height / 2 - tooltipRect.height / 2
+          break
+        default: // top
+          left = rect.left + rect.width / 2 - tooltipRect.width / 2
+          top = rect.top - tooltipRect.height - 8
+      }
+
+      tooltipEl.style.left = `${left}px`
+      tooltipEl.style.top = `${top}px`
+    }
+
+    const showTooltip = () => {
+      document.body.appendChild(tooltipEl)
+
+      repositionTooltip()
+
+      switch (position) {
+        case 'bottom':
           arrow.style.cssText += `
             border-width: 0 5px 5px 5px;
             border-color: transparent transparent rgba(0, 0, 0, 0.9) transparent;
@@ -56,8 +81,6 @@ export const tooltip = {
           `
           break
         case 'left':
-          left = rect.left - tooltipRect.width - 8
-          top = rect.top + rect.height / 2 - tooltipRect.height / 2
           arrow.style.cssText += `
             border-width: 5px 0 5px 5px;
             border-color: transparent transparent transparent rgba(0, 0, 0, 0.9);
@@ -67,8 +90,6 @@ export const tooltip = {
           `
           break
         case 'right':
-          left = rect.right + 8
-          top = rect.top + rect.height / 2 - tooltipRect.height / 2
           arrow.style.cssText += `
             border-width: 5px 5px 5px 0;
             border-color: transparent rgba(0, 0, 0, 0.9) transparent transparent;
@@ -78,8 +99,6 @@ export const tooltip = {
           `
           break
         default: // top
-          left = rect.left + rect.width / 2 - tooltipRect.width / 2
-          top = rect.top - tooltipRect.height - 8
           arrow.style.cssText += `
             border-width: 5px 5px 0 5px;
             border-color: rgba(0, 0, 0, 0.9) transparent transparent transparent;
@@ -89,16 +108,18 @@ export const tooltip = {
           `
       }
 
-      tooltipEl.style.left = `${left}px`
-      tooltipEl.style.top = `${top}px`
-
       setTimeout(() => {
         tooltipEl.style.opacity = '1'
       }, 10)
+
+      // Add scroll listener to reposition tooltip
+      window.addEventListener('scroll', repositionTooltip, true)
     }
 
     const hideTooltip = () => {
       tooltipEl.style.opacity = '0'
+      // Remove scroll listener
+      window.removeEventListener('scroll', repositionTooltip, true)
       setTimeout(() => {
         if (tooltipEl.parentNode) {
           document.body.removeChild(tooltipEl)
@@ -112,6 +133,7 @@ export const tooltip = {
 
     el._tooltipShowFn = showTooltip
     el._tooltipHideFn = hideTooltip
+    el._tooltipRepositionFn = repositionTooltip
   },
 
   updated(el, binding) {
@@ -130,6 +152,9 @@ export const tooltip = {
     if (el._tooltipHideFn) {
       el.removeEventListener('mouseleave', el._tooltipHideFn)
       el.removeEventListener('click', el._tooltipHideFn)
+    }
+    if (el._tooltipRepositionFn) {
+      window.removeEventListener('scroll', el._tooltipRepositionFn, true)
     }
   }
 }
