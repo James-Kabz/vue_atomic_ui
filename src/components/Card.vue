@@ -1,22 +1,40 @@
 <template>
-  <div
-    :class="cn(cardVariants({ variant, padding, hoverable, clickable, loading }))"
+  <component
+    :is="as"
+    :class="cn(cardVariants({ variant, padding, hoverable, clickable, loading, bordered }))"
+    :disabled="disabled || loading"
+    :aria-busy="loading"
+    :aria-disabled="disabled"
+    :role="clickable ? 'button' : undefined"
+    :tabindex="clickable && !disabled ? 0 : undefined"
     @click="handleClick"
+    @keydown.enter="handleKeydown"
+    @keydown.space.prevent="handleKeydown"
   >
+    <!-- Loading Overlay -->
+    <div
+      v-if="loading"
+      class="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center z-10"
+      aria-hidden="true"
+    >
+      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-slate-900"></div>
+    </div>
+
     <!-- Header -->
     <div
-      v-if="$slots.header || title || subtitle"
-      :class="cn(headerVariants({ padding }))"
+      v-if="$slots.header || title || subtitle || $slots.actions"
+      :class="cn(headerVariants({ padding, hasBorder: !!($slots.default || $slots.footer) }))"
     >
       <slot name="header">
-        <div class="flex items-start justify-between">
+        <div class="flex items-start justify-between gap-4">
           <div class="flex-1 min-w-0">
-            <h3
+            <component
+              :is="titleTag"
               v-if="title"
-              :class="titleClasses"
+              :class="cn(titleClasses, titleSize)"
             >
               {{ title }}
-            </h3>
+            </component>
             <p
               v-if="subtitle"
               :class="subtitleClasses"
@@ -27,7 +45,7 @@
 
           <div
             v-if="$slots.actions"
-            class="flex-shrink-0 ml-4"
+            class="flex-shrink-0"
           >
             <slot name="actions" />
           </div>
@@ -38,14 +56,15 @@
     <!-- Image -->
     <div
       v-if="$slots.image || image"
-      :class="cn(imageContainerVariants({ padding }))"
+      :class="cn(imageContainerVariants({ padding, hasHeader: !!($slots.header || title) }))"
     >
       <slot name="image">
         <img
           v-if="image"
           :src="image"
           :alt="imageAlt"
-          :class="imageClasses"
+          :class="cn(imageClasses, imageAspect)"
+          :loading="imageLazy ? 'lazy' : 'eager'"
         >
       </slot>
     </div>
@@ -65,52 +84,130 @@
     >
       <slot name="footer" />
     </div>
-  </div>
+
+    <!-- Badge -->
+    <div
+      v-if="badge"
+      class="absolute top-3 right-3"
+    >
+      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-900 text-white">
+        {{ badge }}
+      </span>
+    </div>
+  </component>
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import { cva } from 'class-variance-authority'
 import { cn } from '../utils/cn.js'
 
 const props = defineProps({
+  // Component type
+  as: {
+    type: String,
+    default: 'div'
+  },
+  
+  // Styling variants
   variant: {
     type: String,
     default: 'default',
-    validator: (value) => ['default', 'outlined', 'elevated', 'filled'].includes(value)
+    validator: (value) => ['default', 'outlined', 'elevated', 'filled', 'ghost'].includes(value)
   },
   padding: {
     type: String,
     default: 'md',
     validator: (value) => ['none', 'sm', 'md', 'lg', 'xl'].includes(value)
   },
+  bordered: {
+    type: Boolean,
+    default: true
+  },
+  
+  // Content props
   title: String,
+  titleTag: {
+    type: String,
+    default: 'h3'
+  },
+  titleSize: {
+    type: String,
+    default: 'default',
+    validator: (value) => ['sm', 'default', 'lg', 'xl'].includes(value)
+  },
   subtitle: String,
+  badge: String,
+  
+  // Image props
   image: String,
   imageAlt: {
     type: String,
     default: 'Card image'
   },
+  imageAspect: {
+    type: String,
+    default: 'auto',
+    validator: (value) => ['auto', 'video', 'square', 'portrait'].includes(value)
+  },
+  imageLazy: {
+    type: Boolean,
+    default: true
+  },
+  
+  // Interaction states
   hoverable: Boolean,
   clickable: Boolean,
+  disabled: Boolean,
   loading: Boolean
 })
 
 const emit = defineEmits(['click'])
 
 const handleClick = (event) => {
-  if (props.clickable) emit('click', event)
+  if (props.clickable && !props.disabled && !props.loading) {
+    emit('click', event)
+  }
 }
+
+const handleKeydown = (event) => {
+  if (props.clickable && !props.disabled && !props.loading) {
+    emit('click', event)
+  }
+}
+
+/* --- Computed Classes --- */
+const titleSize = computed(() => {
+  const sizes = {
+    sm: 'text-base',
+    default: 'text-lg',
+    lg: 'text-xl',
+    xl: 'text-2xl'
+  }
+  return sizes[props.titleSize]
+})
+
+const imageAspect = computed(() => {
+  const aspects = {
+    auto: '',
+    video: 'aspect-video',
+    square: 'aspect-square',
+    portrait: 'aspect-[3/4]'
+  }
+  return aspects[props.imageAspect]
+})
 
 /* --- Variants --- */
 const cardVariants = cva(
-  'rounded-lg overflow-hidden transition-all duration-200',
+  'rounded-lg overflow-hidden transition-all duration-200 relative',
   {
     variants: {
       variant: {
-        default: 'bg-white border border-slate-200',
-        outlined: 'bg-white border-2 border-slate-300',
-        elevated: 'bg-white shadow-lg border border-slate-100',
-        filled: 'bg-slate-50 border border-slate-200'
+        default: 'bg-white',
+        outlined: 'bg-white',
+        elevated: 'bg-white shadow-md',
+        filled: 'bg-slate-50',
+        ghost: 'bg-transparent'
       },
       padding: {
         none: '',
@@ -119,37 +216,70 @@ const cardVariants = cva(
         lg: 'p-6',
         xl: 'p-8'
       },
+      bordered: {
+        true: '',
+        false: ''
+      },
       hoverable: {
-        true: 'hover:shadow-md'
+        true: 'hover:shadow-lg hover:scale-[1.02]'
       },
       clickable: {
-        true: 'cursor-pointer'
+        true: 'cursor-pointer focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2'
       },
       loading: {
-        true: 'opacity-60 pointer-events-none'
+        true: ''
       }
     },
+    compoundVariants: [
+      {
+        variant: 'default',
+        bordered: true,
+        class: 'border border-slate-200'
+      },
+      {
+        variant: 'outlined',
+        bordered: true,
+        class: 'border-2 border-slate-300'
+      },
+      {
+        variant: 'elevated',
+        bordered: true,
+        class: 'border border-slate-100'
+      },
+      {
+        variant: 'filled',
+        bordered: true,
+        class: 'border border-slate-200'
+      },
+      {
+        clickable: true,
+        hoverable: false,
+        class: 'hover:bg-slate-50'
+      }
+    ],
     defaultVariants: {
       variant: 'default',
-      padding: 'md'
+      padding: 'md',
+      bordered: true
     }
   }
 )
 
-const headerVariants = cva(
-  'border-b border-slate-100 last:border-b-0',
-  {
-    variants: {
-      padding: {
-        none: 'p-4 pb-0',
-        sm: 'px-3 pt-3',
-        md: 'px-4 pt-4',
-        lg: 'px-6 pt-6',
-        xl: 'px-8 pt-8'
-      }
+const headerVariants = cva('', {
+  variants: {
+    padding: {
+      none: 'p-4 pb-3',
+      sm: 'px-3 pt-3 pb-2',
+      md: 'px-4 pt-4 pb-3',
+      lg: 'px-6 pt-6 pb-4',
+      xl: 'px-8 pt-8 pb-6'
+    },
+    hasBorder: {
+      true: 'border-b border-slate-200 mb-0',
+      false: ''
     }
   }
-)
+})
 
 const contentVariants = cva('', {
   variants: {
@@ -163,35 +293,58 @@ const contentVariants = cva('', {
   }
 })
 
-const footerVariants = cva(
-  'border-t border-slate-100 bg-slate-50/50',
-  {
-    variants: {
-      padding: {
-        none: 'p-4 pt-0',
-        sm: 'px-3 pb-3',
-        md: 'px-4 pb-4',
-        lg: 'px-6 pb-6',
-        xl: 'px-8 pb-8'
-      }
-    }
-  }
-)
-
-const imageContainerVariants = cva('', {
+const footerVariants = cva('border-t border-slate-200 bg-slate-50/50', {
   variants: {
     padding: {
-      none: '',
-      sm: '-mx-3 -mt-3 mb-3',
-      md: '-mx-4 -mt-4 mb-4',
-      lg: '-mx-6 -mt-6 mb-6',
-      xl: '-mx-8 -mt-8 mb-8'
+      none: 'p-4 pt-3',
+      sm: 'px-3 pb-3 pt-2',
+      md: 'px-4 pb-4 pt-3',
+      lg: 'px-6 pb-6 pt-4',
+      xl: 'px-8 pb-8 pt-6'
     }
   }
 })
 
+const imageContainerVariants = cva('overflow-hidden', {
+  variants: {
+    padding: {
+      none: '',
+      sm: '-mx-3 mb-3',
+      md: '-mx-4 mb-4',
+      lg: '-mx-6 mb-6',
+      xl: '-mx-8 mb-8'
+    },
+    hasHeader: {
+      true: '',
+      false: ''
+    }
+  },
+  compoundVariants: [
+    {
+      hasHeader: true,
+      padding: 'sm',
+      class: '-mt-3'
+    },
+    {
+      hasHeader: true,
+      padding: 'md',
+      class: '-mt-4'
+    },
+    {
+      hasHeader: true,
+      padding: 'lg',
+      class: '-mt-6'
+    },
+    {
+      hasHeader: true,
+      padding: 'xl',
+      class: '-mt-8'
+    }
+  ]
+})
+
 /* --- Static classes --- */
-const imageClasses = 'w-full h-auto object-cover'
-const titleClasses = 'text-lg font-semibold text-slate-900 truncate'
-const subtitleClasses = 'text-sm text-slate-600 mt-1'
+const imageClasses = 'w-full h-full object-cover'
+const titleClasses = 'font-semibold text-slate-900 line-clamp-2'
+const subtitleClasses = 'text-sm text-slate-600 mt-1 line-clamp-2'
 </script>
