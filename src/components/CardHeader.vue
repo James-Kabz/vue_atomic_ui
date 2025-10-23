@@ -10,12 +10,18 @@
       <h2 class="text-lg font-semibold leading-tight text-foreground">
         <slot name="title" />
       </h2>
-      <p v-if="$slots.description" class="text-sm text-muted-foreground">
+      <p
+        v-if="$slots.description"
+        class="text-sm text-muted-foreground"
+      >
         <slot name="description" />
       </p>
     </div>
 
-    <div v-if="$slots.actions" class="flex items-center gap-2">
+    <div
+      v-if="$slots.actions"
+      class="flex items-center gap-2"
+    >
       <slot name="actions" />
     </div>
   </header>
@@ -27,7 +33,7 @@ import { cn } from '../utils/cn.js'
 
 defineOptions({ inheritAttrs: false })
 
-const props = defineProps({
+defineProps({
   padding: {
     type: String,
     default: 'p-4 md:p-6'

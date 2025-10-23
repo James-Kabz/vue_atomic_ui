@@ -1,98 +1,177 @@
 <template>
-    <div class="bg-white border-b border-gray-200">
-        <!-- Main Filters Bar -->
-        <div :class="filtersClasses">
-            <!-- Date Range Filter -->
-            <div v-if="showDateFilter" class="flex items-center gap-3 min-w-64">
-                <div class="relative flex-1">
-                    <Icon icon="calendar"
-                        class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                    <input v-model="dateFrom" type="date" :class="dateInputClasses" placeholder="From date">
-                </div>
-                <span class="text-gray-500 text-sm">to</span>
-                <div class="relative flex-1">
-                    <Icon icon="calendar"
-                        class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                    <input v-model="dateTo" type="date" :class="dateInputClasses" placeholder="To date">
-                </div>
-            </div>
-
-            <!-- Chart Type Selector -->
-            <div v-if="showChartTypeFilter" class="min-w-40">
-                <div class="relative">
-                    <Select v-model="selectedChartType" :class="selectClasses" @change="handleChartTypeChange">
-                        <option value="bar">
-                            Bar Chart
-                        </option>
-                        <option value="line">
-                            Line Chart
-                        </option>
-                        <option value="pie">
-                            Pie Chart
-                        </option>
-                    </Select>
-                    <Icon icon="chart-bar"
-                        class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
-                </div>
-            </div>
-
-            <!-- Data Source Filter -->
-            <div v-if="dataSources.length > 0" class="min-w-40">
-                <div class="relative">
-                    <Select v-model="selectedDataSource" :class="selectClasses" @change="handleDataSourceChange">
-                        <option value="">
-                            All Sources
-                        </option>
-                        <option v-for="source in dataSources" :key="source.value" :value="source.value">
-                            {{ source.label }}
-                        </option>
-                    </Select>
-                    <Icon icon="database"
-                        class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
-                </div>
-            </div>
-
-            <!-- Custom Filters Slot -->
-            <div v-if="$slots.filters" class="flex items-center gap-2">
-                <slot name="filters" />
-            </div>
-
-            <!-- Actions -->
-            <div class="flex items-center gap-3 ml-auto">
-                <!-- Clear Filters -->
-                <Button v-if="hasActiveFilters" :class="clearFiltersButtonClasses" @click="clearFilters">
-                    <Icon icon="rotate-left" class="w-4 h-4 mr-2" />
-                    Clear Filters
-                </Button>
-
-                <!-- Export Button -->
-                <Button v-if="showExport" :class="exportButtonClasses" @click="$emit('export')">
-                    <Icon icon="download" class="w-4 h-4 mr-2" />
-                    Export
-                </Button>
-
-                <!-- Refresh Button -->
-                <Button v-if="showRefresh" :class="refreshButtonClasses" @click="$emit('refresh')">
-                    <Icon icon="sync" class="w-4 h-4 mr-2" />
-                    Refresh
-                </Button>
-            </div>
+  <div class="bg-white border-b border-gray-200">
+    <!-- Main Filters Bar -->
+    <div :class="filtersClasses">
+      <!-- Date Range Filter -->
+      <div
+        v-if="showDateFilter"
+        class="flex items-center gap-3 min-w-64"
+      >
+        <div class="relative flex-1">
+          <Icon
+            icon="calendar"
+            class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
+          />
+          <input
+            v-model="dateFrom"
+            type="date"
+            :class="dateInputClasses"
+            placeholder="From date"
+          >
         </div>
-
-        <!-- Active Filters Display -->
-        <div v-if="activeFilters.length > 0" :class="activeFiltersContainerClasses">
-            <div class="flex items-center gap-3 flex-wrap">
-                <span :class="activeFiltersLabelClasses">Active filters:</span>
-                <div v-for="filter in activeFilters" :key="filter.key" :class="activeFilterTagClasses">
-                    <Icon :icon="filter.icon" class="w-3 h-3" />
-                    <span>{{ filter.label }}: {{ filter.value }}</span>
-                    <button :class="activeFilterRemoveButtonClasses" @click="removeFilter(filter.key)">
-                        <Icon icon="xmark" class="w-3 h-3" />
-                    </button>
-                </div>
-            </div>
+        <span class="text-gray-500 text-sm">to</span>
+        <div class="relative flex-1">
+          <Icon
+            icon="calendar"
+            class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
+          />
+          <input
+            v-model="dateTo"
+            type="date"
+            :class="dateInputClasses"
+            placeholder="To date"
+          >
         </div>
+      </div>
+
+      <!-- Chart Type Selector -->
+      <div
+        v-if="showChartTypeFilter"
+        class="min-w-40"
+      >
+        <div class="relative">
+          <Select
+            v-model="selectedChartType"
+            :class="selectClasses"
+            @change="handleChartTypeChange"
+          >
+            <option value="bar">
+              Bar Chart
+            </option>
+            <option value="line">
+              Line Chart
+            </option>
+            <option value="pie">
+              Pie Chart
+            </option>
+          </Select>
+          <Icon
+            icon="chart-bar"
+            class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
+          />
+        </div>
+      </div>
+
+      <!-- Data Source Filter -->
+      <div
+        v-if="dataSources.length > 0"
+        class="min-w-40"
+      >
+        <div class="relative">
+          <Select
+            v-model="selectedDataSource"
+            :class="selectClasses"
+            @change="handleDataSourceChange"
+          >
+            <option value="">
+              All Sources
+            </option>
+            <option
+              v-for="source in dataSources"
+              :key="source.value"
+              :value="source.value"
+            >
+              {{ source.label }}
+            </option>
+          </Select>
+          <Icon
+            icon="database"
+            class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
+          />
+        </div>
+      </div>
+
+      <!-- Custom Filters Slot -->
+      <div
+        v-if="$slots.filters"
+        class="flex items-center gap-2"
+      >
+        <slot name="filters" />
+      </div>
+
+      <!-- Actions -->
+      <div class="flex items-center gap-3 ml-auto">
+        <!-- Clear Filters -->
+        <Button
+          v-if="hasActiveFilters"
+          :class="clearFiltersButtonClasses"
+          @click="clearFilters"
+        >
+          <Icon
+            icon="rotate-left"
+            class="w-4 h-4 mr-2"
+          />
+          Clear Filters
+        </Button>
+
+        <!-- Export Button -->
+        <Button
+          v-if="showExport"
+          :class="exportButtonClasses"
+          @click="$emit('export')"
+        >
+          <Icon
+            icon="download"
+            class="w-4 h-4 mr-2"
+          />
+          Export
+        </Button>
+
+        <!-- Refresh Button -->
+        <Button
+          v-if="showRefresh"
+          :class="refreshButtonClasses"
+          @click="$emit('refresh')"
+        >
+          <Icon
+            icon="sync"
+            class="w-4 h-4 mr-2"
+          />
+          Refresh
+        </Button>
+      </div>
     </div>
+
+    <!-- Active Filters Display -->
+    <div
+      v-if="activeFilters.length > 0"
+      :class="activeFiltersContainerClasses"
+    >
+      <div class="flex items-center gap-3 flex-wrap">
+        <span :class="activeFiltersLabelClasses">Active filters:</span>
+        <div
+          v-for="filter in activeFilters"
+          :key="filter.key"
+          :class="activeFilterTagClasses"
+        >
+          <Icon
+            :icon="filter.icon"
+            class="w-3 h-3"
+          />
+          <span>{{ filter.label }}: {{ filter.value }}</span>
+          <button
+            :class="activeFilterRemoveButtonClasses"
+            @click="removeFilter(filter.key)"
+          >
+            <Icon
+              icon="xmark"
+              class="w-3 h-3"
+            />
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
