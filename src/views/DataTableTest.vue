@@ -95,7 +95,7 @@
           @selection-change="selectedUsers = $event"
           @sort-change="handleSort"
           @row-click="handleRowClick"
-          @action="handleTableAction"
+          @action="handleAction"
         >
           <!-- Custom cell for user name with avatar -->
           <template #cell-name="{ item }">
