@@ -365,16 +365,23 @@ const tableActions = [
 
 ## Action Variants
 
-The `variant` prop controls the button icon color on hover:
+The `variant` prop controls the button styling. All action buttons use the Button component with `icon` size and are mapped to the `ghost` variant for consistent, minimal styling in table rows:
 
-- `primary`: Blue hover color (default for view/edit actions)
-- `secondary`: Gray hover color
-- `danger`: Red hover color (for delete/destructive actions)
-- `success`: Green hover color (for approve/activate actions)
-- `warning`: Yellow hover color (for warning actions)
-- `default`: Gray hover color
+- `primary`: Ghost button with subtle hover (default for view/edit actions)
+- `secondary`: Ghost button with subtle hover
+- `danger`: Ghost button with subtle hover (for delete/destructive actions)
+- `success`: Ghost button with subtle hover (for approve/activate actions)
+- `warning`: Ghost button with subtle hover (for warning actions)
+- `info`: Ghost button with subtle hover (for info actions)
+- `default`: Ghost button with subtle hover
 
-All action buttons use the `Button` component with `ghost` variant and `icon` size for consistent styling. The variant only affects the icon color on hover.
+All variants use the Button component's `ghost` variant which provides:
+- Transparent background
+- Gray text color
+- Subtle gray background on hover
+- Consistent spacing and sizing
+
+This ensures action buttons don't overwhelm the table design while remaining clearly interactive.
 
 ## Props Reference
 

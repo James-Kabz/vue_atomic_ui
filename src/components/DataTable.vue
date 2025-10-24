@@ -334,36 +334,27 @@ const handleActionClick = (action, item) => {
 // Map action variant to Button component variant
 const getButtonVariant = (actionVariant) => {
   const variantMap = {
-    primary: 'ghost',
-    secondary: 'ghost',
-    danger: 'ghost',
-    success: 'ghost',
-    warning: 'ghost',
-    default: 'ghost'
+    default: 'default',
+    primary: 'gradient',
+    secondary: 'secondary',
+    destructive: 'destructive',
+    success: 'success',
+    warning: 'warning',
+    info: 'info',
+    subtle: 'subtle',
+    dark: 'dark',
+    light: 'light',
+    primaryOutline: 'primaryOutline',
+    destructiveOutline: 'destructiveOutline',
+    successOutline: 'successOutline',
+    outline: 'outline',
+    link: 'link',
+    ghost: 'ghost'
   }
-  
+
   return variantMap[actionVariant] || 'ghost'
 }
 
-// Get icon color class based on action variant
-const getIconColorClass = (action, item) => {
-  const isDisabled = isActionDisabled(action, item) || !hasPermission(action, item)
-  
-  if (isDisabled) {
-    return 'text-slate-300'
-  }
-
-  const colorClasses = {
-    primary: 'text-slate-400 hover:text-blue-600',
-    secondary: 'text-slate-400 hover:text-slate-600',
-    danger: 'text-slate-400 hover:text-red-600',
-    success: 'text-slate-400 hover:text-green-600',
-    warning: 'text-slate-400 hover:text-yellow-600',
-    default: 'text-slate-400 hover:text-slate-600'
-  }
-
-  return colorClasses[action.variant || 'default']
-}
 
 const isAllSelected = computed(() => {
   return filteredData.value.length > 0 &&
@@ -680,22 +671,15 @@ defineExpose({
                 <template #actions="slotProps">
                   <!-- Use slot if provided -->
                   <slot v-if="$slots.actions" name="actions" v-bind="slotProps" />
-                  
+
                   <!-- Otherwise render actions from prop -->
-                  <div v-else-if="actions.length > 0 && showActionsColumn" class="flex items-center gap-1 justify-center">
-                    <Tooltip
-                      v-for="action in getVisibleActions(slotProps.item)"
-                      :key="action.key"
-                      :content="action.tooltip || action.label || action.key"
-                      placement="top"
-                    >
-                      <Button
-                        :variant="getButtonVariant(action.variant)"
-                        size="icon"
+                  <div v-else-if="actions.length > 0 && showActionsColumn"
+                    class="flex items-center gap-1 justify-center">
+                    <Tooltip v-for="action in getVisibleActions(slotProps.item)" :key="action.key"
+                      :content="action.tooltip || action.label || action.key" placement="top">
+                      <Button :variant="getButtonVariant(action.variant)" size="icon"
                         :disabled="isActionDisabled(action, slotProps.item) || !hasPermission(action, slotProps.item)"
-                        :class="['h-8 w-8', getIconColorClass(action, slotProps.item)]"
-                        @click.stop="handleActionClick(action, slotProps.item)"
-                      >
+                        class="h-8 w-8" @click.stop="handleActionClick(action, slotProps.item)">
                         <Icon v-if="action.icon" :icon="action.icon" class="w-4 h-4" />
                         <span v-else-if="action.label" class="text-xs">{{ action.label }}</span>
                       </Button>
