@@ -207,82 +207,81 @@ import { ref, computed } from 'vue'
 import DataTableFilters from '../components/DataTableFilters.vue'
 import DataTableToolBar from '../components/DataTableToolBar.vue'
 import DataTable from '../components/DataTable.vue'
-import DatePicker from '../components/DatePicker.vue'
 
 // Sample data with better avatars
 const users = ref([
-  // {
-  //   id: 1,
-  //   name: 'John Doe',
-  //   email: 'john@example.com',
-  //   role: 'Admin',
-  //   department: 'Engineering',
-  //   status: 'active',
-  //   lastLogin: new Date('2024-01-15'),
-  //   avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face&auto=format',
-  //   salary: 75000,
-  //   joinDate: '2023-03-15'
-  // },
-  // {
-  //   id: 2,
-  //   name: 'Jane Smith',
-  //   email: 'jane@example.com',
-  //   role: 'Editor',
-  //   department: 'Marketing',
-  //   status: 'active',
-  //   lastLogin: new Date('2024-01-14'),
-  //   avatar: 'https://images.unsplash.com/photo-1494790108755-2616b332c3c7?w=32&h=32&fit=crop&crop=face&auto=format',
-  //   salary: 65000,
-  //   joinDate: '2023-05-22'
-  // },
-  // {
-  //   id: 3,
-  //   name: 'Mike Johnson',
-  //   email: 'mike@example.com',
-  //   role: 'Viewer',
-  //   department: 'Sales',
-  //   status: 'inactive',
-  //   lastLogin: new Date('2024-01-10'),
-  //   avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=32&h=32&fit=crop&crop=face&auto=format',
-  //   salary: 55000,
-  //   joinDate: '2023-07-08'
-  // },
-  // {
-  //   id: 4,
-  //   name: 'Sarah Wilson',
-  //   email: 'sarah@example.com',
-  //   role: 'Editor',
-  //   department: 'Design',
-  //   status: 'active',
-  //   lastLogin: new Date('2024-01-16'),
-  //   avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=32&h=32&fit=crop&crop=face&auto=format',
-  //   salary: 70000,
-  //   joinDate: '2023-02-14'
-  // },
-  // {
-  //   id: 5,
-  //   name: 'Alex Chen',
-  //   email: 'alex@example.com',
-  //   role: 'Admin',
-  //   department: 'Engineering',
-  //   status: 'active',
-  //   lastLogin: new Date('2024-01-17'),
-  //   avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=32&h=32&fit=crop&crop=face&auto=format',
-  //   salary: 80000,
-  //   joinDate: '2023-01-10'
-  // },
-  // {
-  //   id: 6,
-  //   name: 'Maria Garcia',
-  //   email: 'maria@example.com',
-  //   role: 'Editor',
-  //   department: 'Marketing',
-  //   status: 'inactive',
-  //   lastLogin: new Date('2024-01-05'),
-  //   avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=32&h=32&fit=crop&crop=face&auto=format',
-  //   salary: 62000,
-  //   joinDate: '2023-06-20'
-  // }
+  {
+    id: 1,
+    name: 'John Doe',
+    email: 'john@example.com',
+    role: 'Admin',
+    department: 'Engineering',
+    status: 'active',
+    lastLogin: new Date('2024-01-15'),
+    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face&auto=format',
+    salary: 75000,
+    joinDate: '2023-03-15'
+  },
+  {
+    id: 2,
+    name: 'Jane Smith',
+    email: 'jane@example.com',
+    role: 'Editor',
+    department: 'Marketing',
+    status: 'active',
+    lastLogin: new Date('2024-01-14'),
+    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b332c3c7?w=32&h=32&fit=crop&crop=face&auto=format',
+    salary: 65000,
+    joinDate: '2023-05-22'
+  },
+  {
+    id: 3,
+    name: 'Mike Johnson',
+    email: 'mike@example.com',
+    role: 'Viewer',
+    department: 'Sales',
+    status: 'inactive',
+    lastLogin: new Date('2024-01-10'),
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=32&h=32&fit=crop&crop=face&auto=format',
+    salary: 55000,
+    joinDate: '2023-07-08'
+  },
+  {
+    id: 4,
+    name: 'Sarah Wilson',
+    email: 'sarah@example.com',
+    role: 'Editor',
+    department: 'Design',
+    status: 'active',
+    lastLogin: new Date('2024-01-16'),
+    avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=32&h=32&fit=crop&crop=face&auto=format',
+    salary: 70000,
+    joinDate: '2023-02-14'
+  },
+  {
+    id: 5,
+    name: 'Alex Chen',
+    email: 'alex@example.com',
+    role: 'Admin',
+    department: 'Engineering',
+    status: 'active',
+    lastLogin: new Date('2024-01-17'),
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=32&h=32&fit=crop&crop=face&auto=format',
+    salary: 80000,
+    joinDate: '2023-01-10'
+  },
+  {
+    id: 6,
+    name: 'Maria Garcia',
+    email: 'maria@example.com',
+    role: 'Editor',
+    department: 'Marketing',
+    status: 'inactive',
+    lastLogin: new Date('2024-01-05'),
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=32&h=32&fit=crop&crop=face&auto=format',
+    salary: 62000,
+    joinDate: '2023-06-20'
+  }
 ])
 
 // Filter state
