@@ -173,23 +173,6 @@
         </DataTable>
       </div>
 
-      <!-- Debug Info -->
-      <div class="mt-8 p-4 bg-slate-100 rounded-lg">
-        <h3 class="font-medium text-slate-900 mb-2">
-          Debug Info:
-        </h3>
-        <div class="text-sm text-slate-600 space-y-1">
-          <div>Search Query: "{{ searchQuery }}"</div>
-          <div>Selected Status: "{{ selectedStatus }}"</div>
-          <div>Department Filter: "{{ departmentFilter }}"</div>
-          <div>Date Range: {{ dateFrom }} to {{ dateTo }}</div>
-          <div>Selected Users: {{ selectedUsers.length }}</div>
-          <div>Filtered Results: {{ filteredUsers.length }}</div>
-          <div>Current Density: {{ density }}</div>
-          <div>Visible Columns: {{ visibleColumns.join(', ') }}</div>
-        </div>
-      </div>
-
       <!-- Status Messages -->
       <div
         v-if="statusMessage"
