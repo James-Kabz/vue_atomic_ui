@@ -472,7 +472,6 @@ defineExpose({
 })
 </script>
 
-
 <template>
   <div :class="tableContainerClasses">
     <!-- Header Component -->
@@ -541,53 +540,7 @@ defineExpose({
 
           <!-- Table Body -->
           <tbody :class="bodyClasses">
-            <!-- Data Loading State -->
-            <tr v-if="dataLoading && !loading">
-              <td :colspan="totalColumns" :class="emptyCellClasses">
-                <div class="flex justify-center items-center">
-                  <Loader :loading="true" type="dots" size="medium" :color="loadingColor" />
-                </div>
-              </td>
-            </tr>
-
-            <!-- Data Rows -->
-            <DataTableRow v-for="(item, index) in paginatedData" v-else-if="paginatedData.length > 0 && !loading"
-              :key="getRowKey(item, index)" :item="item" :columns="columns" :index="index" :selectable="selectable"
-              :is-selected="isRowSelected(item)" :striped="striped" :hoverable="hoverable"
-              :clickable-rows="clickableRows" :density="density" :row-loading="rowLoading[getRowKey(item, index)]"
-              :loading-color="loadingColor" @toggle-selection="toggleRowSelection" @row-click="handleRowClick">
-              <!-- Pass through cell slots -->
-              <template v-for="column in columns" :key="column.key" #[`cell-${column.key}`]="slotProps">
-                <slot :name="`cell-${column.key}`" v-bind="slotProps" />
-              </template>
-
-              <!-- Pass through actions slot -->
-              <template #actions="slotProps">
-                <slot name="actions" v-bind="slotProps" />
-              </template>
-            </DataTableRow>
-
-            
-            <!-- Empty State Row -->
-            <tr v-else-if="!loading && !dataLoading">
-              <td :colspan="totalColumns" :class="emptyCellClasses">
-                <slot name="empty">
-                  <div class="flex flex-col items-center justify-center py-12">
-                    <div class="text-slate-400 mb-4 flex justify-center">
-                      <Icon icon="search" class="w-16 h-16" />
-                    </div>
-                    <p class="text-slate-600 text-lg font-medium mb-2">
-                      {{ emptyText }}
-                    </p>
-                    <p class="text-slate-500 text-sm">
-                      {{ emptySubtitle }}
-                    </p>
-                  </div>
-                </slot>
-              </td>
-            </tr>
-
-            <!-- Skeleton Loading Rows -->
+            <!-- Skeleton Loading Rows - Show first when loading -->
             <template v-if="showSkeleton && (loading || dataLoading)">
               <tr v-for="n in skeletonRows" :key="`skeleton-${n}`" class="animate-pulse">
                 <!-- Selection checkbox skeleton -->
@@ -609,6 +562,44 @@ defineExpose({
                 </td>
               </tr>
             </template>
+
+            <!-- Data Rows - Show when not loading and has data -->
+            <template v-else-if="paginatedData.length > 0">
+              <DataTableRow v-for="(item, index) in paginatedData" :key="getRowKey(item, index)" :item="item"
+                :columns="columns" :index="index" :selectable="selectable" :is-selected="isRowSelected(item)"
+                :striped="striped" :hoverable="hoverable" :clickable-rows="clickableRows" :density="density"
+                :row-loading="rowLoading[getRowKey(item, index)]" :loading-color="loadingColor"
+                @toggle-selection="toggleRowSelection" @row-click="handleRowClick">
+                <!-- Pass through cell slots -->
+                <template v-for="column in columns" :key="column.key" #[`cell-${column.key}`]="slotProps">
+                  <slot :name="`cell-${column.key}`" v-bind="slotProps" />
+                </template>
+
+                <!-- Pass through actions slot -->
+                <template #actions="slotProps">
+                  <slot name="actions" v-bind="slotProps" />
+                </template>
+              </DataTableRow>
+            </template>
+
+            <!-- Empty State Row - Show when not loading and no data -->
+            <tr v-else>
+              <td :colspan="totalColumns" :class="emptyCellClasses">
+                <slot name="empty">
+                  <div class="flex flex-col items-center justify-center py-12">
+                    <div class="text-slate-400 mb-4 flex justify-center">
+                      <Icon icon="search" class="w-16 h-16" />
+                    </div>
+                    <p class="text-slate-600 text-lg font-medium mb-2">
+                      {{ emptyText }}
+                    </p>
+                    <p class="text-slate-500 text-sm">
+                      {{ emptySubtitle }}
+                    </p>
+                  </div>
+                </slot>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -626,7 +617,6 @@ defineExpose({
     </DataTablePagination>
   </div>
 </template>
-
 
 <style scoped>
 .table-loading-overlay {
