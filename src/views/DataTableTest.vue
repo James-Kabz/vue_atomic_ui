@@ -90,10 +90,12 @@
           :page-size="pageSize"
           :show-pagination="true"
           :density="density"
+          :actions="userActions"
           empty-text="No users found"
           @selection-change="selectedUsers = $event"
           @sort-change="handleSort"
           @row-click="handleRowClick"
+          @action="handleAction"
         >
           <!-- Custom cell for user name with avatar -->
           <template #cell-name="{ item }">
@@ -144,32 +146,8 @@
             </span>
           </template>
 
-          <!-- Custom actions -->
-          <template #actions="{ item }">
-            <div class="flex items-center gap-2 justify-center">
-              <button
-                class="p-1 text-slate-400 hover:text-blue-600 rounded"
-                title="View details"
-                @click="viewUser(item)"
-              >
-                <font-awesome-icon icon="eye" />
-              </button>
-              <button
-                class="p-1 text-slate-400 hover:text-blue-600 rounded"
-                title="Edit user"
-                @click="editUser(item)"
-              >
-                <font-awesome-icon icon="pen" />
-              </button>
-              <button
-                class="p-1 text-slate-400 hover:text-red-600 rounded"
-                title="Delete user"
-                @click="deleteUser(item)"
-              >
-                <font-awesome-icon icon="trash" />
-              </button>
-            </div>
-          </template>
+          <!-- Note: Actions are now defined via the :actions prop with permission checks -->
+          <!-- You can still use the slot for custom rendering if needed -->
         </DataTable>
       </div>
 
@@ -190,6 +168,86 @@ import { ref, computed } from 'vue'
 import DataTableFilters from '../components/DataTableFilters.vue'
 import DataTableToolBar from '../components/DataTableToolBar.vue'
 import DataTable from '../components/DataTable.vue'
+
+// Simulated current user with permissions
+const currentUser = ref({
+  id: 1,
+  role: 'admin', // Can be: admin, editor, viewer
+  permissions: ['users.view', 'users.edit', 'users.delete', 'users.activate']
+})
+
+// Helper function to check permissions
+const hasPermission = (permission) => {
+  return currentUser.value.permissions.includes(permission)
+}
+
+// Define actions with permission checks
+const userActions = computed(() => [
+  {
+    key: 'view',
+    icon: 'eye',
+    variant: 'primary',
+    tooltip: 'View user details',
+    permission: () => hasPermission('users.view')
+  },
+  {
+    key: 'edit',
+    icon: 'pen',
+    variant: 'secondary',
+    tooltip: 'Edit user',
+    permission: (item) => {
+      // Check if user has edit permission
+      if (!hasPermission('users.edit')) return false
+      
+      // Admins can edit anyone, others can't edit admins
+      if (currentUser.value.role === 'admin') return true
+      return item.role !== 'Admin'
+    },
+    disabled: (item) => {
+      // Can't edit yourself
+      return item.id === currentUser.value.id
+    }
+  },
+  {
+    key: 'delete',
+    icon: 'trash',
+    variant: 'danger',
+    tooltip: 'Delete user',
+    permission: (item) => {
+      // Check if user has delete permission
+      if (!hasPermission('users.delete')) return false
+      
+      // Can't delete admin users
+      if (item.role === 'Admin') return false
+      
+      // Can't delete yourself
+      if (item.id === currentUser.value.id) return false
+      
+      return true
+    },
+    visible: (item) => {
+      // Hide delete button for admin role users
+      return item.role !== 'Admin'
+    }
+  },
+  {
+    key: 'activate',
+    icon: 'check',
+    variant: 'success',
+    tooltip: 'Activate user',
+    visible: (item) => item.status === 'inactive',
+    permission: () => hasPermission('users.activate')
+  },
+  {
+    key: 'deactivate',
+    icon: 'times',
+    variant: 'warning',
+    tooltip: 'Deactivate user',
+    visible: (item) => item.status === 'active',
+    permission: () => hasPermission('users.activate'),
+    disabled: (item) => item.id === currentUser.value.id
+  }
+])
 
 // Sample data with better avatars
 const users = ref([
@@ -533,6 +591,31 @@ const clearAllFilters = () => {
   showStatusMessage('All filters cleared')
 }
 
+// Handle actions from the actions prop
+const handleAction = ({ action, item }) => {
+  console.log('Action triggered:', action, item)
+  
+  switch (action) {
+    case 'view':
+      viewUser(item)
+      break
+    case 'edit':
+      editUser(item)
+      break
+    case 'delete':
+      deleteUser(item)
+      break
+    case 'activate':
+      activateUser(item)
+      break
+    case 'deactivate':
+      deactivateUser(item)
+      break
+    default:
+      console.warn('Unknown action:', action)
+  }
+}
+
 const viewUser = (user) => {
   console.log('View user:', user)
   showStatusMessage(`Viewing details for ${user.name}`)
@@ -553,6 +636,24 @@ const deleteUser = (user) => {
       // Remove from selection if selected
       selectedUsers.value = selectedUsers.value.filter(u => u.id !== user.id)
     }
+  }
+}
+
+const activateUser = (user) => {
+  console.log('Activate user:', user)
+  const index = users.value.findIndex(u => u.id === user.id)
+  if (index !== -1) {
+    users.value[index].status = 'active'
+    showStatusMessage(`Activated ${user.name}`)
+  }
+}
+
+const deactivateUser = (user) => {
+  console.log('Deactivate user:', user)
+  const index = users.value.findIndex(u => u.id === user.id)
+  if (index !== -1) {
+    users.value[index].status = 'inactive'
+    showStatusMessage(`Deactivated ${user.name}`)
   }
 }
 </script>

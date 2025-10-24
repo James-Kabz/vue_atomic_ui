@@ -8,6 +8,8 @@ import DataTableRow from './DataTableRow.vue'
 import DataTablePagination from './DataTablePagination.vue'
 import Icon from './Icon.vue'
 import Loader from './Loader.vue'
+import Button from './Button.vue'
+import Tooltip from './Tooltip.vue'
 
 const props = defineProps({
   data: {
@@ -101,6 +103,29 @@ const props = defineProps({
     type: String,
     default: 'normal'
   },
+  // Actions configuration
+  actions: {
+    type: Array,
+    default: () => []
+    // Expected format:
+    // [
+    //   {
+    //     key: 'edit',
+    //     label: 'Edit',
+    //     icon: 'pen',
+    //     variant: 'primary', // primary, secondary, danger, success, warning
+    //     permission: (item) => true, // Function to check permission
+    //     visible: (item) => true, // Function to check visibility
+    //     disabled: (item) => false, // Function to check if disabled
+    //     tooltip: 'Edit item',
+    //     onClick: (item) => {} // Optional handler
+    //   }
+    // ]
+  },
+  showActionsColumn: {
+    type: Boolean,
+    default: true
+  },
   // Loading Props
   loading: {
     type: Boolean,
@@ -163,7 +188,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['selection-change', 'sort-change', 'row-click', 'page-change', 'page-size-change', 'refresh'])
+const emit = defineEmits(['selection-change', 'sort-change', 'row-click', 'page-change', 'page-size-change', 'refresh', 'action'])
 
 const currentPage = ref(1)
 const pageSize = ref(props.pageSize)
@@ -260,9 +285,85 @@ const paginatedData = computed(() => {
 const totalColumns = computed(() => {
   let count = props.columns.length
   if (props.selectable) count++
-  if (props.$slots?.actions) count++
+  if (props.$slots?.actions || (props.actions.length > 0 && props.showActionsColumn)) count++
   return count
 })
+
+// Computed property to get visible actions for a specific item
+const getVisibleActions = (item) => {
+  return props.actions.filter(action => {
+    // Check visibility function
+    if (action.visible && typeof action.visible === 'function') {
+      return action.visible(item)
+    }
+    return true
+  })
+}
+
+// Check if action has permission
+const hasPermission = (action, item) => {
+  if (action.permission && typeof action.permission === 'function') {
+    return action.permission(item)
+  }
+  return true
+}
+
+// Check if action is disabled
+const isActionDisabled = (action, item) => {
+  if (action.disabled && typeof action.disabled === 'function') {
+    return action.disabled(item)
+  }
+  return false
+}
+
+// Handle action click
+const handleActionClick = (action, item) => {
+  if (isActionDisabled(action, item) || !hasPermission(action, item)) {
+    return
+  }
+
+  // Emit action event
+  emit('action', { action: action.key, item, actionConfig: action })
+
+  // Call optional onClick handler
+  if (action.onClick && typeof action.onClick === 'function') {
+    action.onClick(item)
+  }
+}
+
+// Map action variant to Button component variant
+const getButtonVariant = (actionVariant) => {
+  const variantMap = {
+    primary: 'ghost',
+    secondary: 'ghost',
+    danger: 'ghost',
+    success: 'ghost',
+    warning: 'ghost',
+    default: 'ghost'
+  }
+  
+  return variantMap[actionVariant] || 'ghost'
+}
+
+// Get icon color class based on action variant
+const getIconColorClass = (action, item) => {
+  const isDisabled = isActionDisabled(action, item) || !hasPermission(action, item)
+  
+  if (isDisabled) {
+    return 'text-slate-300'
+  }
+
+  const colorClasses = {
+    primary: 'text-slate-400 hover:text-blue-600',
+    secondary: 'text-slate-400 hover:text-slate-600',
+    danger: 'text-slate-400 hover:text-red-600',
+    success: 'text-slate-400 hover:text-green-600',
+    warning: 'text-slate-400 hover:text-yellow-600',
+    default: 'text-slate-400 hover:text-slate-600'
+  }
+
+  return colorClasses[action.variant || 'default']
+}
 
 const isAllSelected = computed(() => {
   return filteredData.value.length > 0 &&
@@ -532,7 +633,7 @@ defineExpose({
               </th>
 
               <!-- Actions Column Header -->
-              <th v-if="$slots.actions" :class="actionsCellClasses">
+              <th v-if="$slots.actions || (actions.length > 0 && showActionsColumn)" :class="actionsCellClasses">
                 Actions
               </th>
             </tr>
@@ -554,7 +655,7 @@ defineExpose({
                 </td>
 
                 <!-- Actions column skeleton -->
-                <td v-if="$slots.actions" :class="actionsCellClasses">
+                <td v-if="$slots.actions || (actions.length > 0 && showActionsColumn)" :class="actionsCellClasses">
                   <div class="flex gap-2 justify-center">
                     <div class="w-6 h-6 bg-slate-200 rounded" />
                     <div class="w-6 h-6 bg-slate-200 rounded" />
@@ -575,9 +676,31 @@ defineExpose({
                   <slot :name="`cell-${column.key}`" v-bind="slotProps" />
                 </template>
 
-                <!-- Pass through actions slot -->
+                <!-- Pass through actions slot or render actions from prop -->
                 <template #actions="slotProps">
-                  <slot name="actions" v-bind="slotProps" />
+                  <!-- Use slot if provided -->
+                  <slot v-if="$slots.actions" name="actions" v-bind="slotProps" />
+                  
+                  <!-- Otherwise render actions from prop -->
+                  <div v-else-if="actions.length > 0 && showActionsColumn" class="flex items-center gap-1 justify-center">
+                    <Tooltip
+                      v-for="action in getVisibleActions(slotProps.item)"
+                      :key="action.key"
+                      :content="action.tooltip || action.label || action.key"
+                      placement="top"
+                    >
+                      <Button
+                        :variant="getButtonVariant(action.variant)"
+                        size="icon"
+                        :disabled="isActionDisabled(action, slotProps.item) || !hasPermission(action, slotProps.item)"
+                        :class="['h-8 w-8', getIconColorClass(action, slotProps.item)]"
+                        @click.stop="handleActionClick(action, slotProps.item)"
+                      >
+                        <Icon v-if="action.icon" :icon="action.icon" class="w-4 h-4" />
+                        <span v-else-if="action.label" class="text-xs">{{ action.label }}</span>
+                      </Button>
+                    </Tooltip>
+                  </div>
                 </template>
               </DataTableRow>
             </template>

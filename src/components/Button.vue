@@ -79,7 +79,7 @@ defineProps({
   },
   size: {
     type: String,
-    default: 'default',
+    default: 'xs',
     validator: (value) =>
       ['default', 'xs', 'sm', 'lg', 'icon'].includes(value),
   },
