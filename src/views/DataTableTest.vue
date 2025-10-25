@@ -147,7 +147,6 @@
               {{ formatDate(value) }}
             </span>
           </template>
-
         </DataTable>
       </div>
 

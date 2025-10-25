@@ -169,7 +169,10 @@
           </Button>
 
           <!-- Add Button Slot (fallback) -->
-          <slot v-else name="add">
+          <slot
+            v-else
+            name="add"
+          >
             <Button
               variant="success"
               size="lg"

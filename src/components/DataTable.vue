@@ -567,8 +567,13 @@ defineExpose({
 <template>
   <div :class="tableContainerClasses">
     <!-- Header Component -->
-    <DataTableHeader v-if="title || description || $slots.header" :title="title" :description="description"
-      :variant="headerVariant" :padding="headerPadding">
+    <DataTableHeader
+      v-if="title || description || $slots.header"
+      :title="title"
+      :description="description"
+      :variant="headerVariant"
+      :padding="headerPadding"
+    >
       <template #header>
         <slot name="header" />
       </template>
@@ -579,52 +584,113 @@ defineExpose({
 
     <!-- Loading Overlay for entire table -->
     <div class="relative">
-      <Loader v-if="loading" :loading="true" :type="loadingType" :size="loadingSize" :color="loadingColor"
-        :overlay="true" :text="loadingText" :text-position="loadingTextPosition" :background-color="loadingBackground"
-        class="table-loading-overlay" />
+      <Loader
+        v-if="loading"
+        :loading="true"
+        :type="loadingType"
+        :size="loadingSize"
+        :color="loadingColor"
+        :overlay="true"
+        :text="loadingText"
+        :text-position="loadingTextPosition"
+        :background-color="loadingBackground"
+        class="table-loading-overlay"
+      />
 
       <!-- Table -->
-      <div class="overflow-x-auto" :class="{ 'opacity-50': loading }">
+      <div
+        class="overflow-x-auto"
+        :class="{ 'opacity-50': loading }"
+      >
         <table :class="tableClasses">
           <!-- Table Head -->
           <thead :class="headClasses">
             <tr>
               <!-- Selection Column Header -->
-              <th v-if="selectable" :class="checkboxCellClasses">
+              <th
+                v-if="selectable"
+                :class="checkboxCellClasses"
+              >
                 <div class="flex items-center justify-center">
                   <!-- Header loading for bulk operations -->
-                  <Loader v-if="bulkLoading" :loading="true" type="spin" size="small" :color="loadingColor" />
-                  <Checkbox v-else :model-value="isAllSelected" :indeterminate="isIndeterminate"
-                    :disabled="loading || dataLoading" @update:model-value="toggleSelectAll" />
+                  <Loader
+                    v-if="bulkLoading"
+                    :loading="true"
+                    type="spin"
+                    size="small"
+                    :color="loadingColor"
+                  />
+                  <Checkbox
+                    v-else
+                    :model-value="isAllSelected"
+                    :indeterminate="isIndeterminate"
+                    :disabled="loading || dataLoading"
+                    @update:model-value="toggleSelectAll"
+                  />
                 </div>
               </th>
 
               <!-- Data Column Headers -->
-              <th v-for="column in columns" :key="column.key" :class="getHeaderCellClasses(column)"
-                @click="handleSort(column)">
+              <th
+                v-for="column in columns"
+                :key="column.key"
+                :class="getHeaderCellClasses(column)"
+                @click="handleSort(column)"
+              >
                 <div class="flex items-center gap-2">
                   <span>{{ column.label }}</span>
 
                   <!-- Sort loading indicator -->
-                  <Loader v-if="sortLoading && sortColumn === column.key" :loading="true" type="spin" size="small"
-                    :color="loadingColor" />
+                  <Loader
+                    v-if="sortLoading && sortColumn === column.key"
+                    :loading="true"
+                    type="spin"
+                    size="small"
+                    :color="loadingColor"
+                  />
 
                   <!-- Sort icons -->
-                  <div v-else-if="column.sortable" class="flex flex-col">
-                    <svg :class="getSortIconClasses(column, 'asc')" class="w-3 h-3 transition-colors" fill="none"
-                      viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+                  <div
+                    v-else-if="column.sortable"
+                    class="flex flex-col"
+                  >
+                    <svg
+                      :class="getSortIconClasses(column, 'asc')"
+                      class="w-3 h-3 transition-colors"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="m4.5 15.75 7.5-7.5 7.5 7.5"
+                      />
                     </svg>
-                    <svg :class="getSortIconClasses(column, 'desc')" class="w-3 h-3 transition-colors" fill="none"
-                      viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    <svg
+                      :class="getSortIconClasses(column, 'desc')"
+                      class="w-3 h-3 transition-colors"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                      />
                     </svg>
                   </div>
                 </div>
               </th>
 
               <!-- Actions Column Header -->
-              <th v-if="$slots.actions || (actions.length > 0 && showActionsColumn)" :class="actionsCellClasses">
+              <th
+                v-if="$slots.actions || (actions.length > 0 && showActionsColumn)"
+                :class="actionsCellClasses"
+              >
                 Actions
               </th>
             </tr>
@@ -634,19 +700,33 @@ defineExpose({
           <tbody :class="bodyClasses">
             <!-- Skeleton Loading Rows - Show first when loading -->
             <template v-if="showSkeleton && (loading || dataLoading)">
-              <tr v-for="n in skeletonRows" :key="`skeleton-${n}`" class="animate-pulse">
+              <tr
+                v-for="n in skeletonRows"
+                :key="`skeleton-${n}`"
+                class="animate-pulse"
+              >
                 <!-- Selection checkbox skeleton -->
-                <td v-if="selectable" :class="checkboxCellClasses">
+                <td
+                  v-if="selectable"
+                  :class="checkboxCellClasses"
+                >
                   <div class="w-4 h-4 bg-slate-200 rounded" />
                 </td>
 
                 <!-- Data columns skeleton -->
-                <td v-for="column in columns" :key="column.key" :class="getDataCellClasses()">
+                <td
+                  v-for="column in columns"
+                  :key="column.key"
+                  :class="getDataCellClasses()"
+                >
                   <div class="h-4 bg-slate-200 rounded w-3/4" />
                 </td>
 
                 <!-- Actions column skeleton -->
-                <td v-if="$slots.actions || (actions.length > 0 && showActionsColumn)" :class="actionsCellClasses">
+                <td
+                  v-if="$slots.actions || (actions.length > 0 && showActionsColumn)"
+                  :class="actionsCellClasses"
+                >
                   <div class="flex gap-2 justify-center">
                     <div class="w-6 h-6 bg-slate-200 rounded" />
                     <div class="w-6 h-6 bg-slate-200 rounded" />
@@ -657,31 +737,71 @@ defineExpose({
 
             <!-- Data Rows - Show when not loading and has data -->
             <template v-else-if="paginatedData.length > 0">
-              <DataTableRow v-for="(item, index) in paginatedData" :key="getRowKey(item, index)" :item="item"
-                :columns="columns" :index="index" :selectable="selectable" :is-selected="isRowSelected(item)"
-                :striped="striped" :hoverable="hoverable" :clickable-rows="clickableRows" :density="density"
-                :row-loading="rowLoading[getRowKey(item, index)]" :loading-color="loadingColor"
-                @toggle-selection="toggleRowSelection" @row-click="handleRowClick">
+              <DataTableRow
+                v-for="(item, index) in paginatedData"
+                :key="getRowKey(item, index)"
+                :item="item"
+                :columns="columns"
+                :index="index"
+                :selectable="selectable"
+                :is-selected="isRowSelected(item)"
+                :striped="striped"
+                :hoverable="hoverable"
+                :clickable-rows="clickableRows"
+                :density="density"
+                :row-loading="rowLoading[getRowKey(item, index)]"
+                :loading-color="loadingColor"
+                @toggle-selection="toggleRowSelection"
+                @row-click="handleRowClick"
+              >
                 <!-- Pass through cell slots -->
-                <template v-for="column in columns" :key="column.key" #[`cell-${column.key}`]="slotProps">
-                  <slot :name="`cell-${column.key}`" v-bind="slotProps" />
+                <template
+                  v-for="column in columns"
+                  :key="column.key"
+                  #[`cell-${column.key}`]="slotProps"
+                >
+                  <slot
+                    :name="`cell-${column.key}`"
+                    v-bind="slotProps"
+                  />
                 </template>
 
                 <!-- Pass through actions slot or render actions from prop -->
                 <template #actions="slotProps">
                   <!-- Use slot if provided -->
-                  <slot v-if="$slots.actions" name="actions" v-bind="slotProps" />
+                  <slot
+                    v-if="$slots.actions"
+                    name="actions"
+                    v-bind="slotProps"
+                  />
 
                   <!-- Otherwise render actions from prop -->
-                  <div v-else-if="actions.length > 0 && showActionsColumn"
-                    class="flex items-center gap-1 justify-center">
-                    <Tooltip v-for="action in getVisibleActions(slotProps.item)" :key="action.key"
-                      :content="action.tooltip || action.label || action.key" placement="top">
-                      <Button :variant="getButtonVariant(action.variant)" size="icon"
+                  <div
+                    v-else-if="actions.length > 0 && showActionsColumn"
+                    class="flex items-center gap-1 justify-center"
+                  >
+                    <Tooltip
+                      v-for="action in getVisibleActions(slotProps.item)"
+                      :key="action.key"
+                      :content="action.tooltip || action.label || action.key"
+                      placement="top"
+                    >
+                      <Button
+                        :variant="getButtonVariant(action.variant)"
+                        size="icon"
                         :disabled="isActionDisabled(action, slotProps.item) || !hasPermission(action, slotProps.item)"
-                        class="h-8 w-8" @click.stop="handleActionClick(action, slotProps.item)">
-                        <Icon v-if="action.icon" :icon="action.icon" class="w-4 h-4" />
-                        <span v-else-if="action.label" class="text-xs">{{ action.label }}</span>
+                        class="h-8 w-8"
+                        @click.stop="handleActionClick(action, slotProps.item)"
+                      >
+                        <Icon
+                          v-if="action.icon"
+                          :icon="action.icon"
+                          class="w-4 h-4"
+                        />
+                        <span
+                          v-else-if="action.label"
+                          class="text-xs"
+                        >{{ action.label }}</span>
                       </Button>
                     </Tooltip>
                   </div>
@@ -691,11 +811,17 @@ defineExpose({
 
             <!-- Empty State Row - Show when not loading and no data -->
             <tr v-else>
-              <td :colspan="totalColumns" :class="emptyCellClasses">
+              <td
+                :colspan="totalColumns"
+                :class="emptyCellClasses"
+              >
                 <slot name="empty">
                   <div class="flex flex-col items-center justify-center py-12">
                     <div class="text-slate-400 mb-4 flex justify-center">
-                      <Icon icon="search" class="w-16 h-16" />
+                      <Icon
+                        icon="search"
+                        class="w-16 h-16"
+                      />
                     </div>
                     <p class="text-slate-600 text-lg font-medium mb-2">
                       {{ emptyText }}
@@ -713,11 +839,22 @@ defineExpose({
     </div>
 
     <!-- Footer/Pagination Component -->
-    <DataTablePagination v-if="showPagination || $slots.footer" :current-page="currentPage" :total-pages="totalPages"
-      :total="filteredData.length" :page-size="pageSize" :show-pagination="showPagination" :selectable="selectable"
-      :selected-count="selectedItems.length" :variant="paginationVariant" :padding="paginationPadding"
-      :loading="paginationLoading" :disabled="loading || dataLoading" @update:current-page="handlePageChange"
-      @update:page-size="handlePageSizeChange">
+    <DataTablePagination
+      v-if="showPagination || $slots.footer"
+      :current-page="currentPage"
+      :total-pages="totalPages"
+      :total="filteredData.length"
+      :page-size="pageSize"
+      :show-pagination="showPagination"
+      :selectable="selectable"
+      :selected-count="selectedItems.length"
+      :variant="paginationVariant"
+      :padding="paginationPadding"
+      :loading="paginationLoading"
+      :disabled="loading || dataLoading"
+      @update:current-page="handlePageChange"
+      @update:page-size="handlePageSizeChange"
+    >
       <template #footer>
         <slot name="footer" />
       </template>

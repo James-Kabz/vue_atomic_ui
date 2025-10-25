@@ -17,7 +17,7 @@
       class="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center z-10"
       aria-hidden="true"
     >
-      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-slate-900"></div>
+      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-slate-900" />
     </div>
 
     <!-- Header -->

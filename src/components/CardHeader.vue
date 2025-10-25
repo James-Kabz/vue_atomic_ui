@@ -7,10 +7,14 @@
   >
     <div class="flex flex-col">
       <h2 v-if="title || $slots.title">
-        <slot name="title">{{ title }}</slot>
+        <slot name="title">
+          {{ title }}
+        </slot>
       </h2>
       <p v-if="subtitle || $slots.description">
-        <slot name="description">{{ subtitle }}</slot>
+        <slot name="description">
+          {{ subtitle }}
+        </slot>
       </p>
     </div>
 
