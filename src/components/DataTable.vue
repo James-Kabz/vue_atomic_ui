@@ -788,7 +788,7 @@ defineExpose({
                     >
                       <Button
                         :variant="getButtonVariant(action.variant)"
-                        size="icon"
+                        size="xs"
                         :disabled="isActionDisabled(action, slotProps.item) || !hasPermission(action, slotProps.item)"
                         class="h-8 w-8"
                         @click.stop="handleActionClick(action, slotProps.item)"
