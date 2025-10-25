@@ -143,7 +143,7 @@ const containerClasses = computed(() =>
   cn(positionClasses[props.position])
 )
 
-// Toast styling with improved error/destructive variant
+// Toast styling with improved error/danger variant
 const toastVariants = cva(
   'group pointer-events-auto relative flex w-full items-center justify-between space-x-4 overflow-hidden rounded-md border p-6 pr-8 shadow-lg transition-all',
   {

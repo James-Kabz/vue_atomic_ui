@@ -369,7 +369,7 @@ The `variant` prop controls the button styling. All action buttons use the Butto
 
 - `primary`: Ghost button with subtle hover (default for view/edit actions)
 - `secondary`: Ghost button with subtle hover
-- `danger`: Ghost button with subtle hover (for delete/destructive actions)
+- `danger`: Ghost button with subtle hover (for delete/danger actions)
 - `success`: Ghost button with subtle hover (for approve/activate actions)
 - `warning`: Ghost button with subtle hover (for warning actions)
 - `info`: Ghost button with subtle hover (for info actions)

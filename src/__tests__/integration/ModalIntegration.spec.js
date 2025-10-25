@@ -89,7 +89,7 @@ describe('Modal Integration', () => {
               message="Are you sure you want to delete this item?"
               :actions="[
                 { label: 'Cancel', variant: 'outline', onClick: () => handleAction('cancel') },
-                { label: 'Delete', variant: 'destructive', onClick: () => handleAction('delete') }
+                { label: 'Delete', variant: 'danger', onClick: () => handleAction('delete') }
               ]"
             />
           </Modal>

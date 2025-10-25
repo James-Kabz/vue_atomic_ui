@@ -232,8 +232,8 @@ const currentPath = computed(() => `#${currentSection.value}`);
                   <Button variant="default">
                     Default
                   </Button>
-                  <Button variant="destructive">
-                    Destructive
+                  <Button variant="danger">
+                    danger
                   </Button>
                   <Button variant="outline">
                     Outline
@@ -262,8 +262,8 @@ const currentPath = computed(() => `#${currentSection.value}`);
                   <Button variant="primaryOutline">
                     Primary Outline
                   </Button>
-                  <Button variant="destructiveOutline">
-                    Destructive Outline
+                  <Button variant="dangerOutline">
+                    danger Outline
                   </Button>
                   <Button variant="successOutline">
                     Success Outline
@@ -600,8 +600,8 @@ const currentPath = computed(() => `#${currentSection.value}`);
                   message="Something went wrong. Please try again."
                 />
                 <Alert
-                  variant="destructive"
-                  title="Destructive Alert"
+                  variant="danger"
+                  title="danger Alert"
                   message="This action cannot be undone."
                   dismissible
                 />
@@ -658,7 +658,7 @@ const currentPath = computed(() => `#${currentSection.value}`);
                   />
                   <Progress
                     :value="75"
-                    variant="destructive"
+                    variant="danger"
                   />
                 </div>
               </div>

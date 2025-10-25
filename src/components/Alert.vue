@@ -83,7 +83,7 @@ const props = defineProps({
     type: String,
     default: 'info',
     validator: (value) =>
-      ['info', 'success', 'warning', 'error', 'default', 'destructive'].includes(
+      ['info', 'success', 'warning', 'error', 'default', 'danger'].includes(
         value
       )
   },
@@ -168,7 +168,7 @@ const iconComponent = computed(() => {
     warning: ExclamationTriangleIcon,
     error: XCircleIcon,
     default: InfoIcon,
-    destructive: XCircleIcon
+    danger: XCircleIcon
   }
   return icons[props.variant]
 })
@@ -180,8 +180,8 @@ const alertVariants = cva(
     variants: {
       variant: {
         default: 'bg-background text-foreground',
-        destructive:
-          'border-destructive/50 text-destructive dark:border-destructive',
+        danger:
+          'border-danger/50 text-danger dark:border-danger',
         info: 'bg-blue-50 border-blue-200 text-blue-800',
         success: 'bg-green-50 border-green-200 text-green-800',
         warning: 'bg-yellow-50 border-yellow-200 text-yellow-800',
@@ -199,7 +199,7 @@ const iconClasses = computed(() => {
     warning: 'text-yellow-500',
     error: 'text-red-500',
     default: 'text-foreground',
-    destructive: 'text-destructive'
+    danger: 'text-danger'
   }
   return ['w-5 h-5', colors[props.variant]]
 })
@@ -211,8 +211,8 @@ const dismissButtonClasses = computed(() => {
     warning: 'text-yellow-500 hover:text-yellow-700 hover:bg-yellow-100',
     error: 'text-red-500 hover:text-red-700 hover:bg-red-100',
     default: 'text-foreground hover:text-foreground/80 hover:bg-muted',
-    destructive:
-      'text-destructive hover:text-destructive/80 hover:bg-destructive/10'
+    danger:
+      'text-danger hover:text-danger/80 hover:bg-danger/10'
   }
   return ['flex-shrink-0 p-1 rounded-md transition-colors duration-200', colors[props.variant]]
 })

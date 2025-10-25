@@ -25,7 +25,7 @@ const props = defineProps({
   variant: {
     type: String,
     default: 'default',
-    validator: (value) => ['default', 'muted', 'destructive'].includes(value)
+    validator: (value) => ['default', 'muted', 'danger'].includes(value)
   },
   weight: {
     type: String,
@@ -54,7 +54,7 @@ const textVariants = cva(
       variant: {
         default: 'text-foreground',
         muted: 'text-muted-foreground',
-        destructive: 'text-destructive'
+        danger: 'text-danger'
       },
       weight: {
         normal: 'font-normal',

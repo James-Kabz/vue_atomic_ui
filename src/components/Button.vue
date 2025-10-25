@@ -59,7 +59,7 @@ defineProps({
     validator: (value) =>
       [
         'default',
-        'destructive',
+        'danger',
         'outline',
         'secondary',
         'ghost',
@@ -71,7 +71,7 @@ defineProps({
         'dark',
         'light',
         'primaryOutline',
-        'destructiveOutline',
+        'dangerOutline',
         'successOutline',
         'gradient',
       ].includes(value),
@@ -104,7 +104,7 @@ const buttonVariants = cva(
       variant: {
         default:
           'bg-blue-600 text-white hover:bg-blue-700',
-        destructive:
+        danger:
           'bg-red-600 text-white hover:bg-red-700',
         outline:
           'border border-gray-300 bg-white text-gray-900 hover:bg-gray-100',
@@ -128,7 +128,7 @@ const buttonVariants = cva(
           'bg-gray-50 text-gray-800 border border-gray-200 hover:bg-gray-100',
         primaryOutline:
           'border border-blue-600 text-blue-600 bg-transparent hover:bg-blue-50',
-        destructiveOutline:
+        dangerOutline:
           'border border-red-600 text-red-600 bg-transparent hover:bg-red-50',
         successOutline:
           'border border-green-600 text-green-600 bg-transparent hover:bg-green-50',

@@ -288,7 +288,7 @@ onMounted(async () => {
           Cancel
         </Button>
         <Button
-          variant="destructive"
+          variant="danger"
           :loading="complianceStore.isLoading"
           @click="handleConfirmDelete(selectedFormData)"
         >

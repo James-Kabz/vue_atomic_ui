@@ -33,7 +33,7 @@ const props = defineProps({
   variant: {
     type: String,
     default: 'default',
-    validator: (value) => ['default', 'success', 'warning', 'destructive'].includes(value)
+    validator: (value) => ['default', 'success', 'warning', 'danger'].includes(value)
   }
 })
 
@@ -67,7 +67,7 @@ const progressVariants = cva(
         default: 'bg-primary',
         success: 'bg-green-500',
         warning: 'bg-yellow-500',
-        destructive: 'bg-red-500'
+        danger: 'bg-red-500'
       }
     },
     defaultVariants: {

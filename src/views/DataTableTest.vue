@@ -221,7 +221,7 @@ const userActions = computed(() => [
   {
     key: 'delete',
     icon: 'trash',
-    variant: 'destructive',
+    variant: 'danger',
     tooltip: 'Delete user',
     permission: (item) => {
       // Check if user has delete permission

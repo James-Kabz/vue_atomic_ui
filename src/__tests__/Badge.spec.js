@@ -20,7 +20,7 @@ describe('Badge', () => {
 
   it('applies variant classes', () => {
     const wrapper = mount(Badge, {
-      props: { variant: 'destructive' }
+      props: { variant: 'danger' }
     })
     expect(wrapper.classes()).toContain('bg-red-50')
   })
@@ -95,9 +95,9 @@ describe('Badge', () => {
     expect(wrapper.classes()).toContain('border-blue-500')
   })
 
-  it('applies destructiveOutline variant classes', () => {
+  it('applies dangerOutline variant classes', () => {
     const wrapper = mount(Badge, {
-      props: { variant: 'destructiveOutline' }
+      props: { variant: 'dangerOutline' }
     })
     expect(wrapper.classes()).toContain('border-red-500')
   })

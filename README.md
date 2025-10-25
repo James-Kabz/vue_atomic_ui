@@ -580,7 +580,7 @@ A dropdown menu component with customizable trigger and placement.
     </template>
     <DropdownItem @click="action1">Action 1</DropdownItem>
     <DropdownItem @click="action2">Action 2</DropdownItem>
-    <DropdownItem variant="destructive" @click="delete">Delete</DropdownItem>
+    <DropdownItem variant="danger" @click="delete">Delete</DropdownItem>
   </Dropdown>
 </template>
 
@@ -607,7 +607,7 @@ An individual item within a dropdown menu.
 | `icon` | `String` | - | Icon name |
 | `shortcut` | `String` | - | Keyboard shortcut text |
 | `disabled` | `Boolean` | `false` | Whether disabled |
-| `variant` | `String` | `'default'` | Visual variant (default, destructive) |
+| `variant` | `String` | `'default'` | Visual variant (default, danger) |
 
 ### Events
 
@@ -984,7 +984,7 @@ A versatile button component with multiple variants, sizes, and states.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `variant` | `String` | `'default'` | Visual style (default, destructive, outline, secondary, ghost, link, success, warning, info, subtle, dark, light, primaryOutline, destructiveOutline, successOutline, gradient) |
+| `variant` | `String` | `'default'` | Visual style (default, danger, outline, secondary, ghost, link, success, warning, info, subtle, dark, light, primaryOutline, dangerOutline, successOutline, gradient) |
 | `size` | `String` | `'default'` | Size variant (default, xs, sm, lg, icon) |
 | `disabled` | `Boolean` | `false` | Whether the button is disabled |
 | `loading` | `Boolean` | `false` | Shows loading spinner |
@@ -1004,7 +1004,7 @@ A versatile button component with multiple variants, sizes, and states.
   <div class="space-x-2">
     <Button variant="default">Default</Button>
     <Button variant="outline" size="sm">Outline</Button>
-    <Button variant="destructive" :loading="true" loadingText="Deleting...">
+    <Button variant="danger" :loading="true" loadingText="Deleting...">
       Delete
     </Button>
     <Button variant="icon" size="icon">
@@ -1030,7 +1030,7 @@ A notification component for displaying messages with different variants and opt
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `variant` | `String` | `'info'` | Alert style (info, success, warning, error, default, destructive) |
+| `variant` | `String` | `'info'` | Alert style (info, success, warning, error, default, danger) |
 | `title` | `String` | - | Alert title |
 | `message` | `String` | - | Alert message |
 | `dismissible` | `Boolean` | `false` | Show dismiss button |
@@ -1091,7 +1091,7 @@ A small label component for displaying status, tags, or counts with multiple var
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `variant` | `String` | `'default'` | Visual style (default, secondary, destructive, primary, outline, success, warning, info, ghost, link, subtle, dark, light, primaryOutline, destructiveOutline, successOutline, gradient) |
+| `variant` | `String` | `'default'` | Visual style (default, secondary, danger, primary, outline, success, warning, info, ghost, link, subtle, dark, light, primaryOutline, dangerOutline, successOutline, gradient) |
 | `size` | `String` | `'md'` | Size variant (sm, md, lg) |
 | `shape` | `String` | `'rounded'` | Shape variant (rounded, pill, square) |
 | `icon` | `String \| Object` | `null` | Icon component |
@@ -1120,7 +1120,7 @@ A small label component for displaying status, tags, or counts with multiple var
     <Badge variant="secondary">Secondary</Badge>
     <Badge variant="success" size="sm">Active</Badge>
     <Badge variant="warning" shape="pill">Pending</Badge>
-    <Badge variant="destructive" icon="ExclamationIcon">Error</Badge>
+    <Badge variant="danger" icon="ExclamationIcon">Error</Badge>
     <Badge variant="info">Info</Badge>
     <Badge variant="ghost">Ghost</Badge>
     <Badge variant="link">Link</Badge>
@@ -1128,7 +1128,7 @@ A small label component for displaying status, tags, or counts with multiple var
     <Badge variant="dark">Dark</Badge>
     <Badge variant="light">Light</Badge>
     <Badge variant="primaryOutline">Primary Outline</Badge>
-    <Badge variant="destructiveOutline">Destructive Outline</Badge>
+    <Badge variant="dangerOutline">danger Outline</Badge>
     <Badge variant="successOutline">Success Outline</Badge>
     <Badge variant="gradient">Gradient</Badge>
     <Badge variant="outline" dismissible @dismiss="handleDismiss">
@@ -1968,7 +1968,7 @@ A progress bar component for showing completion status.
 | `value` | `Number` | `0` | Current progress value |
 | `max` | `Number` | `100` | Maximum value |
 | `size` | `String` | `'default'` | Size variant (sm, default, md, lg) |
-| `variant` | `String` | `'default'` | Color variant (default, success, warning, destructive) |
+| `variant` | `String` | `'default'` | Color variant (default, success, warning, danger) |
 
 ### Example
 
@@ -1978,7 +1978,7 @@ A progress bar component for showing completion status.
     <Progress :value="progress" />
     <Progress :value="75" variant="success" size="sm" />
     <Progress :value="50" variant="warning" />
-    <Progress :value="25" variant="destructive" size="lg" />
+    <Progress :value="25" variant="danger" size="lg" />
   </div>
 </template>
 

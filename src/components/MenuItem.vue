@@ -42,7 +42,7 @@ const props = defineProps({
   variant: {
     type: String,
     default: 'default',
-    validator: (value) => ['default', 'destructive'].includes(value)
+    validator: (value) => ['default', 'danger'].includes(value)
   }
 })
 
@@ -54,7 +54,7 @@ const itemVariants = cva(
     variants: {
       variant: {
         default: 'hover:bg-accent hover:text-accent-foreground',
-        destructive: 'text-destructive hover:bg-destructive hover:text-destructive-foreground'
+        danger: 'text-danger hover:bg-danger hover:text-danger-foreground'
       }
     }
   }

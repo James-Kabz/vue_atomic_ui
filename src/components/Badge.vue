@@ -40,7 +40,7 @@ const props = defineProps({
     type: String,
     default: 'default',
     validator: (value) =>
-      ['default', 'secondary', 'destructive', 'primary', 'outline', 'success', 'warning', 'info', 'ghost', 'link', 'subtle', 'dark', 'light', 'primaryOutline', 'destructiveOutline', 'successOutline', 'gradient'].includes(value)
+      ['default', 'secondary', 'danger', 'primary', 'outline', 'success', 'warning', 'info', 'ghost', 'link', 'subtle', 'dark', 'light', 'primaryOutline', 'dangerOutline', 'successOutline', 'gradient'].includes(value)
   },
   size: {
     type: String,
@@ -79,7 +79,7 @@ const badgeVariants = cva(
           'border border-blue-200 bg-blue-50 text-blue-800 hover:bg-blue-100 dark:border-blue-200 dark:bg-blue-50 dark:text-blue-900',
         secondary:
           'border border-gray-200 bg-gray-50 text-gray-800 hover:bg-gray-100 dark:border-gray-200 dark:bg-gray-50 dark:text-gray-900',
-        destructive:
+        danger:
           'border border-red-200 bg-red-50 text-red-800 hover:bg-red-100 dark:border-red-200 dark:bg-red-50 dark:text-red-900',
         primary:
           'border border-blue-200 bg-blue-50 text-blue-800 hover:bg-blue-100 dark:border-blue-200 dark:bg-blue-50 dark:text-blue-900',
@@ -102,7 +102,7 @@ const badgeVariants = cva(
           'bg-gray-50 text-gray-800 border border-gray-200 hover:bg-gray-100',
         primaryOutline:
           'border border-blue-500 text-blue-500 bg-transparent hover:bg-blue-50',
-        destructiveOutline:
+        dangerOutline:
           'border border-red-500 text-red-500 bg-transparent hover:bg-red-50',
         successOutline:
           'border border-green-500 text-green-500 bg-transparent hover:bg-green-50',

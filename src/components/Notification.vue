@@ -11,7 +11,7 @@
       v-if="visible"
       :class="notificationClasses"
       role="alert"
-      :aria-live="variant === 'destructive' ? 'assertive' : 'polite'"
+      :aria-live="variant === 'danger' ? 'assertive' : 'polite'"
     >
       <div class="flex items-start space-x-3">
         <div
@@ -68,7 +68,7 @@ const props = defineProps({
   variant: {
     type: String,
     default: 'default',
-    validator: (value) => ['default', 'success', 'warning', 'destructive'].includes(value)
+    validator: (value) => ['default', 'success', 'warning', 'danger'].includes(value)
   },
   dismissible: {
     type: Boolean,
@@ -96,7 +96,7 @@ const notificationVariants = cva(
         default: 'border-l-4 border-primary',
         success: 'border-l-4 border-green-500',
         warning: 'border-l-4 border-yellow-500',
-        destructive: 'border-l-4 border-destructive'
+        danger: 'border-l-4 border-danger'
       }
     }
   }
@@ -106,7 +106,7 @@ const iconVariants = {
   default: 'info',
   success: 'check-circle',
   warning: 'alert-triangle',
-  destructive: 'alert-circle'
+  danger: 'alert-circle'
 }
 
 const iconColorVariants = cva('h-5 w-5', {
@@ -115,7 +115,7 @@ const iconColorVariants = cva('h-5 w-5', {
       default: 'text-primary',
       success: 'text-green-500',
       warning: 'text-yellow-500',
-      destructive: 'text-destructive'
+      danger: 'text-danger'
     }
   }
 })
