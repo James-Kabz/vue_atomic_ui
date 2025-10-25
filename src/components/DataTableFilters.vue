@@ -149,21 +149,40 @@
           Export
         </Button>
 
-        <!-- Add Button Slot -->
-        <slot name="actions">
+        <!-- Add Button -->
+        <div v-if="showAdd && isAddButtonVisible">
+          <!-- Custom Add Button from prop -->
           <Button
-            v-if="showAdd"
-            variant="success"
-            size="lg"
-            @click="$emit('add')"
+            v-if="hasAddButton"
+            :variant="addButton.variant || 'success'"
+            :size="addButton.size || 'lg'"
+            :disabled="isAddButtonDisabled || !hasAddButtonPermission"
+            :title="addButton.tooltip"
+            @click="handleAddButtonClick"
           >
             <Icon
-              icon="plus"
+              v-if="addButton.icon"
+              :icon="addButton.icon"
               class="w-4 h-4 mr-2"
             />
-            Add
+            {{ addButton.label || 'Add' }}
           </Button>
-        </slot>
+
+          <!-- Add Button Slot (fallback) -->
+          <slot v-else name="add">
+            <Button
+              variant="success"
+              size="lg"
+              @click="$emit('add')"
+            >
+              <Icon
+                icon="plus"
+                class="w-4 h-4 mr-2"
+              />
+              Add
+            </Button>
+          </slot>
+        </div>
       </div>
     </div>
 
@@ -489,6 +508,22 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  addButton: {
+    type: Object,
+    default: () => ({})
+    // Expected format:
+    // {
+    //   label: 'Add Item',
+    //   icon: 'plus',
+    //   variant: 'success',
+    //   size: 'lg',
+    //   permission: () => true, // Function to check permission
+    //   visible: () => true,     // Function to check visibility
+    //   disabled: () => false,   // Function to check if disabled
+    //   tooltip: 'Add new item',
+    //   onClick: () => {}        // Optional click handler
+    // }
+  },
   showTableInfo: {
     type: Boolean,
     default: true
@@ -532,11 +567,61 @@ const emit = defineEmits([
   'update:multiSelectFilters',
   'export',
   'add',
-  'clear-filters'
+  'clear-filters',
+  'add-button-click'
 ])
 
 // Local state
 const showAdvancedFilters = ref(false)
+
+// Add button configuration helpers
+const hasAddButton = computed(() => {
+  return Object.keys(props.addButton).length > 0
+})
+
+const isAddButtonVisible = computed(() => {
+  if (!hasAddButton.value) return props.showAdd
+
+  if (props.addButton.visible && typeof props.addButton.visible === 'function') {
+    return props.addButton.visible()
+  }
+  return true
+})
+
+const hasAddButtonPermission = computed(() => {
+  if (!hasAddButton.value) return true
+
+  if (props.addButton.permission && typeof props.addButton.permission === 'function') {
+    return props.addButton.permission()
+  }
+  return true
+})
+
+const isAddButtonDisabled = computed(() => {
+  if (!hasAddButton.value) return false
+
+  if (props.addButton.disabled && typeof props.addButton.disabled === 'function') {
+    return props.addButton.disabled()
+  }
+  return false
+})
+
+const handleAddButtonClick = () => {
+  if (isAddButtonDisabled.value || !hasAddButtonPermission.value) {
+    return
+  }
+
+  // Emit the add event for backward compatibility
+  emit('add')
+
+  // Emit the new add-button-click event
+  emit('add-button-click', props.addButton)
+
+  // Call optional onClick handler
+  if (props.addButton.onClick && typeof props.addButton.onClick === 'function') {
+    props.addButton.onClick()
+  }
+}
 
 // CVA Variants
 const filtersVariants = cva('flex flex-wrap items-center gap-4', {

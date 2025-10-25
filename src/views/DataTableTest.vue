@@ -19,8 +19,10 @@
           :show-export="true"
           :show-add="true"
           search-placeholder="Search users..."
+          :add-button="addButtonConfig"
           @export="handleExport"
           @add="handleAddUser"
+          @add-button-click="handleAddButtonClick"
           @clear-filters="clearAllFilters"
         >
           <template #filters>
@@ -146,8 +148,6 @@
             </span>
           </template>
 
-          <!-- Note: Actions are now defined via the :actions prop with permission checks -->
-          <!-- You can still use the slot for custom rendering if needed -->
         </DataTable>
       </div>
 
@@ -180,6 +180,17 @@ const currentUser = ref({
 const hasPermission = (permission) => {
   return currentUser.value.permissions.includes(permission)
 }
+
+// Define add button configuration with permission checks
+const addButtonConfig = computed(() => ({
+  label: 'Add User',
+  icon: 'plus',
+  variant: 'success',
+  size: 'lg',
+  tooltip: 'Create new user',
+  permission: () => hasPermission('users.create'),
+  onClick: () => handleAddUser()
+}))
 
 // Define actions with permission checks
 const userActions = computed(() => [
@@ -242,7 +253,7 @@ const userActions = computed(() => [
     key: 'deactivate',
     icon: 'times',
     variant: 'warning',
-    tooltip: 'Deactivate user',
+    tooltip: 'Deactivate user test. blah',
     visible: (item) => item.status === 'active',
     permission: () => hasPermission('users.activate'),
     disabled: (item) => item.id === currentUser.value.id
@@ -494,6 +505,12 @@ const handleRowClick = (rowInfo) => {
 const handleExport = () => {
   console.log('Export clicked - exporting', filteredUsers.value.length, 'users')
   showStatusMessage(`Exporting ${filteredUsers.value.length} users...`)
+}
+
+// Handle add button click
+const handleAddButtonClick = (buttonConfig) => {
+  console.log('Add button clicked:', buttonConfig)
+  // The onClick handler in the config will also be called
 }
 
 const handleAddUser = () => {

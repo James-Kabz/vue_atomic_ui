@@ -30,6 +30,17 @@ const modals = ref({
   delete: { show: false },
 })
 
+// Define add button configuration with permission checks
+const addButtonConfig = computed(() => ({
+  label: 'Add Compliance',
+  icon: 'plus',
+  variant: 'success',
+  size: 'lg',
+  tooltip: 'Create new compliance',
+  permission: () => authStore.hasPermission('create.compliance'),
+  onClick: () => handleCreate()
+}))
+
 // Define table actions with permission checks
 const tableActions = computed(() => [
   {
@@ -140,6 +151,12 @@ const handleTableAction = ({ action, item }) => {
   }
 }
 
+// Handle add button click
+const handleAddButtonClick = (buttonConfig) => {
+  console.log('Add button clicked:', buttonConfig)
+  // The onClick handler in the config will also be called
+}
+
 // Handle create button click
 const handleCreate = () => {
   openModal('create')
@@ -189,17 +206,9 @@ onMounted(async () => {
       :show-add="true"
       :total-items="filteredCompliances.length"
       item-label="compliances"
-    >
-      <template #actions>
-        <Button
-          variant="success"
-          size="lg"
-          @click="handleCreate"
-        >
-          <Icon icon="plus" class="mr-1" /> Add Compliance
-        </Button>
-      </template>
-    </DataTableFilters>
+      :add-button="addButtonConfig"
+      @add-button-click="handleAddButtonClick"
+    />
 
     <!-- Toolbar -->
     <DataTableToolBar
