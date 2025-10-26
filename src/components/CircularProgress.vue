@@ -69,6 +69,10 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  dynamicColor: {
+    type: Boolean,
+    default: true
+  },
   strokeLinecap: {
     type: String,
     default: 'round',
@@ -115,6 +119,15 @@ const strokeDashoffset = computed(() => {
 })
 
 const progressColor = computed(() => {
+  if (props.dynamicColor) {
+    const percentage = clampedValue.value
+    if (percentage >= 80) return '#ef4444' // danger - red
+    if (percentage >= 60) return '#f59e0b' // warning - orange
+    if (percentage >= 40) return '#eab308' // yellow
+    if (percentage >= 20) return '#22c55e' // success - green
+    return '#6b7280' // gray for very low
+  }
+
   const colors = {
     default: '#3b82f6',
     success: '#10b981',
@@ -129,6 +142,15 @@ const backgroundColor = computed(() => {
 })
 
 const textColor = computed(() => {
+  if (props.dynamicColor) {
+    const percentage = clampedValue.value
+    if (percentage >= 80) return 'text-red-600'
+    if (percentage >= 60) return 'text-orange-600'
+    if (percentage >= 40) return 'text-yellow-600'
+    if (percentage >= 20) return 'text-green-600'
+    return 'text-gray-600'
+  }
+
   const colors = {
     default: 'text-blue-600',
     success: 'text-green-600',
