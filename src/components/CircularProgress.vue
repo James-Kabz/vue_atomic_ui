@@ -44,11 +44,11 @@ import { cn } from '../utils/cn.js'
 
 const props = defineProps({
   value: {
-    type: Number,
+    type: [Number, String],
     default: 0
   },
   max: {
-    type: Number,
+    type: [Number, String],
     default: 100
   },
   size: {
@@ -73,7 +73,9 @@ const props = defineProps({
 })
 
 const clampedValue = computed(() => {
-  const percentage = (props.value / props.max) * 100
+  const numValue = parseFloat(props.value) || 0
+  const numMax = parseFloat(props.max) || 100
+  const percentage = (numValue / numMax) * 100
   return Math.min(Math.max(percentage, 0), 100)
 })
 
