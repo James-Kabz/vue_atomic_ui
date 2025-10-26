@@ -12,6 +12,7 @@ import Textarea from './components/Textarea.vue';
 import FileUpload from './components/FileUpload.vue';
 import Accordion from './components/Accordion.vue';
 import Progress from './components/Progress.vue';
+import CircularProgress from './components/CircularProgress.vue';
 import Spinner from './components/Spinner.vue';
 import Loader from './components/Loader.vue';
 import Icon from './components/Icon.vue';
@@ -660,6 +661,55 @@ const currentPath = computed(() => `#${currentSection.value}`);
                     :value="75"
                     variant="danger"
                   />
+                </div>
+              </div>
+            </div>
+
+            <!-- Circular Progress -->
+            <div class="space-y-4">
+              <h3 class="text-xl font-semibold">
+                Circular Progress Component
+              </h3>
+              <div class="space-y-4">
+                <div class="flex flex-wrap gap-6 items-center">
+                  <div class="flex flex-col items-center space-y-2">
+                    <CircularProgress :value="progressValue" size="xs" />
+                    <span class="text-xs">XS</span>
+                  </div>
+                  <div class="flex flex-col items-center space-y-2">
+                    <CircularProgress :value="progressValue" size="sm" />
+                    <span class="text-xs">SM</span>
+                  </div>
+                  <div class="flex flex-col items-center space-y-2">
+                    <CircularProgress :value="progressValue" size="md" />
+                    <span class="text-xs">MD</span>
+                  </div>
+                  <div class="flex flex-col items-center space-y-2">
+                    <CircularProgress :value="progressValue" size="lg" />
+                    <span class="text-xs">LG</span>
+                  </div>
+                  <div class="flex flex-col items-center space-y-2">
+                    <CircularProgress :value="progressValue" size="xl" />
+                    <span class="text-xs">XL</span>
+                  </div>
+                </div>
+                <div class="flex flex-wrap gap-6 items-center">
+                  <div class="flex flex-col items-center space-y-2">
+                    <CircularProgress :value="25" variant="success" />
+                    <span class="text-xs">Success</span>
+                  </div>
+                  <div class="flex flex-col items-center space-y-2">
+                    <CircularProgress :value="50" variant="warning" />
+                    <span class="text-xs">Warning</span>
+                  </div>
+                  <div class="flex flex-col items-center space-y-2">
+                    <CircularProgress :value="75" variant="danger" />
+                    <span class="text-xs">Danger</span>
+                  </div>
+                  <div class="flex flex-col items-center space-y-2">
+                    <CircularProgress :value="100" />
+                    <span class="text-xs">Complete</span>
+                  </div>
                 </div>
               </div>
             </div>

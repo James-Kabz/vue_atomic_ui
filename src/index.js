@@ -12,6 +12,7 @@ import Logo from "./components/Logo.vue"
 import Option from "./components/Option.vue"
 import Progress from "./components/Progress.vue"
 import ProgressBar from "./components/ProgressBar.vue"
+import CircularProgress from "./components/CircularProgress.vue"
 import Radio from "./components/Radio.vue"
 import Select from "./components/Select.vue"
 import Spinner from "./components/Spinner.vue"
@@ -104,6 +105,7 @@ const components = {
   Link,
   Logo,
   Option,
+  CircularProgress,
   Progress,
   ProgressBar,
   Radio,
@@ -204,6 +206,7 @@ export {
   Link,
   Logo,
   Option,
+  CircularProgress,
   Progress,
   ProgressBar,
   Radio,
