@@ -31,8 +31,8 @@
     </svg>
     <!-- Optional text in center -->
     <div v-if="showValue" class="absolute inset-0 flex items-center justify-center">
-      <span :class="cn('text-sm font-medium', textColor)">
-        {{ Math.round(clampedValue) }}%
+      <span :class="cn('text-xs font-medium', textColor)">
+        {{ showRawValue ? numValue.toFixed(2) : Math.round(clampedValue) + '%' }}
       </span>
     </div>
   </div>
@@ -65,6 +65,10 @@ const props = defineProps({
     type: Boolean,
     default: true
   },
+  showRawValue: {
+    type: Boolean,
+    default: false
+  },
   strokeLinecap: {
     type: String,
     default: 'round',
@@ -72,10 +76,11 @@ const props = defineProps({
   }
 })
 
+const numValue = computed(() => parseFloat(props.value) || 0)
+const numMax = computed(() => parseFloat(props.max) || 100)
+
 const clampedValue = computed(() => {
-  const numValue = parseFloat(props.value) || 0
-  const numMax = parseFloat(props.max) || 100
-  const percentage = (numValue / numMax) * 100
+  const percentage = (numValue.value / numMax.value) * 100
   return Math.min(Math.max(percentage, 0), 100)
 })
 
