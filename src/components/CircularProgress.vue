@@ -90,7 +90,7 @@ const clampedValue = computed(() => {
 
 const sizeValue = computed(() => {
   const sizes = {
-    xs: 36,
+    xs: 42,
     sm: 48,
     md: 64,
     lg: 80,
@@ -101,7 +101,7 @@ const sizeValue = computed(() => {
 
 const strokeWidth = computed(() => {
   const widths = {
-    xs: 3,
+    xs: 2.5,
     sm: 4,
     md: 5,
     lg: 6,
