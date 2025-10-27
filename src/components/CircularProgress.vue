@@ -54,7 +54,7 @@ const props = defineProps({
   size: {
     type: String,
     default: 'md',
-    validator: (value) => ['xs', 'sm', 'md', 'lg', 'xl'].includes(value)
+    validator: (value) => [ 'xs', 'sm', 'md', 'lg', 'xl'].includes(value)
   },
   variant: {
     type: String,
@@ -90,7 +90,7 @@ const clampedValue = computed(() => {
 
 const sizeValue = computed(() => {
   const sizes = {
-    xs: 32,
+    xs: 36,
     sm: 48,
     md: 64,
     lg: 80,

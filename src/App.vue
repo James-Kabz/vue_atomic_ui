@@ -50,7 +50,7 @@ const dataSources = ref([
 const checkboxValue = ref(false);
 const radioValue = ref('');
 const textareaValue = ref('');
-const progressValue = ref(0);
+const progressValue = ref(75);
 const loading = ref(false);
 const currentSection = ref('buttons');
 
