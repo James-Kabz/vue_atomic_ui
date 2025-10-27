@@ -7,6 +7,7 @@ import FormField from './FormField.vue'
 import Input from './Input.vue'
 import Textarea from './Textarea.vue'
 import Select from './Select.vue'
+import MultiSelect from './MultiSelect.vue'
 import Button from './Button.vue'
 import { toast } from '../lib/toast'
 import Label from './Label.vue'
@@ -57,6 +58,7 @@ const props = defineProps({
             'range',          // NEW (alternative to slider)
             'search',         // NEW
             'hidden',         // NEW
+            'multiselect',    // NEW
           ].includes(field.type),
       )
     },
@@ -109,6 +111,8 @@ const initializeFormData = () => {
       data[field.name] = null
     } else if (field.type === 'radio') {
       data[field.name] = field.options?.[0]?.value || ''
+    } else if (field.type === 'multiselect') {
+      data[field.name] = []
     } else {
       data[field.name] = ''
     }
@@ -129,6 +133,8 @@ watch(
           data[field.name] = newData[field.name] ?? (field.min !== undefined ? field.min : 0)
         } else if (field.type === 'file') {
           data[field.name] = null
+        } else if (field.type === 'multiselect') {
+          data[field.name] = Array.isArray(newData[field.name]) ? newData[field.name] : []
         } else {
           data[field.name] = newData[field.name] ?? ''
         }
@@ -148,6 +154,8 @@ watch(
           data[field.name] = null
         } else if (field.type === 'radio') {
           data[field.name] = field.options?.[0]?.value || ''
+        } else if (field.type === 'multiselect') {
+          data[field.name] = []
         } else {
           data[field.name] = ''
         }
@@ -183,6 +191,8 @@ watch(
               data[field.name] = null
             } else if (field.type === 'radio') {
               data[field.name] = field.options?.[0]?.value || ''
+            } else if (field.type === 'multiselect') {
+              data[field.name] = []
             } else {
               data[field.name] = ''
             }
@@ -253,6 +263,10 @@ const validateForm = () => {
         }
       } else if (field.type === 'radio') {
         if (!value) {
+          errors.value[field.name] = field.errorMessage || `${field.label} is required`
+        }
+      } else if (field.type === 'multiselect') {
+        if (!Array.isArray(value) || value.length === 0) {
           errors.value[field.name] = field.errorMessage || `${field.label} is required`
         }
       } else if (field.type === 'date' || field.type === 'time' || field.type === 'datetime-local' || field.type === 'month' || field.type === 'week') {
@@ -476,6 +490,19 @@ const handleClose = () => {
                 {{ option.label }}
               </option>
             </Select>
+
+            <!-- MultiSelect Dropdown -->
+            <MultiSelect
+              v-else-if="field.type === 'multiselect'"
+              :id="fieldId"
+              :model-value="formData[field.name]"
+              :options="field.options"
+              :disabled="isLoading || field.disabled"
+              :placeholder="field.placeholder || 'Select options'"
+              :has-error="hasError"
+              :aria-describedby="ariaDescribedBy"
+              @update:model-value="formData[field.name] = $event"
+            />
 
             <!-- Checkbox -->
             <div
