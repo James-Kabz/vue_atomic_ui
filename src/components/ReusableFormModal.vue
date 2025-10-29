@@ -416,7 +416,7 @@ const handleClose = () => {
     </div>
 
     <form
-      class="space-y-6"
+      class="space-y-6 overflow-y-auto"
       @submit.prevent="handleSubmit"
     >
       <div

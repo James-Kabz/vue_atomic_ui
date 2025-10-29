@@ -23,7 +23,7 @@ const modalVariants = cva(
         full: 'max-w-full',
       },
       height: {
-        auto: '',
+        auto: 'max-h-[90vh]',
         sm: 'max-h-[50vh]',
         md: 'max-h-[70vh]',
         lg: 'max-h-[80vh]',
