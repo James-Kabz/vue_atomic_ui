@@ -194,7 +194,7 @@ const handleKeydown = (event) => {
 // Close dropdown when clicking outside
 const handleClickOutside = (event) => {
   const target = event.target
-  if (!target.closest('.relative')) {
+  if (target && !target.closest('.relative')) {
     isOpen.value = false
     searchQuery.value = ''
     filteredOptions.value = [...props.options]
