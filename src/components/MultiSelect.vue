@@ -36,10 +36,8 @@ const isOpen = ref(false)
 const searchQuery = ref('')
 const searchInput = ref(null)
 const filteredOptions = ref([...props.options])
-const dropdownRef = ref(null)
 const buttonRef = ref(null)
-const containerRef = ref(null)
-const dropdownPosition = ref('bottom')
+const dropdownStyle = ref({})
 
 const selectedLabels = computed(() => {
   return props.options
@@ -47,20 +45,31 @@ const selectedLabels = computed(() => {
     .map(option => option.label)
 })
 
-const calculateDropdownPosition = () => {
+const updateDropdownPosition = () => {
   if (!buttonRef.value) return
 
-  const buttonRect = buttonRef.value.getBoundingClientRect()
+  const rect = buttonRef.value.getBoundingClientRect()
   const viewportHeight = window.innerHeight
-  const spaceBelow = viewportHeight - buttonRect.bottom
-  const spaceAbove = buttonRect.top
-  const dropdownHeight = 280 // approximate max height of dropdown
+  const spaceBelow = viewportHeight - rect.bottom
+  const dropdownHeight = 320 // approximate max height of dropdown
 
-  // Position above if there's not enough space below and more space above
-  if (spaceBelow < dropdownHeight && spaceAbove > spaceBelow) {
-    dropdownPosition.value = 'top'
+  // Position above if there's not enough space below
+  if (spaceBelow < dropdownHeight && rect.top > dropdownHeight) {
+    dropdownStyle.value = {
+      position: 'fixed',
+      bottom: `${viewportHeight - rect.top + 4}px`,
+      left: `${rect.left}px`,
+      width: `${rect.width}px`,
+      zIndex: 9999
+    }
   } else {
-    dropdownPosition.value = 'bottom'
+    dropdownStyle.value = {
+      position: 'fixed',
+      top: `${rect.bottom + 4}px`,
+      left: `${rect.left}px`,
+      width: `${rect.width}px`,
+      zIndex: 9999
+    }
   }
 }
 
@@ -68,8 +77,8 @@ const toggleDropdown = () => {
   if (!props.disabled) {
     isOpen.value = !isOpen.value
     if (isOpen.value) {
+      updateDropdownPosition()
       nextTick(() => {
-        calculateDropdownPosition()
         searchInput.value?.focus()
       })
     } else {
@@ -110,10 +119,9 @@ const handleKeydown = (event) => {
 
 // Close dropdown when clicking outside
 const handleClickOutside = (event) => {
-  if (!containerRef.value) return
-
-  // Check if click is outside the container
-  if (!containerRef.value.contains(event.target)) {
+  if (!buttonRef.value) return
+  const target = event.target
+  if (target && !buttonRef.value.contains(target) && !target.closest('[data-multiselect-dropdown]')) {
     isOpen.value = false
     searchQuery.value = ''
     filteredOptions.value = [...props.options]
@@ -121,25 +129,31 @@ const handleClickOutside = (event) => {
 }
 
 onMounted(() => {
-  document.addEventListener('mousedown', handleClickOutside)
-  window.addEventListener('scroll', calculateDropdownPosition, true)
-  window.addEventListener('resize', calculateDropdownPosition)
+  document.addEventListener('click', handleClickOutside)
+  window.addEventListener('scroll', updateDropdownPosition, true)
+  window.addEventListener('resize', updateDropdownPosition)
 })
 
 onUnmounted(() => {
-  document.removeEventListener('mousedown', handleClickOutside)
-  window.removeEventListener('scroll', calculateDropdownPosition, true)
-  window.removeEventListener('resize', calculateDropdownPosition)
+  document.removeEventListener('click', handleClickOutside)
+  window.removeEventListener('scroll', updateDropdownPosition, true)
+  window.removeEventListener('resize', updateDropdownPosition)
 })
 
 // Watch for options changes
 watch(() => props.options, (newOptions) => {
   filteredOptions.value = [...newOptions]
 }, { immediate: true })
+
+watch(isOpen, (open) => {
+  if (open) {
+    updateDropdownPosition()
+  }
+})
 </script>
 
 <template>
-  <div ref="containerRef" class="relative">
+  <div class="relative">
     <button ref="buttonRef" type="button" :id="id" :disabled="disabled" :class="[
       'w-full px-3 py-2.5 text-left border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white min-h-[42px]',
       hasError ? 'border-red-500' : 'border-slate-300',
@@ -162,42 +176,42 @@ watch(() => props.options, (newOptions) => {
       </svg>
     </button>
 
-    <Transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95"
-      enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75"
-      leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
-      <div v-if="isOpen" ref="dropdownRef" :class="[
-        'absolute z-[60] w-full bg-white shadow-lg max-h-72 rounded-md text-base ring-1 ring-black ring-opacity-5 overflow-hidden focus:outline-none',
-        dropdownPosition === 'top' ? 'bottom-full mb-1' : 'top-full mt-1'
-      ]">
-        <!-- Search input -->
-        <div class="px-3 py-2.5 border-b border-gray-200 bg-gray-50">
-          <input ref="searchInput" v-model="searchQuery" type="text" placeholder="Search options..."
-            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
-            @input="filterOptions" @keydown.stop>
-        </div>
+    <Teleport to="body">
+      <Transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95"
+        enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75"
+        leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
+        <div v-if="isOpen" :style="dropdownStyle" data-multiselect-dropdown
+          class="bg-white shadow-lg max-h-72 rounded-md text-base ring-1 ring-black ring-opacity-5 overflow-hidden focus:outline-none">
+          <!-- Search input -->
+          <div class="px-3 py-2.5 border-b border-gray-200 bg-gray-50">
+            <input ref="searchInput" v-model="searchQuery" type="text" placeholder="Search options..."
+              class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+              @input="filterOptions" @keydown.stop>
+          </div>
 
-        <!-- Options list -->
-        <div v-if="filteredOptions.length > 0" class="max-h-52 overflow-y-auto py-1">
-          <div v-for="option in filteredOptions" :key="option.value"
-            class="cursor-pointer select-none relative py-2.5 pl-3 pr-9 hover:bg-blue-50 transition-colors duration-150"
-            :class="{ 'bg-blue-50': modelValue.includes(option.value) }" @click.stop="toggleOption(option.value)">
-            <div class="flex items-center gap-3">
-              <input type="checkbox" :checked="modelValue.includes(option.value)"
-                class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded cursor-pointer pointer-events-none"
-                readonly />
-              <span class="block font-normal truncate"
-                :class="{ 'text-blue-900 font-medium': modelValue.includes(option.value) }">
-                {{ option.label }}
-              </span>
-            </div>
+          <!-- Options list -->
+          <div v-if="filteredOptions.length > 0" class="max-h-52 overflow-y-auto py-1">
+            <button v-for="option in filteredOptions" :key="option.value" type="button"
+              class="cursor-pointer select-none relative py-2.5 pl-3 pr-9 w-full text-left hover:bg-blue-50 focus:bg-blue-50 focus:outline-none transition-colors duration-150"
+              :class="{ 'bg-blue-50': modelValue.includes(option.value) }" @click="toggleOption(option.value)">
+              <div class="flex items-center gap-3">
+                <input type="checkbox" :checked="modelValue.includes(option.value)"
+                  class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded cursor-pointer pointer-events-none"
+                  readonly tabindex="-1" />
+                <span class="block font-normal truncate"
+                  :class="{ 'text-blue-900 font-medium': modelValue.includes(option.value) }">
+                  {{ option.label }}
+                </span>
+              </div>
+            </button>
+          </div>
+
+          <!-- No results -->
+          <div v-else class="px-4 py-6 text-sm text-gray-500 text-center">
+            No options found
           </div>
         </div>
-
-        <!-- No results -->
-        <div v-else class="px-4 py-6 text-sm text-gray-500 text-center">
-          No options found
-        </div>
-      </div>
-    </Transition>
+      </Transition>
+    </Teleport>
   </div>
 </template>
