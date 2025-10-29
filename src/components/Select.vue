@@ -83,7 +83,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, nextTick } from 'vue'
+import { ref, computed, watch, nextTick, onUnmounted } from 'vue'
 import { cva } from 'class-variance-authority'
 import { cn } from '../utils/cn.js'
 
@@ -200,6 +200,11 @@ const handleClickOutside = (event) => {
     filteredOptions.value = [...props.options]
   }
 }
+
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside)
+})
 
 document.addEventListener('click', handleClickOutside)
 

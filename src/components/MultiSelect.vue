@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch, nextTick } from 'vue'
 import Badge from './Badge.vue'
 
 const props = defineProps({
@@ -33,6 +33,9 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue'])
 
 const isOpen = ref(false)
+const searchQuery = ref('')
+const searchInput = ref(null)
+const filteredOptions = ref([...props.options])
 
 const selectedLabels = computed(() => {
   return props.options
@@ -43,6 +46,11 @@ const selectedLabels = computed(() => {
 const toggleDropdown = () => {
   if (!props.disabled) {
     isOpen.value = !isOpen.value
+    if (isOpen.value) {
+      nextTick(() => {
+        searchInput.value?.focus()
+      })
+    }
   }
 }
 
@@ -56,21 +64,48 @@ const toggleOption = (value) => {
   emit('update:modelValue', newValue)
 }
 
+const filterOptions = () => {
+  if (!searchQuery.value.trim()) {
+    filteredOptions.value = [...props.options]
+  } else {
+    const query = searchQuery.value.toLowerCase()
+    filteredOptions.value = props.options.filter(option =>
+      option.label.toLowerCase().includes(query)
+    )
+  }
+}
+
 const handleKeydown = (event) => {
   if (event.key === 'Escape') {
     isOpen.value = false
+    searchQuery.value = ''
+    filteredOptions.value = [...props.options]
   }
 }
 
 // Close dropdown when clicking outside
 const handleClickOutside = (event) => {
   const target = event.target
-  if (!target.closest('.relative')) {
+  if (target && !target.closest('.relative')) {
     isOpen.value = false
+    searchQuery.value = ''
+    filteredOptions.value = [...props.options]
   }
 }
 
 document.addEventListener('click', handleClickOutside)
+
+// Cleanup event listener on unmount
+import { onUnmounted } from 'vue'
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside)
+})
+
+// Watch for options changes
+watch(() => props.options, (newOptions) => {
+  filteredOptions.value = [...newOptions]
+}, { immediate: true })
 </script>
 
 <template>
@@ -95,14 +130,35 @@ document.addEventListener('click', handleClickOutside)
 
     <div v-if="isOpen"
       class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none">
-      <div v-for="option in options" :key="option.value"
-        class="cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-gray-100"
-        @click="toggleOption(option.value)">
-        <div class="flex items-center">
-          <input type="checkbox" :checked="modelValue.includes(option.value)"
-            class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" @change.stop />
-          <span class="ml-3 block font-normal truncate">{{ option.label }}</span>
+      <!-- Search input -->
+      <div class="px-3 py-2 border-b border-gray-200">
+        <input
+          ref="searchInput"
+          v-model="searchQuery"
+          type="text"
+          placeholder="Search options..."
+          class="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+          @input="filterOptions"
+          @keydown.stop
+        >
+      </div>
+
+      <!-- Options list -->
+      <div v-if="filteredOptions.length > 0" class="max-h-48 overflow-y-auto">
+        <div v-for="option in filteredOptions" :key="option.value"
+          class="cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-gray-100"
+          @click="toggleOption(option.value)">
+          <div class="flex items-center">
+            <input type="checkbox" :checked="modelValue.includes(option.value)"
+              class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" @change.stop />
+            <span class="ml-3 block font-normal truncate">{{ option.label }}</span>
+          </div>
         </div>
+      </div>
+
+      <!-- No results -->
+      <div v-else class="px-4 py-3 text-sm text-gray-500 text-center">
+        No options found
       </div>
     </div>
   </div>
