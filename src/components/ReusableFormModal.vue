@@ -468,28 +468,13 @@ const handleClose = () => {
               v-else-if="field.type === 'select'"
               :id="fieldId"
               :model-value="formData[field.name]"
+              :options="field.options"
+              :placeholder="field.placeholder || 'Select an option'"
               :disabled="isLoading || field.disabled"
-              :class="[
-                'w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500',
-                hasError ? 'border-red-500' : 'border-slate-300',
-              ]"
+              :has-error="hasError"
               :aria-describedby="ariaDescribedBy"
               @update:model-value="handleSelectChange(field, $event)"
-            >
-              <option
-                value=""
-                disabled
-              >
-                {{ field.placeholder || 'Select an option' }}
-              </option>
-              <option
-                v-for="option in field.options"
-                :key="option.value"
-                :value="option.value"
-              >
-                {{ option.label }}
-              </option>
-            </Select>
+            />
 
             <!-- MultiSelect Dropdown -->
             <MultiSelect
