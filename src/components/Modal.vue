@@ -14,7 +14,7 @@
         @click="handleBackdropClick"
       >
         <div
-          :class="cn(modalVariants({ size }), resizable ? 'resize' : '')"
+          :class="cn(modalVariants({ size, height }), resizable ? 'resize' : '')"
           :style="resizable ? 'min-width: 400px; min-height: 200px;' : ''"
         >
           <button
@@ -48,21 +48,38 @@ const modalVariants = cva(
   {
     variants: {
       size: {
-        sm: 'max-w-sm max-h-[50vh]',
-        md: 'max-w-md max-h-[70vh]',
-        lg: 'max-w-lg max-h-[80vh]',
-        xl: 'max-w-xl max-h-[90vh]',
-        '2xl': 'max-w-2xl max-h-[90vh]',
-        '3xl': 'max-w-3xl max-h-[90vh]',
-        '4xl': 'max-w-4xl max-h-[100vh]',
-        '5xl': 'max-w-5xl max-h-[100vh]',
-        '6xl': 'max-w-6xl max-h-[100vh]',
-        '7xl': 'max-w-7xl max-h-[100vh]',
-        full: 'max-w-full max-h-[100vh]',
+        sm: 'max-w-sm',
+        md: 'max-w-md',
+        lg: 'max-w-lg',
+        xl: 'max-w-xl',
+        '2xl': 'max-w-2xl',
+        '3xl': 'max-w-3xl',
+        '4xl': 'max-w-4xl',
+        '5xl': 'max-w-5xl',
+        '6xl': 'max-w-6xl',
+        '7xl': 'max-w-7xl',
+        '8xl': 'max-w-8xl',
+        full: 'max-w-full',
+      },
+      height: {
+        auto: '',
+        sm: 'max-h-[50vh]',
+        md: 'max-h-[70vh]',
+        lg: 'max-h-[80vh]',
+        xl: 'max-h-[90vh]',
+        '2xl': 'max-h-[90vh]',
+        '3xl': 'max-h-[90vh]',
+        '4xl': 'max-h-[100vh]',
+        '5xl': 'max-h-[100vh]',
+        '6xl': 'max-h-[100vh]',
+        '7xl': 'max-h-[100vh]',
+        '8xl': 'max-h-[100vh]',
+        full: 'max-h-[100vh]',
       },
     },
     defaultVariants: {
       size: '4xl',
+      height: 'auto',
     },
   }
 )
@@ -80,7 +97,12 @@ const props = defineProps({
   size: {
     type: String,
     default: '4xl',
-    validator: (value) => ['sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', 'full'].includes(value)
+    validator: (value) => ['sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', 'full'].includes(value)
+  },
+  height: {
+    type: String,
+    default: 'auto',
+    validator: (value) => ['auto', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', 'full'].includes(value)
   },
   resizable: {
     type: Boolean,

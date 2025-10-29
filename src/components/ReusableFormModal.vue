@@ -78,7 +78,12 @@ const props = defineProps({
   modalSize: {
     type: String,
     default: '4xl',
-    validator: (value) => ['sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', 'full'].includes(value)
+    validator: (value) => ['sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', 'full'].includes(value)
+  },
+  modalHeight: {
+    type: String,
+    default: 'auto',
+    validator: (value) => ['auto', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', 'full'].includes(value)
   },
   modalResizable: {
     type: Boolean,
@@ -394,6 +399,7 @@ const handleClose = () => {
     :show-close="true"
     :close-on-backdrop="true"
     :size="modalSize"
+    :height="modalHeight"
     :resizable="modalResizable"
     @close="handleClose"
   >
