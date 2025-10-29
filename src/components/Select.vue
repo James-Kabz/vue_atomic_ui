@@ -74,7 +74,7 @@ const selectClasses = computed(() =>
 
 const updateDropdownPosition = () => {
   if (!buttonRef.value) return
-  
+
   const rect = buttonRef.value.getBoundingClientRect()
   dropdownStyle.value = {
     position: 'fixed',
