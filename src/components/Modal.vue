@@ -14,7 +14,7 @@
         @click="handleBackdropClick"
       >
         <div
-          :class="cn(modalVariants({ size }), height ? height : '', resizable ? 'resize' : '')"
+          :class="cn(modalVariants({ size }), height, props.class, resizable ? 'resize' : '')"
           :style="resizable ? 'min-width: 400px; min-height: 200px;' : ''"
         >
           <button
@@ -100,6 +100,10 @@ const props = defineProps({
     validator: (value) => ['sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', 'full'].includes(value)
   },
   height: {
+    type: String,
+    default: '',
+  },
+  class: {
     type: String,
     default: '',
   },
