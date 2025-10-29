@@ -59,7 +59,8 @@
         <button
           v-for="option in filteredOptions"
           :key="option.value"
-          class="cursor-pointer select-none relative py-2 pl-3 pr-9 w-full text-left hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
+          class="cursor-pointer select-none relative py-2 pl-3 pr-9 w-full text-left hover:bg-blue-50 focus:bg-blue-50 focus:outline-none transition-colors duration-150"
+          :class="{ 'bg-blue-50 text-blue-900': modelValue === option.value }"
           @click="selectOption(option.value)"
         >
           <span class="block font-normal truncate">{{ option.label }}</span>

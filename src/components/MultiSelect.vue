@@ -143,12 +143,14 @@ watch(() => props.options, (newOptions) => {
       <!-- Options list -->
       <div v-if="filteredOptions.length > 0" class="max-h-48 overflow-y-auto">
         <div v-for="option in filteredOptions" :key="option.value"
-          class="cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-gray-100"
+          class="cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-blue-50 transition-colors duration-150"
+          :class="{ 'bg-blue-50': modelValue.includes(option.value) }"
           @click="toggleOption(option.value)">
           <div class="flex items-center">
             <input type="checkbox" :checked="modelValue.includes(option.value)"
               class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" @change.stop />
-            <span class="ml-3 block font-normal truncate">{{ option.label }}</span>
+            <span class="ml-3 block font-normal truncate"
+              :class="{ 'text-blue-900': modelValue.includes(option.value) }">{{ option.label }}</span>
           </div>
         </div>
       </div>

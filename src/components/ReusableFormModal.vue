@@ -82,7 +82,7 @@ const props = defineProps({
   },
   modalHeight: {
     type: String,
-    default: '',
+    default: 'auto',
   },
   modalResizable: {
     type: Boolean,
@@ -398,15 +398,15 @@ const handleClose = () => {
     :show-close="true"
     :close-on-backdrop="true"
     :size="modalSize"
-    :class="modalHeight"
+    :class="modalHeight === 'auto' ? '' : modalHeight"
     :resizable="modalResizable"
     @close="handleClose"
   >
-    <div class="mb-4">
-      <h2 class="text-lg font-semibold text-gray-900">
+    <div class="mb-6">
+      <h2 class="text-xl font-semibold text-gray-900">
         {{ modalType === 'create' ? `Add New ${entityName}` : `Edit ${entityName}` }}
       </h2>
-      <p class="text-sm text-gray-600">
+      <p class="text-sm text-gray-600 mt-1">
         {{
           modalType === 'create'
             ? `Fill in the details to create a new ${entityName.toLowerCase()}.`
@@ -416,7 +416,7 @@ const handleClose = () => {
     </div>
 
     <form
-      class="space-y-4"
+      class="space-y-6"
       @submit.prevent="handleSubmit"
     >
       <div
@@ -699,7 +699,7 @@ const handleClose = () => {
         </FormField>
       </div>
 
-      <div class="flex justify-end gap-3 pt-4">
+      <div class="flex justify-end gap-3 pt-6">
         <Button
           type="button"
           variant="outline"
