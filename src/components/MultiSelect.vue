@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch, nextTick } from 'vue'
+import { ref, computed, watch, nextTick, onUnmounted } from 'vue'
 import Badge from './Badge.vue'
 
 const props = defineProps({
@@ -94,9 +94,6 @@ const handleClickOutside = (event) => {
 }
 
 document.addEventListener('click', handleClickOutside)
-
-// Cleanup event listener on unmount
-import { onUnmounted } from 'vue'
 
 onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside)
