@@ -39,7 +39,7 @@
 
     <div
       v-if="isOpen"
-      class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none"
+      class="absolute z-[60] mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none"
     >
       <!-- Search input -->
       <div class="px-3 py-2 border-b border-gray-200">
