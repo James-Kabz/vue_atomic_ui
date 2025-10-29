@@ -11,11 +11,12 @@
       <div
         v-if="modelValue"
         class="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-center justify-center"
+        :class="{ 'pointer-events-none': resizable }"
         @click="handleBackdropClick"
       >
         <div
-          :class="cn(modalVariants({ size }), height, props.class, resizable ? 'resize' : '')"
-          :style="resizable ? 'min-width: 400px; min-height: 200px;' : ''"
+          :class="cn(modalVariants({ size }), height, props.class, resizable ? 'resize overflow-hidden pointer-events-auto' : '')"
+          :style="resizable ? 'min-width: 400px; min-height: 200px; resize: both;' : ''"
         >
           <button
             v-if="showClose"
@@ -121,7 +122,7 @@ const closeModal = () => {
 }
 
 const handleBackdropClick = (event) => {
-  if (props.closeOnBackdrop && event.target === event.currentTarget) {
+  if (props.closeOnBackdrop && event.target === event.currentTarget && !props.resizable) {
     closeModal()
   }
 }
