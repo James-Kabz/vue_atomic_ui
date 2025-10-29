@@ -129,23 +129,16 @@ watch(() => props.options, (newOptions) => {
       class="absolute z-[60] mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none">
       <!-- Search input -->
       <div class="px-3 py-2 border-b border-gray-200">
-        <input
-          ref="searchInput"
-          v-model="searchQuery"
-          type="text"
-          placeholder="Search options..."
+        <input ref="searchInput" v-model="searchQuery" type="text" placeholder="Search options..."
           class="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
-          @input="filterOptions"
-          @keydown.stop
-        >
+          @input="filterOptions" @keydown.stop>
       </div>
 
       <!-- Options list -->
       <div v-if="filteredOptions.length > 0" class="max-h-48 overflow-y-auto">
         <div v-for="option in filteredOptions" :key="option.value"
           class="cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-blue-50 transition-colors duration-150"
-          :class="{ 'bg-blue-50': modelValue.includes(option.value) }"
-          @click="toggleOption(option.value)">
+          :class="{ 'bg-blue-50': modelValue.includes(option.value) }" @click="toggleOption(option.value)">
           <div class="flex items-center">
             <input type="checkbox" :checked="modelValue.includes(option.value)"
               class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" @change.stop />
