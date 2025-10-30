@@ -5,7 +5,7 @@ import { cn } from '@/utils/cn'
 import Icon from './Icon.vue'
 
 const modalVariants = cva(
-  'relative w-full overflow-y-auto border bg-white p-6 shadow-lg duration-200 sm:rounded-lg',
+  'relative w-full overflow-y-auto border bg-white pt-12 pr-12 pb-6 pl-6 shadow-lg duration-200 sm:rounded-lg',
   {
     variants: {
       size: {
