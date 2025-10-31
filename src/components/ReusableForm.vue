@@ -20,15 +20,6 @@ const props = defineProps({
     type: String,
     default: 'Item',
   },
-  formSize: {
-    type: String,
-    default: '4xl',
-    validator: (value) => ['sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', 'full'].includes(value)
-  },
-  formHeight: {
-    type: String,
-    default: 'auto',
-  },
   fields: {
     type: Array,
     required: true,
@@ -54,7 +45,7 @@ const props = defineProps({
             'time',           // NEW
             'datetime-local', // NEW
             'month',          // NEW
-            'week',           // NEW
+            'week',          // NEW
             'file',           // NEW
             'radio',          // NEW
             'switch',         // NEW (alternative to checkbox)
@@ -319,7 +310,7 @@ const handleReset = () => {
 </script>
 
 <template>
-  <div :class="formHeight === 'auto' ? '' : formHeight">
+  <div class="w-full p-6">
     <div v-if="title" class="mb-6">
       <h2 class="text-xl font-semibold text-gray-900">
         {{ title }}
@@ -327,7 +318,7 @@ const handleReset = () => {
     </div>
 
     <form
-      class="space-y-6 overflow-y-auto"
+      class="space-y-8"
       @submit.prevent="handleSubmit"
     >
       <div
