@@ -20,6 +20,15 @@ const props = defineProps({
     type: String,
     default: 'Item',
   },
+  formSize: {
+    type: String,
+    default: '4xl',
+    validator: (value) => ['sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', 'full'].includes(value)
+  },
+  formHeight: {
+    type: String,
+    default: 'auto',
+  },
   fields: {
     type: Array,
     required: true,
@@ -310,7 +319,7 @@ const handleReset = () => {
 </script>
 
 <template>
-  <div class="w-full">
+  <div :class="formHeight === 'auto' ? '' : formHeight">
     <div v-if="title" class="mb-6">
       <h2 class="text-xl font-semibold text-gray-900">
         {{ title }}
@@ -318,7 +327,7 @@ const handleReset = () => {
     </div>
 
     <form
-      class="space-y-6"
+      class="space-y-6 overflow-y-auto"
       @submit.prevent="handleSubmit"
     >
       <div
