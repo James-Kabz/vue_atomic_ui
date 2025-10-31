@@ -134,14 +134,14 @@ onUnmounted(() => {
           </button>
 
           <!-- Resize handle -->
-          <div
+          <!-- <div
             v-if="resizable"
             class="absolute bottom-0 right-0 w-8 h-8 cursor-se-resize bg-gray-200 hover:bg-gray-300 border border-gray-300 rounded-tl-lg flex items-end justify-end transition-colors"
           >
             <svg class="w-5 h-5 text-gray-600 mb-1 mr-1" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l.293-.293L9 15.586V3a1 1 0 012 0v12.586l3.414-3.293a1 1 0 011.293-.001z" clip-rule="evenodd" />
             </svg>
-          </div>
+          </div> -->
 
           <slot />
         </div>
