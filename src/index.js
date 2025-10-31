@@ -74,6 +74,7 @@ import DataTableToolBar from "./components/DataTableToolBar.vue"
 import Footer from "./components/Footer.vue"
 import Header from "./components/Header.vue"
 import ReusableFormModal from "./components/ReusableFormModal.vue"
+import ReusableForm from "./components/ReusableForm.vue"
 import Sidebar from "./components/Sidebar.vue"
 import Timeline from "./components/Timeline.vue"
 import TimelineItem from "./components/TimelineItem.vue"
@@ -163,6 +164,7 @@ const components = {
   Footer,
   Header,
   ReusableFormModal,
+  ReusableForm,
   Sidebar,
   Timeline,
   TimelineItem,
@@ -264,6 +266,7 @@ export {
   Footer,
   Header,
   ReusableFormModal,
+  ReusableForm,
   Sidebar,
   Timeline,
   TimelineItem,
