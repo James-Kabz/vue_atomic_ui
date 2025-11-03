@@ -58,7 +58,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { cva } from 'class-variance-authority'
 import { cn } from '../utils/cn.js'
 import Checkbox from './Checkbox.vue'
@@ -111,9 +111,6 @@ const props = defineProps({
 
 const emit = defineEmits(['toggle-selection', 'row-click'])
 
-const expandedCells = ref({})
-
-const showTooltip = ref(false)
 
 // CVA variants
 const rowVariants = cva('transition-colors', {
@@ -226,21 +223,6 @@ const truncateText = (text, maxWords = 10) => {
   return words.slice(0, maxWords).join(' ') + '...'
 }
 
-const toggleCellExpansion = (columnKey) => {
-  expandedCells.value[columnKey] = !expandedCells.value[columnKey]
-}
-
-const isCellExpanded = (columnKey) => {
-  return expandedCells.value[columnKey] || false
-}
-
-const handleTooltipToggle = (columnKey, show) => {
-  if (show) {
-    showTooltip.value = columnKey
-  } else {
-    showTooltip.value = null
-  }
-}
 
 const handleRowClick = () => {
   if (props.clickableRows) {
