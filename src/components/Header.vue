@@ -219,10 +219,10 @@ watch(searchQuery, (newValue) => emit('search', newValue))
               <div class="py-2">
                 <button
                   v-for="org in organisations"
-                  :key="org.id || org.organisation_name"
+                  :key="org.org_id || org.organisation_name"
                   :class="cn(
                     'flex items-center w-full px-3 py-2.5 text-sm transition-colors',
-                    org.id === currentOrganisation.id
+                    org.org_id === currentOrganisation?.org_id
                       ? 'bg-blue-50 text-blue-700 border-l-4 border-blue-500'
                       : 'text-gray-700 hover:bg-gray-50'
                   )"
@@ -250,7 +250,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                     </p>
                   </div>
                   <svg
-                    v-if="org.id === currentOrganisation.id"
+                    v-if="org.org_id === currentOrganisation?.org_id"
                     class="w-4 h-4 text-blue-500 flex-shrink-0 ml-2"
                     fill="currentColor"
                     viewBox="0 0 20 20"

@@ -168,6 +168,14 @@ import DataTableFilters from '../components/DataTableFilters.vue'
 import DataTableToolBar from '../components/DataTableToolBar.vue'
 import DataTable from '../components/DataTable.vue'
 
+// Props
+const props = defineProps({
+  currentOrganisation: {
+    type: Object,
+    default: null
+  }
+})
+
 // Simulated current user with permissions
 const currentUser = ref({
   id: 1,
@@ -259,7 +267,7 @@ const userActions = computed(() => [
   }
 ])
 
-// Sample data with better avatars
+// Sample data with better avatars and organisation field
 const users = ref([
   {
     id: 1,
@@ -271,7 +279,8 @@ const users = ref([
     lastLogin: new Date('2024-01-15'),
     avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face&auto=format',
     salary: 75000,
-    joinDate: '2023-03-15'
+    joinDate: '2023-03-15',
+    organisation_id: 1
   },
   {
     id: 2,
@@ -283,7 +292,8 @@ const users = ref([
     lastLogin: new Date('2024-01-14'),
     avatar: 'https://images.unsplash.com/photo-1494790108755-2616b332c3c7?w=32&h=32&fit=crop&crop=face&auto=format',
     salary: 65000,
-    joinDate: '2023-05-22'
+    joinDate: '2023-05-22',
+    organisation_id: 1
   },
   {
     id: 3,
@@ -295,7 +305,8 @@ const users = ref([
     lastLogin: new Date('2024-01-10'),
     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=32&h=32&fit=crop&crop=face&auto=format',
     salary: 55000,
-    joinDate: '2023-07-08'
+    joinDate: '2023-07-08',
+    organisation_id: 2
   },
   {
     id: 4,
@@ -307,7 +318,8 @@ const users = ref([
     lastLogin: new Date('2024-01-16'),
     avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=32&h=32&fit=crop&crop=face&auto=format',
     salary: 70000,
-    joinDate: '2023-02-14'
+    joinDate: '2023-02-14',
+    organisation_id: 2
   },
   {
     id: 5,
@@ -319,7 +331,8 @@ const users = ref([
     lastLogin: new Date('2024-01-17'),
     avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=32&h=32&fit=crop&crop=face&auto=format',
     salary: 80000,
-    joinDate: '2023-01-10'
+    joinDate: '2023-01-10',
+    organisation_id: 1
   },
   {
     id: 6,
@@ -331,7 +344,8 @@ const users = ref([
     lastLogin: new Date('2024-01-05'),
     avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=32&h=32&fit=crop&crop=face&auto=format',
     salary: 62000,
-    joinDate: '2023-06-20'
+    joinDate: '2023-06-20',
+    organisation_id: 2
   }
 ])
 
@@ -400,6 +414,14 @@ const bulkActions = [
 // Computed filtered data
 const filteredUsers = computed(() => {
   let filtered = users.value
+
+  // Apply organisation filter first - only if organisation is selected
+  if (props.currentOrganisation) {
+    filtered = filtered.filter(user => user.organisation_id === props.currentOrganisation.org_id)
+  } else {
+    // If no organisation selected, show no data
+    return []
+  }
 
   // Apply search filter
   if (searchQuery.value.trim()) {
