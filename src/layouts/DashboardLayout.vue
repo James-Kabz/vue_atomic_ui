@@ -1,51 +1,3 @@
-<template>
-  <div class="min-h-screen bg-gray-50">
-    <!-- Sidebar -->
-    <Sidebar
-      ref="sidebarRef"
-      :sidebar-width="sidebarWidth"
-      :header="{ title: 'Risk & Compliance' }"
-      :navigation-items="navigationItems"
-      :management-settings="managementSettingsItems"
-      :show-management-settings="true"
-      :mobile-open="mobileOpen"
-      :is-management-settings-active="isManagementSettingsActive"
-      :current-path="currentRoute"
-      @navigate="handleNavigation"
-      @update:mobile-open="handleMobileToggle"
-    />
-
-    <!-- Header -->
-    <Header
-      :sidebar-width="sidebarWidth"
-      :current-section="currentSection"
-      :current-page="currentPage"
-      :current-route="currentRoute"
-      :user="user"
-      :notifications="[]"
-      :profile-menu-items="profileMenuItems"
-      :mobile-open="mobileOpen"
-      :organisation-name="user?.organisation?.organisation_name || 'Risk & Compliance'"
-      :company-logo="user?.organisation?.logo || ''"
-      @search="handleSearch"
-      @profile-action="handleProfileAction"
-      @logout="handleLogout"
-      @navigate="handleNavigation"
-      @toggle-mobile-sidebar="handleMobileSidebarToggle"
-    />
-
-    <!-- Main Content -->
-    <main
-      class="transition-all duration-300 ease-in-out pt-16 min-h-screen"
-      :style="{ marginLeft: sidebarRef?.contentMarginLeft + 'px' }"
-    >
-      <div class="p-6">
-        <router-view />
-      </div>
-    </main>
-  </div>
-</template>
-
 <script setup>
 import { ref, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
@@ -268,3 +220,51 @@ defineExpose({
   }
 })
 </script>
+
+<template>
+  <div class="min-h-screen bg-gray-50">
+    <!-- Sidebar -->
+    <Sidebar
+      ref="sidebarRef"
+      :sidebar-width="sidebarWidth"
+      :header="{ title: 'Risk & Compliance' }"
+      :navigation-items="navigationItems"
+      :management-settings="managementSettingsItems"
+      :show-management-settings="true"
+      :mobile-open="mobileOpen"
+      :is-management-settings-active="isManagementSettingsActive"
+      :current-path="currentRoute"
+      @navigate="handleNavigation"
+      @update:mobile-open="handleMobileToggle"
+    />
+
+    <!-- Header -->
+    <Header
+      :sidebar-width="sidebarWidth"
+      :current-section="currentSection"
+      :current-page="currentPage"
+      :current-route="currentRoute"
+      :user="user"
+      :notifications="[]"
+      :profile-menu-items="profileMenuItems"
+      :mobile-open="mobileOpen"
+      :organisation-name="user?.organisation?.organisation_name || 'Risk & Compliance'"
+      :company-logo="user?.organisation?.logo || ''"
+      @search="handleSearch"
+      @profile-action="handleProfileAction"
+      @logout="handleLogout"
+      @navigate="handleNavigation"
+      @toggle-mobile-sidebar="handleMobileSidebarToggle"
+    />
+
+    <!-- Main Content -->
+    <main
+      class="transition-all duration-300 ease-in-out pt-16 min-h-screen"
+      :style="{ marginLeft: sidebarRef?.contentMarginLeft + 'px' }"
+    >
+      <div class="p-6">
+        <router-view />
+      </div>
+    </main>
+  </div>
+</template>

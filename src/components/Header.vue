@@ -1,3 +1,98 @@
+<script setup>
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { cn } from '../utils/cn.js'
+import Icon from './Icon.vue'
+
+const props = defineProps({
+  sidebarWidth: { type: Number, default: 256 },
+  currentSection: { type: String, default: 'Dashboard' },
+  currentPage: { type: String, default: 'Overview' },
+  currentRoute: { type: String, default: '' },
+  user: { type: Object, required: true },
+  notifications: { type: Array, default: () => [] },
+  profileMenuItems: { type: Array, required: true },
+  mobileOpen: { type: Boolean, default: false },
+  currentOrganisation: { type: Object, default: null },
+  companyLogo: { type: String, default: '' },
+  organisationLogo: { type: String, default: '' }
+})
+
+const emit = defineEmits(['search', 'profile-action', 'logout', 'navigate', 'toggle-mobile-sidebar'])
+
+const searchQuery = ref('')
+const showNotifications = ref(false)
+const showProfile = ref(false)
+const notificationCount = ref(props.notifications.length)
+const showMobileSearch = ref(false)
+const isMobile = ref(false)
+
+const userInitials = computed(() => {
+  const name = props.user?.name || 'Guest'
+  return name.split(' ').map(n => n[0] || '').join('').toUpperCase()
+})
+
+const userRoleNames = computed(() => {
+  if (!props.user?.roles?.length) return 'No role'
+  return props.user.roles.map(role => role.name).join(', ')
+})
+
+const toggleNotifications = () => {
+  showNotifications.value = !showNotifications.value
+  showProfile.value = false
+}
+
+const toggleProfile = () => {
+  showProfile.value = !showProfile.value
+  showNotifications.value = false
+}
+
+const handleNavigation = (item) => {
+  emit('navigate', item)
+  showProfile.value = false
+}
+
+const isItemActive = (item) => {
+  if (!item.route) return false
+  if (props.currentRoute === item.route) return true
+  if (props.currentRoute.startsWith(item.route + '/')) return true
+  return false
+}
+
+const handleProfileAction = (item) => {
+  emit('profile-action', item)
+  showProfile.value = false
+}
+
+const handleLogout = () => {
+  emit('logout')
+  showProfile.value = false
+}
+
+const handleClickOutside = (event) => {
+  if (!event.target.closest('.absolute') && !event.target.closest('button')) {
+    showNotifications.value = false
+    showProfile.value = false
+  }
+}
+
+const checkMobile = () => {
+  isMobile.value = window.innerWidth < 768
+}
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside)
+  checkMobile()
+  window.addEventListener('resize', checkMobile)
+})
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside)
+  window.removeEventListener('resize', checkMobile)
+})
+
+watch(searchQuery, (newValue) => emit('search', newValue))
+</script>
+
+
 <template>
   <header
     :class="cn(
@@ -11,17 +106,43 @@
         <!-- Organisation Info -->
         <div
           v-if="currentOrganisation"
-          class="mr-4 flex-shrink-0 bg-gradient-to-r from-blue-50 to-indigo-50 px-3 py-2 rounded-lg border border-blue-100"
+          class="mr-4 flex-shrink-0 bg-gradient-to-r from-blue-50 to-indigo-50 px-3 py-2 rounded-lg border border-blue-100 flex items-center gap-3"
         >
-          <p class="text-lg font-bold text-blue-900 truncate max-w-[200px]">
-            {{ currentOrganisation.organisation_name }}
-          </p>
-          <p
-            v-if="currentOrganisation.role"
-            class="text-xs text-blue-600 truncate font-medium"
+          <!-- Company Logo (Software Company) -->
+          <div
+            v-if="companyLogo"
+            class="flex-shrink-0"
           >
-            {{ currentOrganisation.role }}
-          </p>
+            <img
+              :src="companyLogo"
+              alt="Company logo"
+              class="w-6 h-6 object-contain rounded"
+            />
+          </div>
+
+          <!-- Organisation Logo (Registered Organisation) -->
+          <div
+            v-if="organisationLogo"
+            class="flex-shrink-0"
+          >
+            <img
+              :src="organisationLogo"
+              :alt="`${currentOrganisation.organisation_name} logo`"
+              class="w-8 h-8 object-contain rounded border border-blue-200"
+            />
+          </div>
+
+          <div class="min-w-0">
+            <p class="text-lg font-bold text-blue-900 truncate max-w-[200px]">
+              {{ currentOrganisation.organisation_name }}
+            </p>
+            <p
+              v-if="currentOrganisation.role"
+              class="text-xs text-blue-600 truncate font-medium"
+            >
+              {{ currentOrganisation.role }}
+            </p>
+          </div>
         </div>
 
         <!-- Breadcrumb -->
@@ -347,96 +468,3 @@
     </div>
   </header>
 </template>
-
-<script setup>
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
-import { cn } from '../utils/cn.js'
-import Icon from './Icon.vue'
-
-const props = defineProps({
-  sidebarWidth: { type: Number, default: 256 },
-  currentSection: { type: String, default: 'Dashboard' },
-  currentPage: { type: String, default: 'Overview' },
-  currentRoute: { type: String, default: '' },
-  user: { type: Object, required: true },
-  notifications: { type: Array, default: () => [] },
-  profileMenuItems: { type: Array, required: true },
-  mobileOpen: { type: Boolean, default: false },
-  currentOrganisation: { type: Object, default: null },
-  companyLogo: { type: String, default: '' }
-})
-
-const emit = defineEmits(['search', 'profile-action', 'logout', 'navigate', 'toggle-mobile-sidebar'])
-
-const searchQuery = ref('')
-const showNotifications = ref(false)
-const showProfile = ref(false)
-const notificationCount = ref(props.notifications.length)
-const showMobileSearch = ref(false)
-const isMobile = ref(false)
-
-const userInitials = computed(() => {
-  const name = props.user?.name || 'Guest'
-  return name.split(' ').map(n => n[0] || '').join('').toUpperCase()
-})
-
-const userRoleNames = computed(() => {
-  if (!props.user?.roles?.length) return 'No role'
-  return props.user.roles.map(role => role.name).join(', ')
-})
-
-const toggleNotifications = () => {
-  showNotifications.value = !showNotifications.value
-  showProfile.value = false
-}
-
-const toggleProfile = () => {
-  showProfile.value = !showProfile.value
-  showNotifications.value = false
-}
-
-const handleNavigation = (item) => {
-  emit('navigate', item)
-  showProfile.value = false
-}
-
-const isItemActive = (item) => {
-  if (!item.route) return false
-  if (props.currentRoute === item.route) return true
-  if (props.currentRoute.startsWith(item.route + '/')) return true
-  return false
-}
-
-const handleProfileAction = (item) => {
-  emit('profile-action', item)
-  showProfile.value = false
-}
-
-const handleLogout = () => {
-  emit('logout')
-  showProfile.value = false
-}
-
-const handleClickOutside = (event) => {
-  if (!event.target.closest('.absolute') && !event.target.closest('button')) {
-    showNotifications.value = false
-    showProfile.value = false
-  }
-}
-
-const checkMobile = () => {
-  isMobile.value = window.innerWidth < 768
-}
-
-onMounted(() => {
-  document.addEventListener('click', handleClickOutside)
-  checkMobile()
-  window.addEventListener('resize', checkMobile)
-})
-onUnmounted(() => {
-  document.removeEventListener('click', handleClickOutside)
-  window.removeEventListener('resize', checkMobile)
-})
-
-watch(searchQuery, (newValue) => emit('search', newValue))
-</script>
