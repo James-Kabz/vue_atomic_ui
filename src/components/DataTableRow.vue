@@ -1,50 +1,3 @@
-<template>
-  <tr
-    :class="rowClasses"
-    @click="handleRowClick"
-  >
-    <!-- Selection Column -->
-    <td
-      v-if="selectable"
-      :class="checkboxCellClasses"
-    >
-      <Checkbox
-        :model-value="isSelected"
-        @update:model-value="$emit('toggle-selection', item)"
-      />
-    </td>
-
-    <!-- Data Columns -->
-    <td
-      v-for="column in columns"
-      :key="getColumnKey(column)"
-      :class="getCellClasses(column)"
-    >
-      <slot
-        :name="`cell-${getColumnKey(column)}`"
-        :item="item"
-        :value="getCellValue(item, column)"
-        :column="column"
-        :index="index"
-      >
-        {{ formatCellValue(item, column) }}
-      </slot>
-    </td>
-
-    <!-- Actions Column -->
-    <td
-      v-if="$slots.actions"
-      :class="actionsCellClasses"
-    >
-      <slot
-        name="actions"
-        :item="item"
-        :index="index"
-      />
-    </td>
-  </tr>
-</template>
-
 <script setup>
 import { computed } from 'vue'
 import { cva } from 'class-variance-authority'
@@ -258,3 +211,50 @@ const actionsCellClasses = computed(() =>
   )
 )
 </script>
+
+<template>
+  <tr
+    :class="rowClasses"
+    @click="handleRowClick"
+  >
+    <!-- Selection Column -->
+    <td
+      v-if="selectable"
+      :class="checkboxCellClasses"
+    >
+      <Checkbox
+        :model-value="isSelected"
+        @update:model-value="$emit('toggle-selection', item)"
+      />
+    </td>
+
+    <!-- Data Columns -->
+    <td
+      v-for="column in columns"
+      :key="getColumnKey(column)"
+      :class="getCellClasses(column)"
+    >
+      <slot
+        :name="`cell-${getColumnKey(column)}`"
+        :item="item"
+        :value="getCellValue(item, column)"
+        :column="column"
+        :index="index"
+      >
+        {{ formatCellValue(item, column) }}
+      </slot>
+    </td>
+
+    <!-- Actions Column -->
+    <td
+      v-if="$slots.actions"
+      :class="actionsCellClasses"
+    >
+      <slot
+        name="actions"
+        :item="item"
+        :index="index"
+      />
+    </td>
+  </tr>
+</template>
