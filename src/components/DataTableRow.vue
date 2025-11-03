@@ -60,9 +60,9 @@
     height="auto"
     @close="closeModal"
   >
-    <div class="p-6">
+    <div class="p-2">
       <h3 class="text-lg font-semibold mb-4">Full Text</h3>
-      <div class="text-sm text-gray-700 whitespace-pre-wrap break-words">
+      <div class="text-sm font-bold text-gray-700 whitespace-pre-wrap break-words">
         {{ modalContent }}
       </div>
     </div>
