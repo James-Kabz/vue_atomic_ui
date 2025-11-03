@@ -27,16 +27,13 @@
         :column="column"
         :index="index"
       >
-        <Tooltip
+        <span
           v-if="formatCellValue(item, column).toString().split(' ').length > 10"
-          :content="formatCellValue(item, column)"
-          placement="top"
-          trigger="hover"
+          class="cursor-pointer text-blue-600 hover:text-blue-800"
+          @click.stop="openModal(formatCellValue(item, column))"
         >
-          <span class="cursor-pointer">
-            {{ truncateText(formatCellValue(item, column)) }}
-          </span>
-        </Tooltip>
+          {{ truncateText(formatCellValue(item, column)) }}
+        </span>
         <span v-else>
           {{ formatCellValue(item, column) }}
         </span>
@@ -55,14 +52,29 @@
       />
     </td>
   </tr>
+
+  <!-- Modal for full text display -->
+  <Modal
+    v-model="showModal"
+    size="lg"
+    height="auto"
+    @close="closeModal"
+  >
+    <div class="p-6">
+      <h3 class="text-lg font-semibold mb-4">Full Text</h3>
+      <div class="text-sm text-gray-700 whitespace-pre-wrap break-words">
+        {{ modalContent }}
+      </div>
+    </div>
+  </Modal>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { cva } from 'class-variance-authority'
 import { cn } from '../utils/cn.js'
 import Checkbox from './Checkbox.vue'
-import Tooltip from './Tooltip.vue'
+import Modal from './Modal.vue'
 
 const props = defineProps({
   item: {
@@ -110,6 +122,9 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['toggle-selection', 'row-click'])
+
+const showModal = ref(false)
+const modalContent = ref('')
 
 
 // CVA variants
@@ -221,6 +236,16 @@ const truncateText = (text, maxWords = 10) => {
   const words = text.toString().split(' ')
   if (words.length <= maxWords) return text
   return words.slice(0, maxWords).join(' ') + '...'
+}
+
+const openModal = (content) => {
+  modalContent.value = content
+  showModal.value = true
+}
+
+const closeModal = () => {
+  showModal.value = false
+  modalContent.value = ''
 }
 
 
