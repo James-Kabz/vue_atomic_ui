@@ -1,9 +1,8 @@
 <template>
-  <div>
-    <tr
-      :class="rowClasses"
-      @click="handleRowClick"
-    >
+  <tr
+    :class="rowClasses"
+    @click="handleRowClick"
+  >
     <!-- Selection Column -->
     <td
       v-if="selectable"
@@ -28,16 +27,7 @@
         :column="column"
         :index="index"
       >
-        <span
-          v-if="formatCellValue(item, column).toString().split(' ').length > 10"
-          class="cursor-pointer text-blue-600 hover:text-blue-800"
-          @click.stop="openModal(formatCellValue(item, column))"
-        >
-          {{ truncateText(formatCellValue(item, column)) }}
-        </span>
-        <span v-else>
-          {{ formatCellValue(item, column) }}
-        </span>
+        {{ formatCellValue(item, column) }}
       </slot>
     </td>
 
@@ -53,30 +43,13 @@
       />
     </td>
   </tr>
-
-  <!-- Modal for full text display -->
-  <Modal
-    v-model="showModal"
-    size="lg"
-    height="auto"
-    @close="closeModal"
-  >
-    <div class="p-2">
-      <h3 class="text-md font-semibold mb-4">Full Text</h3>
-      <div class="text-xl font-bold text-gray-700 whitespace-pre-wrap break-words">
-        {{ modalContent }}
-      </div>
-    </div>
-  </Modal>
-  </div>
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { cva } from 'class-variance-authority'
 import { cn } from '../utils/cn.js'
 import Checkbox from './Checkbox.vue'
-import Modal from './Modal.vue'
 
 const props = defineProps({
   item: {
@@ -124,9 +97,6 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['toggle-selection', 'row-click'])
-
-const showModal = ref(false)
-const modalContent = ref('')
 
 
 // CVA variants
@@ -233,22 +203,6 @@ const formatCellValue = (item, column) => {
   return value
 }
 
-const truncateText = (text, maxWords = 10) => {
-  if (!text) return text
-  const words = text.toString().split(' ')
-  if (words.length <= maxWords) return text
-  return words.slice(0, maxWords).join(' ') + '...'
-}
-
-const openModal = (content) => {
-  modalContent.value = content
-  showModal.value = true
-}
-
-const closeModal = () => {
-  showModal.value = false
-  modalContent.value = ''
-}
 
 
 const handleRowClick = () => {

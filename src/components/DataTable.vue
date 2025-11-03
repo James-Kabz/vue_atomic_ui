@@ -4,12 +4,12 @@ import { cva } from 'class-variance-authority'
 import { cn } from '../utils/cn.js'
 import Checkbox from './Checkbox.vue'
 import DataTableHeader from './DataTableHeader.vue'
-import DataTableRow from './DataTableRow.vue'
 import DataTablePagination from './DataTablePagination.vue'
 import Icon from './Icon.vue'
 import Loader from './Loader.vue'
 import Button from './Button.vue'
 import Tooltip from './Tooltip.vue'
+import Modal from './Modal.vue'
 
 const props = defineProps({
   data: {
@@ -194,6 +194,8 @@ const currentPage = ref(1)
 const pageSize = ref(props.pageSize)
 const sortColumn = ref(props.sortBy)
 const sortDirection = ref(props.sortOrder)
+const showModal = ref(false)
+const modalContent = ref('')
 
 // CVA variants
 const tableContainerVariants = cva('bg-white border border-slate-200 rounded-lg overflow-hidden', {
@@ -487,6 +489,82 @@ const getDataCellClasses = () => {
   )
 }
 
+const getRowClasses = (item, index) => {
+  const baseClasses = []
+
+  // Striped rows
+  if (props.striped && index % 2 === 1) {
+    baseClasses.push('bg-slate-50/50')
+  }
+
+  // Hoverable rows
+  if (props.hoverable && !props.clickableRows) {
+    baseClasses.push('hover:bg-slate-50')
+  }
+
+  // Clickable rows
+  if (props.clickableRows) {
+    baseClasses.push('cursor-pointer hover:bg-slate-100')
+  }
+
+  // Selected rows
+  if (props.selectable && isRowSelected(item)) {
+    baseClasses.push('bg-blue-50 border-blue-200')
+  }
+
+  // Variant-specific classes
+  if (props.variant === 'bordered') {
+    baseClasses.push('border-b border-slate-200')
+  } else if (props.variant === 'minimal') {
+    baseClasses.push('border-b border-slate-100')
+  }
+
+  return cn('transition-colors', ...baseClasses)
+}
+
+const formatCellValue = (item, column) => {
+  const value = getCellValue(item, column)
+
+  if (typeof column === 'object' && column.formatter) {
+    return column.formatter(value, item)
+  }
+
+  if (value == null) {
+    return ''
+  }
+
+  if (value instanceof Date) {
+    return value.toLocaleDateString()
+  }
+
+  if (Array.isArray(value)) {
+    return value.join(', ')
+  }
+
+  return value
+}
+
+const truncateText = (text, maxWords = 10) => {
+  if (!text) return text
+  const words = text.toString().split(' ')
+  if (words.length <= maxWords) return text
+  return words.slice(0, maxWords).join(' ') + '...'
+}
+
+const openModal = (content) => {
+  // We'll need to emit this to parent or handle modal state here
+  // For now, let's create a simple modal state
+  if (!modalContent.value) {
+    modalContent.value = content
+    showModal.value = true
+  }
+}
+
+const closeModal = () => {
+  showModal.value = false
+  modalContent.value = ''
+}
+
 const checkboxCellClasses = computed(() => {
   const densityPadding = {
     compact: 'px-4 py-2',
@@ -737,42 +815,60 @@ defineExpose({
 
             <!-- Data Rows - Show when not loading and has data -->
             <template v-else-if="paginatedData.length > 0">
-              <DataTableRow
+              <tr
                 v-for="(item, index) in paginatedData"
                 :key="getRowKey(item, index)"
-                :item="item"
-                :columns="columns"
-                :index="index"
-                :selectable="selectable"
-                :is-selected="isRowSelected(item)"
-                :striped="striped"
-                :hoverable="hoverable"
-                :clickable-rows="clickableRows"
-                :density="density"
-                :row-loading="rowLoading[getRowKey(item, index)]"
-                :loading-color="loadingColor"
-                @toggle-selection="toggleRowSelection"
-                @row-click="handleRowClick"
+                :class="getRowClasses(item, index)"
+                @click="handleRowClick({ item, index })"
               >
-                <!-- Pass through cell slots -->
-                <template
+                <!-- Selection Column -->
+                <td
+                  v-if="selectable"
+                  :class="checkboxCellClasses"
+                >
+                  <Checkbox
+                    :model-value="isRowSelected(item)"
+                    @update:model-value="toggleRowSelection(item)"
+                  />
+                </td>
+
+                <!-- Data Columns -->
+                <td
                   v-for="column in columns"
                   :key="column.key"
-                  #[`cell-${column.key}`]="slotProps"
+                  :class="getDataCellClasses()"
                 >
                   <slot
                     :name="`cell-${column.key}`"
-                    v-bind="slotProps"
-                  />
-                </template>
+                    :item="item"
+                    :value="getCellValue(item, column)"
+                    :column="column"
+                    :index="index"
+                  >
+                    <span
+                      v-if="formatCellValue(item, column).toString().split(' ').length > 10"
+                      class="cursor-pointer text-blue-600 hover:text-blue-800"
+                      @click.stop="openModal(formatCellValue(item, column))"
+                    >
+                      {{ truncateText(formatCellValue(item, column)) }}
+                    </span>
+                    <span v-else>
+                      {{ formatCellValue(item, column) }}
+                    </span>
+                  </slot>
+                </td>
 
-                <!-- Pass through actions slot or render actions from prop -->
-                <template #actions="slotProps">
+                <!-- Actions Column -->
+                <td
+                  v-if="$slots.actions || (actions.length > 0 && showActionsColumn)"
+                  :class="actionsCellClasses"
+                >
                   <!-- Use slot if provided -->
                   <slot
                     v-if="$slots.actions"
                     name="actions"
-                    v-bind="slotProps"
+                    :item="item"
+                    :index="index"
                   />
 
                   <!-- Otherwise render actions from prop -->
@@ -781,7 +877,7 @@ defineExpose({
                     class="flex items-center gap-1 justify-center"
                   >
                     <Tooltip
-                      v-for="action in getVisibleActions(slotProps.item)"
+                      v-for="action in getVisibleActions(item)"
                       :key="action.key"
                       :content="action.tooltip || action.label || action.key"
                       placement="top"
@@ -789,9 +885,9 @@ defineExpose({
                       <Button
                         :variant="getButtonVariant(action.variant)"
                         size="xs"
-                        :disabled="isActionDisabled(action, slotProps.item) || !hasPermission(action, slotProps.item)"
+                        :disabled="isActionDisabled(action, item) || !hasPermission(action, item)"
                         class="h-8 w-8"
-                        @click.stop="handleActionClick(action, slotProps.item)"
+                        @click.stop="handleActionClick(action, item)"
                       >
                         <Icon
                           v-if="action.icon"
@@ -805,8 +901,8 @@ defineExpose({
                       </Button>
                     </Tooltip>
                   </div>
-                </template>
-              </DataTableRow>
+                </td>
+              </tr>
             </template>
 
             <!-- Empty State Row - Show when not loading and no data -->
@@ -859,6 +955,21 @@ defineExpose({
         <slot name="footer" />
       </template>
     </DataTablePagination>
+
+    <!-- Modal for full text display -->
+    <Modal
+      v-model="showModal"
+      size="lg"
+      height="auto"
+      @close="closeModal"
+    >
+      <div class="p-6">
+        <h3 class="text-lg font-semibold mb-4">Full Text</h3>
+        <div class="text-sm text-gray-700 whitespace-pre-wrap break-words">
+          {{ modalContent }}
+        </div>
+      </div>
+    </Modal>
   </div>
 </template>
 
