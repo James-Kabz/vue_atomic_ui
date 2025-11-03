@@ -61,8 +61,8 @@
     @close="closeModal"
   >
     <div class="p-2">
-      <h3 class="text-lg font-semibold mb-4">Full Text</h3>
-      <div class="text-sm font-bold text-gray-700 whitespace-pre-wrap break-words">
+      <h3 class="text-md font-semibold mb-4">Full Text</h3>
+      <div class="text-xl font-bold text-gray-700 whitespace-pre-wrap break-words">
         {{ modalContent }}
       </div>
     </div>
