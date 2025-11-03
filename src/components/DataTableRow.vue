@@ -27,18 +27,16 @@
         :column="column"
         :index="index"
       >
-        <span
+        <Tooltip
           v-if="formatCellValue(item, column).toString().split(' ').length > 10"
-          class="cursor-pointer"
-          @click.stop="toggleCellExpansion(getColumnKey(column))"
+          :content="formatCellValue(item, column)"
+          placement="top"
+          trigger="hover"
         >
-          <span v-if="!isCellExpanded(getColumnKey(column))">
+          <span class="cursor-pointer">
             {{ truncateText(formatCellValue(item, column)) }}
           </span>
-          <span v-else>
-            {{ formatCellValue(item, column) }}
-          </span>
-        </span>
+        </Tooltip>
         <span v-else>
           {{ formatCellValue(item, column) }}
         </span>
@@ -64,6 +62,7 @@ import { computed, ref } from 'vue'
 import { cva } from 'class-variance-authority'
 import { cn } from '../utils/cn.js'
 import Checkbox from './Checkbox.vue'
+import Tooltip from './Tooltip.vue'
 
 const props = defineProps({
   item: {
@@ -113,6 +112,8 @@ const props = defineProps({
 const emit = defineEmits(['toggle-selection', 'row-click'])
 
 const expandedCells = ref({})
+
+const showTooltip = ref(false)
 
 // CVA variants
 const rowVariants = cva('transition-colors', {
@@ -231,6 +232,14 @@ const toggleCellExpansion = (columnKey) => {
 
 const isCellExpanded = (columnKey) => {
   return expandedCells.value[columnKey] || false
+}
+
+const handleTooltipToggle = (columnKey, show) => {
+  if (show) {
+    showTooltip.value = columnKey
+  } else {
+    showTooltip.value = null
+  }
 }
 
 const handleRowClick = () => {
