@@ -27,7 +27,21 @@
         :column="column"
         :index="index"
       >
-        {{ formatCellValue(item, column) }}
+        <span
+          v-if="formatCellValue(item, column).toString().split(' ').length > 10"
+          class="cursor-pointer"
+          @click.stop="toggleCellExpansion(getColumnKey(column))"
+        >
+          <span v-if="!isCellExpanded(getColumnKey(column))">
+            {{ truncateText(formatCellValue(item, column)) }}
+          </span>
+          <span v-else>
+            {{ formatCellValue(item, column) }}
+          </span>
+        </span>
+        <span v-else>
+          {{ formatCellValue(item, column) }}
+        </span>
       </slot>
     </td>
 
@@ -46,7 +60,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { cva } from 'class-variance-authority'
 import { cn } from '../utils/cn.js'
 import Checkbox from './Checkbox.vue'
@@ -97,6 +111,8 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['toggle-selection', 'row-click'])
+
+const expandedCells = ref({})
 
 // CVA variants
 const rowVariants = cva('transition-colors', {
@@ -200,6 +216,21 @@ const formatCellValue = (item, column) => {
   }
 
   return value
+}
+
+const truncateText = (text, maxWords = 10) => {
+  if (!text) return text
+  const words = text.toString().split(' ')
+  if (words.length <= maxWords) return text
+  return words.slice(0, maxWords).join(' ') + '...'
+}
+
+const toggleCellExpansion = (columnKey) => {
+  expandedCells.value[columnKey] = !expandedCells.value[columnKey]
+}
+
+const isCellExpanded = (columnKey) => {
+  return expandedCells.value[columnKey] || false
 }
 
 const handleRowClick = () => {
