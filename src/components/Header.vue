@@ -14,10 +14,11 @@ const props = defineProps({
   mobileOpen: { type: Boolean, default: false },
   currentOrganisation: { type: Object, default: null },
   companyLogo: { type: String, default: '' },
-  organisationLogo: { type: String, default: '' }
+  organisationLogo: { type: String, default: '' },
+  organisations: { type: Array, default: () => [] }
 })
 
-const emit = defineEmits(['search', 'profile-action', 'logout', 'navigate', 'toggle-mobile-sidebar'])
+const emit = defineEmits(['search', 'profile-action', 'logout', 'navigate', 'toggle-mobile-sidebar', 'organisation-change'])
 
 const searchQuery = ref('')
 const showNotifications = ref(false)
@@ -25,6 +26,7 @@ const showProfile = ref(false)
 const notificationCount = ref(props.notifications.length)
 const showMobileSearch = ref(false)
 const isMobile = ref(false)
+const showOrganisationDropdown = ref(false)
 
 const userInitials = computed(() => {
   const name = props.user?.name || 'Guest'
@@ -43,6 +45,13 @@ const toggleNotifications = () => {
 
 const toggleProfile = () => {
   showProfile.value = !showProfile.value
+  showNotifications.value = false
+  showOrganisationDropdown.value = false
+}
+
+const toggleOrganisationDropdown = () => {
+  showOrganisationDropdown.value = !showOrganisationDropdown.value
+  showProfile.value = false
   showNotifications.value = false
 }
 
@@ -68,10 +77,16 @@ const handleLogout = () => {
   showProfile.value = false
 }
 
+const handleOrganisationChange = (organisation) => {
+  emit('organisation-change', organisation)
+  showOrganisationDropdown.value = false
+}
+
 const handleClickOutside = (event) => {
   if (!event.target.closest('.absolute') && !event.target.closest('button')) {
     showNotifications.value = false
     showProfile.value = false
+    showOrganisationDropdown.value = false
   }
 }
 
@@ -106,7 +121,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
         <!-- Organisation Info -->
         <div
           v-if="currentOrganisation"
-          class="mr-4 flex-shrink-0 bg-gradient-to-r from-blue-50 to-indigo-50 px-3 py-2 rounded-lg border border-blue-100 flex items-center gap-3"
+          class="mr-4 flex-shrink-0 bg-gradient-to-r from-blue-50 to-indigo-50 px-3 py-2 rounded-lg border border-blue-100 flex items-center gap-3 relative"
         >
           <!-- Company Logo (Software Company) -->
           <div
@@ -132,7 +147,43 @@ watch(searchQuery, (newValue) => emit('search', newValue))
             />
           </div>
 
-          <div class="min-w-0">
+          <!-- Organisation Switcher -->
+          <button
+            v-if="organisations.length > 1"
+            class="flex items-center gap-2 min-w-0 cursor-pointer hover:bg-blue-100/50 rounded-md px-2 py-1 transition-colors"
+            @click="toggleOrganisationDropdown"
+          >
+            <div class="min-w-0">
+              <p class="text-lg font-bold text-blue-900 truncate max-w-[200px]">
+                {{ currentOrganisation.organisation_name }}
+              </p>
+              <p
+                v-if="currentOrganisation.role"
+                class="text-xs text-blue-600 truncate font-medium"
+              >
+                {{ currentOrganisation.role }}
+              </p>
+            </div>
+            <svg
+              class="w-4 h-4 text-blue-600 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                :d="showOrganisationDropdown ? 'm5 15 7-7 7 7' : 'm19 9-7 7-7-7'"
+              />
+            </svg>
+          </button>
+
+          <!-- Static display when only one organisation -->
+          <div
+            v-else
+            class="min-w-0"
+          >
             <p class="text-lg font-bold text-blue-900 truncate max-w-[200px]">
               {{ currentOrganisation.organisation_name }}
             </p>
@@ -143,6 +194,77 @@ watch(searchQuery, (newValue) => emit('search', newValue))
               {{ currentOrganisation.role }}
             </p>
           </div>
+
+          <!-- Organisation Dropdown -->
+          <transition
+            enter-active-class="transition-all duration-200 ease-out"
+            leave-active-class="transition-all duration-200 ease-in"
+            enter-from-class="opacity-0 translate-y-2 scale-95"
+            enter-to-class="opacity-100 translate-y-0 scale-100"
+            leave-from-class="opacity-100 translate-y-0 scale-100"
+            leave-to-class="opacity-0 translate-y-2 scale-95"
+          >
+            <div
+              v-if="showOrganisationDropdown"
+              class="absolute top-full left-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50 max-h-96 overflow-y-auto"
+            >
+              <div class="p-3 border-b border-gray-200">
+                <h3 class="text-sm font-semibold text-gray-900">
+                  Switch Organisation
+                </h3>
+                <p class="text-xs text-gray-500 mt-1">
+                  Select an organisation to view its data
+                </p>
+              </div>
+              <div class="py-2">
+                <button
+                  v-for="org in organisations"
+                  :key="org.id || org.organisation_name"
+                  :class="cn(
+                    'flex items-center w-full px-3 py-2.5 text-sm transition-colors',
+                    org.id === currentOrganisation.id
+                      ? 'bg-blue-50 text-blue-700 border-l-4 border-blue-500'
+                      : 'text-gray-700 hover:bg-gray-50'
+                  )"
+                  @click="handleOrganisationChange(org)"
+                >
+                  <div
+                    v-if="org.logo"
+                    class="flex-shrink-0 mr-3"
+                  >
+                    <img
+                      :src="org.logo"
+                      :alt="`${org.organisation_name} logo`"
+                      class="w-6 h-6 object-contain rounded"
+                    />
+                  </div>
+                  <div class="flex-1 text-left min-w-0">
+                    <p class="font-medium truncate">
+                      {{ org.organisation_name }}
+                    </p>
+                    <p
+                      v-if="org.role"
+                      class="text-xs text-gray-500 truncate"
+                    >
+                      {{ org.role }}
+                    </p>
+                  </div>
+                  <svg
+                    v-if="org.id === currentOrganisation.id"
+                    class="w-4 h-4 text-blue-500 flex-shrink-0 ml-2"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 01 1.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </transition>
         </div>
 
         <!-- Breadcrumb -->
