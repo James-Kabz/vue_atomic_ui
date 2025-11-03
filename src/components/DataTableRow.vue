@@ -1,8 +1,9 @@
 <template>
-  <tr
-    :class="rowClasses"
-    @click="handleRowClick"
-  >
+  <div>
+    <tr
+      :class="rowClasses"
+      @click="handleRowClick"
+    >
     <!-- Selection Column -->
     <td
       v-if="selectable"
@@ -67,6 +68,7 @@
       </div>
     </div>
   </Modal>
+  </div>
 </template>
 
 <script setup>

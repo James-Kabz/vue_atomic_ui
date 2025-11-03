@@ -73,7 +73,8 @@ const emit = defineEmits([
   'navigate',
   'search',
   'profile-action',
-  'logout'
+  'logout',
+  'organisation-change'
 ])
 
 const profileMenuItems = [
@@ -205,6 +206,10 @@ const handleLogout = () => {
   emit('logout')
 }
 
+const handleOrganisationChange = (organisation) => {
+  emit('organisation-change', organisation)
+}
+
 // Watch for route changes
 watch(() => route.path, (newPath) => {
   currentRoute.value = newPath
@@ -248,13 +253,16 @@ defineExpose({
       :notifications="[]"
       :profile-menu-items="profileMenuItems"
       :mobile-open="mobileOpen"
-      :organisation-name="user?.organisation?.organisation_name || 'Risk & Compliance'"
-      :company-logo="user?.organisation?.logo || ''"
+      :current-organisation="user?.currentOrganisation || user?.organisations?.[0]"
+      :company-logo="user?.companyLogo || ''"
+      :organisation-logo="user?.currentOrganisation?.logo || user?.organisations?.[0]?.logo || ''"
+      :organisations="user?.organisations || []"
       @search="handleSearch"
       @profile-action="handleProfileAction"
       @logout="handleLogout"
       @navigate="handleNavigation"
       @toggle-mobile-sidebar="handleMobileSidebarToggle"
+      @organisation-change="handleOrganisationChange"
     />
 
     <!-- Main Content -->
