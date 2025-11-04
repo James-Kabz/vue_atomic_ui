@@ -38,19 +38,39 @@
     </div>
     
     <div
-      v-if="files.length > 0"
+      v-if="files.length > 0 || uploadingFiles.length > 0"
       class="mt-4 space-y-2"
     >
+      <!-- Uploading files -->
+      <div
+        v-for="(fileItem, index) in uploadingFiles"
+        :key="`uploading-${index}`"
+        class="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg shadow-sm"
+      >
+        <div class="flex items-center space-x-3">
+          <CircularProgress
+            :value="fileItem.progress"
+            size="sm"
+            class="flex-shrink-0"
+          />
+          <div class="flex flex-col">
+            <span class="text-sm font-medium text-gray-900">{{ fileItem.file.name }}</span>
+            <span class="text-xs text-gray-500">Uploading... {{ Math.round(fileItem.progress) }}%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Uploaded files -->
       <div
         v-for="(file, index) in files"
-        :key="index"
+        :key="`uploaded-${index}`"
         class="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow"
       >
         <div class="flex items-center space-x-3">
-          <div class="bg-blue-100 rounded-md p-2">
+          <div class="bg-green-100 rounded-md p-2">
             <Icon
               icon="file"
-              class="h-5 w-5 text-blue-600"
+              class="h-5 w-5 text-green-600"
             />
           </div>
           <div class="flex flex-col">
@@ -77,6 +97,7 @@ import { ref, computed } from 'vue'
 import { cva } from 'class-variance-authority'
 import { cn } from '../utils/cn.js'
 import Icon from './Icon.vue'
+import CircularProgress from './CircularProgress.vue'
 
 const props = defineProps({
   multiple: Boolean,
@@ -94,6 +115,7 @@ const emit = defineEmits(['files-selected', 'file-removed'])
 const files = ref([])
 const isDragOver = ref(false)
 const fileInput = ref(null)
+const uploadingFiles = ref([])
 
 const dropzoneVariants = cva(
   'border-2 border-dashed rounded-xl cursor-pointer transition-all duration-300 ease-in-out shadow-sm',
@@ -156,14 +178,39 @@ const addFiles = (newFiles) => {
     }
     return true
   })
-  
-  if (props.multiple) {
-    files.value.push(...validFiles)
-  } else {
-    files.value = validFiles.slice(0, 1)
-  }
-  
-  emit('files-selected', files.value)
+
+  // Add files to uploading state with progress
+  const filesWithProgress = validFiles.map(file => ({
+    file,
+    progress: 0,
+    uploading: true
+  }))
+
+  uploadingFiles.value.push(...filesWithProgress)
+
+  // Simulate upload progress
+  filesWithProgress.forEach((fileItem, index) => {
+    const interval = setInterval(() => {
+      fileItem.progress += Math.random() * 15
+      if (fileItem.progress >= 100) {
+        fileItem.progress = 100
+        fileItem.uploading = false
+        clearInterval(interval)
+
+        // Move to files array after upload completes
+        if (props.multiple) {
+          files.value.push(fileItem.file)
+        } else {
+          files.value = [fileItem.file]
+        }
+
+        // Remove from uploading
+        uploadingFiles.value.splice(uploadingFiles.value.indexOf(fileItem), 1)
+
+        emit('files-selected', files.value)
+      }
+    }, 200)
+  })
 }
 
 const removeFile = (index) => {
