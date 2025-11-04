@@ -189,7 +189,7 @@ const addFiles = (newFiles) => {
   uploadingFiles.value.push(...filesWithProgress)
 
   // Simulate upload progress
-  filesWithProgress.forEach((fileItem, index) => {
+  filesWithProgress.forEach((fileItem) => {
     const interval = setInterval(() => {
       fileItem.progress += Math.random() * 15
       if (fileItem.progress >= 100) {
