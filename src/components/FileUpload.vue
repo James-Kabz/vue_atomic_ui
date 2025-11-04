@@ -53,7 +53,7 @@
             :max="100"
             size="sm"
             variant="default"
-            :dynamic-color="false"
+            :dynamic-color="true"
             class="flex-shrink-0"
           />
           <div class="flex flex-col">
@@ -96,7 +96,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, reactive } from 'vue'
 import { cva } from 'class-variance-authority'
 import { cn } from '../utils/cn.js'
 import Icon from './Icon.vue'
@@ -183,7 +183,7 @@ const addFiles = (newFiles) => {
   })
 
   // Add files to uploading state with progress
-  const filesWithProgress = validFiles.map(file => ({
+  const filesWithProgress = validFiles.map(file => reactive({
     file,
     progress: 0,
     uploading: true
@@ -197,10 +197,10 @@ const addFiles = (newFiles) => {
     const intervalTime = 50 // Update every 50ms
     const totalSteps = duration / intervalTime
     const increment = 100 / totalSteps
-    
+
     const interval = setInterval(() => {
       fileItem.progress += increment
-      
+
       if (fileItem.progress >= 100) {
         fileItem.progress = 100
         fileItem.uploading = false
