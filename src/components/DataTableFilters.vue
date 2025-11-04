@@ -3,196 +3,104 @@
     <!-- Main Filters Bar -->
     <div :class="filtersClasses">
       <!-- Search Input -->
-      <div
-        v-if="showSearch"
-        class="flex-1 min-w-80 max-w-md"
-      >
+      <div v-if="showSearch" class="flex-1 min-w-80 max-w-md">
         <div class="relative group">
-          <Icon
-            icon="magnifying-glass"
-            :class="searchIconClasses"
-          />
-          <input
-            :model-value="searchQuery"
-            :placeholder="searchPlaceholder"
-            :class="searchInputClasses"
-            @input="$emit('update:searchQuery', $event.target.value)"
-          >
-          <button
-            v-if="searchQuery"
-            :class="clearSearchButtonClasses"
-            @click="$emit('update:searchQuery', '')"
-          >
-            <Icon
-              icon="xmark"
-              class="w-3 h-3"
-            />
+          <Icon icon="magnifying-glass" :class="searchIconClasses" />
+          <input :model-value="searchQuery" :placeholder="searchPlaceholder" :class="searchInputClasses"
+            @input="$emit('update:searchQuery', $event.target.value)">
+          <button v-if="searchQuery" :class="clearSearchButtonClasses" @click="$emit('update:searchQuery', '')">
+            <Icon icon="xmark" class="w-3 h-3" />
           </button>
         </div>
       </div>
 
       <!-- Dynamic Select Filters -->
-      <div
-        v-for="filter in selectFilters"
-        :key="filter.key"
-        class="min-w-36"
-      >
+      <div v-for="filter in selectFilters" :key="filter.key" class="min-w-36">
         <div class="relative">
-          <Select
-            :model-value="filter.value"
-            :class="selectClasses"
-            @change="updateSelectFilter(filter.key, $event.target.value)"
-          >
+          <Select :model-value="filter.value" :class="selectClasses"
+            @change="updateSelectFilter(filter.key, $event.target.value)">
             <option value="">
               {{ filter.placeholder || `All ${filter.label}` }}
             </option>
-            <option
-              v-for="option in filter.options"
-              :key="option.value"
-              :value="option.value"
-            >
+            <option v-for="option in filter.options" :key="option.value" :value="option.value">
               {{ option.label }}
             </option>
           </Select>
-          <Icon
-            icon="chevron-down"
-            class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
-          />
+          <Icon icon="chevron-down"
+            class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
         </div>
       </div>
 
       <!-- Legacy Status Filter (for backward compatibility) -->
-      <div
-        v-if="showFilters && statusOptions.length > 0"
-        class="min-w-36"
-      >
+      <div v-if="showFilters && statusOptions.length > 0" class="min-w-36">
         <div class="relative">
-          <Select
-            :model-value="selectedStatus"
-            :class="selectClasses"
-            @change="$emit('update:selectedStatus', $event.target.value)"
-          >
+          <Select :model-value="selectedStatus" :class="selectClasses"
+            @change="$emit('update:selectedStatus', $event.target.value)">
             <option value="">
               All Status
             </option>
-            <option
-              v-for="option in statusOptions"
-              :key="option.value"
-              :value="option.value"
-            >
+            <option v-for="option in statusOptions" :key="option.value" :value="option.value">
               {{ option.label }}
             </option>
           </Select>
-          <Icon
-            icon="chevron-down"
-            class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
-          />
+          <Icon icon="chevron-down"
+            class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
         </div>
       </div>
 
       <!-- Advanced Filters Toggle -->
-      <button
-        v-if="showFilters && (dateFilters.length > 0 || hasAdvancedFilters)"
-        :class="advancedFiltersToggleClasses"
-        @click="toggleAdvancedFilters"
-      >
-        <Icon
-          icon="filter"
-          class="w-4 h-4"
-        />
+      <button v-if="showFilters && (dateFilters.length > 0 || hasAdvancedFilters)" :class="advancedFiltersToggleClasses"
+        @click="toggleAdvancedFilters">
+        <Icon icon="filter" class="w-4 h-4" />
         Filters
-        <span
-          v-if="activeFiltersCount > 0"
-          :class="filterCountBadgeClasses"
-        >
+        <span v-if="activeFiltersCount > 0" :class="filterCountBadgeClasses">
           {{ activeFiltersCount }}
         </span>
-        <Icon
-          :icon="showAdvancedFilters ? 'chevron-up' : 'chevron-down'"
-          class="w-4 h-4 ml-1"
-        />
+        <Icon :icon="showAdvancedFilters ? 'chevron-up' : 'chevron-down'" class="w-4 h-4 ml-1" />
       </button>
 
       <!-- Custom Filters Slot -->
-      <div
-        v-if="$slots.filters"
-        class="flex items-center gap-2"
-      >
+      <div v-if="$slots.filters" class="flex items-center gap-2">
         <slot name="filters" />
       </div>
 
       <!-- Actions -->
       <div class="flex items-center gap-3 ml-auto">
         <!-- File Upload Button -->
-        <FileUpload
-          v-if="showFileUpload"
-          :multiple="fileUploadMultiple"
-          :accept="fileUploadAccept"
-          :max-size="fileUploadMaxSize"
-          :variant="fileUploadVariant"
-          @files-selected="$emit('files-selected', $event)"
-          @file-removed="$emit('file-removed', $event)"
-        />
+        <!-- File Upload Button -->
+        <div v-if="showFileUpload">
+          <Button variant="default" size="lg" @click="openFileUploadModal">
+            <Icon icon="upload" class="w-4 h-4 mr-2" />
+            Upload Files
+          </Button>
+        </div>
 
         <!-- Clear Filters -->
-        <Button
-          v-if="hasActiveFilters"
-          :class="clearFiltersButtonClasses"
-          @click="clearFilters"
-        >
-          <Icon
-            icon="rotate-left"
-            class="w-4 h-4 mr-2"
-          />
+        <Button v-if="hasActiveFilters" :class="clearFiltersButtonClasses" @click="clearFilters">
+          <Icon icon="rotate-left" class="w-4 h-4 mr-2" />
           Clear All
         </Button>
 
         <!-- Export Button -->
-        <Button
-          v-if="showExport"
-          :class="exportButtonClasses"
-          @click="$emit('export')"
-        >
-          <Icon
-            icon="download"
-            class="w-4 h-4 mr-2"
-          />
+        <Button v-if="showExport" :class="exportButtonClasses" @click="$emit('export')">
+          <Icon icon="download" class="w-4 h-4 mr-2" />
           Export
         </Button>
 
         <!-- Add Button -->
         <div v-if="showAdd && isAddButtonVisible">
           <!-- Custom Add Button from prop -->
-          <Button
-            v-if="hasAddButton"
-            :variant="addButton.variant || 'success'"
-            :size="addButton.size || 'lg'"
-            :disabled="isAddButtonDisabled || !hasAddButtonPermission"
-            :title="addButton.tooltip"
-            @click="handleAddButtonClick"
-          >
-            <Icon
-              v-if="addButton.icon"
-              :icon="addButton.icon"
-              class="w-4 h-4 mr-2"
-            />
+          <Button v-if="hasAddButton" :variant="addButton.variant || 'success'" :size="addButton.size || 'lg'"
+            :disabled="isAddButtonDisabled || !hasAddButtonPermission" :title="addButton.tooltip"
+            @click="handleAddButtonClick">
+            <Icon v-if="addButton.icon" :icon="addButton.icon" class="w-4 h-4 mr-2" />
             {{ addButton.label || 'Add' }}
           </Button>
 
           <!-- Add Button Slot (fallback) -->
-          <slot
-            v-else
-            name="add"
-          >
-            <Button
-              variant="success"
-              size="lg"
-              @click="$emit('add')"
-            >
-              <Icon
-                icon="plus"
-                class="w-4 h-4 mr-2"
-              />
+          <slot v-else name="add">
+            <Button variant="success" size="lg" @click="$emit('add')">
+              <Icon icon="plus" class="w-4 h-4 mr-2" />
               Add
             </Button>
           </slot>
@@ -201,17 +109,10 @@
     </div>
 
     <!-- Advanced Filters Panel -->
-    <div
-      v-if="showFilters && showAdvancedFilters"
-      :class="advancedFiltersContainerClasses"
-    >
+    <div v-if="showFilters && showAdvancedFilters" :class="advancedFiltersContainerClasses">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Date Range Filters -->
-        <div 
-          v-for="dateFilter in dateFilters" 
-          :key="dateFilter.key" 
-          class="space-y-3"
-        >
+        <div v-for="dateFilter in dateFilters" :key="dateFilter.key" class="space-y-3">
           <div class="flex items-center justify-between">
             <label :class="dateFilterLabelClasses">
               {{ dateFilter.label }}
@@ -220,55 +121,30 @@
               {{ hasDateFilterValues(dateFilter) ? 'Active' : 'Inactive' }}
             </span>
           </div>
-          
+
           <div class="flex items-center gap-3">
             <div class="relative flex-1">
-              <Icon
-                icon="calendar" 
-                class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
-              />
-              <input 
-                type="date" 
-                :model-value="dateFilter.from" 
-                :class="dateInputClasses"
-                :placeholder="`From ${dateFilter.label}`" 
-                @input="updateDateFilter(dateFilter.key, 'from', $event.target.value)"
-              >
+              <Icon icon="calendar" class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input type="date" :model-value="dateFilter.from" :class="dateInputClasses"
+                :placeholder="`From ${dateFilter.label}`"
+                @input="updateDateFilter(dateFilter.key, 'from', $event.target.value)">
             </div>
             <span :class="dateRangeSeparatorClasses">to</span>
             <div class="relative flex-1">
-              <Icon 
-                icon="calendar" 
-                class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
-              />
-              <input 
-                type="date" 
-                :model-value="dateFilter.to" 
-                :class="dateInputClasses"
-                :placeholder="`To ${dateFilter.label}`" 
-                @input="updateDateFilter(dateFilter.key, 'to', $event.target.value)"
-              >
+              <Icon icon="calendar" class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input type="date" :model-value="dateFilter.to" :class="dateInputClasses"
+                :placeholder="`To ${dateFilter.label}`"
+                @input="updateDateFilter(dateFilter.key, 'to', $event.target.value)">
             </div>
-            <button
-              v-if="hasDateFilterValues(dateFilter)"
-              :class="clearDateFilterButtonClasses"
-              title="Clear this filter"
-              @click="clearDateFilter(dateFilter.key)"
-            >
-              <Icon
-                icon="xmark"
-                class="w-4 h-4"
-              />
+            <button v-if="hasDateFilterValues(dateFilter)" :class="clearDateFilterButtonClasses"
+              title="Clear this filter" @click="clearDateFilter(dateFilter.key)">
+              <Icon icon="xmark" class="w-4 h-4" />
             </button>
           </div>
         </div>
 
         <!-- Number Range Filters -->
-        <div 
-          v-for="numberFilter in numberFilters" 
-          :key="numberFilter.key" 
-          class="space-y-3"
-        >
+        <div v-for="numberFilter in numberFilters" :key="numberFilter.key" class="space-y-3">
           <div class="flex items-center justify-between">
             <label :class="dateFilterLabelClasses">
               {{ numberFilter.label }}
@@ -277,49 +153,28 @@
               {{ hasNumberFilterValues(numberFilter) ? 'Active' : 'Inactive' }}
             </span>
           </div>
-          
+
           <div class="flex items-center gap-3">
             <div class="relative flex-1">
-              <input 
-                type="number" 
-                :model-value="numberFilter.min" 
-                :class="dateInputClasses"
-                :placeholder="`Min ${numberFilter.label}`" 
-                :step="numberFilter.step || 1"
-                @input="updateNumberFilter(numberFilter.key, 'min', $event.target.value)"
-              >
+              <input type="number" :model-value="numberFilter.min" :class="dateInputClasses"
+                :placeholder="`Min ${numberFilter.label}`" :step="numberFilter.step || 1"
+                @input="updateNumberFilter(numberFilter.key, 'min', $event.target.value)">
             </div>
             <span :class="dateRangeSeparatorClasses">to</span>
             <div class="relative flex-1">
-              <input 
-                type="number" 
-                :model-value="numberFilter.max" 
-                :class="dateInputClasses"
-                :placeholder="`Max ${numberFilter.label}`" 
-                :step="numberFilter.step || 1"
-                @input="updateNumberFilter(numberFilter.key, 'max', $event.target.value)"
-              >
+              <input type="number" :model-value="numberFilter.max" :class="dateInputClasses"
+                :placeholder="`Max ${numberFilter.label}`" :step="numberFilter.step || 1"
+                @input="updateNumberFilter(numberFilter.key, 'max', $event.target.value)">
             </div>
-            <button
-              v-if="hasNumberFilterValues(numberFilter)"
-              :class="clearDateFilterButtonClasses"
-              title="Clear this filter"
-              @click="clearNumberFilter(numberFilter.key)"
-            >
-              <Icon
-                icon="xmark"
-                class="w-4 h-4"
-              />
+            <button v-if="hasNumberFilterValues(numberFilter)" :class="clearDateFilterButtonClasses"
+              title="Clear this filter" @click="clearNumberFilter(numberFilter.key)">
+              <Icon icon="xmark" class="w-4 h-4" />
             </button>
           </div>
         </div>
 
         <!-- Multi-Select Filters -->
-        <div 
-          v-for="multiFilter in multiSelectFilters" 
-          :key="multiFilter.key" 
-          class="space-y-3"
-        >
+        <div v-for="multiFilter in multiSelectFilters" :key="multiFilter.key" class="space-y-3">
           <div class="flex items-center justify-between">
             <label :class="dateFilterLabelClasses">
               {{ multiFilter.label }}
@@ -328,48 +183,28 @@
               {{ hasMultiSelectFilterValues(multiFilter) ? `${multiFilter.selected.length} selected` : 'None' }}
             </span>
           </div>
-          
+
           <div class="relative">
-            <Select
-              :model-value="''"
-              :class="selectClasses"
-              @change="toggleMultiSelectOption(multiFilter.key, $event.target.value)"
-            >
+            <Select :model-value="''" :class="selectClasses"
+              @change="toggleMultiSelectOption(multiFilter.key, $event.target.value)">
               <option value="">
                 Select {{ multiFilter.label }}
               </option>
-              <option
-                v-for="option in multiFilter.options"
-                :key="option.value"
-                :value="option.value"
-              >
+              <option v-for="option in multiFilter.options" :key="option.value" :value="option.value">
                 {{ option.label }}
               </option>
             </Select>
-            <Icon
-              icon="chevron-down"
-              class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
-            />
+            <Icon icon="chevron-down"
+              class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
           </div>
-          
-          <div
-            v-if="multiFilter.selected.length > 0"
-            class="flex flex-wrap gap-2 mt-2"
-          >
-            <span
-              v-for="selectedValue in multiFilter.selected"
-              :key="selectedValue"
-              class="inline-flex items-center gap-1 bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full"
-            >
+
+          <div v-if="multiFilter.selected.length > 0" class="flex flex-wrap gap-2 mt-2">
+            <span v-for="selectedValue in multiFilter.selected" :key="selectedValue"
+              class="inline-flex items-center gap-1 bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
               {{ getMultiSelectOptionLabel(multiFilter, selectedValue) }}
-              <button
-                class="hover:bg-blue-200 rounded-full p-0.5"
-                @click="removeMultiSelectOption(multiFilter.key, selectedValue)"
-              >
-                <Icon
-                  icon="xmark"
-                  class="w-3 h-3"
-                />
+              <button class="hover:bg-blue-200 rounded-full p-0.5"
+                @click="removeMultiSelectOption(multiFilter.key, selectedValue)">
+                <Icon icon="xmark" class="w-3 h-3" />
               </button>
             </span>
           </div>
@@ -378,47 +213,52 @@
     </div>
 
     <!-- Active Filters Display -->
-    <div
-      v-if="showFilters && activeFiltersDisplay.length > 0"
-      :class="activeFiltersContainerClasses"
-    >
+    <div v-if="showFilters && activeFiltersDisplay.length > 0" :class="activeFiltersContainerClasses">
       <div class="flex items-center gap-3 flex-wrap">
         <span :class="activeFiltersLabelClasses">Active filters:</span>
-        <div
-          v-for="filter in activeFiltersDisplay"
-          :key="filter.key"
-          :class="activeFilterTagClasses"
-        >
-          <Icon
-            :icon="filter.icon"
-            class="w-3 h-3"
-          />
+        <div v-for="filter in activeFiltersDisplay" :key="filter.key" :class="activeFilterTagClasses">
+          <Icon :icon="filter.icon" class="w-3 h-3" />
           <span>{{ filter.label }}: {{ filter.value }}</span>
-          <button
-            :class="activeFilterRemoveButtonClasses"
-            @click="removeFilter(filter.key)"
-          >
-            <Icon
-              icon="xmark"
-              class="w-3 h-3"
-            />
+          <button :class="activeFilterRemoveButtonClasses" @click="removeFilter(filter.key)">
+            <Icon icon="xmark" class="w-3 h-3" />
           </button>
         </div>
       </div>
     </div>
 
     <!-- Table Info Bar -->
-    <div
-      v-if="showTableInfo"
-      class="px-6 py-3 bg-gray-50 border-t border-gray-200"
-    >
+    <div v-if="showTableInfo" class="px-6 py-3 bg-gray-50 border-t border-gray-200">
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-4">
           <span class="text-sm text-gray-600">
-            <span class="font-medium">{{ totalItems || 0 }}</span> 
+            <span class="font-medium">{{ totalItems || 0 }}</span>
             {{ itemLabel || 'items' }} found
           </span>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- File Upload Modal -->
+  <div v-if="showFileUpload && isFileUploadModalOpen"
+    class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+    @click.self="closeFileUploadModal">
+    <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold text-gray-900">Upload Files</h3>
+        <button class="text-gray-400 hover:text-gray-600 p-2 hover:bg-gray-100 rounded-full transition-all"
+          @click="closeFileUploadModal">
+          <Icon icon="xmark" class="w-5 h-5" />
+        </button>
+      </div>
+
+      <FileUpload :multiple="fileUploadMultiple" :accept="fileUploadAccept" :max-size="fileUploadMaxSize"
+        :variant="fileUploadVariant" @files-selected="handleFilesSelected" @file-removed="handleFileRemoved" />
+
+      <div class="flex justify-end gap-3 mt-6">
+        <Button variant="default" @click="closeFileUploadModal">
+          Close
+        </Button>
       </div>
     </div>
   </div>
@@ -611,6 +451,7 @@ const emit = defineEmits([
 
 // Local state
 const showAdvancedFilters = ref(false)
+const isFileUploadModalOpen = ref(false)
 
 // Add button configuration helpers
 const hasAddButton = computed(() => {
@@ -643,6 +484,25 @@ const isAddButtonDisabled = computed(() => {
   }
   return false
 })
+
+const openFileUploadModal = () => {
+  isFileUploadModalOpen.value = true
+}
+
+const closeFileUploadModal = () => {
+  isFileUploadModalOpen.value = false
+}
+
+const handleFilesSelected = (files) => {
+  emit('files-selected', files)
+  // Optionally close modal after upload completes
+  // closeFileUploadModal()
+}
+
+const handleFileRemoved = (files) => {
+  emit('file-removed', files)
+}
+
 
 const handleAddButtonClick = () => {
   if (isAddButtonDisabled.value || !hasAddButtonPermission.value) {
@@ -736,9 +596,8 @@ const clearDateFilter = (key) => {
 
 const getDateFilterStatusClasses = (dateFilter) => {
   const hasValues = hasDateFilterValues(dateFilter)
-  return `text-xs px-2 py-1 rounded ${
-    hasValues ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'
-  }`
+  return `text-xs px-2 py-1 rounded ${hasValues ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'
+    }`
 }
 
 const updateDateFilter = (key, type, value) => {
@@ -762,9 +621,8 @@ const clearNumberFilter = (key) => {
 
 const getNumberFilterStatusClasses = (numberFilter) => {
   const hasValues = hasNumberFilterValues(numberFilter)
-  return `text-xs px-2 py-1 rounded ${
-    hasValues ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'
-  }`
+  return `text-xs px-2 py-1 rounded ${hasValues ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'
+    }`
 }
 
 const updateNumberFilter = (key, type, value) => {
@@ -781,14 +639,13 @@ const hasMultiSelectFilterValues = (multiFilter) => {
 
 const getMultiSelectFilterStatusClasses = (multiFilter) => {
   const hasValues = hasMultiSelectFilterValues(multiFilter)
-  return `text-xs px-2 py-1 rounded ${
-    hasValues ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'
-  }`
+  return `text-xs px-2 py-1 rounded ${hasValues ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'
+    }`
 }
 
 const toggleMultiSelectOption = (key, value) => {
   if (!value) return
-  
+
   const updatedFilters = props.multiSelectFilters.map(filter => {
     if (filter.key === key) {
       const selected = filter.selected || []
@@ -841,9 +698,9 @@ const hasActiveFilters = computed(() => {
   const hasDynamicDates = props.dateFilters.some(f => f.from || f.to)
   const hasNumberFilters = props.numberFilters.some(f => f.min || f.max)
   const hasMultiSelectFilters = props.multiSelectFilters.some(f => f.selected && f.selected.length > 0)
-  
-  return hasSearch || hasStatus || hasLegacyDates || hasSelectFilters || 
-         hasDynamicDates || hasNumberFilters || hasMultiSelectFilters
+
+  return hasSearch || hasStatus || hasLegacyDates || hasSelectFilters ||
+    hasDynamicDates || hasNumberFilters || hasMultiSelectFilters
 })
 
 const activeFiltersCount = computed(() => {
@@ -1014,9 +871,9 @@ const selectClasses = computed(() =>
 const advancedFiltersToggleClasses = computed(() => {
   const isActive = showAdvancedFilters.value || hasActiveFilters.value
   return cn(
-    buttonVariants({ 
-      variant: isActive ? 'primary' : 'default', 
-      size: 'lg' 
+    buttonVariants({
+      variant: isActive ? 'primary' : 'default',
+      size: 'lg'
     }),
     'gap-2'
   )
@@ -1076,14 +933,14 @@ const clearFilters = () => {
   emit('update:selectedStatus', '')
   emit('update:dateFrom', '')
   emit('update:dateTo', '')
-  
+
   // Clear select filters
   const clearedSelectFilters = props.selectFilters.map(filter => ({
     ...filter,
     value: ''
   }))
   emit('update:selectFilters', clearedSelectFilters)
-  
+
   // Clear date filters
   const clearedDateFilters = props.dateFilters.map(filter => ({
     ...filter,
@@ -1091,7 +948,7 @@ const clearFilters = () => {
     to: ''
   }))
   emit('update:dateFilters', clearedDateFilters)
-  
+
   // Clear number filters
   const clearedNumberFilters = props.numberFilters.map(filter => ({
     ...filter,
@@ -1099,14 +956,14 @@ const clearFilters = () => {
     max: ''
   }))
   emit('update:numberFilters', clearedNumberFilters)
-  
+
   // Clear multi-select filters
   const clearedMultiSelectFilters = props.multiSelectFilters.map(filter => ({
     ...filter,
     selected: []
   }))
   emit('update:multiSelectFilters', clearedMultiSelectFilters)
-  
+
   emit('clear-filters')
 }
 
@@ -1127,7 +984,7 @@ const removeFilter = (filterKey) => {
       // Handle select filters
       if (filterKey.startsWith('select-')) {
         const selectKey = filterKey.replace('select-', '')
-        const updatedFilters = props.selectFilters.map(filter => 
+        const updatedFilters = props.selectFilters.map(filter =>
           filter.key === selectKey ? { ...filter, value: '' } : filter
         )
         emit('update:selectFilters', updatedFilters)
@@ -1135,7 +992,7 @@ const removeFilter = (filterKey) => {
       // Handle date filters
       else if (filterKey.startsWith('date-')) {
         const dateKey = filterKey.replace('date-', '')
-        const updatedFilters = props.dateFilters.map(filter => 
+        const updatedFilters = props.dateFilters.map(filter =>
           filter.key === dateKey ? { ...filter, from: '', to: '' } : filter
         )
         emit('update:dateFilters', updatedFilters)
@@ -1143,7 +1000,7 @@ const removeFilter = (filterKey) => {
       // Handle number filters
       else if (filterKey.startsWith('number-')) {
         const numberKey = filterKey.replace('number-', '')
-        const updatedFilters = props.numberFilters.map(filter => 
+        const updatedFilters = props.numberFilters.map(filter =>
           filter.key === numberKey ? { ...filter, min: '', max: '' } : filter
         )
         emit('update:numberFilters', updatedFilters)
@@ -1151,7 +1008,7 @@ const removeFilter = (filterKey) => {
       // Handle multi-select filters
       else if (filterKey.startsWith('multi-')) {
         const multiKey = filterKey.replace('multi-', '')
-        const updatedFilters = props.multiSelectFilters.map(filter => 
+        const updatedFilters = props.multiSelectFilters.map(filter =>
           filter.key === multiKey ? { ...filter, selected: [] } : filter
         )
         emit('update:multiSelectFilters', updatedFilters)

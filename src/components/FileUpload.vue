@@ -50,7 +50,10 @@
         <div class="flex items-center space-x-3">
           <CircularProgress
             :value="fileItem.progress"
+            :max="100"
             size="sm"
+            variant="default"
+            :dynamic-color="false"
             class="flex-shrink-0"
           />
           <div class="flex flex-col">
@@ -188,10 +191,16 @@ const addFiles = (newFiles) => {
 
   uploadingFiles.value.push(...filesWithProgress)
 
-  // Simulate upload progress
+  // Simulate upload progress with smooth increments
   filesWithProgress.forEach((fileItem) => {
+    const duration = 2000 + Math.random() * 2000 // 2-4 seconds total
+    const intervalTime = 50 // Update every 50ms
+    const totalSteps = duration / intervalTime
+    const increment = 100 / totalSteps
+    
     const interval = setInterval(() => {
-      fileItem.progress += Math.random() * 15
+      fileItem.progress += increment
+      
       if (fileItem.progress >= 100) {
         fileItem.progress = 100
         fileItem.uploading = false
@@ -209,7 +218,7 @@ const addFiles = (newFiles) => {
 
         emit('files-selected', files.value)
       }
-    }, 200)
+    }, intervalTime)
   })
 }
 
