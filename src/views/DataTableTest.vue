@@ -15,6 +15,7 @@
           v-model:date-from="dateFrom"
           v-model:date-to="dateTo"
           :status-options="statusOptions"
+          :show-file-upload="true"
           :show-date-filter="true"
           :show-export="true"
           :show-add="true"
