@@ -123,10 +123,21 @@
 
       <!-- Actions -->
       <div class="flex items-center gap-3 ml-auto">
+        <!-- File Upload Button -->
+        <FileUpload
+          v-if="showFileUpload"
+          :multiple="fileUploadMultiple"
+          :accept="fileUploadAccept"
+          :max-size="fileUploadMaxSize"
+          :variant="fileUploadVariant"
+          @files-selected="$emit('files-selected', $event)"
+          @file-removed="$emit('file-removed', $event)"
+        />
+
         <!-- Clear Filters -->
-        <Button 
-          v-if="hasActiveFilters" 
-          :class="clearFiltersButtonClasses" 
+        <Button
+          v-if="hasActiveFilters"
+          :class="clearFiltersButtonClasses"
           @click="clearFilters"
         >
           <Icon
@@ -137,9 +148,9 @@
         </Button>
 
         <!-- Export Button -->
-        <Button 
-          v-if="showExport" 
-          :class="exportButtonClasses" 
+        <Button
+          v-if="showExport"
+          :class="exportButtonClasses"
           @click="$emit('export')"
         >
           <Icon
@@ -416,6 +427,7 @@
 <script setup>
 import Button from './Button.vue'
 import Select from './Select.vue'
+import FileUpload from './FileUpload.vue'
 import { computed, ref } from 'vue'
 import { cva } from 'class-variance-authority'
 import { cn } from '../utils/cn.js'
@@ -539,6 +551,27 @@ const props = defineProps({
     type: Boolean,
     default: true
   },
+  showFileUpload: {
+    type: Boolean,
+    default: false
+  },
+  fileUploadMultiple: {
+    type: Boolean,
+    default: false
+  },
+  fileUploadAccept: {
+    type: String,
+    default: ''
+  },
+  fileUploadMaxSize: {
+    type: Number,
+    default: null
+  },
+  fileUploadVariant: {
+    type: String,
+    default: 'default',
+    validator: (value) => ['default', 'dashed'].includes(value)
+  },
   totalItems: {
     type: Number,
     default: 0
@@ -571,7 +604,9 @@ const emit = defineEmits([
   'export',
   'add',
   'clear-filters',
-  'add-button-click'
+  'add-button-click',
+  'files-selected',
+  'file-removed'
 ])
 
 // Local state
