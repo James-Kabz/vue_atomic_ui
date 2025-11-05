@@ -67,7 +67,7 @@ const props = defineProps({
   type: {
     type: String,
     default: 'text',
-    validator: (value) => ['text', 'email', 'password', 'number', 'tel', 'url', 'search', 'date', 'color'].includes(value)
+    validator: (value) => ['text', 'email', 'password', 'number', 'tel', 'url', 'search', 'date', 'color', 'file'].includes(value)
   },
   placeholder: {
     type: String,
