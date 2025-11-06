@@ -32,10 +32,11 @@
       />
     </svg>
 
-    <!-- Icon slot (only show if not loading) -->
-    <slot
-      v-if="!loading"
-      name="icon"
+    <!-- Icon component (only show if not loading) -->
+    <Icon
+      v-if="icon && !loading"
+      :icon="icon"
+      class="mr-2"
     />
 
     <!-- Button content -->
@@ -47,6 +48,7 @@
 <script setup>
 import { cva } from 'class-variance-authority'
 import { cn } from '../utils/cn.js'
+import Icon from './Icon.vue'
 
 defineOptions({
   inheritAttrs: false
@@ -92,6 +94,10 @@ defineProps({
     default: false,
   },
   loadingText: {
+    type: String,
+    default: null,
+  },
+  icon: {
     type: String,
     default: null,
   },
