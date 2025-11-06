@@ -36,6 +36,7 @@
     <Icon
       v-if="icon && !loading"
       :icon="icon"
+      class="h-4 w-4"
     />
 
     <!-- Button content -->
