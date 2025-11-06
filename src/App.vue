@@ -673,37 +673,61 @@ const currentPath = computed(() => `#${currentSection.value}`);
               <div class="space-y-4">
                 <div class="flex flex-wrap gap-6 items-center">
                   <div class="flex flex-col items-center space-y-2">
-                    <CircularProgress :value="progressValue" size="xs" />
+                    <CircularProgress
+                      :value="progressValue"
+                      size="xs"
+                    />
                     <span class="text-xs">XS</span>
                   </div>
                   <div class="flex flex-col items-center space-y-2">
-                    <CircularProgress :value="progressValue" size="sm" />
+                    <CircularProgress
+                      :value="progressValue"
+                      size="sm"
+                    />
                     <span class="text-xs">SM</span>
                   </div>
                   <div class="flex flex-col items-center space-y-2">
-                    <CircularProgress :value="progressValue" size="md" />
+                    <CircularProgress
+                      :value="progressValue"
+                      size="md"
+                    />
                     <span class="text-xs">MD</span>
                   </div>
                   <div class="flex flex-col items-center space-y-2">
-                    <CircularProgress :value="progressValue" size="lg" />
+                    <CircularProgress
+                      :value="progressValue"
+                      size="lg"
+                    />
                     <span class="text-xs">LG</span>
                   </div>
                   <div class="flex flex-col items-center space-y-2">
-                    <CircularProgress :value="progressValue" size="xl" />
+                    <CircularProgress
+                      :value="progressValue"
+                      size="xl"
+                    />
                     <span class="text-xs">XL</span>
                   </div>
                 </div>
                 <div class="flex flex-wrap gap-6 items-center">
                   <div class="flex flex-col items-center space-y-2">
-                    <CircularProgress :value="25" variant="success" />
+                    <CircularProgress
+                      :value="25"
+                      variant="success"
+                    />
                     <span class="text-xs">Success</span>
                   </div>
                   <div class="flex flex-col items-center space-y-2">
-                    <CircularProgress :value="50" variant="warning" />
+                    <CircularProgress
+                      :value="50"
+                      variant="warning"
+                    />
                     <span class="text-xs">Warning</span>
                   </div>
                   <div class="flex flex-col items-center space-y-2">
-                    <CircularProgress :value="75" variant="danger" />
+                    <CircularProgress
+                      :value="75"
+                      variant="danger"
+                    />
                     <span class="text-xs">Danger</span>
                   </div>
                   <div class="flex flex-col items-center space-y-2">

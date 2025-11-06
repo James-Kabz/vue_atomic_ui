@@ -31,7 +31,10 @@
           </p>
           <p class="text-xs text-gray-500">
             {{ maxSize ? `Up to ${formatFileSize(maxSize)}` : 'No size limit' }}
-            <span v-if="accept" class="ml-2">• {{ accept }}</span>
+            <span
+              v-if="accept"
+              class="ml-2"
+            >• {{ accept }}</span>
           </p>
         </div>
       </div>

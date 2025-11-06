@@ -964,7 +964,9 @@ defineExpose({
       @close="closeModal"
     >
       <div class="p-6">
-        <h3 class="text-md font-semibold mb-4">Full Text</h3>
+        <h3 class="text-md font-semibold mb-4">
+          Full Text
+        </h3>
         <div class="text-xl font-bold text-gray-700 whitespace-pre-wrap break-words">
           {{ modalContent }}
         </div>

@@ -311,7 +311,10 @@ const handleReset = () => {
 
 <template>
   <div class="w-full p-6">
-    <div v-if="title" class="mb-6">
+    <div
+      v-if="title"
+      class="mb-6"
+    >
       <h2 class="text-xl font-semibold text-gray-900">
         {{ title }}
       </h2>

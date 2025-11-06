@@ -132,7 +132,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
               :src="companyLogo"
               alt="Company logo"
               class="w-6 h-6 object-contain rounded"
-            />
+            >
           </div>
 
           <!-- Organisation Logo (Registered Organisation) -->
@@ -144,7 +144,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
               :src="organisationLogo"
               :alt="`${currentOrganisation.organisation_name} logo`"
               class="w-8 h-8 object-contain rounded border border-blue-200"
-            />
+            >
           </div>
 
           <!-- Organisation Switcher -->
@@ -236,7 +236,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                       :src="org.logo"
                       :alt="`${org.organisation_name} logo`"
                       class="w-6 h-6 object-contain rounded"
-                    />
+                    >
                   </div>
                   <div class="flex-1 text-left min-w-0">
                     <p class="font-medium truncate">

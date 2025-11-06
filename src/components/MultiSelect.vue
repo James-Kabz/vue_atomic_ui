@@ -154,52 +154,105 @@ watch(isOpen, (open) => {
 
 <template>
   <div class="relative">
-    <button ref="buttonRef" type="button" :id="id" :disabled="disabled" :class="[
-      'w-full px-3 py-2.5 text-left border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white min-h-[42px]',
-      hasError ? 'border-red-500' : 'border-slate-300',
-      disabled ? 'bg-gray-100 cursor-not-allowed opacity-50' : 'hover:border-slate-400'
-    ]" @click="toggleDropdown" @keydown="handleKeydown">
-      <div v-if="selectedLabels.length === 0" class="text-gray-500">
+    <button
+      :id="id"
+      ref="buttonRef"
+      type="button"
+      :disabled="disabled"
+      :class="[
+        'w-full px-3 py-2.5 text-left border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white min-h-[42px]',
+        hasError ? 'border-red-500' : 'border-slate-300',
+        disabled ? 'bg-gray-100 cursor-not-allowed opacity-50' : 'hover:border-slate-400'
+      ]"
+      @click="toggleDropdown"
+      @keydown="handleKeydown"
+    >
+      <div
+        v-if="selectedLabels.length === 0"
+        class="text-gray-500"
+      >
         {{ placeholder || 'Select options' }}
       </div>
-      <div v-else class="flex flex-wrap gap-1.5">
-        <Badge v-for="label in selectedLabels" :key="label" variant="primary" size="sm">
+      <div
+        v-else
+        class="flex flex-wrap gap-1.5"
+      >
+        <Badge
+          v-for="label in selectedLabels"
+          :key="label"
+          variant="primary"
+          size="sm"
+        >
           {{ label }}
         </Badge>
       </div>
       <svg
         class="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none transition-transform duration-200"
-        :class="{ 'rotate-180': isOpen }" fill="currentColor" viewBox="0 0 20 20">
-        <path fill-rule="evenodd"
+        :class="{ 'rotate-180': isOpen }"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+      >
+        <path
+          fill-rule="evenodd"
           d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-          clip-rule="evenodd" />
+          clip-rule="evenodd"
+        />
       </svg>
     </button>
 
     <Teleport to="body">
-      <Transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95"
-        enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75"
-        leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
-        <div v-if="isOpen" :style="dropdownStyle" data-multiselect-dropdown
-          class="bg-white shadow-lg max-h-72 rounded-md text-base ring-1 ring-black ring-opacity-5 overflow-hidden focus:outline-none">
+      <Transition
+        enter-active-class="transition ease-out duration-100"
+        enter-from-class="transform opacity-0 scale-95"
+        enter-to-class="transform opacity-100 scale-100"
+        leave-active-class="transition ease-in duration-75"
+        leave-from-class="transform opacity-100 scale-100"
+        leave-to-class="transform opacity-0 scale-95"
+      >
+        <div
+          v-if="isOpen"
+          :style="dropdownStyle"
+          data-multiselect-dropdown
+          class="bg-white shadow-lg max-h-72 rounded-md text-base ring-1 ring-black ring-opacity-5 overflow-hidden focus:outline-none"
+        >
           <!-- Search input -->
           <div class="px-3 py-2.5 border-b border-gray-200 bg-gray-50">
-            <input ref="searchInput" v-model="searchQuery" type="text" placeholder="Search options..."
+            <input
+              ref="searchInput"
+              v-model="searchQuery"
+              type="text"
+              placeholder="Search options..."
               class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
-              @input="filterOptions" @keydown.stop>
+              @input="filterOptions"
+              @keydown.stop
+            >
           </div>
 
           <!-- Options list -->
-          <div v-if="filteredOptions.length > 0" class="max-h-52 overflow-y-auto py-1">
-            <button v-for="option in filteredOptions" :key="option.value" type="button"
+          <div
+            v-if="filteredOptions.length > 0"
+            class="max-h-52 overflow-y-auto py-1"
+          >
+            <button
+              v-for="option in filteredOptions"
+              :key="option.value"
+              type="button"
               class="cursor-pointer select-none relative py-2.5 pl-3 pr-9 w-full text-left hover:bg-blue-50 focus:bg-blue-50 focus:outline-none transition-colors duration-150"
-              :class="{ 'bg-blue-50': modelValue.includes(option.value) }" @click="toggleOption(option.value)">
+              :class="{ 'bg-blue-50': modelValue.includes(option.value) }"
+              @click="toggleOption(option.value)"
+            >
               <div class="flex items-center gap-3">
-                <input type="checkbox" :checked="modelValue.includes(option.value)"
+                <input
+                  type="checkbox"
+                  :checked="modelValue.includes(option.value)"
                   class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded cursor-pointer pointer-events-none"
-                  readonly tabindex="-1" />
-                <span class="block font-normal truncate"
-                  :class="{ 'text-blue-900 font-medium': modelValue.includes(option.value) }">
+                  readonly
+                  tabindex="-1"
+                >
+                <span
+                  class="block font-normal truncate"
+                  :class="{ 'text-blue-900 font-medium': modelValue.includes(option.value) }"
+                >
                   {{ option.label }}
                 </span>
               </div>
@@ -207,7 +260,10 @@ watch(isOpen, (open) => {
           </div>
 
           <!-- No results -->
-          <div v-else class="px-4 py-6 text-sm text-gray-500 text-center">
+          <div
+            v-else
+            class="px-4 py-6 text-sm text-gray-500 text-center"
+          >
             No options found
           </div>
         </div>

@@ -30,7 +30,10 @@
       />
     </svg>
     <!-- Optional text in center -->
-    <div v-if="showValue" class="absolute inset-0 flex items-center justify-center">
+    <div
+      v-if="showValue"
+      class="absolute inset-0 flex items-center justify-center"
+    >
       <span :class="cn('text-xs font-medium', textColor)">
         {{ showRawValue ? numValue.toFixed(2) : Math.round(clampedValue) + '%' }}
       </span>
