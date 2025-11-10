@@ -59,6 +59,7 @@ const props = defineProps({
             'search',         // NEW
             'hidden',         // NEW
             'multiselect',    // NEW
+            'combobox',       // NEW
           ].includes(field.type),
       )
     },
@@ -117,6 +118,8 @@ const initializeFormData = () => {
       data[field.name] = field.options?.[0]?.value || ''
     } else if (field.type === 'multiselect') {
       data[field.name] = []
+    } else if (field.type === 'combobox') {
+      data[field.name] = ''
     } else {
       data[field.name] = ''
     }
@@ -139,6 +142,8 @@ watch(
           data[field.name] = null
         } else if (field.type === 'multiselect') {
           data[field.name] = Array.isArray(newData[field.name]) ? newData[field.name] : []
+        } else if (field.type === 'combobox') {
+          data[field.name] = newData[field.name] ?? ''
         } else {
           data[field.name] = newData[field.name] ?? ''
         }
@@ -160,6 +165,8 @@ watch(
           data[field.name] = field.options?.[0]?.value || ''
         } else if (field.type === 'multiselect') {
           data[field.name] = []
+        } else if (field.type === 'combobox') {
+          data[field.name] = ''
         } else {
           data[field.name] = ''
         }
@@ -197,6 +204,8 @@ watch(
               data[field.name] = field.options?.[0]?.value || ''
             } else if (field.type === 'multiselect') {
               data[field.name] = []
+            } else if (field.type === 'combobox') {
+              data[field.name] = ''
             } else {
               data[field.name] = ''
             }
@@ -271,6 +280,10 @@ const validateForm = () => {
         }
       } else if (field.type === 'multiselect') {
         if (!Array.isArray(value) || value.length === 0) {
+          errors.value[field.name] = field.errorMessage || `${field.label} is required`
+        }
+      } else if (field.type === 'combobox') {
+        if (!value || (typeof value === 'string' && !value.trim())) {
           errors.value[field.name] = field.errorMessage || `${field.label} is required`
         }
       } else if (field.type === 'date' || field.type === 'time' || field.type === 'datetime-local' || field.type === 'month' || field.type === 'week') {
@@ -492,6 +505,20 @@ const handleClose = () => {
               :has-error="hasError"
               :aria-describedby="ariaDescribedBy"
               @update:model-value="formData[field.name] = $event"
+            />
+
+            <!-- Combobox -->
+            <Select
+              v-else-if="field.type === 'combobox'"
+              :id="fieldId"
+              :model-value="formData[field.name]"
+              :options="field.options"
+              :placeholder="field.placeholder || 'Select or type to add new'"
+              :disabled="isLoading || field.disabled"
+              :has-error="hasError"
+              :aria-describedby="ariaDescribedBy"
+              :allow-create="field.allowCreate"
+              @update:model-value="handleSelectChange(field, $event)"
             />
 
             <!-- Checkbox -->

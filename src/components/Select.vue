@@ -36,6 +36,10 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  allowCreate: {
+    type: Boolean,
+    default: false
+  },
   class: String
 })
 
@@ -104,6 +108,16 @@ const selectOption = (value) => {
   filteredOptions.value = [...props.options]
 }
 
+const createOption = () => {
+  if (props.allowCreate && searchQuery.value.trim()) {
+    const newValue = searchQuery.value.trim()
+    emit('update:modelValue', newValue)
+    isOpen.value = false
+    searchQuery.value = ''
+    filteredOptions.value = [...props.options]
+  }
+}
+
 const filterOptions = () => {
   if (!searchQuery.value.trim()) {
     filteredOptions.value = [...props.options]
@@ -120,6 +134,8 @@ const handleKeydown = (event) => {
     isOpen.value = false
     searchQuery.value = ''
     filteredOptions.value = [...props.options]
+  } else if (event.key === 'Enter' && props.allowCreate && searchQuery.value.trim() && filteredOptions.value.length === 0) {
+    createOption()
   }
 }
 
@@ -272,10 +288,21 @@ watch(isOpen, (open) => {
 
         <!-- No results -->
         <div
-          v-else
+          v-else-if="!props.allowCreate"
           class="px-4 py-3 text-sm text-gray-500 text-center"
         >
           No options found
+        </div>
+        <div
+          v-else
+          class="px-4 py-3"
+        >
+          <button
+            class="w-full text-left px-2 py-1 text-sm text-blue-600 hover:bg-blue-50 rounded cursor-pointer"
+            @click="createOption"
+          >
+            Create "{{ searchQuery }}"
+          </button>
         </div>
       </div>
     </Teleport>
