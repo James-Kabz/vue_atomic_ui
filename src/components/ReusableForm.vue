@@ -310,7 +310,7 @@ const handleReset = () => {
 </script>
 
 <template>
-  <div class="w-full p-6">
+  <div class="w-full p-2">
     <div
       v-if="title"
       class="mb-6"
