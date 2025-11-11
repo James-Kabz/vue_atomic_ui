@@ -1,3 +1,239 @@
+<script setup>
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { cn } from '../utils/cn.js'
+import Icon from './Icon.vue'
+
+// Props
+const props = defineProps({
+  sidebarWidth: {
+    type: Number,
+    default: 130
+  },
+  header: {
+    type: Object,
+    default: null
+  },
+  navigationItems: {
+    type: Array,
+    required: true,
+  },
+  managementSettings: {
+    type: Array,
+    default: () => []
+  },
+  showManagementSettings: {
+    type: Boolean,
+    default: true
+  },
+  mobileOpen: {
+    type: Boolean,
+    default: false
+  },
+  isManagementSettingsActive: {
+    type: Boolean,
+    default: false
+  },
+  currentPath: {
+    type: String,
+    default: ''
+  }
+})
+
+// Emits
+const emit = defineEmits([
+  'navigate',
+  'update:mobileOpen'
+])
+
+// Internal State
+const isMobile = ref(false)
+const submenuOpen = ref(false)
+const currentSubmenu = ref(null)
+const managementSettingsOpen = ref(false)
+
+// Computed
+const isMobileOpen = computed(() => props.mobileOpen)
+
+const submenuStyle = computed(() => {
+  if (isMobile.value) {
+    return {}
+  }
+  return {
+    left: `${props.sidebarWidth}px`,
+  }
+})
+
+const managementStyle = computed(() => {
+  if (isMobile.value) {
+    return {}
+  }
+  return {
+    left: `${props.sidebarWidth}px`,
+  }
+})
+
+// Computed for main content margin
+const contentMarginLeft = computed(() => {
+  if (isMobile.value) {
+    return 0
+  }
+
+  let margin = props.sidebarWidth
+  if (submenuOpen.value) margin += 220
+  if (managementSettingsOpen.value) margin += 220
+
+  return margin
+})
+
+// Methods
+const handleNavigation = (item) => {
+  emit('navigate', item)
+  if (isMobile.value) {
+    closeMobileSidebar()
+  }
+  // On mobile, always close menus after navigation
+  // On desktop, don't close submenu if navigating to a subitem, or management settings if navigating to a setting
+  const isSubmenuItem = submenuOpen.value && currentSubmenu.value && currentSubmenu.value.subItems.some(sub => sub.route === item.route)
+  const isManagementItem = managementSettingsOpen.value && props.managementSettings.some(setting => setting.route === item.route)
+  if (isMobile.value || !(isSubmenuItem || isManagementItem)) {
+    closeAllMenus()
+  }
+}
+
+const closeMobileSidebar = () => {
+  emit('update:mobileOpen', false)
+}
+
+const hasSubItems = (item) => {
+  return item.subItems && item.subItems.length > 0
+}
+
+const handleSubmenuClick = (item) => {
+  // Close any open menus
+  if (managementSettingsOpen.value) {
+    closeManagementSettings()
+  }
+  if (submenuOpen.value && currentSubmenu.value !== item) {
+    closeSubmenu()
+    setTimeout(() => {
+      currentSubmenu.value = item
+      submenuOpen.value = true
+    }, 300)
+  } else if (!submenuOpen.value) {
+    currentSubmenu.value = item
+    submenuOpen.value = true
+  } else if (currentSubmenu.value === item) {
+    closeSubmenu()
+  }
+  if (isMobile.value) {
+    closeMobileSidebar()
+  }
+}
+
+const handleManagementSettingsClick = () => {
+  // Close any open menus
+  if (submenuOpen.value) {
+    closeSubmenu()
+  }
+  if (!managementSettingsOpen.value) {
+    managementSettingsOpen.value = true
+  } else {
+    closeManagementSettings()
+  }
+  if (isMobile.value) {
+    closeMobileSidebar()
+  }
+}
+
+const closeSubmenu = () => {
+  submenuOpen.value = false
+  setTimeout(() => {
+    currentSubmenu.value = null
+  }, 300)
+}
+
+const closeManagementSettings = () => {
+  managementSettingsOpen.value = false
+}
+
+const closeAllMenus = () => {
+  closeSubmenu()
+  closeManagementSettings()
+}
+
+const handleSubmenuNavigation = (item) => {
+  handleNavigation(item)
+}
+
+const handleManagementSettingsNavigation = (item) => {
+  handleNavigation(item)
+}
+
+// Check if navigation item is active using passed currentPath prop
+const isItemActive = (item) => {
+  const currentPath = props.currentPath
+  
+  if (!item.route) {
+    // For parent items with subItems, check if any subItem is active
+    if (item.subItems && item.subItems.length > 0) {
+      return item.subItems.some(subItem => {
+        if (!subItem.route) return false
+        return currentPath === subItem.route || currentPath.startsWith(subItem.route + '/')
+      })
+    }
+    return false
+  }
+
+  if (currentPath === item.route) return true
+  if (currentPath.startsWith(item.route + '/')) return true
+
+  return false
+}
+
+// Handle responsive behavior
+const checkMobile = () => {
+  const wasMobile = isMobile.value
+  isMobile.value = window.innerWidth < 1024
+
+  if (wasMobile && !isMobile.value && isMobileOpen.value) {
+    closeMobileSidebar()
+  }
+}
+
+// Handle escape key to close mobile sidebar and menus
+const handleEscape = (event) => {
+  if (event.key === 'Escape') {
+    if (submenuOpen.value || managementSettingsOpen.value) {
+      closeAllMenus()
+    } else if (isMobile.value && isMobileOpen.value) {
+      closeMobileSidebar()
+    }
+  }
+}
+
+// Lifecycle
+onMounted(() => {
+  checkMobile()
+  window.addEventListener('resize', checkMobile)
+  document.addEventListener('keydown', handleEscape)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobile)
+  document.removeEventListener('keydown', handleEscape)
+})
+
+// Expose values for parent
+defineExpose({
+  isMobile,
+  isMobileOpen,
+  submenuOpen,
+  managementSettingsOpen,
+  contentMarginLeft,
+  closeAllMenus
+})
+</script>
+
 <template>
   <div>
     <!-- Mobile Overlay -->
@@ -457,239 +693,3 @@
     </transition>
   </div>
 </template>
-
-<script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { cn } from '../utils/cn.js'
-import Icon from './Icon.vue'
-
-// Props
-const props = defineProps({
-  sidebarWidth: {
-    type: Number,
-    default: 130
-  },
-  header: {
-    type: Object,
-    default: null
-  },
-  navigationItems: {
-    type: Array,
-    required: true,
-  },
-  managementSettings: {
-    type: Array,
-    default: () => []
-  },
-  showManagementSettings: {
-    type: Boolean,
-    default: true
-  },
-  mobileOpen: {
-    type: Boolean,
-    default: false
-  },
-  isManagementSettingsActive: {
-    type: Boolean,
-    default: false
-  },
-  currentPath: {
-    type: String,
-    default: ''
-  }
-})
-
-// Emits
-const emit = defineEmits([
-  'navigate',
-  'update:mobileOpen'
-])
-
-// Internal State
-const isMobile = ref(false)
-const submenuOpen = ref(false)
-const currentSubmenu = ref(null)
-const managementSettingsOpen = ref(false)
-
-// Computed
-const isMobileOpen = computed(() => props.mobileOpen)
-
-const submenuStyle = computed(() => {
-  if (isMobile.value) {
-    return {}
-  }
-  return {
-    left: `${props.sidebarWidth}px`,
-  }
-})
-
-const managementStyle = computed(() => {
-  if (isMobile.value) {
-    return {}
-  }
-  return {
-    left: `${props.sidebarWidth}px`,
-  }
-})
-
-// Computed for main content margin
-const contentMarginLeft = computed(() => {
-  if (isMobile.value) {
-    return 0
-  }
-
-  let margin = props.sidebarWidth
-  if (submenuOpen.value) margin += 220
-  if (managementSettingsOpen.value) margin += 220
-
-  return margin
-})
-
-// Methods
-const handleNavigation = (item) => {
-  emit('navigate', item)
-  if (isMobile.value) {
-    closeMobileSidebar()
-  }
-  // On mobile, always close menus after navigation
-  // On desktop, don't close submenu if navigating to a subitem, or management settings if navigating to a setting
-  const isSubmenuItem = submenuOpen.value && currentSubmenu.value && currentSubmenu.value.subItems.some(sub => sub.route === item.route)
-  const isManagementItem = managementSettingsOpen.value && props.managementSettings.some(setting => setting.route === item.route)
-  if (isMobile.value || !(isSubmenuItem || isManagementItem)) {
-    closeAllMenus()
-  }
-}
-
-const closeMobileSidebar = () => {
-  emit('update:mobileOpen', false)
-}
-
-const hasSubItems = (item) => {
-  return item.subItems && item.subItems.length > 0
-}
-
-const handleSubmenuClick = (item) => {
-  // Close any open menus
-  if (managementSettingsOpen.value) {
-    closeManagementSettings()
-  }
-  if (submenuOpen.value && currentSubmenu.value !== item) {
-    closeSubmenu()
-    setTimeout(() => {
-      currentSubmenu.value = item
-      submenuOpen.value = true
-    }, 300)
-  } else if (!submenuOpen.value) {
-    currentSubmenu.value = item
-    submenuOpen.value = true
-  } else if (currentSubmenu.value === item) {
-    closeSubmenu()
-  }
-  if (isMobile.value) {
-    closeMobileSidebar()
-  }
-}
-
-const handleManagementSettingsClick = () => {
-  // Close any open menus
-  if (submenuOpen.value) {
-    closeSubmenu()
-  }
-  if (!managementSettingsOpen.value) {
-    managementSettingsOpen.value = true
-  } else {
-    closeManagementSettings()
-  }
-  if (isMobile.value) {
-    closeMobileSidebar()
-  }
-}
-
-const closeSubmenu = () => {
-  submenuOpen.value = false
-  setTimeout(() => {
-    currentSubmenu.value = null
-  }, 300)
-}
-
-const closeManagementSettings = () => {
-  managementSettingsOpen.value = false
-}
-
-const closeAllMenus = () => {
-  closeSubmenu()
-  closeManagementSettings()
-}
-
-const handleSubmenuNavigation = (item) => {
-  handleNavigation(item)
-}
-
-const handleManagementSettingsNavigation = (item) => {
-  handleNavigation(item)
-}
-
-// Check if navigation item is active using passed currentPath prop
-const isItemActive = (item) => {
-  const currentPath = props.currentPath
-  
-  if (!item.route) {
-    // For parent items with subItems, check if any subItem is active
-    if (item.subItems && item.subItems.length > 0) {
-      return item.subItems.some(subItem => {
-        if (!subItem.route) return false
-        return currentPath === subItem.route || currentPath.startsWith(subItem.route + '/')
-      })
-    }
-    return false
-  }
-
-  if (currentPath === item.route) return true
-  if (currentPath.startsWith(item.route + '/')) return true
-
-  return false
-}
-
-// Handle responsive behavior
-const checkMobile = () => {
-  const wasMobile = isMobile.value
-  isMobile.value = window.innerWidth < 1024
-
-  if (wasMobile && !isMobile.value && isMobileOpen.value) {
-    closeMobileSidebar()
-  }
-}
-
-// Handle escape key to close mobile sidebar and menus
-const handleEscape = (event) => {
-  if (event.key === 'Escape') {
-    if (submenuOpen.value || managementSettingsOpen.value) {
-      closeAllMenus()
-    } else if (isMobile.value && isMobileOpen.value) {
-      closeMobileSidebar()
-    }
-  }
-}
-
-// Lifecycle
-onMounted(() => {
-  checkMobile()
-  window.addEventListener('resize', checkMobile)
-  document.addEventListener('keydown', handleEscape)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('resize', checkMobile)
-  document.removeEventListener('keydown', handleEscape)
-})
-
-// Expose values for parent
-defineExpose({
-  isMobile,
-  isMobileOpen,
-  submenuOpen,
-  managementSettingsOpen,
-  contentMarginLeft,
-  closeAllMenus
-})
-</script>
