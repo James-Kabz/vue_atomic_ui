@@ -1,51 +1,97 @@
 <template>
-  <header
+  <component
+    :is="tag"
     :class="cn(
-      'flex items-center justify-between px-4 py-3 border-b border-slate-200 bg-slate-50/50',
+      'flex items-center justify-between gap-4',
       $attrs.class
     )"
   >
-    <div class="flex flex-col">
-      <Typography
+    <div class="flex flex-col gap-1 min-w-0">
+      <component
+        :is="titleTag"
         v-if="title || $slots.title"
-        variant="text-lg"
-        color="default"
-        class="font-semibold"
+        :class="cn(
+          'font-semibold text-lg leading-tight',
+          titleClass
+        )"
       >
         <slot name="title">
           {{ title }}
         </slot>
-      </Typography>
-      <Typography
+      </component>
+      
+      <p
         v-if="subtitle || $slots.description"
-        variant="body-sm"
-        color="muted"
-        class="mt-1"
+        :class="cn(
+          'text-sm text-muted-foreground',
+          subtitleClass
+        )"
       >
         <slot name="description">
           {{ subtitle }}
         </slot>
-      </Typography>
+      </p>
     </div>
 
-    <div v-if="$slots.actions">
+    <div
+      v-if="$slots.actions"
+      class="flex items-center gap-2 shrink-0"
+    >
       <slot name="actions" />
     </div>
-  </header>
+  </component>
 </template>
 
 <script setup>
 import { cn } from '../utils/cn.js'
-import Typography from './Typography.vue'
 
 defineOptions({ inheritAttrs: false })
 
 defineProps({
+  /**
+   * Main title text
+   */
   title: {
     type: String,
     default: ''
   },
+  
+  /**
+   * Subtitle/description text
+   */
   subtitle: {
+    type: String,
+    default: ''
+  },
+  
+  /**
+   * Root HTML tag (header, div, section, etc.)
+   */
+  tag: {
+    type: String,
+    default: 'header'
+  },
+  
+  /**
+   * Title HTML tag (h1, h2, h3, etc.)
+   */
+  titleTag: {
+    type: String,
+    default: 'h2'
+  },
+  
+  /**
+   * Additional classes for title
+   */
+  titleClass: {
+    type: String,
+    default: ''
+  },
+  
+  /**
+   * Additional classes for subtitle
+   */
+  subtitleClass: {
     type: String,
     default: ''
   }
