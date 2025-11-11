@@ -49,6 +49,7 @@ const isOpen = ref(false)
 const searchQuery = ref('')
 const searchInput = ref(null)
 const buttonRef = ref(null)
+const dropdownRef = ref(null)
 const filteredOptions = ref([...props.options])
 const dropdownStyle = ref({})
 
@@ -108,7 +109,13 @@ const selectOption = (value) => {
   filteredOptions.value = [...props.options]
 }
 
-const createOption = () => {
+const createOption = (event) => {
+  // Prevent event propagation
+  if (event) {
+    event.stopPropagation()
+    event.preventDefault()
+  }
+  
   if (props.allowCreate && searchQuery.value.trim()) {
     const newValue = searchQuery.value.trim()
     emit('update:modelValue', newValue)
@@ -135,7 +142,8 @@ const handleKeydown = (event) => {
     searchQuery.value = ''
     filteredOptions.value = [...props.options]
   } else if (event.key === 'Enter' && props.allowCreate && searchQuery.value.trim() && filteredOptions.value.length === 0) {
-    createOption()
+    event.preventDefault()
+    createOption(event)
   }
 }
 
@@ -143,7 +151,12 @@ const handleKeydown = (event) => {
 const handleClickOutside = (event) => {
   if (!buttonRef.value) return
   const target = event.target
-  if (target && !buttonRef.value.contains(target) && !target.closest('[data-select-dropdown]')) {
+  
+  // Check if click is inside dropdown or button
+  const isInsideDropdown = dropdownRef.value && dropdownRef.value.contains(target)
+  const isInsideButton = buttonRef.value.contains(target)
+  
+  if (!isInsideDropdown && !isInsideButton) {
     isOpen.value = false
     searchQuery.value = ''
     filteredOptions.value = [...props.options]
@@ -237,6 +250,7 @@ watch(isOpen, (open) => {
     <Teleport to="body">
       <div
         v-if="isOpen"
+        ref="dropdownRef"
         :style="dropdownStyle"
         data-select-dropdown
         class="bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none"
@@ -250,7 +264,8 @@ watch(isOpen, (open) => {
             placeholder="Search options..."
             class="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
             @input="filterOptions"
-            @keydown.stop
+            @keydown="handleKeydown"
+            @keydown.enter.prevent="handleKeydown"
           >
         </div>
 
@@ -262,9 +277,10 @@ watch(isOpen, (open) => {
           <button
             v-for="option in filteredOptions"
             :key="option.value"
+            type="button"
             class="cursor-pointer select-none relative py-2 pl-3 pr-9 w-full text-left hover:bg-blue-50 focus:bg-blue-50 focus:outline-none transition-colors duration-150"
             :class="{ 'bg-blue-50 text-blue-900': modelValue === option.value }"
-            @click="selectOption(option.value)"
+            @click.stop="selectOption(option.value)"
           >
             <span class="block font-normal truncate">{{ option.label }}</span>
             <span
@@ -298,8 +314,10 @@ watch(isOpen, (open) => {
           class="px-4 py-3"
         >
           <button
-            class="w-full text-left px-2 py-1 text-sm text-blue-600 hover:bg-blue-50 rounded cursor-pointer"
-            @click="createOption"
+            type="button"
+            class="w-full text-left px-2 py-1 text-sm text-blue-600 hover:bg-blue-50 rounded cursor-pointer transition-colors"
+            @click.stop="createOption"
+            @mousedown.prevent
           >
             Create "{{ searchQuery }}"
           </button>
