@@ -20,17 +20,17 @@ const props = defineProps({
   }
 })
 
-const data = ref(null)
+const widgetData = ref(null)
 const loading = ref(false)
 const error = ref(null)
 const refreshInterval = ref(null)
 
 const displayData = computed(() => {
-  if (!data.value) return []
+  if (!widgetData.value) return []
 
   // Transform API data to stats format
-  if (Array.isArray(data.value)) {
-    return data.value.map((item, index) => ({
+  if (Array.isArray(widgetData.value)) {
+    return widgetData.value.map((item, index) => ({
       label: item.label || item.name || `Item ${index + 1}`,
       value: item.value || item.count || item.amount || 0,
       icon: item.icon || '📊',
@@ -39,7 +39,7 @@ const displayData = computed(() => {
   }
 
   // If object, convert to array
-  return Object.entries(data.value).map(([key, value]) => ({
+  return Object.entries(widgetData.value).map(([key, value]) => ({
     label: key.charAt(0).toUpperCase() + key.slice(1),
     value: typeof value === 'number' ? value : String(value),
     icon: '📈'
@@ -49,13 +49,13 @@ const displayData = computed(() => {
 async function fetchData() {
   // If direct data is provided, use it
   if (props.data && props.data.length > 0) {
-    data.value = props.data
+    widgetData.value = props.data
     return
   }
 
   // If stats prop is provided, use it
   if (props.stats && props.stats.length > 0) {
-    data.value = props.stats
+    widgetData.value = props.stats
     return
   }
 
@@ -92,7 +92,7 @@ async function fetchData() {
     }
 
     const result = await response.json()
-    data.value = props.apiConfig.dataPath ? getNestedValue(result, props.apiConfig.dataPath) : result
+    widgetData.value = props.apiConfig.dataPath ? getNestedValue(result, props.apiConfig.dataPath) : result
   } catch (err) {
     error.value = err.message
     console.error('StatsWidget fetch error:', err)
@@ -151,7 +151,7 @@ onUnmounted(() => {
     </div>
 
     <div
-      v-else-if="data"
+      v-else-if="widgetData"
       class="space-y-4"
     >
       <div

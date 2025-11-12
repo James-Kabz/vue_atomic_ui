@@ -47,7 +47,9 @@ const cardContent = ref(props.content)
     <div
       v-else
       class="bg-white border border-gray-200 rounded-lg p-4"
-      v-html="cardContent"
-    ></div>
+    >
+      <!-- eslint-disable-next-line vue/no-v-html -->
+      <div v-html="cardContent"></div>
+    </div>
   </div>
 </template>
