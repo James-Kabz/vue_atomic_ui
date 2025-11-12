@@ -255,31 +255,35 @@ onUnmounted(() => {
           :is="'StatsWidget'"
           v-if="widget.component === 'StatsWidget'"
           :title="widget.title"
+          v-bind="widget.props || {}"
           :api-config="widget.apiConfig"
         />
         <component
           :is="'ChartWidget'"
           v-else-if="widget.component === 'ChartWidget'"
           :title="widget.title"
+          v-bind="widget.props || {}"
           :api-config="widget.apiConfig"
         />
         <component
           :is="'TableWidget'"
           v-else-if="widget.component === 'TableWidget'"
           :title="widget.title"
+          v-bind="widget.props || {}"
           :api-config="widget.apiConfig"
         />
         <component
           :is="'ListWidget'"
           v-else-if="widget.component === 'ListWidget'"
           :title="widget.title"
+          v-bind="widget.props || {}"
           :api-config="widget.apiConfig"
         />
         <component
           :is="'CardWidget'"
           v-else-if="widget.component === 'CardWidget'"
           :title="widget.title"
-          :content="widget.props?.content || ''"
+          v-bind="widget.props || {}"
           :api-config="widget.apiConfig"
         />
         <!-- Simple components fallback -->
