@@ -21,6 +21,7 @@ const error = ref(null)
 const cardContent = ref(props.content)
 </script>
 
+
 <template>
   <div class="card-widget">
     <div class="flex items-center justify-between mb-4">
