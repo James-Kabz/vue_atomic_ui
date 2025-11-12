@@ -62,11 +62,6 @@ const widgets = ref([])
 const mode = ref('read')
 const isEditMode = computed(() => mode.value === 'edit')
 
-function setMode(newMode) {
-  mode.value = newMode
-  saveToStorage()
-}
-
 function addWidget(widget) {
   widgets.value.push({
     id: widget.id || Date.now().toString(),
