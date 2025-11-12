@@ -83,6 +83,7 @@ import AuthLayout from "./layouts/AuthLayout.vue"
 import DefaultLayout from "./layouts/DefaultLayout.vue"
 import ErrorLayout from "./layouts/ErrorLayout.vue"
 
+import DashboardWidget from "./components/widgets/DashboardWidget.vue"
 
 // Import toast function and composable (not a component!)
 import { toast, useToaster } from './lib/toast'
@@ -172,6 +173,7 @@ const components = {
   AuthLayout,
   DefaultLayout,
   ErrorLayout,
+  DashboardWidget
 }
 
 // Plugin installer
@@ -274,6 +276,7 @@ export {
   AuthLayout,
   DefaultLayout,
   ErrorLayout,
+  DashboardWidget,
   // Export toast function and composable
   toast,
   useToaster,
