@@ -109,7 +109,9 @@ onUnmounted(() => {
 <template>
   <div class="table-widget">
     <div class="flex items-center justify-between mb-4">
-      <h3 class="text-lg font-semibold text-gray-900">{{ title }}</h3>
+      <h3 class="text-lg font-semibold text-gray-900">
+        {{ title }}
+      </h3>
       <button
         v-if="loading"
         class="text-gray-400 animate-spin"
@@ -119,11 +121,17 @@ onUnmounted(() => {
       </button>
     </div>
 
-    <div v-if="error" class="text-red-500 text-sm mb-4">
+    <div
+      v-if="error"
+      class="text-red-500 text-sm mb-4"
+    >
       Error loading table data: {{ error }}
     </div>
 
-    <div v-else-if="tableData && tableData.length > 0" class="overflow-x-auto">
+    <div
+      v-else-if="tableData && tableData.length > 0"
+      class="overflow-x-auto"
+    >
       <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">
           <tr>
@@ -154,7 +162,10 @@ onUnmounted(() => {
       </table>
     </div>
 
-    <div v-else class="text-gray-500 text-center py-8">
+    <div
+      v-else
+      class="text-gray-500 text-center py-8"
+    >
       No table data available
     </div>
   </div>

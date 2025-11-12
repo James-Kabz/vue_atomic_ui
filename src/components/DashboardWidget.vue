@@ -184,45 +184,72 @@ onUnmounted(() => {
     @mousedown="handleMouseDown"
   >
     <!-- Resize handles (only in edit mode) -->
-    <div v-if="isEditMode" class="absolute inset-0 pointer-events-none z-10">
+    <div
+      v-if="isEditMode"
+      class="absolute inset-0 pointer-events-none z-10"
+    >
       <div
         class="resize-handle resize-handle-se absolute bottom-0 right-0 w-4 h-4 bg-blue-500 rounded-tl cursor-se-resize pointer-events-auto border-2 border-white shadow-md hover:bg-blue-600 hover:scale-110 transition-all"
         @mousedown.stop="startResize('se')"
-      ></div>
+      />
       <div
         class="resize-handle resize-handle-sw absolute bottom-0 left-0 w-4 h-4 bg-blue-500 rounded-tr cursor-sw-resize pointer-events-auto border-2 border-white shadow-md hover:bg-blue-600 hover:scale-110 transition-all"
         @mousedown.stop="startResize('sw')"
-      ></div>
+      />
       <div
         class="resize-handle resize-handle-ne absolute top-0 right-0 w-4 h-4 bg-blue-500 rounded-bl cursor-ne-resize pointer-events-auto border-2 border-white shadow-md hover:bg-blue-600 hover:scale-110 transition-all"
         @mousedown.stop="startResize('ne')"
-      ></div>
+      />
       <div
         class="resize-handle resize-handle-nw absolute top-0 left-0 w-4 h-4 bg-blue-500 rounded-br cursor-nw-resize pointer-events-auto border-2 border-white shadow-md hover:bg-blue-600 hover:scale-110 transition-all"
         @mousedown.stop="startResize('nw')"
-      ></div>
+      />
     </div>
 
     <!-- Widget content -->
     <div class="p-4 h-full">
       <div class="flex justify-between items-center mb-2">
         <h3 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
-          <svg v-if="isEditMode" class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"></path>
+          <svg
+            v-if="isEditMode"
+            class="w-4 h-4 text-gray-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 8h16M4 16h16"
+            />
           </svg>
           {{ widget.title }}
         </h3>
         <button
           v-if="isEditMode"
-          @click.stop="$emit('remove', widget.id)"
           class="text-red-500 hover:text-red-700 p-1 rounded hover:bg-red-50 transition-colors"
+          @click.stop="$emit('remove', widget.id)"
         >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
           </svg>
         </button>
       </div>
-      <div class="widget-content overflow-auto" :style="{ maxHeight: `${gridCellSize * widget.rowSpan - 80}px` }">
+      <div
+        class="widget-content overflow-auto"
+        :style="{ maxHeight: `${gridCellSize * widget.rowSpan - 80}px` }"
+      >
         <!-- Render specific widget components -->
         <component
           :is="'StatsWidget'"
@@ -249,27 +276,48 @@ onUnmounted(() => {
           :api-config="widget.apiConfig"
         />
         <!-- Simple components fallback -->
-        <div v-else-if="widget.component === 'Typography'" class="text-gray-700">
+        <div
+          v-else-if="widget.component === 'Typography'"
+          class="text-gray-700"
+        >
           {{ widget.children }}
         </div>
-        <button v-else-if="widget.component === 'Button'" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full">
+        <button
+          v-else-if="widget.component === 'Button'"
+          class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full"
+        >
           {{ widget.children }}
         </button>
-        <div v-else-if="widget.component === 'Card'" class="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded h-full">
-          <p class="text-gray-600">{{ widget.children || 'Card Content' }}</p>
+        <div
+          v-else-if="widget.component === 'Card'"
+          class="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded h-full"
+        >
+          <p class="text-gray-600">
+            {{ widget.children || 'Card Content' }}
+          </p>
         </div>
-        <div v-else-if="widget.component === 'Alert'" :class="getAlertClass(widget.props?.type)" class="p-3 rounded">
+        <div
+          v-else-if="widget.component === 'Alert'"
+          :class="getAlertClass(widget.props?.type)"
+          class="p-3 rounded"
+        >
           {{ widget.children }}
         </div>
-        <div v-else-if="widget.component === 'Progress'" class="w-full">
+        <div
+          v-else-if="widget.component === 'Progress'"
+          class="w-full"
+        >
           <div class="w-full bg-gray-200 rounded-full h-4">
-            <div class="bg-blue-500 h-4 rounded-full transition-all" :style="{ width: `${widget.props?.value || 0}%` }"></div>
+            <div
+              class="bg-blue-500 h-4 rounded-full transition-all"
+              :style="{ width: `${widget.props?.value || 0}%` }"
+            />
           </div>
         </div>
         <!-- Fallback for custom components -->
         <component
-          v-else
           :is="widget.component"
+          v-else
           v-bind="widget.props || {}"
         >
           {{ widget.children || '' }}

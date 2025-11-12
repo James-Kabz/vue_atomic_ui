@@ -111,7 +111,9 @@ onUnmounted(() => {
 <template>
   <div class="chart-widget">
     <div class="flex items-center justify-between mb-4">
-      <h3 class="text-lg font-semibold text-gray-900">{{ title }}</h3>
+      <h3 class="text-lg font-semibold text-gray-900">
+        {{ title }}
+      </h3>
       <button
         v-if="loading"
         class="text-gray-400 animate-spin"
@@ -121,11 +123,17 @@ onUnmounted(() => {
       </button>
     </div>
 
-    <div v-if="error" class="text-red-500 text-sm mb-4">
+    <div
+      v-if="error"
+      class="text-red-500 text-sm mb-4"
+    >
       Error loading chart data: {{ error }}
     </div>
 
-    <div v-else-if="chartData" class="h-64">
+    <div
+      v-else-if="chartData"
+      class="h-64"
+    >
       <!-- Simple bar chart visualization -->
       <div class="flex items-end justify-between h-full space-x-2">
         <div
@@ -136,7 +144,7 @@ onUnmounted(() => {
           <div
             class="bg-blue-500 rounded-t w-full transition-all duration-300 hover:bg-blue-600"
             :style="{ height: `${getBarHeight(item.value)}%` }"
-          ></div>
+          />
           <span class="text-xs text-gray-600 mt-2 truncate w-full text-center">
             {{ item.label || item.name || `Item ${index + 1}` }}
           </span>
@@ -144,7 +152,10 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <div v-else class="text-gray-500 text-center py-8">
+    <div
+      v-else
+      class="text-gray-500 text-center py-8"
+    >
       No chart data available
     </div>
   </div>

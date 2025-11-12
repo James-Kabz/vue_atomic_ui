@@ -96,7 +96,9 @@ onUnmounted(() => {
 <template>
   <div class="list-widget">
     <div class="flex items-center justify-between mb-4">
-      <h3 class="text-lg font-semibold text-gray-900">{{ title }}</h3>
+      <h3 class="text-lg font-semibold text-gray-900">
+        {{ title }}
+      </h3>
       <button
         v-if="loading"
         class="text-gray-400 animate-spin"
@@ -106,11 +108,17 @@ onUnmounted(() => {
       </button>
     </div>
 
-    <div v-if="error" class="text-red-500 text-sm mb-4">
+    <div
+      v-if="error"
+      class="text-red-500 text-sm mb-4"
+    >
       Error loading list data: {{ error }}
     </div>
 
-    <div v-else-if="listData && listData.length > 0" class="space-y-2">
+    <div
+      v-else-if="listData && listData.length > 0"
+      class="space-y-2"
+    >
       <div
         v-for="(item, index) in listData"
         :key="index"
@@ -126,18 +134,27 @@ onUnmounted(() => {
             <p class="text-sm font-medium text-gray-900">
               {{ item.title || item.name || item.label || `Item ${index + 1}` }}
             </p>
-            <p v-if="item.description || item.subtitle" class="text-sm text-gray-500">
+            <p
+              v-if="item.description || item.subtitle"
+              class="text-sm text-gray-500"
+            >
               {{ item.description || item.subtitle }}
             </p>
           </div>
         </div>
-        <div v-if="item.value || item.amount" class="text-sm font-medium text-gray-900">
+        <div
+          v-if="item.value || item.amount"
+          class="text-sm font-medium text-gray-900"
+        >
           {{ item.value || item.amount }}
         </div>
       </div>
     </div>
 
-    <div v-else class="text-gray-500 text-center py-8">
+    <div
+      v-else
+      class="text-gray-500 text-center py-8"
+    >
       No list data available
     </div>
   </div>

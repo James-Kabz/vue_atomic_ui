@@ -254,23 +254,25 @@ onMounted(() => {
   <div class="dashboard-container">
     <!-- Dashboard Header -->
     <div class="flex justify-between items-center mb-4 p-4 bg-gray-50 rounded-lg">
-      <h2 class="text-2xl font-bold text-gray-800">Dashboard</h2>
+      <h2 class="text-2xl font-bold text-gray-800">
+        Dashboard
+      </h2>
       <div class="flex gap-2">
         <button
-          @click="toggleMode"
           :class="[
             'px-4 py-2 rounded-lg font-medium transition-colors',
             isEditMode
               ? 'bg-blue-500 text-white hover:bg-blue-600'
               : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
           ]"
+          @click="toggleMode"
         >
           {{ isEditMode ? 'Exit Edit' : 'Edit Mode' }}
         </button>
         <button
           v-if="isEditMode"
-          @click="addSampleWidget"
           class="px-4 py-2 bg-green-500 text-white rounded-lg font-medium hover:bg-green-600 transition-colors"
+          @click="addSampleWidget"
         >
           Add Widget
         </button>

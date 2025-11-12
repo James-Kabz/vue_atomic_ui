@@ -110,7 +110,9 @@ onUnmounted(() => {
 <template>
   <div class="stats-widget">
     <div class="flex items-center justify-between mb-4">
-      <h3 class="text-lg font-semibold text-gray-900">{{ title }}</h3>
+      <h3 class="text-lg font-semibold text-gray-900">
+        {{ title }}
+      </h3>
       <button
         v-if="loading"
         class="text-gray-400 animate-spin"
@@ -120,11 +122,17 @@ onUnmounted(() => {
       </button>
     </div>
 
-    <div v-if="error" class="text-red-500 text-sm mb-4">
+    <div
+      v-if="error"
+      class="text-red-500 text-sm mb-4"
+    >
       Error loading data: {{ error }}
     </div>
 
-    <div v-else-if="data" class="space-y-4">
+    <div
+      v-else-if="data"
+      class="space-y-4"
+    >
       <div
         v-for="(stat, index) in displayData"
         :key="index"
@@ -132,12 +140,21 @@ onUnmounted(() => {
       >
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-sm font-medium text-gray-600">{{ stat.label }}</p>
-            <p class="text-2xl font-bold text-gray-900">{{ stat.value }}</p>
+            <p class="text-sm font-medium text-gray-600">
+              {{ stat.label }}
+            </p>
+            <p class="text-2xl font-bold text-gray-900">
+              {{ stat.value }}
+            </p>
           </div>
-          <div class="text-2xl">{{ stat.icon }}</div>
+          <div class="text-2xl">
+            {{ stat.icon }}
+          </div>
         </div>
-        <div v-if="stat.change !== undefined" class="mt-2">
+        <div
+          v-if="stat.change !== undefined"
+          class="mt-2"
+        >
           <span
             :class="[
               'text-sm font-medium',
@@ -151,7 +168,10 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <div v-else class="text-gray-500 text-center py-8">
+    <div
+      v-else
+      class="text-gray-500 text-center py-8"
+    >
       No data available
     </div>
   </div>
