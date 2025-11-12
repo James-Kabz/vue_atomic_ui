@@ -1,53 +1,3 @@
-<template>
-  <div class="list-widget">
-    <div class="flex items-center justify-between mb-4">
-      <h3 class="text-lg font-semibold text-gray-900">{{ title }}</h3>
-      <button
-        v-if="loading"
-        class="text-gray-400 animate-spin"
-        disabled
-      >
-        ⟳
-      </button>
-    </div>
-
-    <div v-if="error" class="text-red-500 text-sm mb-4">
-      Error loading list data: {{ error }}
-    </div>
-
-    <div v-else-if="listData && listData.length > 0" class="space-y-2">
-      <div
-        v-for="(item, index) in listData"
-        :key="index"
-        class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-      >
-        <div class="flex items-center space-x-3">
-          <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-            <span class="text-sm font-medium text-blue-600">
-              {{ getInitials(item) }}
-            </span>
-          </div>
-          <div>
-            <p class="text-sm font-medium text-gray-900">
-              {{ item.title || item.name || item.label || `Item ${index + 1}` }}
-            </p>
-            <p v-if="item.description || item.subtitle" class="text-sm text-gray-500">
-              {{ item.description || item.subtitle }}
-            </p>
-          </div>
-        </div>
-        <div v-if="item.value || item.amount" class="text-sm font-medium text-gray-900">
-          {{ item.value || item.amount }}
-        </div>
-      </div>
-    </div>
-
-    <div v-else class="text-gray-500 text-center py-8">
-      No list data available
-    </div>
-  </div>
-</template>
-
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 
@@ -142,3 +92,53 @@ onUnmounted(() => {
   stopAutoRefresh()
 })
 </script>
+
+<template>
+  <div class="list-widget">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-lg font-semibold text-gray-900">{{ title }}</h3>
+      <button
+        v-if="loading"
+        class="text-gray-400 animate-spin"
+        disabled
+      >
+        ⟳
+      </button>
+    </div>
+
+    <div v-if="error" class="text-red-500 text-sm mb-4">
+      Error loading list data: {{ error }}
+    </div>
+
+    <div v-else-if="listData && listData.length > 0" class="space-y-2">
+      <div
+        v-for="(item, index) in listData"
+        :key="index"
+        class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+      >
+        <div class="flex items-center space-x-3">
+          <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+            <span class="text-sm font-medium text-blue-600">
+              {{ getInitials(item) }}
+            </span>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-gray-900">
+              {{ item.title || item.name || item.label || `Item ${index + 1}` }}
+            </p>
+            <p v-if="item.description || item.subtitle" class="text-sm text-gray-500">
+              {{ item.description || item.subtitle }}
+            </p>
+          </div>
+        </div>
+        <div v-if="item.value || item.amount" class="text-sm font-medium text-gray-900">
+          {{ item.value || item.amount }}
+        </div>
+      </div>
+    </div>
+
+    <div v-else class="text-gray-500 text-center py-8">
+      No list data available
+    </div>
+  </div>
+</template>

@@ -1,52 +1,3 @@
-<!-- Dashboard.vue -->
-<template>
-  <div class="dashboard-container">
-    <!-- Dashboard Header -->
-    <div class="flex justify-between items-center mb-4 p-4 bg-gray-50 rounded-lg">
-      <h2 class="text-2xl font-bold text-gray-800">Dashboard</h2>
-      <div class="flex gap-2">
-        <button
-          @click="toggleMode"
-          :class="[
-            'px-4 py-2 rounded-lg font-medium transition-colors',
-            isEditMode
-              ? 'bg-blue-500 text-white hover:bg-blue-600'
-              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-          ]"
-        >
-          {{ isEditMode ? 'Exit Edit' : 'Edit Mode' }}
-        </button>
-        <button
-          v-if="isEditMode"
-          @click="addSampleWidget"
-          class="px-4 py-2 bg-green-500 text-white rounded-lg font-medium hover:bg-green-600 transition-colors"
-        >
-          Add Widget
-        </button>
-      </div>
-    </div>
-
-    <!-- Grid Container -->
-    <div
-      ref="gridRef"
-      class="dashboard-grid grid gap-4 p-4 min-h-screen bg-gray-100 rounded-lg"
-      :style="gridStyle"
-    >
-      <DashboardWidget
-        v-for="widget in widgets"
-        :key="widget.id"
-        :widget="widget"
-        :is-edit-mode="isEditMode"
-        :grid-cell-size="gridCellSize"
-        :grid-cols="gridCols"
-        @update:position="(pos) => updateWidgetPosition(widget.id, pos)"
-        @update:size="(size) => updateWidgetSize(widget.id, size)"
-        @remove="removeWidget"
-      />
-    </div>
-  </div>
-</template>
-
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import DashboardWidget from './DashboardWidget.vue'
@@ -297,6 +248,56 @@ onMounted(() => {
   }
 })
 </script>
+
+
+<template>
+  <div class="dashboard-container">
+    <!-- Dashboard Header -->
+    <div class="flex justify-between items-center mb-4 p-4 bg-gray-50 rounded-lg">
+      <h2 class="text-2xl font-bold text-gray-800">Dashboard</h2>
+      <div class="flex gap-2">
+        <button
+          @click="toggleMode"
+          :class="[
+            'px-4 py-2 rounded-lg font-medium transition-colors',
+            isEditMode
+              ? 'bg-blue-500 text-white hover:bg-blue-600'
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+          ]"
+        >
+          {{ isEditMode ? 'Exit Edit' : 'Edit Mode' }}
+        </button>
+        <button
+          v-if="isEditMode"
+          @click="addSampleWidget"
+          class="px-4 py-2 bg-green-500 text-white rounded-lg font-medium hover:bg-green-600 transition-colors"
+        >
+          Add Widget
+        </button>
+      </div>
+    </div>
+
+    <!-- Grid Container -->
+    <div
+      ref="gridRef"
+      class="dashboard-grid grid gap-4 p-4 min-h-screen bg-gray-100 rounded-lg"
+      :style="gridStyle"
+    >
+      <DashboardWidget
+        v-for="widget in widgets"
+        :key="widget.id"
+        :widget="widget"
+        :is-edit-mode="isEditMode"
+        :grid-cell-size="gridCellSize"
+        :grid-cols="gridCols"
+        @update:position="(pos) => updateWidgetPosition(widget.id, pos)"
+        @update:size="(size) => updateWidgetSize(widget.id, size)"
+        @remove="removeWidget"
+      />
+    </div>
+  </div>
+</template>
+
 
 <style scoped>
 .dashboard-grid {

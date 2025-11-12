@@ -1,53 +1,3 @@
-<template>
-  <div class="stats-widget">
-    <div class="flex items-center justify-between mb-4">
-      <h3 class="text-lg font-semibold text-gray-900">{{ title }}</h3>
-      <button
-        v-if="loading"
-        class="text-gray-400 animate-spin"
-        disabled
-      >
-        ⟳
-      </button>
-    </div>
-
-    <div v-if="error" class="text-red-500 text-sm mb-4">
-      Error loading data: {{ error }}
-    </div>
-
-    <div v-else-if="data" class="space-y-4">
-      <div
-        v-for="(stat, index) in displayData"
-        :key="index"
-        class="bg-gray-50 p-4 rounded-lg"
-      >
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-sm font-medium text-gray-600">{{ stat.label }}</p>
-            <p class="text-2xl font-bold text-gray-900">{{ stat.value }}</p>
-          </div>
-          <div class="text-2xl">{{ stat.icon }}</div>
-        </div>
-        <div v-if="stat.change !== undefined" class="mt-2">
-          <span
-            :class="[
-              'text-sm font-medium',
-              stat.change > 0 ? 'text-green-600' : 'text-red-600'
-            ]"
-          >
-            {{ stat.change > 0 ? '+' : '' }}{{ stat.change }}%
-          </span>
-          <span class="text-sm text-gray-500 ml-1">from last period</span>
-        </div>
-      </div>
-    </div>
-
-    <div v-else class="text-gray-500 text-center py-8">
-      No data available
-    </div>
-  </div>
-</template>
-
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 
@@ -156,3 +106,53 @@ onUnmounted(() => {
   stopAutoRefresh()
 })
 </script>
+
+<template>
+  <div class="stats-widget">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-lg font-semibold text-gray-900">{{ title }}</h3>
+      <button
+        v-if="loading"
+        class="text-gray-400 animate-spin"
+        disabled
+      >
+        ⟳
+      </button>
+    </div>
+
+    <div v-if="error" class="text-red-500 text-sm mb-4">
+      Error loading data: {{ error }}
+    </div>
+
+    <div v-else-if="data" class="space-y-4">
+      <div
+        v-for="(stat, index) in displayData"
+        :key="index"
+        class="bg-gray-50 p-4 rounded-lg"
+      >
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-gray-600">{{ stat.label }}</p>
+            <p class="text-2xl font-bold text-gray-900">{{ stat.value }}</p>
+          </div>
+          <div class="text-2xl">{{ stat.icon }}</div>
+        </div>
+        <div v-if="stat.change !== undefined" class="mt-2">
+          <span
+            :class="[
+              'text-sm font-medium',
+              stat.change > 0 ? 'text-green-600' : 'text-red-600'
+            ]"
+          >
+            {{ stat.change > 0 ? '+' : '' }}{{ stat.change }}%
+          </span>
+          <span class="text-sm text-gray-500 ml-1">from last period</span>
+        </div>
+      </div>
+    </div>
+
+    <div v-else class="text-gray-500 text-center py-8">
+      No data available
+    </div>
+  </div>
+</template>

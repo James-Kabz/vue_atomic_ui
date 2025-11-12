@@ -1,57 +1,3 @@
-<template>
-  <div class="table-widget">
-    <div class="flex items-center justify-between mb-4">
-      <h3 class="text-lg font-semibold text-gray-900">{{ title }}</h3>
-      <button
-        v-if="loading"
-        class="text-gray-400 animate-spin"
-        disabled
-      >
-        ⟳
-      </button>
-    </div>
-
-    <div v-if="error" class="text-red-500 text-sm mb-4">
-      Error loading table data: {{ error }}
-    </div>
-
-    <div v-else-if="tableData && tableData.length > 0" class="overflow-x-auto">
-      <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
-          <tr>
-            <th
-              v-for="column in columns"
-              :key="column.key"
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-            >
-              {{ column.label }}
-            </th>
-          </tr>
-        </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
-          <tr
-            v-for="(row, index) in tableData"
-            :key="index"
-            class="hover:bg-gray-50"
-          >
-            <td
-              v-for="column in columns"
-              :key="column.key"
-              class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
-            >
-              {{ getCellValue(row, column.key) }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div v-else class="text-gray-500 text-center py-8">
-      No table data available
-    </div>
-  </div>
-</template>
-
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 
@@ -159,3 +105,57 @@ onUnmounted(() => {
   stopAutoRefresh()
 })
 </script>
+
+<template>
+  <div class="table-widget">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-lg font-semibold text-gray-900">{{ title }}</h3>
+      <button
+        v-if="loading"
+        class="text-gray-400 animate-spin"
+        disabled
+      >
+        ⟳
+      </button>
+    </div>
+
+    <div v-if="error" class="text-red-500 text-sm mb-4">
+      Error loading table data: {{ error }}
+    </div>
+
+    <div v-else-if="tableData && tableData.length > 0" class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th
+              v-for="column in columns"
+              :key="column.key"
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              {{ column.label }}
+            </th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <tr
+            v-for="(row, index) in tableData"
+            :key="index"
+            class="hover:bg-gray-50"
+          >
+            <td
+              v-for="column in columns"
+              :key="column.key"
+              class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
+            >
+              {{ getCellValue(row, column.key) }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div v-else class="text-gray-500 text-center py-8">
+      No table data available
+    </div>
+  </div>
+</template>
