@@ -6,6 +6,10 @@ const props = defineProps({
   data: {
     type: Object,
     default: () => ({})
+  },
+  widgets: {
+    type: Array,
+    default: () => []
   }
 })
 
@@ -217,9 +221,14 @@ function findEmptyPosition(colSpan, rowSpan) {
 
 onMounted(() => {
   loadFromStorage()
-  // Add some default widgets if empty
+  // Add widgets if none exist
   if (widgets.value.length === 0) {
-    if (props.data && Object.keys(props.data).length > 0) {
+    if (props.widgets && props.widgets.length > 0) {
+      // Use provided widgets
+      props.widgets.forEach(widget => {
+        addWidget(widget)
+      })
+    } else if (props.data && Object.keys(props.data).length > 0) {
       // Create widgets based on provided data
       let yPos = 0
       Object.entries(props.data).forEach(([key, value], index) => {
@@ -235,14 +244,57 @@ onMounted(() => {
         if (index % 2 === 1) yPos += 2
       })
     } else {
+      // Add sample widgets to showcase functionality
       addWidget({
-        id: '1',
-        title: 'Welcome Widget',
-        component: 'Typography',
-        colSpan: 12,
+        id: 'stats-demo',
+        title: 'User Statistics',
+        component: 'StatsWidget',
+        colSpan: 6,
         rowSpan: 2,
         position: { x: 0, y: 0 },
-        children: 'Welcome to Dashboard! Switch to edit mode to customize your widgets.'
+        apiConfig: {
+          url: '/api/fake-stats',
+          refreshInterval: 10000
+        }
+      })
+
+      addWidget({
+        id: 'chart-demo',
+        title: 'Sales Chart',
+        component: 'ChartWidget',
+        colSpan: 6,
+        rowSpan: 3,
+        position: { x: 6, y: 0 },
+        apiConfig: {
+          url: '/api/fake-chart',
+          refreshInterval: 15000
+        }
+      })
+
+      addWidget({
+        id: 'table-demo',
+        title: 'Recent Orders',
+        component: 'TableWidget',
+        colSpan: 12,
+        rowSpan: 4,
+        position: { x: 0, y: 2 },
+        apiConfig: {
+          url: '/api/fake-table',
+          params: { limit: 5 }
+        }
+      })
+
+      addWidget({
+        id: 'list-demo',
+        title: 'Active Users',
+        component: 'ListWidget',
+        colSpan: 6,
+        rowSpan: 3,
+        position: { x: 0, y: 6 },
+        apiConfig: {
+          url: '/api/fake-list',
+          refreshInterval: 20000
+        }
       })
     }
   }
