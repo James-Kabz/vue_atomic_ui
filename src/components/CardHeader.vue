@@ -1,11 +1,11 @@
 <template>
   <header
     :class="cn(
-      'flex items-center justify-between',
+      cardHeaderVariants({ size }),
       $attrs.class
     )"
   >
-    <div class="flex flex-col">
+    <div :class="cn(contentVariants({ alignment }), 'flex flex-col')">
       <h2 v-if="title || $slots.title">
         <slot name="title">
           {{ title }}
@@ -25,6 +25,7 @@
 </template>
 
 <script setup>
+import { cva } from 'class-variance-authority'
 import { cn } from '../utils/cn.js'
 
 defineOptions({ inheritAttrs: false })
@@ -37,6 +38,48 @@ defineProps({
   subtitle: {
     type: String,
     default: ''
+  },
+  size: {
+    type: String,
+    default: 'medium',
+    validator: (value) => ['small', 'medium', 'large'].includes(value)
+  },
+  alignment: {
+    type: String,
+    default: 'left',
+    validator: (value) => ['left', 'center', 'right'].includes(value)
   }
 })
+
+const cardHeaderVariants = cva(
+  'flex items-center justify-between',
+  {
+    variants: {
+      size: {
+        small: 'p-2',
+        medium: 'p-4',
+        large: 'p-6'
+      }
+    },
+    defaultVariants: {
+      size: 'medium'
+    }
+  }
+)
+
+const contentVariants = cva(
+  '',
+  {
+    variants: {
+      alignment: {
+        left: 'text-left',
+        center: 'text-center',
+        right: 'text-right'
+      }
+    },
+    defaultVariants: {
+      alignment: 'left'
+    }
+  }
+)
 </script>
