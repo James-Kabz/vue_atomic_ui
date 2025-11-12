@@ -84,7 +84,11 @@ import DefaultLayout from "./layouts/DefaultLayout.vue"
 import ErrorLayout from "./layouts/ErrorLayout.vue"
 
 import Dashboard from "./components/Dashboard.vue"
-import Widget from "./components/Widget.vue"
+import DashboardWidget from "./components/DashboardWidget.vue"
+import StatsWidget from "./components/widgets/StatsWidget.vue"
+import ChartWidget from "./components/widgets/ChartWidget.vue"
+import TableWidget from "./components/widgets/TableWidget.vue"
+import ListWidget from "./components/widgets/ListWidget.vue"
 
 // Import toast function and composable (not a component!)
 import { toast, useToaster } from './lib/toast'
@@ -175,7 +179,11 @@ const components = {
   DefaultLayout,
   ErrorLayout,
   Dashboard,
-  Widget,
+  DashboardWidget,
+  StatsWidget,
+  ChartWidget,
+  TableWidget,
+  ListWidget,
 }
 
 // Plugin installer
@@ -279,7 +287,11 @@ export {
   DefaultLayout,
   ErrorLayout,
   Dashboard,
-  Widget,
+  DashboardWidget,
+  StatsWidget,
+  ChartWidget,
+  TableWidget,
+  ListWidget,
   // Export toast function and composable
   toast,
   useToaster,

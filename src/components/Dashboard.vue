@@ -32,7 +32,7 @@
       :class="gridClasses"
       :style="gridStyle"
     >
-      <Widget
+      <DashboardWidget
         v-for="widget in widgets"
         :key="widget.id"
         :widget="widget"
@@ -49,7 +49,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import Widget from './Widget.vue'
+import DashboardWidget from './DashboardWidget.vue'
 
 const props = defineProps({
   data: {

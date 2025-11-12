@@ -43,8 +43,33 @@
         </button>
       </div>
       <div class="widget-content">
-        <!-- Dynamic component rendering -->
-        <component :is="widget.component" v-bind="widget.props || {}">
+        <!-- Render specific widget components -->
+        <StatsWidget
+          v-if="widget.component === 'StatsWidget'"
+          :title="widget.title"
+          :api-config="widget.apiConfig"
+        />
+        <ChartWidget
+          v-else-if="widget.component === 'ChartWidget'"
+          :title="widget.title"
+          :api-config="widget.apiConfig"
+        />
+        <TableWidget
+          v-else-if="widget.component === 'TableWidget'"
+          :title="widget.title"
+          :api-config="widget.apiConfig"
+        />
+        <ListWidget
+          v-else-if="widget.component === 'ListWidget'"
+          :title="widget.title"
+          :api-config="widget.apiConfig"
+        />
+        <!-- Fallback for custom components -->
+        <component
+          v-else
+          :is="widget.component"
+          v-bind="widget.props || {}"
+        >
           {{ widget.children || '' }}
         </component>
       </div>
@@ -54,6 +79,10 @@
 
 <script setup>
 import { ref, computed, onUnmounted } from 'vue'
+import StatsWidget from './widgets/StatsWidget.vue'
+import ChartWidget from './widgets/ChartWidget.vue'
+import TableWidget from './widgets/TableWidget.vue'
+import ListWidget from './widgets/ListWidget.vue'
 
 const props = defineProps({
   widget: {
