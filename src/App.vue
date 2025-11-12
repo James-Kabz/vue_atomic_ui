@@ -24,6 +24,7 @@ import LineChart from './components/LineChart.vue'
 import GraphFilters from './components/GraphFilters.vue'
 import DataTableTest from './views/DataTableTest.vue';
 import Dashboard from './components/Dashboard.vue';
+import DashboardPage from './views/DashboardPage.vue';
 
 // Reactive data for examples
 const buttonLoading = ref(false);
@@ -156,5 +157,5 @@ const currentPath = computed(() => `#${currentSection.value}`);
 </script>
 
 <template>
-  <Dashboard/>
+  <DashboardPage />
 </template>

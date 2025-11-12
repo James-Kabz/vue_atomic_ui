@@ -51,6 +51,13 @@
 import { ref, computed, onMounted } from 'vue'
 import Widget from './Widget.vue'
 
+const props = defineProps({
+  data: {
+    type: Object,
+    default: () => ({})
+  }
+})
+
 const widgets = ref([])
 const mode = ref('read')
 const isEditMode = computed(() => mode.value === 'edit')
@@ -190,15 +197,32 @@ onMounted(() => {
   loadFromStorage()
   // Add some default widgets if empty
   if (widgets.value.length === 0) {
-    addWidget({
-      id: '1',
-      title: 'Welcome Widget',
-      component: 'Typography',
-      colSpan: 12,
-      rowSpan: 2,
-      position: { x: 0, y: 0 },
-      children: 'Welcome to Dashboard! Switch to edit mode to customize your widgets.'
-    })
+    if (props.data && Object.keys(props.data).length > 0) {
+      // Create widgets based on provided data
+      let yPos = 0
+      Object.entries(props.data).forEach(([key, value], index) => {
+        addWidget({
+          id: `data-${key}`,
+          title: key.charAt(0).toUpperCase() + key.slice(1),
+          component: 'Typography',
+          colSpan: 6,
+          rowSpan: 2,
+          position: { x: (index % 2) * 6, y: yPos },
+          children: Array.isArray(value) ? value.slice(0, 5).join(', ') : String(value)
+        })
+        if (index % 2 === 1) yPos += 2
+      })
+    } else {
+      addWidget({
+        id: '1',
+        title: 'Welcome Widget',
+        component: 'Typography',
+        colSpan: 12,
+        rowSpan: 2,
+        position: { x: 0, y: 0 },
+        children: 'Welcome to Dashboard! Switch to edit mode to customize your widgets.'
+      })
+    }
   }
 })
 </script>
