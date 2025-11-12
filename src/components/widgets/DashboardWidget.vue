@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import Icon from '../Icon.vue'
 import Loader from '../Loader.vue'
 import { cn } from '../../utils/cn'
@@ -19,7 +19,6 @@ const props = defineProps({
   padding: { type: String, default: 'normal' },
   hasRole: {
     type: Function,
-    required: true,
     default: () => () => false
   },
   // Chart props
@@ -432,7 +431,6 @@ onUnmounted(() => {
 })
 
 // Watch for chart data changes
-const chartKey = computed(() => JSON.stringify(props.chartData))
 const watchChart = () => {
   if (props.chartType && props.chartData) {
     setTimeout(renderChart, 50)
@@ -446,19 +444,25 @@ onMounted(() => {
     observer.observe(chartCanvas.value.parentElement, { childList: true, subtree: true })
   }
 })
+
+// Watch computed for data changes to trigger re-render
+const chartDataString = computed(() => JSON.stringify(props.chartData))
+watch(chartDataString, () => {
+  watchChart()
+})
 </script>
 
 <template>
   <div
     v-if="canView"
     draggable="true"
-    @dragstart="handleDragStart"
-    @dragend="handleDragEnd"
     :style="containerStyles"
     :class="cn(
       'bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden transition-all select-none flex flex-col',
       isDragging ? 'opacity-50 scale-95' : 'hover:shadow-lg cursor-move'
     )"
+    @dragstart="handleDragStart"
+    @dragend="handleDragEnd"
   >
     <!-- Header -->
     <div
@@ -466,18 +470,28 @@ onMounted(() => {
       class="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-slate-100 flex-shrink-0"
     >
       <div class="flex items-center gap-3">
-        <Icon v-if="icon" :icon="icon" class="w-5 h-5 text-slate-700" />
-        <h3 class="font-semibold text-lg text-slate-900">{{ title }}</h3>
+        <Icon
+          v-if="icon"
+          :icon="icon"
+          class="w-5 h-5 text-slate-700"
+        />
+        <h3 class="font-semibold text-lg text-slate-900">
+          {{ title }}
+        </h3>
       </div>
       <div class="flex items-center gap-3">
         <slot name="header-actions" />
         <button
           v-if="showRefresh"
-          @click="$emit('refresh')"
           class="p-2 rounded-lg hover:bg-white/80 transition-all duration-200 hover:scale-105 active:scale-95"
           :disabled="loading"
+          @click="$emit('refresh')"
         >
-          <Icon icon="refresh" class="w-4 h-4 text-slate-600" :class="{ 'animate-spin': loading }" />
+          <Icon
+            icon="refresh"
+            class="w-4 h-4 text-slate-600"
+            :class="{ 'animate-spin': loading }"
+          />
         </button>
       </div>
     </div>
@@ -488,7 +502,11 @@ onMounted(() => {
         v-if="loading"
         class="absolute inset-0 bg-white/90 backdrop-blur-sm z-10 flex items-center justify-center"
       >
-        <Loader type="spin" size="medium" color="#3b82f6" />
+        <Loader
+          type="spin"
+          size="medium"
+          color="#3b82f6"
+        />
       </div>
       
       <!-- Chart Canvas -->
@@ -497,10 +515,14 @@ onMounted(() => {
         ref="chartCanvas"
         class="w-full h-full"
         :class="paddingClasses[padding]"
-      ></canvas>
+      />
       
       <!-- Regular Content -->
-      <div v-else class="overflow-auto h-full" :class="paddingClasses[padding]">
+      <div
+        v-else
+        class="overflow-auto h-full"
+        :class="paddingClasses[padding]"
+      >
         <slot />
       </div>
     </div>
