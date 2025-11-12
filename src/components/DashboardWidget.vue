@@ -52,22 +52,26 @@
       </div>
       <div class="widget-content overflow-auto" :style="{ maxHeight: `${gridCellSize * widget.rowSpan - 80}px` }">
         <!-- Render specific widget components -->
-        <StatsWidget
+        <component
+          :is="'StatsWidget'"
           v-if="widget.component === 'StatsWidget'"
           :title="widget.title"
           :api-config="widget.apiConfig"
         />
-        <ChartWidget
+        <component
+          :is="'ChartWidget'"
           v-else-if="widget.component === 'ChartWidget'"
           :title="widget.title"
           :api-config="widget.apiConfig"
         />
-        <TableWidget
+        <component
+          :is="'TableWidget'"
           v-else-if="widget.component === 'TableWidget'"
           :title="widget.title"
           :api-config="widget.apiConfig"
         />
-        <ListWidget
+        <component
+          :is="'ListWidget'"
           v-else-if="widget.component === 'ListWidget'"
           :title="widget.title"
           :api-config="widget.apiConfig"
