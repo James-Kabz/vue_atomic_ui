@@ -49,7 +49,7 @@ const cardContent = ref(props.content)
       class="bg-white border border-gray-200 rounded-lg p-4"
     >
       <!-- eslint-disable-next-line vue/no-v-html -->
-      <div v-html="cardContent"></div>
+      <div v-html="cardContent" />
     </div>
   </div>
 </template>
