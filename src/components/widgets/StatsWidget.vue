@@ -9,6 +9,14 @@ const props = defineProps({
   apiConfig: {
     type: Object,
     default: () => ({})
+  },
+  data: {
+    type: Array,
+    default: () => []
+  },
+  stats: {
+    type: Array,
+    default: () => []
   }
 })
 
@@ -39,6 +47,19 @@ const displayData = computed(() => {
 })
 
 async function fetchData() {
+  // If direct data is provided, use it
+  if (props.data && props.data.length > 0) {
+    data.value = props.data
+    return
+  }
+
+  // If stats prop is provided, use it
+  if (props.stats && props.stats.length > 0) {
+    data.value = props.stats
+    return
+  }
+
+  // Otherwise, try API
   if (!props.apiConfig.url) return
 
   loading.value = true

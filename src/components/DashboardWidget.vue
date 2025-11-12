@@ -275,6 +275,13 @@ onUnmounted(() => {
           :title="widget.title"
           :api-config="widget.apiConfig"
         />
+        <component
+          :is="'CardWidget'"
+          v-else-if="widget.component === 'CardWidget'"
+          :title="widget.title"
+          :content="widget.props?.content || ''"
+          :api-config="widget.apiConfig"
+        />
         <!-- Simple components fallback -->
         <div
           v-else-if="widget.component === 'Typography'"

@@ -89,6 +89,7 @@ import StatsWidget from "./components/widgets/StatsWidget.vue"
 import ChartWidget from "./components/widgets/ChartWidget.vue"
 import TableWidget from "./components/widgets/TableWidget.vue"
 import ListWidget from "./components/widgets/ListWidget.vue"
+import CardWidget from "./components/widgets/CardWidget.vue"
 
 // Import toast function and composable (not a component!)
 import { toast, useToaster } from './lib/toast'
@@ -184,6 +185,7 @@ const components = {
   ChartWidget,
   TableWidget,
   ListWidget,
+  CardWidget,
 }
 
 // Plugin installer
@@ -292,6 +294,7 @@ export {
   ChartWidget,
   TableWidget,
   ListWidget,
+  CardWidget,
   // Export toast function and composable
   toast,
   useToaster,
