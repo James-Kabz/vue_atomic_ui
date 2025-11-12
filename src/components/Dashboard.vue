@@ -1,3 +1,4 @@
+<!-- Dashboard.vue -->
 <template>
   <div class="dashboard-container">
     <!-- Dashboard Header -->
@@ -29,7 +30,6 @@
     <div
       ref="gridRef"
       class="dashboard-grid grid gap-4 p-4 min-h-screen bg-gray-100 rounded-lg"
-      :class="gridClasses"
       :style="gridStyle"
     >
       <DashboardWidget
@@ -61,6 +61,106 @@ const props = defineProps({
 const widgets = ref([])
 const mode = ref('read')
 const isEditMode = computed(() => mode.value === 'edit')
+const gridRef = ref(null)
+const gridCols = ref(12)
+const gridCellSize = ref(120)
+
+const gridStyle = computed(() => ({
+  gridTemplateColumns: `repeat(${gridCols.value}, 1fr)`,
+  gridAutoRows: `${gridCellSize.value}px`
+}))
+
+// Check if two widgets collide
+function checkCollision(widget1, widget2) {
+  return !(
+    widget1.position.x + widget1.colSpan <= widget2.position.x ||
+    widget2.position.x + widget2.colSpan <= widget1.position.x ||
+    widget1.position.y + widget1.rowSpan <= widget2.position.y ||
+    widget2.position.y + widget2.rowSpan <= widget1.position.y
+  )
+}
+
+// Resolve collisions by pushing widgets down
+function resolveCollisions(updatedWidget) {
+  const movedWidgets = new Set([updatedWidget.id])
+  
+  function pushWidgetDown(widget) {
+    if (movedWidgets.has(widget.id)) return
+    
+    movedWidgets.add(widget.id)
+    widget.position.y = updatedWidget.position.y + updatedWidget.rowSpan
+    
+    // Check for new collisions with other widgets
+    widgets.value.forEach(other => {
+      if (other.id !== widget.id && !movedWidgets.has(other.id)) {
+        if (checkCollision(widget, other)) {
+          pushWidgetDown(other)
+        }
+      }
+    })
+  }
+  
+  // Check all widgets for collisions with the updated widget
+  widgets.value.forEach(widget => {
+    if (widget.id !== updatedWidget.id && checkCollision(updatedWidget, widget)) {
+      pushWidgetDown(widget)
+    }
+  })
+}
+
+function updateWidgetPosition(widgetId, newPosition) {
+  const widget = widgets.value.find(w => w.id === widgetId)
+  if (!widget) return
+  
+  // Create a temporary widget with new position
+  const tempWidget = {
+    ...widget,
+    position: { ...newPosition }
+  }
+  
+  // Update the widget position
+  widget.position = { ...newPosition }
+  
+  // Resolve any collisions
+  resolveCollisions(tempWidget)
+  
+  saveToStorage()
+}
+
+function updateWidgetSize(widgetId, newSize) {
+  const widget = widgets.value.find(w => w.id === widgetId)
+  if (!widget) return
+  
+  // Check if new size would exceed grid bounds
+  if (widget.position.x + newSize.colSpan > gridCols.value) {
+    newSize.colSpan = gridCols.value - widget.position.x
+  }
+  
+  // Create a temporary widget with new size
+  const tempWidget = {
+    ...widget,
+    colSpan: newSize.colSpan,
+    rowSpan: newSize.rowSpan
+  }
+  
+  // Check if resize would cause collisions
+  let hasCollision = false
+  widgets.value.forEach(other => {
+    if (other.id !== widget.id && checkCollision(tempWidget, other)) {
+      hasCollision = true
+    }
+  })
+  
+  // Only update if no collision or resolve collisions
+  widget.colSpan = newSize.colSpan
+  widget.rowSpan = newSize.rowSpan
+  
+  if (hasCollision) {
+    resolveCollisions(tempWidget)
+  }
+  
+  saveToStorage()
+}
 
 function addWidget(widget) {
   widgets.value.push({
@@ -82,23 +182,6 @@ function removeWidget(widgetId) {
   const index = widgets.value.findIndex(w => w.id === widgetId)
   if (index > -1) {
     widgets.value.splice(index, 1)
-    saveToStorage()
-  }
-}
-
-function updateWidgetPosition(widgetId, newPosition) {
-  const widget = widgets.value.find(w => w.id === widgetId)
-  if (widget) {
-    widget.position = { ...newPosition }
-    saveToStorage()
-  }
-}
-
-function updateWidgetSize(widgetId, newSize) {
-  const widget = widgets.value.find(w => w.id === widgetId)
-  if (widget) {
-    widget.colSpan = newSize.colSpan
-    widget.rowSpan = newSize.rowSpan
     saveToStorage()
   }
 }
@@ -129,21 +212,6 @@ function saveToStorage() {
   }))
 }
 
-const gridRef = ref(null)
-const gridCols = ref(12)
-const gridCellSize = ref(120)
-
-const gridStyle = computed(() => ({
-  gridTemplateColumns: `repeat(${gridCols.value}, minmax(${gridCellSize.value}px, 1fr))`,
-  gridAutoRows: `${gridCellSize.value}px`
-}))
-
-const gridClasses = computed(() => ({
-  'grid-cols-12': gridCols.value === 12,
-  'md:grid-cols-8': gridCols.value === 12, // responsive
-  'sm:grid-cols-4': gridCols.value === 12
-}))
-
 function toggleMode() {
   mode.value = isEditMode.value ? 'read' : 'edit'
   saveToStorage()
@@ -166,27 +234,35 @@ function addSampleWidget() {
 }
 
 function findEmptyPosition(colSpan, rowSpan) {
-  // Simple algorithm to find empty spot
-  for (let y = 0; y < 10; y++) {
-    for (let x = 0; x <= gridCols.value - colSpan; x++) {
-      if (isPositionEmpty(x, y, colSpan, rowSpan)) {
-        return { x, y }
+  // Find the lowest Y position that's available
+  const maxY = widgets.value.length > 0 
+    ? Math.max(...widgets.value.map(w => w.position.y + w.rowSpan)) 
+    : 0
+  
+  // Try to place widget at bottom
+  for (let x = 0; x <= gridCols.value - colSpan; x++) {
+    const testWidget = {
+      position: { x, y: maxY },
+      colSpan,
+      rowSpan
+    }
+    
+    let hasCollision = false
+    for (const widget of widgets.value) {
+      if (checkCollision(testWidget, widget)) {
+        hasCollision = true
+        break
       }
     }
+    
+    if (!hasCollision) {
+      return { x, y: maxY }
+    }
   }
-  return { x: 0, y: 0 } // fallback
+  
+  // If no space at bottom, place below everything
+  return { x: 0, y: maxY }
 }
-
-function isPositionEmpty(x, y, colSpan, rowSpan) {
-  return !widgets.value.some(widget => {
-    const wx = widget.position.x
-    const wy = widget.position.y
-    const wcol = widget.colSpan
-    const wrow = widget.rowSpan
-    return !(x + colSpan <= wx || wx + wcol <= x || y + rowSpan <= wy || wy + wrow <= y)
-  })
-}
-
 
 onMounted(() => {
   loadFromStorage()

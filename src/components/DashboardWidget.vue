@@ -1,31 +1,32 @@
+<!-- DashboardWidget.vue -->
 <template>
   <div
     ref="widgetRef"
     :class="[
-      'widget-card bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden transition-all duration-200',
-      isDragging && 'shadow-lg z-50',
-      isResizing && 'shadow-lg z-50',
+      'widget-card bg-white border rounded-lg shadow-sm overflow-hidden transition-all duration-200 relative',
+      (isDragging || isResizing) && 'shadow-lg z-50 border-blue-500 border-2',
+      !isDragging && !isResizing && 'border-gray-200',
       isEditMode && 'cursor-move'
     ]"
     :style="widgetStyle"
     @mousedown="handleMouseDown"
   >
     <!-- Resize handles (only in edit mode) -->
-    <div v-if="isEditMode" class="absolute inset-0 pointer-events-none">
+    <div v-if="isEditMode" class="absolute inset-0 pointer-events-none z-10">
       <div
-        class="resize-handle resize-handle-se absolute bottom-0 right-0 w-4 h-4 cursor-se-resize pointer-events-auto"
+        class="resize-handle resize-handle-se absolute bottom-0 right-0 w-4 h-4 bg-blue-500 rounded-tl cursor-se-resize pointer-events-auto border-2 border-white shadow-md hover:bg-blue-600 hover:scale-110 transition-all"
         @mousedown.stop="startResize('se')"
       ></div>
       <div
-        class="resize-handle resize-handle-sw absolute bottom-0 left-0 w-4 h-4 cursor-sw-resize pointer-events-auto"
+        class="resize-handle resize-handle-sw absolute bottom-0 left-0 w-4 h-4 bg-blue-500 rounded-tr cursor-sw-resize pointer-events-auto border-2 border-white shadow-md hover:bg-blue-600 hover:scale-110 transition-all"
         @mousedown.stop="startResize('sw')"
       ></div>
       <div
-        class="resize-handle resize-handle-ne absolute top-0 right-0 w-4 h-4 cursor-ne-resize pointer-events-auto"
+        class="resize-handle resize-handle-ne absolute top-0 right-0 w-4 h-4 bg-blue-500 rounded-bl cursor-ne-resize pointer-events-auto border-2 border-white shadow-md hover:bg-blue-600 hover:scale-110 transition-all"
         @mousedown.stop="startResize('ne')"
       ></div>
       <div
-        class="resize-handle resize-handle-nw absolute top-0 left-0 w-4 h-4 cursor-nw-resize pointer-events-auto"
+        class="resize-handle resize-handle-nw absolute top-0 left-0 w-4 h-4 bg-blue-500 rounded-br cursor-nw-resize pointer-events-auto border-2 border-white shadow-md hover:bg-blue-600 hover:scale-110 transition-all"
         @mousedown.stop="startResize('nw')"
       ></div>
     </div>
@@ -33,16 +34,23 @@
     <!-- Widget content -->
     <div class="p-4 h-full">
       <div class="flex justify-between items-center mb-2">
-        <h3 class="text-lg font-semibold text-gray-800">{{ widget.title }}</h3>
+        <h3 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
+          <svg v-if="isEditMode" class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"></path>
+          </svg>
+          {{ widget.title }}
+        </h3>
         <button
           v-if="isEditMode"
-          @click="$emit('remove', widget.id)"
-          class="text-red-500 hover:text-red-700 p-1"
+          @click.stop="$emit('remove', widget.id)"
+          class="text-red-500 hover:text-red-700 p-1 rounded hover:bg-red-50 transition-colors"
         >
-          ×
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
         </button>
       </div>
-      <div class="widget-content">
+      <div class="widget-content overflow-auto" :style="{ maxHeight: `${gridCellSize * widget.rowSpan - 80}px` }">
         <!-- Render specific widget components -->
         <StatsWidget
           v-if="widget.component === 'StatsWidget'"
@@ -64,6 +72,24 @@
           :title="widget.title"
           :api-config="widget.apiConfig"
         />
+        <!-- Simple components fallback -->
+        <div v-else-if="widget.component === 'Typography'" class="text-gray-700">
+          {{ widget.children }}
+        </div>
+        <button v-else-if="widget.component === 'Button'" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full">
+          {{ widget.children }}
+        </button>
+        <div v-else-if="widget.component === 'Card'" class="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded h-full">
+          <p class="text-gray-600">{{ widget.children || 'Card Content' }}</p>
+        </div>
+        <div v-else-if="widget.component === 'Alert'" :class="getAlertClass(widget.props?.type)" class="p-3 rounded">
+          {{ widget.children }}
+        </div>
+        <div v-else-if="widget.component === 'Progress'" class="w-full">
+          <div class="w-full bg-gray-200 rounded-full h-4">
+            <div class="bg-blue-500 h-4 rounded-full transition-all" :style="{ width: `${widget.props?.value || 0}%` }"></div>
+          </div>
+        </div>
         <!-- Fallback for custom components -->
         <component
           v-else
@@ -79,10 +105,6 @@
 
 <script setup>
 import { ref, computed, onUnmounted } from 'vue'
-import StatsWidget from './widgets/StatsWidget.vue'
-import ChartWidget from './widgets/ChartWidget.vue'
-import TableWidget from './widgets/TableWidget.vue'
-import ListWidget from './widgets/ListWidget.vue'
 
 const props = defineProps({
   widget: {
@@ -109,7 +131,7 @@ const widgetRef = ref(null)
 const isDragging = ref(false)
 const isResizing = ref(false)
 const dragStart = ref({ x: 0, y: 0 })
-const resizeStart = ref({ x: 0, y: 0, colSpan: 0, rowSpan: 0 })
+const resizeStart = ref({ x: 0, y: 0, colSpan: 0, rowSpan: 0, posX: 0, posY: 0 })
 const resizeDirection = ref('')
 
 const widgetStyle = computed(() => {
@@ -121,13 +143,28 @@ const widgetStyle = computed(() => {
   }
 })
 
+function getAlertClass(type = 'info') {
+  const classes = {
+    info: 'bg-blue-100 text-blue-800',
+    warning: 'bg-yellow-100 text-yellow-800',
+    error: 'bg-red-100 text-red-800',
+    success: 'bg-green-100 text-green-800'
+  }
+  return classes[type] || classes.info
+}
+
 function handleMouseDown(event) {
   if (!props.isEditMode || isResizing.value) return
 
   isDragging.value = true
+
+  const gridElement = widgetRef.value?.parentElement
+  const gridRect = gridElement?.getBoundingClientRect()
+  const actualCellWidth = gridRect ? gridRect.width / props.gridCols : props.gridCellSize
+
   dragStart.value = {
-    x: event.clientX - props.widget.position.x * props.gridCellSize,
-    y: event.clientY - props.widget.position.y * props.gridCellSize
+    x: event.clientX - (props.widget.position.x * actualCellWidth + (gridRect?.left || 0)),
+    y: event.clientY - (props.widget.position.y * props.gridCellSize + (gridRect?.top || 0))
   }
 
   document.addEventListener('mousemove', handleDrag)
@@ -137,11 +174,19 @@ function handleMouseDown(event) {
 function handleDrag(event) {
   if (!isDragging.value) return
 
-  const rect = widgetRef.value?.parentElement?.getBoundingClientRect()
-  if (!rect) return
+  const gridElement = widgetRef.value?.parentElement
+  if (!gridElement) return
 
-  const x = Math.max(0, Math.min(props.gridCols - props.widget.colSpan, Math.round((event.clientX - dragStart.value.x) / props.gridCellSize)))
-  const y = Math.max(0, Math.round((event.clientY - dragStart.value.y) / props.gridCellSize))
+  const gridRect = gridElement.getBoundingClientRect()
+  const actualCellWidth = gridRect.width / props.gridCols
+  const actualCellHeight = props.gridCellSize
+
+  // Calculate relative mouse position within grid
+  const relativeX = event.clientX - gridRect.left - dragStart.value.x
+  const relativeY = event.clientY - gridRect.top - dragStart.value.y
+
+  const x = Math.max(0, Math.min(props.gridCols - props.widget.colSpan, Math.round(relativeX / actualCellWidth)))
+  const y = Math.max(0, Math.round(relativeY / actualCellHeight))
 
   emit('update:position', { x, y })
 }
@@ -152,7 +197,7 @@ function stopDrag() {
   document.removeEventListener('mouseup', stopDrag)
 }
 
-function startResize(direction) {
+function startResize(direction, event) {
   if (!props.isEditMode) return
 
   isResizing.value = true
@@ -161,7 +206,9 @@ function startResize(direction) {
     x: event.clientX,
     y: event.clientY,
     colSpan: props.widget.colSpan,
-    rowSpan: props.widget.rowSpan
+    rowSpan: props.widget.rowSpan,
+    posX: props.widget.position.x,
+    posY: props.widget.position.y
   }
 
   document.addEventListener('mousemove', handleResize)
@@ -171,35 +218,46 @@ function startResize(direction) {
 function handleResize(event) {
   if (!isResizing.value) return
 
+  const gridElement = widgetRef.value?.parentElement
+  const gridRect = gridElement?.getBoundingClientRect()
+  const actualCellWidth = gridRect ? gridRect.width / props.gridCols : props.gridCellSize
+
   const deltaX = event.clientX - resizeStart.value.x
   const deltaY = event.clientY - resizeStart.value.y
 
   let newColSpan = resizeStart.value.colSpan
   let newRowSpan = resizeStart.value.rowSpan
+  let newX = resizeStart.value.posX
+  let newY = resizeStart.value.posY
 
+  // Handle horizontal resize
   if (resizeDirection.value.includes('e')) {
-    newColSpan = Math.max(1, Math.min(props.gridCols - props.widget.position.x, resizeStart.value.colSpan + Math.round(deltaX / props.gridCellSize)))
+    const colChange = Math.round(deltaX / actualCellWidth)
+    newColSpan = Math.max(1, Math.min(props.gridCols - resizeStart.value.posX, resizeStart.value.colSpan + colChange))
   }
   if (resizeDirection.value.includes('w')) {
-    const leftChange = Math.round(deltaX / props.gridCellSize)
-    newColSpan = Math.max(1, resizeStart.value.colSpan - leftChange)
-    // Adjust position if resizing left
-    if (leftChange > 0 && props.widget.position.x > 0) {
-      emit('update:position', { x: Math.max(0, props.widget.position.x - leftChange), y: props.widget.position.y })
-    }
-  }
-  if (resizeDirection.value.includes('s')) {
-    newRowSpan = Math.max(1, resizeStart.value.rowSpan + Math.round(deltaY / props.gridCellSize))
-  }
-  if (resizeDirection.value.includes('n')) {
-    const topChange = Math.round(deltaY / props.gridCellSize)
-    newRowSpan = Math.max(1, resizeStart.value.rowSpan - topChange)
-    // Adjust position if resizing up
-    if (topChange > 0 && props.widget.position.y > 0) {
-      emit('update:position', { x: props.widget.position.x, y: Math.max(0, props.widget.position.y - topChange) })
-    }
+    const colChange = Math.round(deltaX / actualCellWidth)
+    newColSpan = Math.max(1, resizeStart.value.colSpan - colChange)
+    newX = Math.max(0, Math.min(props.gridCols - newColSpan, resizeStart.value.posX + colChange))
   }
 
+  // Handle vertical resize
+  if (resizeDirection.value.includes('s')) {
+    const rowChange = Math.round(deltaY / props.gridCellSize)
+    newRowSpan = Math.max(1, resizeStart.value.rowSpan + rowChange)
+  }
+  if (resizeDirection.value.includes('n')) {
+    const rowChange = Math.round(deltaY / props.gridCellSize)
+    newRowSpan = Math.max(1, resizeStart.value.rowSpan - rowChange)
+    newY = Math.max(0, resizeStart.value.posY + rowChange)
+  }
+
+  // Update position if needed (for west/north resizing)
+  if (newX !== props.widget.position.x || newY !== props.widget.position.y) {
+    emit('update:position', { x: newX, y: newY })
+  }
+
+  // Update size
   emit('update:size', { colSpan: newColSpan, rowSpan: newRowSpan })
 }
 
@@ -219,52 +277,35 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+.widget-card {
+  user-select: none;
+}
+
 .resize-handle {
-  background: rgba(59, 130, 246, 0.5);
-  border: 1px solid #3b82f6;
+  z-index: 20;
 }
 
-.resize-handle-se::after {
-  content: '';
-  position: absolute;
-  bottom: 2px;
-  right: 2px;
-  width: 0;
-  height: 0;
-  border-left: 6px solid transparent;
-  border-bottom: 6px solid #3b82f6;
+.widget-content {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e0 #f7fafc;
 }
 
-.resize-handle-sw::after {
-  content: '';
-  position: absolute;
-  bottom: 2px;
-  left: 2px;
-  width: 0;
-  height: 0;
-  border-right: 6px solid transparent;
-  border-bottom: 6px solid #3b82f6;
+.widget-content::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }
 
-.resize-handle-ne::after {
-  content: '';
-  position: absolute;
-  top: 2px;
-  right: 2px;
-  width: 0;
-  height: 0;
-  border-left: 6px solid transparent;
-  border-top: 6px solid #3b82f6;
+.widget-content::-webkit-scrollbar-track {
+  background: #f7fafc;
+  border-radius: 3px;
 }
 
-.resize-handle-nw::after {
-  content: '';
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 0;
-  height: 0;
-  border-right: 6px solid transparent;
-  border-top: 6px solid #3b82f6;
+.widget-content::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  border-radius: 3px;
+}
+
+.widget-content::-webkit-scrollbar-thumb:hover {
+  background: #a0aec0;
 }
 </style>
