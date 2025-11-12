@@ -57,9 +57,9 @@ const emit = defineEmits(['widget:update:position', 'widget:update:size', 'widge
         :is-edit-mode="!readOnly"
         :grid-cell-size="gridCellSize"
         :grid-cols="gridCols"
-        @update:position="(pos) => $emit('widget:update:position', { id: widget.id, position: pos })"
-        @update:size="(size) => $emit('widget:update:size', { id: widget.id, size })"
-        @remove="() => $emit('widget:remove', widget.id)"
+        @update:position="(pos) => emit('widget:update:position', { id: widget.id, position: pos })"
+        @update:size="(size) => emit('widget:update:size', { id: widget.id, size })"
+        @remove="() => emit('widget:remove', widget.id)"
       />
     </div>
   </div>
