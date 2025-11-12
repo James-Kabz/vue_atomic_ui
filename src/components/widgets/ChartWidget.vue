@@ -9,6 +9,10 @@ const props = defineProps({
   apiConfig: {
     type: Object,
     default: () => ({})
+  },
+  data: {
+    type: Array,
+    default: () => []
   }
 })
 
@@ -28,6 +32,16 @@ function getBarHeight(value) {
 }
 
 async function fetchData() {
+  // If direct data is provided, use it
+  if (props.data && props.data.length > 0) {
+    chartData.value = props.data.map(item => ({
+      label: item.label || item.name || item.category,
+      value: item.value || item.count || item.amount || 0
+    }))
+    return
+  }
+
+  // Otherwise, try API
   if (!props.apiConfig.url) return
 
   loading.value = true

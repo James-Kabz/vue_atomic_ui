@@ -9,6 +9,10 @@ const props = defineProps({
   apiConfig: {
     type: Object,
     default: () => ({})
+  },
+  data: {
+    type: Array,
+    default: () => []
   }
 })
 
@@ -36,6 +40,13 @@ function getCellValue(row, key) {
 }
 
 async function fetchData() {
+  // If direct data is provided, use it
+  if (props.data && props.data.length > 0) {
+    tableData.value = props.data
+    return
+  }
+
+  // Otherwise, try API
   if (!props.apiConfig.url) return
 
   loading.value = true
