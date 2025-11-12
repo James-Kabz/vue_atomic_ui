@@ -83,13 +83,6 @@ import AuthLayout from "./layouts/AuthLayout.vue"
 import DefaultLayout from "./layouts/DefaultLayout.vue"
 import ErrorLayout from "./layouts/ErrorLayout.vue"
 
-import Dashboard from "./components/Dashboard.vue"
-import DashboardWidget from "./components/DashboardWidget.vue"
-import StatsWidget from "./components/widgets/StatsWidget.vue"
-import ChartWidget from "./components/widgets/ChartWidget.vue"
-import TableWidget from "./components/widgets/TableWidget.vue"
-import ListWidget from "./components/widgets/ListWidget.vue"
-import CardWidget from "./components/widgets/CardWidget.vue"
 
 // Import toast function and composable (not a component!)
 import { toast, useToaster } from './lib/toast'
@@ -179,13 +172,6 @@ const components = {
   AuthLayout,
   DefaultLayout,
   ErrorLayout,
-  Dashboard,
-  DashboardWidget,
-  StatsWidget,
-  ChartWidget,
-  TableWidget,
-  ListWidget,
-  CardWidget,
 }
 
 // Plugin installer
@@ -288,13 +274,6 @@ export {
   AuthLayout,
   DefaultLayout,
   ErrorLayout,
-  Dashboard,
-  DashboardWidget,
-  StatsWidget,
-  ChartWidget,
-  TableWidget,
-  ListWidget,
-  CardWidget,
   // Export toast function and composable
   toast,
   useToaster,
