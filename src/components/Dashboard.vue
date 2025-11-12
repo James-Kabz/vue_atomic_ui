@@ -13,7 +13,7 @@ const props = defineProps({
   }
 })
 
-const widgets = ref([])
+const dashboardWidgets = ref([])
 const mode = ref('read')
 const isEditMode = computed(() => mode.value === 'edit')
 const gridRef = ref(null)
@@ -41,12 +41,12 @@ function resolveCollisions(updatedWidget) {
   
   function pushWidgetDown(widget) {
     if (movedWidgets.has(widget.id)) return
-    
+
     movedWidgets.add(widget.id)
     widget.position.y = updatedWidget.position.y + updatedWidget.rowSpan
-    
+
     // Check for new collisions with other widgets
-    widgets.value.forEach(other => {
+    dashboardWidgets.value.forEach(other => {
       if (other.id !== widget.id && !movedWidgets.has(other.id)) {
         if (checkCollision(widget, other)) {
           pushWidgetDown(other)
@@ -54,9 +54,9 @@ function resolveCollisions(updatedWidget) {
       }
     })
   }
-  
+
   // Check all widgets for collisions with the updated widget
-  widgets.value.forEach(widget => {
+  dashboardWidgets.value.forEach(widget => {
     if (widget.id !== updatedWidget.id && checkCollision(updatedWidget, widget)) {
       pushWidgetDown(widget)
     }
@@ -64,61 +64,61 @@ function resolveCollisions(updatedWidget) {
 }
 
 function updateWidgetPosition(widgetId, newPosition) {
-  const widget = widgets.value.find(w => w.id === widgetId)
+  const widget = dashboardWidgets.value.find(w => w.id === widgetId)
   if (!widget) return
-  
+
   // Create a temporary widget with new position
   const tempWidget = {
     ...widget,
     position: { ...newPosition }
   }
-  
+
   // Update the widget position
   widget.position = { ...newPosition }
-  
+
   // Resolve any collisions
   resolveCollisions(tempWidget)
-  
+
   saveToStorage()
 }
 
 function updateWidgetSize(widgetId, newSize) {
-  const widget = widgets.value.find(w => w.id === widgetId)
+  const widget = dashboardWidgets.value.find(w => w.id === widgetId)
   if (!widget) return
-  
+
   // Check if new size would exceed grid bounds
   if (widget.position.x + newSize.colSpan > gridCols.value) {
     newSize.colSpan = gridCols.value - widget.position.x
   }
-  
+
   // Create a temporary widget with new size
   const tempWidget = {
     ...widget,
     colSpan: newSize.colSpan,
     rowSpan: newSize.rowSpan
   }
-  
+
   // Check if resize would cause collisions
   let hasCollision = false
-  widgets.value.forEach(other => {
+  dashboardWidgets.value.forEach(other => {
     if (other.id !== widget.id && checkCollision(tempWidget, other)) {
       hasCollision = true
     }
   })
-  
+
   // Only update if no collision or resolve collisions
   widget.colSpan = newSize.colSpan
   widget.rowSpan = newSize.rowSpan
-  
+
   if (hasCollision) {
     resolveCollisions(tempWidget)
   }
-  
+
   saveToStorage()
 }
 
 function addWidget(widget) {
-  widgets.value.push({
+  dashboardWidgets.value.push({
     id: widget.id || Date.now().toString(),
     title: widget.title || 'New Widget',
     component: widget.component || 'Typography',
@@ -134,9 +134,9 @@ function addWidget(widget) {
 }
 
 function removeWidget(widgetId) {
-  const index = widgets.value.findIndex(w => w.id === widgetId)
+  const index = dashboardWidgets.value.findIndex(w => w.id === widgetId)
   if (index > -1) {
-    widgets.value.splice(index, 1)
+    dashboardWidgets.value.splice(index, 1)
     saveToStorage()
   }
 }
@@ -147,7 +147,7 @@ function loadFromStorage() {
     if (stored) {
       const parsed = JSON.parse(stored)
       if (parsed.widgets && Array.isArray(parsed.widgets)) {
-        widgets.value = parsed.widgets
+        dashboardWidgets.value = parsed.widgets
       }
       if (parsed.mode) {
         mode.value = parsed.mode
@@ -155,14 +155,14 @@ function loadFromStorage() {
     }
   } catch (e) {
     console.warn('Failed to load dashboard data from storage', e)
-    widgets.value = []
+    dashboardWidgets.value = []
     mode.value = 'read'
   }
 }
 
 function saveToStorage() {
   localStorage.setItem('dashboard-data', JSON.stringify({
-    widgets: widgets.value,
+    widgets: dashboardWidgets.value,
     mode: mode.value
   }))
 }
@@ -190,10 +190,10 @@ function addSampleWidget() {
 
 function findEmptyPosition(colSpan, rowSpan) {
   // Find the lowest Y position that's available
-  const maxY = widgets.value.length > 0 
-    ? Math.max(...widgets.value.map(w => w.position.y + w.rowSpan)) 
+  const maxY = dashboardWidgets.value.length > 0
+    ? Math.max(...dashboardWidgets.value.map(w => w.position.y + w.rowSpan))
     : 0
-  
+
   // Try to place widget at bottom
   for (let x = 0; x <= gridCols.value - colSpan; x++) {
     const testWidget = {
@@ -201,20 +201,20 @@ function findEmptyPosition(colSpan, rowSpan) {
       colSpan,
       rowSpan
     }
-    
+
     let hasCollision = false
-    for (const widget of widgets.value) {
+    for (const widget of dashboardWidgets.value) {
       if (checkCollision(testWidget, widget)) {
         hasCollision = true
         break
       }
     }
-    
+
     if (!hasCollision) {
       return { x, y: maxY }
     }
   }
-  
+
   // If no space at bottom, place below everything
   return { x: 0, y: maxY }
 }
@@ -222,7 +222,7 @@ function findEmptyPosition(colSpan, rowSpan) {
 onMounted(() => {
   loadFromStorage()
   // Add widgets if none exist
-  if (widgets.value.length === 0) {
+  if (dashboardWidgets.value.length === 0) {
     if (props.widgets && props.widgets.length > 0) {
       // Use provided widgets
       props.widgets.forEach(widget => {
@@ -338,7 +338,7 @@ onMounted(() => {
       :style="gridStyle"
     >
       <DashboardWidget
-        v-for="widget in widgets"
+        v-for="widget in dashboardWidgets"
         :key="widget.id"
         :widget="widget"
         :is-edit-mode="isEditMode"
