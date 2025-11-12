@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-// import { createPinia } from 'pinia'
+import { createPinia } from 'pinia'
 
 import App from './App.vue'
 import router from './router'
@@ -22,7 +22,7 @@ library.add(
 )
 app.component('FontAwesomeIcon', FontAwesomeIcon)
 app.directive('tooltip', tooltip)
-// app.use(createPinia())
+app.use(createPinia())
 app.use(router)
 
 app.mount('#app')

@@ -12,7 +12,7 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
 export default defineConfig({
-  plugins: [vue(), vueJsx(), vueDevTools(), tailwindcss()],
+  plugins: [vue(), vueJsx(), tailwindcss()],
   build: {
     lib: {
       entry: resolve(__dirname, "src/index.js"),
