@@ -22,12 +22,17 @@ const props = defineProps({
     default: () => () => false
   },
   // Chart props
-  chartType: { type: String, default: null }, // 'bar', 'pie', 'line', 'doughnut'
+  chartType: { type: String, default: null },
   chartData: { type: Object, default: null },
-  chartOptions: { type: Object, default: () => ({}) }
+  chartOptions: { type: Object, default: () => ({}) },
+  // Customization options
+  customizationOptions: { 
+    type: Array, 
+    default: () => [] // e.g., [{ id: 'legend', label: 'Show Legend', default: true }]
+  }
 })
 
-const emit = defineEmits(['refresh', 'dragstart', 'dragend'])
+const emit = defineEmits(['refresh', 'dragstart', 'dragend', 'customize', 'keypress'])
 
 const canView = computed(() => {
   if (!props.requiredRoles) return true
@@ -47,6 +52,72 @@ const paddingClasses = {
   normal: 'p-4',
   large: 'p-6'
 }
+
+// === Customization Panel ===
+const showCustomization = ref(false)
+const customSettings = ref({})
+
+// Initialize custom settings from props
+onMounted(() => {
+  props.customizationOptions.forEach(option => {
+    customSettings.value[option.id] = option.default ?? true
+  })
+})
+
+const toggleCustomization = () => {
+  showCustomization.value = !showCustomization.value
+}
+
+const updateSetting = (optionId, value) => {
+  customSettings.value[optionId] = value
+  emit('customize', { ...customSettings.value })
+  // Re-render chart with new settings
+  if (props.chartType && props.chartData) {
+    setTimeout(renderChart, 50)
+  }
+}
+
+// === Keyboard Controls ===
+const widgetRef = ref(null)
+const isFocused = ref(false)
+
+const handleKeyDown = (e) => {
+  if (!isFocused.value) return
+  
+  const handlers = {
+    'r': () => emit('refresh'),
+    'R': () => emit('refresh'),
+    'c': () => toggleCustomization(),
+    'C': () => toggleCustomization(),
+    'Escape': () => showCustomization.value = false,
+    'h': () => showKeyboardHelp.value = !showKeyboardHelp.value,
+    'H': () => showKeyboardHelp.value = !showKeyboardHelp.value,
+    '?': () => showKeyboardHelp.value = !showKeyboardHelp.value
+  }
+
+  if (handlers[e.key]) {
+    e.preventDefault()
+    handlers[e.key]()
+    emit('keypress', e.key)
+  }
+}
+
+const handleFocus = () => {
+  isFocused.value = true
+}
+
+const handleBlur = () => {
+  isFocused.value = false
+}
+
+// === Keyboard Help ===
+const showKeyboardHelp = ref(false)
+const keyboardShortcuts = [
+  { key: 'R', description: 'Refresh widget' },
+  { key: 'C', description: 'Open customization' },
+  { key: 'Esc', description: 'Close panels' },
+  { key: '?', description: 'Toggle help' }
+]
 
 // === Native Drag & Drop ===
 const isDragging = ref(false)
@@ -128,7 +199,19 @@ const renderChart = () => {
   if (!chartCanvas.value || !props.chartType || !props.chartData) return
 
   const ctx = chartCanvas.value.getContext('2d')
-  const mergedOptions = { ...defaultChartOptions, ...props.chartOptions }
+  const mergedOptions = { 
+    ...defaultChartOptions, 
+    ...props.chartOptions,
+    plugins: {
+      ...defaultChartOptions.plugins,
+      ...props.chartOptions.plugins,
+      legend: {
+        ...defaultChartOptions.plugins.legend,
+        ...props.chartOptions.plugins?.legend,
+        display: customSettings.value.legend ?? defaultChartOptions.plugins.legend.display
+      }
+    }
+  }
 
   // Clear previous chart
   if (chartInstance) {
@@ -181,20 +264,24 @@ const renderBarChart = (ctx, width, height, options) => {
     ctx.fillStyle = colors[index]
     ctx.fillRect(x, y, barWidth, barHeight)
 
-    // Draw value on top
-    ctx.fillStyle = '#1e293b'
-    ctx.font = 'bold 12px sans-serif'
-    ctx.textAlign = 'center'
-    ctx.fillText(value, x + barWidth / 2, y - 5)
+    // Draw value on top if enabled
+    if (customSettings.value.values ?? true) {
+      ctx.fillStyle = '#1e293b'
+      ctx.font = 'bold 12px sans-serif'
+      ctx.textAlign = 'center'
+      ctx.fillText(value, x + barWidth / 2, y - 5)
+    }
 
-    // Draw label
-    ctx.fillStyle = '#64748b'
-    ctx.font = '11px sans-serif'
-    ctx.save()
-    ctx.translate(x + barWidth / 2, padding + chartHeight + 15)
-    ctx.rotate(-Math.PI / 6)
-    ctx.fillText(labels[index], 0, 0)
-    ctx.restore()
+    // Draw label if enabled
+    if (customSettings.value.labels ?? true) {
+      ctx.fillStyle = '#64748b'
+      ctx.font = '11px sans-serif'
+      ctx.save()
+      ctx.translate(x + barWidth / 2, padding + chartHeight + 15)
+      ctx.rotate(-Math.PI / 6)
+      ctx.fillText(labels[index], 0, 0)
+      ctx.restore()
+    }
   })
 
   // Draw axes
@@ -241,17 +328,19 @@ const renderPieChart = (ctx, width, height, options) => {
     ctx.lineWidth = 2
     ctx.stroke()
 
-    // Draw percentage
-    const midAngle = currentAngle + sliceAngle / 2
-    const textX = centerX + Math.cos(midAngle) * (radius * 0.7)
-    const textY = centerY + Math.sin(midAngle) * (radius * 0.7)
-    
-    const percentage = ((value / total) * 100).toFixed(1)
-    ctx.fillStyle = '#ffffff'
-    ctx.font = 'bold 13px sans-serif'
-    ctx.textAlign = 'center'
-    ctx.textBaseline = 'middle'
-    ctx.fillText(`${percentage}%`, textX, textY)
+    // Draw percentage if enabled
+    if (customSettings.value.percentages ?? true) {
+      const midAngle = currentAngle + sliceAngle / 2
+      const textX = centerX + Math.cos(midAngle) * (radius * 0.7)
+      const textY = centerY + Math.sin(midAngle) * (radius * 0.7)
+      
+      const percentage = ((value / total) * 100).toFixed(1)
+      ctx.fillStyle = '#ffffff'
+      ctx.font = 'bold 13px sans-serif'
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
+      ctx.fillText(`${percentage}%`, textX, textY)
+    }
 
     currentAngle += sliceAngle
   })
@@ -301,15 +390,17 @@ const renderDoughnutChart = (ctx, width, height, options) => {
   ctx.arc(centerX, centerY, innerRadius, 0, 2 * Math.PI)
   ctx.fill()
 
-  // Draw total in center
-  ctx.fillStyle = '#1e293b'
-  ctx.font = 'bold 24px sans-serif'
-  ctx.textAlign = 'center'
-  ctx.textBaseline = 'middle'
-  ctx.fillText(total, centerX, centerY - 10)
-  ctx.font = '12px sans-serif'
-  ctx.fillStyle = '#64748b'
-  ctx.fillText('Total', centerX, centerY + 15)
+  // Draw total in center if enabled
+  if (customSettings.value.centerTotal ?? true) {
+    ctx.fillStyle = '#1e293b'
+    ctx.font = 'bold 24px sans-serif'
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillText(total, centerX, centerY - 10)
+    ctx.font = '12px sans-serif'
+    ctx.fillStyle = '#64748b'
+    ctx.fillText('Total', centerX, centerY + 15)
+  }
 
   // Draw legend
   if (options.plugins.legend.display) {
@@ -332,15 +423,17 @@ const renderLineChart = (ctx, width, height, options) => {
   const range = maxValue - minValue || 1
   const spacing = chartWidth / (data.length - 1)
 
-  // Draw grid lines
-  ctx.strokeStyle = '#e2e8f0'
-  ctx.lineWidth = 1
-  for (let i = 0; i <= 5; i++) {
-    const y = padding + (chartHeight / 5) * i
-    ctx.beginPath()
-    ctx.moveTo(padding, y)
-    ctx.lineTo(padding + chartWidth, y)
-    ctx.stroke()
+  // Draw grid lines if enabled
+  if (customSettings.value.gridLines ?? true) {
+    ctx.strokeStyle = '#e2e8f0'
+    ctx.lineWidth = 1
+    for (let i = 0; i <= 5; i++) {
+      const y = padding + (chartHeight / 5) * i
+      ctx.beginPath()
+      ctx.moveTo(padding, y)
+      ctx.lineTo(padding + chartWidth, y)
+      ctx.stroke()
+    }
   }
 
   // Draw line
@@ -358,30 +451,34 @@ const renderLineChart = (ctx, width, height, options) => {
   })
   ctx.stroke()
 
-  // Draw points
-  data.forEach((value, index) => {
-    const x = padding + spacing * index
-    const y = padding + chartHeight - ((value - minValue) / range) * chartHeight
-    
-    ctx.fillStyle = '#ffffff'
-    ctx.beginPath()
-    ctx.arc(x, y, 6, 0, 2 * Math.PI)
-    ctx.fill()
-    
-    ctx.strokeStyle = color
-    ctx.lineWidth = 3
-    ctx.stroke()
+  // Draw points if enabled
+  if (customSettings.value.dataPoints ?? true) {
+    data.forEach((value, index) => {
+      const x = padding + spacing * index
+      const y = padding + chartHeight - ((value - minValue) / range) * chartHeight
+      
+      ctx.fillStyle = '#ffffff'
+      ctx.beginPath()
+      ctx.arc(x, y, 6, 0, 2 * Math.PI)
+      ctx.fill()
+      
+      ctx.strokeStyle = color
+      ctx.lineWidth = 3
+      ctx.stroke()
 
-    // Draw labels
-    ctx.fillStyle = '#64748b'
-    ctx.font = '11px sans-serif'
-    ctx.textAlign = 'center'
-    ctx.save()
-    ctx.translate(x, padding + chartHeight + 15)
-    ctx.rotate(-Math.PI / 6)
-    ctx.fillText(labels[index], 0, 0)
-    ctx.restore()
-  })
+      // Draw labels if enabled
+      if (customSettings.value.labels ?? true) {
+        ctx.fillStyle = '#64748b'
+        ctx.font = '11px sans-serif'
+        ctx.textAlign = 'center'
+        ctx.save()
+        ctx.translate(x, padding + chartHeight + 15)
+        ctx.rotate(-Math.PI / 6)
+        ctx.fillText(labels[index], 0, 0)
+        ctx.restore()
+      }
+    })
+  }
 
   // Draw axes
   ctx.strokeStyle = '#cbd5e1'
@@ -418,6 +515,8 @@ const drawLegend = (ctx, width, startY, labels, colors) => {
 
 onMounted(() => {
   window.addEventListener('dragover', handleDrag)
+  window.addEventListener('keydown', handleKeyDown)
+  
   if (props.chartType && props.chartData) {
     setTimeout(renderChart, 100)
     window.addEventListener('resize', renderChart)
@@ -427,6 +526,7 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('dragover', handleDrag)
   window.removeEventListener('resize', renderChart)
+  window.removeEventListener('keydown', handleKeyDown)
   if (dragClone) document.body.removeChild(dragClone)
 })
 
@@ -436,14 +536,6 @@ const watchChart = () => {
     setTimeout(renderChart, 50)
   }
 }
-
-// Re-render when data changes
-onMounted(() => {
-  const observer = new MutationObserver(watchChart)
-  if (chartCanvas.value) {
-    observer.observe(chartCanvas.value.parentElement, { childList: true, subtree: true })
-  }
-})
 
 // Watch computed for data changes to trigger re-render
 const chartDataString = computed(() => JSON.stringify(props.chartData))
@@ -455,14 +547,19 @@ watch(chartDataString, () => {
 <template>
   <div
     v-if="canView"
+    ref="widgetRef"
     draggable="true"
+    tabindex="0"
     :style="containerStyles"
     :class="cn(
-      'bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden transition-all select-none flex flex-col',
-      isDragging ? 'opacity-50 scale-95' : 'hover:shadow-lg cursor-move'
+      'bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden transition-all select-none flex flex-col relative',
+      isDragging ? 'opacity-50 scale-95' : 'hover:shadow-lg cursor-move',
+      isFocused ? 'ring-2 ring-blue-400 ring-offset-2' : ''
     )"
     @dragstart="handleDragStart"
     @dragend="handleDragEnd"
+    @focus="handleFocus"
+    @blur="handleBlur"
   >
     <!-- Header -->
     <div
@@ -479,12 +576,41 @@ watch(chartDataString, () => {
           {{ title }}
         </h3>
       </div>
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-2">
         <slot name="header-actions" />
+        
+        <!-- Keyboard Help -->
+        <button
+          class="p-2 rounded-lg hover:bg-white/80 transition-all duration-200 hover:scale-105 active:scale-95"
+          title="Keyboard shortcuts (?)"
+          @click="showKeyboardHelp = !showKeyboardHelp"
+        >
+          <Icon
+            icon="help-circle"
+            class="w-4 h-4 text-slate-600"
+          />
+        </button>
+
+        <!-- Customize -->
+        <button
+          v-if="customizationOptions.length > 0"
+          class="p-2 rounded-lg hover:bg-white/80 transition-all duration-200 hover:scale-105 active:scale-95"
+          :class="{ 'bg-blue-100': showCustomization }"
+          title="Customize (C)"
+          @click="toggleCustomization"
+        >
+          <Icon
+            icon="settings"
+            class="w-4 h-4 text-slate-600"
+          />
+        </button>
+
+        <!-- Refresh -->
         <button
           v-if="showRefresh"
           class="p-2 rounded-lg hover:bg-white/80 transition-all duration-200 hover:scale-105 active:scale-95"
           :disabled="loading"
+          title="Refresh (R)"
           @click="$emit('refresh')"
         >
           <Icon
@@ -493,6 +619,81 @@ watch(chartDataString, () => {
             :class="{ 'animate-spin': loading }"
           />
         </button>
+      </div>
+    </div>
+
+    <!-- Customization Panel -->
+    <div
+      v-if="showCustomization"
+      class="absolute top-16 right-4 z-20 bg-white rounded-lg shadow-xl border border-slate-200 p-4 min-w-[250px]"
+    >
+      <div class="flex items-center justify-between mb-3">
+        <h4 class="font-semibold text-sm text-slate-900">Customize Widget</h4>
+        <button
+          class="p-1 rounded hover:bg-slate-100"
+          @click="showCustomization = false"
+        >
+          <Icon icon="x" class="w-4 h-4 text-slate-600" />
+        </button>
+      </div>
+      
+      <div class="space-y-3">
+        <div
+          v-for="option in customizationOptions"
+          :key="option.id"
+          class="flex items-center justify-between"
+        >
+          <label
+            :for="`setting-${option.id}`"
+            class="text-sm text-slate-700 cursor-pointer"
+          >
+            {{ option.label }}
+          </label>
+          <button
+            :id="`setting-${option.id}`"
+            :class="[
+              'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
+              customSettings[option.id] ? 'bg-blue-600' : 'bg-slate-300'
+            ]"
+            @click="updateSetting(option.id, !customSettings[option.id])"
+          >
+            <span
+              :class="[
+                'inline-block h-4 w-4 transform rounded-full bg-white transition-transform',
+                customSettings[option.id] ? 'translate-x-6' : 'translate-x-1'
+              ]"
+            />
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Keyboard Help Panel -->
+    <div
+      v-if="showKeyboardHelp"
+      class="absolute top-16 right-4 z-20 bg-white rounded-lg shadow-xl border border-slate-200 p-4 min-w-[280px]"
+    >
+      <div class="flex items-center justify-between mb-3">
+        <h4 class="font-semibold text-sm text-slate-900">Keyboard Shortcuts</h4>
+        <button
+          class="p-1 rounded hover:bg-slate-100"
+          @click="showKeyboardHelp = false"
+        >
+          <Icon icon="x" class="w-4 h-4 text-slate-600" />
+        </button>
+      </div>
+      
+      <div class="space-y-2">
+        <div
+          v-for="shortcut in keyboardShortcuts"
+          :key="shortcut.key"
+          class="flex items-center justify-between text-sm"
+        >
+          <span class="text-slate-700">{{ shortcut.description }}</span>
+          <kbd class="px-2 py-1 bg-slate-100 border border-slate-300 rounded text-xs font-mono">
+            {{ shortcut.key }}
+          </kbd>
+        </div>
       </div>
     </div>
 
