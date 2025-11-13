@@ -586,7 +586,7 @@ watch(chartDataString, () => {
           @click="showKeyboardHelp = !showKeyboardHelp"
         >
           <Icon
-            icon="help-circle"
+            icon="circle-info"
             class="w-4 h-4 text-slate-600"
           />
         </button>
@@ -600,7 +600,7 @@ watch(chartDataString, () => {
           @click="toggleCustomization"
         >
           <Icon
-            icon="settings"
+            icon="gear"
             class="w-4 h-4 text-slate-600"
           />
         </button>
@@ -628,12 +628,17 @@ watch(chartDataString, () => {
       class="absolute top-16 right-4 z-20 bg-white rounded-lg shadow-xl border border-slate-200 p-4 min-w-[250px]"
     >
       <div class="flex items-center justify-between mb-3">
-        <h4 class="font-semibold text-sm text-slate-900">Customize Widget</h4>
+        <h4 class="font-semibold text-sm text-slate-900">
+          Customize Widget
+        </h4>
         <button
           class="p-1 rounded hover:bg-slate-100"
           @click="showCustomization = false"
         >
-          <Icon icon="x" class="w-4 h-4 text-slate-600" />
+          <Icon
+            icon="x"
+            class="w-4 h-4 text-slate-600"
+          />
         </button>
       </div>
       
@@ -674,12 +679,17 @@ watch(chartDataString, () => {
       class="absolute top-16 right-4 z-20 bg-white rounded-lg shadow-xl border border-slate-200 p-4 min-w-[280px]"
     >
       <div class="flex items-center justify-between mb-3">
-        <h4 class="font-semibold text-sm text-slate-900">Keyboard Shortcuts</h4>
+        <h4 class="font-semibold text-sm text-slate-900">
+          Keyboard Shortcuts
+        </h4>
         <button
           class="p-1 rounded hover:bg-slate-100"
           @click="showKeyboardHelp = false"
         >
-          <Icon icon="x" class="w-4 h-4 text-slate-600" />
+          <Icon
+            icon="x"
+            class="w-4 h-4 text-slate-600"
+          />
         </button>
       </div>
       
