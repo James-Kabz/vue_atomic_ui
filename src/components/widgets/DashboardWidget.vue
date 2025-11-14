@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import Icon from '../Icon.vue'
 import Loader from '../Loader.vue'
 import BarChart from './BarChart.vue'
