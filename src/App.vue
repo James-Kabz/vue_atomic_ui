@@ -19,8 +19,8 @@ import Icon from './components/Icon.vue';
 import { ref, computed } from 'vue';
 import { toast } from './lib/toast.js';
 import Graph from './components/Graph.vue'
-import BarChart from './components/BarChart.vue'
-import LineChart from './components/LineChart.vue'
+import BarChart from './components/charts/BarChart.vue'
+import LineChart from './components/charts/LineChart.vue'
 import GraphFilters from './components/GraphFilters.vue'
 import DataTableTest from './views/DataTableTest.vue';
 

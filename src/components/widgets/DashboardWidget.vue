@@ -2,9 +2,9 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import Icon from '../Icon.vue'
 import Loader from '../Loader.vue'
-import BarChart from '../BarChart.vue'
-import LineChart from '../LineChart.vue'
-import PieChart from '../PieChart.vue'
+import BarChart from '../charts/BarChart.vue'
+import LineChart from '../charts/LineChart.vue'
+import PieChart from '../charts/PieChart.vue'
 import { cn } from '../../utils/cn'
 
 const props = defineProps({
@@ -24,14 +24,12 @@ const props = defineProps({
     type: Function,
     default: () => () => false
   },
-  // Chart props
-  chartType: { type: String, default: null }, // 'bar', 'line', 'pie', 'doughnut'
+  chartType: { type: String, default: null },
   chartData: { type: Object, default: null },
   chartOptions: { type: Object, default: () => ({}) },
-  // Customization options
   customizationOptions: { 
     type: Array, 
-    default: () => [] // e.g., [{ id: 'legend', label: 'Show Legend', default: true }]
+    default: () => []
   }
 })
 
@@ -56,11 +54,9 @@ const paddingClasses = {
   large: 'p-6'
 }
 
-// === Customization Panel ===
 const showCustomization = ref(false)
 const customSettings = ref({})
 
-// Initialize custom settings from props
 onMounted(() => {
   props.customizationOptions.forEach(option => {
     customSettings.value[option.id] = option.default ?? true
@@ -76,7 +72,6 @@ const updateSetting = (optionId, value) => {
   emit('customize', { ...customSettings.value })
 }
 
-// === Keyboard Controls ===
 const widgetRef = ref(null)
 const isFocused = ref(false)
 
@@ -109,7 +104,6 @@ const handleBlur = () => {
   isFocused.value = false
 }
 
-// === Keyboard Help ===
 const showKeyboardHelp = ref(false)
 const keyboardShortcuts = [
   { key: 'R', description: 'Refresh widget' },
@@ -118,7 +112,6 @@ const keyboardShortcuts = [
   { key: '?', description: 'Toggle help' }
 ]
 
-// === Native Drag & Drop ===
 const isDragging = ref(false)
 let dragClone = null
 
@@ -162,15 +155,12 @@ const handleDragEnd = () => {
   }
 }
 
-// === Chart Component Props ===
 const chartComponentProps = computed(() => {
   if (!props.chartType || !props.chartData) return null
 
-  // Extract data safely
   const rawData = props.chartData.datasets?.[0]?.data || props.chartData.data || []
   const chartLabels = props.chartData.labels || []
   
-  // Validate data
   const validData = rawData.filter(val => val != null && !isNaN(val))
   if (validData.length === 0) return null
 
@@ -180,7 +170,6 @@ const chartComponentProps = computed(() => {
     ...props.chartOptions
   }
 
-  // Apply customization settings
   if (customSettings.value.legend !== undefined) {
     baseProps.showLegend = customSettings.value.legend
   }
@@ -200,7 +189,6 @@ const chartComponentProps = computed(() => {
     baseProps.fillArea = customSettings.value.fillArea
   }
 
-  // Add colors if available
   if (props.chartData.datasets?.[0]?.backgroundColor) {
     baseProps.colors = props.chartData.datasets[0].backgroundColor
   }
@@ -257,7 +245,6 @@ onUnmounted(() => {
     @focus="handleFocus"
     @blur="handleBlur"
   >
-    <!-- Header -->
     <div
       v-if="showHeader"
       class="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-slate-100 flex-shrink-0"
@@ -275,7 +262,6 @@ onUnmounted(() => {
       <div class="flex items-center gap-2">
         <slot name="header-actions" />
         
-        <!-- Keyboard Help -->
         <button
           class="p-2 rounded-lg hover:bg-white/80 transition-all duration-200 hover:scale-105 active:scale-95"
           title="Keyboard shortcuts (?)"
@@ -287,7 +273,6 @@ onUnmounted(() => {
           />
         </button>
 
-        <!-- Customize -->
         <button
           v-if="customizationOptions.length > 0"
           class="p-2 rounded-lg hover:bg-white/80 transition-all duration-200 hover:scale-105 active:scale-95"
@@ -301,7 +286,6 @@ onUnmounted(() => {
           />
         </button>
 
-        <!-- Refresh -->
         <button
           v-if="showRefresh"
           class="p-2 rounded-lg hover:bg-white/80 transition-all duration-200 hover:scale-105 active:scale-95"
@@ -320,7 +304,6 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <!-- Customization Panel -->
     <div
       v-if="showCustomization"
       class="absolute top-16 right-4 z-20 bg-white rounded-lg shadow-xl border border-slate-200 p-4 min-w-[250px]"
@@ -371,7 +354,6 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <!-- Keyboard Help Panel -->
     <div
       v-if="showKeyboardHelp"
       class="absolute top-16 right-4 z-20 bg-white rounded-lg shadow-xl border border-slate-200 p-4 min-w-[280px]"
@@ -405,7 +387,6 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <!-- Body -->
     <div class="relative flex-1 overflow-hidden">
       <div
         v-if="loading"
@@ -418,9 +399,8 @@ onUnmounted(() => {
         />
       </div>
       
-      <!-- Chart Component -->
       <div
-        v-if="chartType && chartData && chartComponent"
+        v-if="chartType && chartData && chartComponent && chartComponentProps"
         class="w-full h-full"
         :class="paddingClasses[padding]"
       >
@@ -431,7 +411,6 @@ onUnmounted(() => {
         />
       </div>
       
-      <!-- Regular Content -->
       <div
         v-else
         class="overflow-auto h-full"
