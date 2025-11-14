@@ -2,6 +2,9 @@
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import Icon from '../Icon.vue'
 import Loader from '../Loader.vue'
+import BarChart from './BarChart.vue'
+import LineChart from './LineChart.vue'
+import PieChart from './PieChart.vue'
 import { cn } from '../../utils/cn'
 
 const props = defineProps({
@@ -22,7 +25,7 @@ const props = defineProps({
     default: () => () => false
   },
   // Chart props
-  chartType: { type: String, default: null },
+  chartType: { type: String, default: null }, // 'bar', 'line', 'pie', 'doughnut'
   chartData: { type: Object, default: null },
   chartOptions: { type: Object, default: () => ({}) },
   // Customization options
@@ -71,10 +74,6 @@ const toggleCustomization = () => {
 const updateSetting = (optionId, value) => {
   customSettings.value[optionId] = value
   emit('customize', { ...customSettings.value })
-  // Re-render chart with new settings
-  if (props.chartType && props.chartData) {
-    setTimeout(renderChart, 50)
-  }
 }
 
 // === Keyboard Controls ===
@@ -163,384 +162,73 @@ const handleDragEnd = () => {
   }
 }
 
-// === Native Canvas Chart Rendering ===
-const chartCanvas = ref(null)
-let chartInstance = null
+// === Chart Component Props ===
+const chartComponentProps = computed(() => {
+  if (!props.chartType || !props.chartData) return null
 
-const defaultChartOptions = {
-  responsive: true,
-  maintainAspectRatio: false,
-  animation: {
-    duration: 800,
-    easing: 'easeInOutQuart'
-  },
-  plugins: {
-    legend: {
-      display: true,
-      position: 'bottom',
-      labels: {
-        padding: 15,
-        font: { size: 12 },
-        usePointStyle: true,
-        pointStyle: 'circle'
-      }
-    },
-    tooltip: {
-      backgroundColor: 'rgba(0, 0, 0, 0.8)',
-      padding: 12,
-      titleFont: { size: 14, weight: 'bold' },
-      bodyFont: { size: 13 },
-      cornerRadius: 6
-    }
-  }
-}
-
-const renderChart = () => {
-  if (!chartCanvas.value || !props.chartType || !props.chartData) return
-
-  const ctx = chartCanvas.value.getContext('2d')
-  const mergedOptions = { 
-    ...defaultChartOptions, 
-    ...props.chartOptions,
-    plugins: {
-      ...defaultChartOptions.plugins,
-      ...props.chartOptions.plugins,
-      legend: {
-        ...defaultChartOptions.plugins.legend,
-        ...props.chartOptions.plugins?.legend,
-        display: customSettings.value.legend ?? defaultChartOptions.plugins.legend.display
-      }
-    }
+  const baseProps = {
+    data: props.chartData.datasets?.[0]?.data || props.chartData.data || [],
+    labels: props.chartData.labels || [],
+    ...props.chartOptions
   }
 
-  // Clear previous chart
-  if (chartInstance) {
-    ctx.clearRect(0, 0, chartCanvas.value.width, chartCanvas.value.height)
+  // Apply customization settings
+  if (customSettings.value.legend !== undefined) {
+    baseProps.showLegend = customSettings.value.legend
+  }
+  if (customSettings.value.grid !== undefined) {
+    baseProps.showGrid = customSettings.value.grid
+  }
+  if (customSettings.value.values !== undefined) {
+    baseProps.showValues = customSettings.value.values
+  }
+  if (customSettings.value.percentages !== undefined) {
+    baseProps.showPercentages = customSettings.value.percentages
+  }
+  if (customSettings.value.points !== undefined) {
+    baseProps.showPoints = customSettings.value.points
+  }
+  if (customSettings.value.fillArea !== undefined) {
+    baseProps.fillArea = customSettings.value.fillArea
   }
 
-  chartCanvas.value.width = chartCanvas.value.offsetWidth * window.devicePixelRatio
-  chartCanvas.value.height = chartCanvas.value.offsetHeight * window.devicePixelRatio
-  ctx.scale(window.devicePixelRatio, window.devicePixelRatio)
+  // Add colors if available
+  if (props.chartData.datasets?.[0]?.backgroundColor) {
+    baseProps.colors = props.chartData.datasets[0].backgroundColor
+  }
+  if (props.chartData.datasets?.[0]?.borderColor) {
+    baseProps.lineColor = props.chartData.datasets[0].borderColor
+  }
 
-  const width = chartCanvas.value.offsetWidth
-  const height = chartCanvas.value.offsetHeight
+  return baseProps
+})
 
+const chartComponent = computed(() => {
   switch (props.chartType) {
     case 'bar':
-      renderBarChart(ctx, width, height, mergedOptions)
-      break
-    case 'pie':
-      renderPieChart(ctx, width, height, mergedOptions)
-      break
-    case 'doughnut':
-      renderDoughnutChart(ctx, width, height, mergedOptions)
-      break
+      return BarChart
     case 'line':
-      renderLineChart(ctx, width, height, mergedOptions)
-      break
+      return LineChart
+    case 'pie':
+      return PieChart
+    case 'doughnut':
+      return PieChart
+    default:
+      return null
   }
-}
+})
 
-const renderBarChart = (ctx, width, height, options) => {
-  const data = props.chartData.datasets[0].data
-  const labels = props.chartData.labels
-  const colors = props.chartData.datasets[0].backgroundColor
-  
-  const padding = 60
-  const legendHeight = options.plugins.legend.display ? 80 : 0
-  const chartHeight = height - padding - legendHeight
-  const chartWidth = width - padding * 2
-  
-  const maxValue = Math.max(...data)
-  const barWidth = chartWidth / data.length * 0.6
-  const spacing = chartWidth / data.length
-
-  // Draw bars
-  data.forEach((value, index) => {
-    const barHeight = (value / maxValue) * chartHeight
-    const x = padding + spacing * index + spacing / 2 - barWidth / 2
-    const y = padding + chartHeight - barHeight
-
-    ctx.fillStyle = colors[index]
-    ctx.fillRect(x, y, barWidth, barHeight)
-
-    // Draw value on top if enabled
-    if (customSettings.value.values ?? true) {
-      ctx.fillStyle = '#1e293b'
-      ctx.font = 'bold 12px sans-serif'
-      ctx.textAlign = 'center'
-      ctx.fillText(value, x + barWidth / 2, y - 5)
-    }
-
-    // Draw label if enabled
-    if (customSettings.value.labels ?? true) {
-      ctx.fillStyle = '#64748b'
-      ctx.font = '11px sans-serif'
-      ctx.save()
-      ctx.translate(x + barWidth / 2, padding + chartHeight + 15)
-      ctx.rotate(-Math.PI / 6)
-      ctx.fillText(labels[index], 0, 0)
-      ctx.restore()
-    }
-  })
-
-  // Draw axes
-  ctx.strokeStyle = '#cbd5e1'
-  ctx.lineWidth = 2
-  ctx.beginPath()
-  ctx.moveTo(padding, padding)
-  ctx.lineTo(padding, padding + chartHeight)
-  ctx.lineTo(padding + chartWidth, padding + chartHeight)
-  ctx.stroke()
-
-  // Draw legend
-  if (options.plugins.legend.display) {
-    drawLegend(ctx, width, height - legendHeight + 20, labels, colors)
-  }
-}
-
-const renderPieChart = (ctx, width, height, options) => {
-  const data = props.chartData.datasets[0].data
-  const labels = props.chartData.labels
-  const colors = props.chartData.datasets[0].backgroundColor
-  
-  const total = data.reduce((sum, val) => sum + val, 0)
-  const legendHeight = options.plugins.legend.display ? 80 : 0
-  const centerX = width / 2
-  const centerY = (height - legendHeight) / 2
-  const radius = Math.min(centerX, centerY) - 40
-
-  let currentAngle = -Math.PI / 2
-
-  data.forEach((value, index) => {
-    const sliceAngle = (value / total) * 2 * Math.PI
-
-    // Draw slice
-    ctx.fillStyle = colors[index]
-    ctx.beginPath()
-    ctx.moveTo(centerX, centerY)
-    ctx.arc(centerX, centerY, radius, currentAngle, currentAngle + sliceAngle)
-    ctx.closePath()
-    ctx.fill()
-
-    // Draw border
-    ctx.strokeStyle = '#ffffff'
-    ctx.lineWidth = 2
-    ctx.stroke()
-
-    // Draw percentage if enabled
-    if (customSettings.value.percentages ?? true) {
-      const midAngle = currentAngle + sliceAngle / 2
-      const textX = centerX + Math.cos(midAngle) * (radius * 0.7)
-      const textY = centerY + Math.sin(midAngle) * (radius * 0.7)
-      
-      const percentage = ((value / total) * 100).toFixed(1)
-      ctx.fillStyle = '#ffffff'
-      ctx.font = 'bold 13px sans-serif'
-      ctx.textAlign = 'center'
-      ctx.textBaseline = 'middle'
-      ctx.fillText(`${percentage}%`, textX, textY)
-    }
-
-    currentAngle += sliceAngle
-  })
-
-  // Draw legend
-  if (options.plugins.legend.display) {
-    drawLegend(ctx, width, height - legendHeight + 20, labels, colors)
-  }
-}
-
-const renderDoughnutChart = (ctx, width, height, options) => {
-  const data = props.chartData.datasets[0].data
-  const labels = props.chartData.labels
-  const colors = props.chartData.datasets[0].backgroundColor
-  
-  const total = data.reduce((sum, val) => sum + val, 0)
-  const legendHeight = options.plugins.legend.display ? 80 : 0
-  const centerX = width / 2
-  const centerY = (height - legendHeight) / 2
-  const outerRadius = Math.min(centerX, centerY) - 40
-  const innerRadius = outerRadius * 0.6
-
-  let currentAngle = -Math.PI / 2
-
-  data.forEach((value, index) => {
-    const sliceAngle = (value / total) * 2 * Math.PI
-
-    // Draw slice
-    ctx.fillStyle = colors[index]
-    ctx.beginPath()
-    ctx.arc(centerX, centerY, outerRadius, currentAngle, currentAngle + sliceAngle)
-    ctx.arc(centerX, centerY, innerRadius, currentAngle + sliceAngle, currentAngle, true)
-    ctx.closePath()
-    ctx.fill()
-
-    // Draw border
-    ctx.strokeStyle = '#ffffff'
-    ctx.lineWidth = 2
-    ctx.stroke()
-
-    currentAngle += sliceAngle
-  })
-
-  // Draw center circle
-  ctx.fillStyle = '#ffffff'
-  ctx.beginPath()
-  ctx.arc(centerX, centerY, innerRadius, 0, 2 * Math.PI)
-  ctx.fill()
-
-  // Draw total in center if enabled
-  if (customSettings.value.centerTotal ?? true) {
-    ctx.fillStyle = '#1e293b'
-    ctx.font = 'bold 24px sans-serif'
-    ctx.textAlign = 'center'
-    ctx.textBaseline = 'middle'
-    ctx.fillText(total, centerX, centerY - 10)
-    ctx.font = '12px sans-serif'
-    ctx.fillStyle = '#64748b'
-    ctx.fillText('Total', centerX, centerY + 15)
-  }
-
-  // Draw legend
-  if (options.plugins.legend.display) {
-    drawLegend(ctx, width, height - legendHeight + 20, labels, colors)
-  }
-}
-
-const renderLineChart = (ctx, width, height, options) => {
-  const data = props.chartData.datasets[0].data
-  const labels = props.chartData.labels
-  const color = props.chartData.datasets[0].borderColor || '#3b82f6'
-  
-  const padding = 60
-  const legendHeight = options.plugins.legend.display ? 60 : 0
-  const chartHeight = height - padding - legendHeight
-  const chartWidth = width - padding * 2
-  
-  const maxValue = Math.max(...data)
-  const minValue = Math.min(...data)
-  const range = maxValue - minValue || 1
-  const spacing = chartWidth / (data.length - 1)
-
-  // Draw grid lines if enabled
-  if (customSettings.value.gridLines ?? true) {
-    ctx.strokeStyle = '#e2e8f0'
-    ctx.lineWidth = 1
-    for (let i = 0; i <= 5; i++) {
-      const y = padding + (chartHeight / 5) * i
-      ctx.beginPath()
-      ctx.moveTo(padding, y)
-      ctx.lineTo(padding + chartWidth, y)
-      ctx.stroke()
-    }
-  }
-
-  // Draw line
-  ctx.strokeStyle = color
-  ctx.lineWidth = 3
-  ctx.beginPath()
-  data.forEach((value, index) => {
-    const x = padding + spacing * index
-    const y = padding + chartHeight - ((value - minValue) / range) * chartHeight
-    if (index === 0) {
-      ctx.moveTo(x, y)
-    } else {
-      ctx.lineTo(x, y)
-    }
-  })
-  ctx.stroke()
-
-  // Draw points if enabled
-  if (customSettings.value.dataPoints ?? true) {
-    data.forEach((value, index) => {
-      const x = padding + spacing * index
-      const y = padding + chartHeight - ((value - minValue) / range) * chartHeight
-      
-      ctx.fillStyle = '#ffffff'
-      ctx.beginPath()
-      ctx.arc(x, y, 6, 0, 2 * Math.PI)
-      ctx.fill()
-      
-      ctx.strokeStyle = color
-      ctx.lineWidth = 3
-      ctx.stroke()
-
-      // Draw labels if enabled
-      if (customSettings.value.labels ?? true) {
-        ctx.fillStyle = '#64748b'
-        ctx.font = '11px sans-serif'
-        ctx.textAlign = 'center'
-        ctx.save()
-        ctx.translate(x, padding + chartHeight + 15)
-        ctx.rotate(-Math.PI / 6)
-        ctx.fillText(labels[index], 0, 0)
-        ctx.restore()
-      }
-    })
-  }
-
-  // Draw axes
-  ctx.strokeStyle = '#cbd5e1'
-  ctx.lineWidth = 2
-  ctx.beginPath()
-  ctx.moveTo(padding, padding)
-  ctx.lineTo(padding, padding + chartHeight)
-  ctx.lineTo(padding + chartWidth, padding + chartHeight)
-  ctx.stroke()
-}
-
-const drawLegend = (ctx, width, startY, labels, colors) => {
-  const itemWidth = 120
-  const itemsPerRow = Math.floor(width / itemWidth)
-  const startX = (width - itemsPerRow * itemWidth) / 2
-
-  labels.forEach((label, index) => {
-    const row = Math.floor(index / itemsPerRow)
-    const col = index % itemsPerRow
-    const x = startX + col * itemWidth
-    const y = startY + row * 25
-
-    // Draw color box
-    ctx.fillStyle = colors[index]
-    ctx.fillRect(x, y, 12, 12)
-
-    // Draw label
-    ctx.fillStyle = '#1e293b'
-    ctx.font = '12px sans-serif'
-    ctx.textAlign = 'left'
-    ctx.fillText(label, x + 18, y + 10)
-  })
-}
+const isDoughnut = computed(() => props.chartType === 'doughnut')
 
 onMounted(() => {
   window.addEventListener('dragover', handleDrag)
   window.addEventListener('keydown', handleKeyDown)
-  
-  if (props.chartType && props.chartData) {
-    setTimeout(renderChart, 100)
-    window.addEventListener('resize', renderChart)
-  }
 })
 
 onUnmounted(() => {
   window.removeEventListener('dragover', handleDrag)
-  window.removeEventListener('resize', renderChart)
   window.removeEventListener('keydown', handleKeyDown)
   if (dragClone) document.body.removeChild(dragClone)
-})
-
-// Watch for chart data changes
-const watchChart = () => {
-  if (props.chartType && props.chartData) {
-    setTimeout(renderChart, 50)
-  }
-}
-
-// Watch computed for data changes to trigger re-render
-const chartDataString = computed(() => JSON.stringify(props.chartData))
-watch(chartDataString, () => {
-  watchChart()
 })
 </script>
 
@@ -615,8 +303,10 @@ watch(chartDataString, () => {
         >
           <Icon
             icon="refresh"
-            class="w-4 h-4 text-slate-600"
-            :class="{ 'animate-spin': loading }"
+            :class="[
+              'w-4 h-4 text-slate-600 transition-transform duration-500',
+              { 'animate-spin': loading }
+            ]"
           />
         </button>
       </div>
@@ -720,13 +410,18 @@ watch(chartDataString, () => {
         />
       </div>
       
-      <!-- Chart Canvas -->
-      <canvas
-        v-if="chartType && chartData"
-        ref="chartCanvas"
+      <!-- Chart Component -->
+      <div
+        v-if="chartType && chartData && chartComponent"
         class="w-full h-full"
         :class="paddingClasses[padding]"
-      />
+      >
+        <component
+          :is="chartComponent"
+          v-bind="chartComponentProps"
+          :doughnut="isDoughnut"
+        />
+      </div>
       
       <!-- Regular Content -->
       <div
