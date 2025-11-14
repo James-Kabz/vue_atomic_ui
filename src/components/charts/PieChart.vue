@@ -258,94 +258,169 @@ const handleSliceClick = (slice, index) => {
 </script>
 
 <template>
-    <div class="w-full h-full relative">
-        <!-- Empty State -->
-        <div v-if="!hasValidData" class="w-full h-full flex items-center justify-center">
-            <div class="text-center">
-                <div class="text-slate-300 mb-2">
-                    <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
-                    </svg>
-                </div>
-                <p class="text-sm text-slate-500">No data available</p>
-            </div>
+  <div class="w-full h-full relative">
+    <!-- Empty State -->
+    <div
+      v-if="!hasValidData"
+      class="w-full h-full flex items-center justify-center"
+    >
+      <div class="text-center">
+        <div class="text-slate-300 mb-2">
+          <svg
+            class="w-16 h-16 mx-auto"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"
+            />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"
+            />
+          </svg>
         </div>
-
-        <!-- Chart -->
-        <svg v-else :width="width" :height="height" :viewBox="`0 0 ${width} ${height}`" class="overflow-visible">
-            <!-- Pie slices -->
-            <g>
-                <path v-for="(slice, index) in slices" :key="`slice-${index}`" :d="slice.path"
-                    :fill="getSliceColor(index)" :stroke="strokeColor" :stroke-width="strokeWidth" :class="sliceClasses"
-                    @mouseenter="handleMouseEnter($event, slice, index)" @mouseleave="handleMouseLeave"
-                    @click="handleSliceClick(slice, index)" />
-            </g>
-
-            <!-- Center circle for doughnut -->
-            <circle v-if="doughnut" :cx="centerX" :cy="centerY" :r="innerRadius" :fill="centerFill" />
-
-            <!-- Center text for doughnut -->
-            <g v-if="doughnut && showCenterText">
-                <text :x="centerX" :y="centerY - 5" :class="centerTextClasses" text-anchor="middle"
-                    dominant-baseline="middle">
-                    {{ totalValue }}
-                </text>
-                <text :x="centerX" :y="centerY + 15" :class="centerLabelClasses" text-anchor="middle"
-                    dominant-baseline="middle">
-                    Total
-                </text>
-            </g>
-
-            <!-- Value labels on slices -->
-            <g v-if="showValues">
-                <text v-for="(slice, index) in slices" :key="`value-${index}`" :x="slice.labelX" :y="slice.labelY"
-                    :class="valueLabelClasses" text-anchor="middle" dominant-baseline="middle">
-                    {{ showPercentages ? `${slice.percentage}%` : slice.value }}
-                </text>
-            </g>
-
-            <!-- Legend -->
-            <g v-if="showLegend">
-                <g v-for="(slice, index) in slices" :key="`legend-${index}`"
-                    :transform="`translate(${getLegendX(index)}, ${getLegendY(index)})`">
-                    <rect :width="12" :height="12" :fill="getSliceColor(index)" rx="2" />
-                    <text :x="18" :y="10" :class="legendTextClasses">
-                        {{ slice.label }}
-                    </text>
-                </g>
-            </g>
-        </svg>
-
-        <!-- Professional Tooltip -->
-        <div v-if="tooltip.visible" :style="{
-            position: 'fixed',
-            left: `${tooltip.x}px`,
-            top: `${tooltip.y}px`,
-            transform: 'translate(-50%, -120%)',
-            pointerEvents: 'none',
-            zIndex: 9999
-        }" class="animate-in fade-in duration-200">
-            <div class="bg-slate-900 text-white px-4 py-3 rounded-lg shadow-2xl border border-slate-700 min-w-[180px]">
-                <div class="flex items-center gap-2 mb-1.5">
-                    <div :style="{ backgroundColor: tooltip.color }" class="w-3 h-3 rounded-full shadow-sm" />
-                    <p class="font-semibold text-sm">
-                        {{ tooltip.label }}
-                    </p>
-                </div>
-                <div class="flex items-baseline gap-2 ml-5">
-                    <span class="text-2xl font-bold">{{ tooltip.value }}</span>
-                    <span class="text-xs text-slate-400">tasks</span>
-                </div>
-                <div class="mt-1 ml-5">
-                    <span class="text-xs text-slate-300">{{ tooltip.percentage }}% of total</span>
-                </div>
-                <!-- Tooltip arrow -->
-                <div
-                    class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 rotate-45 w-2 h-2 bg-slate-900 border-r border-b border-slate-700" />
-            </div>
-        </div>
+        <p class="text-sm text-slate-500">
+          No data available
+        </p>
+      </div>
     </div>
+
+    <!-- Chart -->
+    <svg
+      v-else
+      :width="width"
+      :height="height"
+      :viewBox="`0 0 ${width} ${height}`"
+      class="overflow-visible"
+    >
+      <!-- Pie slices -->
+      <g>
+        <path
+          v-for="(slice, index) in slices"
+          :key="`slice-${index}`"
+          :d="slice.path"
+          :fill="getSliceColor(index)"
+          :stroke="strokeColor"
+          :stroke-width="strokeWidth"
+          :class="sliceClasses"
+          @mouseenter="handleMouseEnter($event, slice, index)"
+          @mouseleave="handleMouseLeave"
+          @click="handleSliceClick(slice, index)"
+        />
+      </g>
+
+      <!-- Center circle for doughnut -->
+      <circle
+        v-if="doughnut"
+        :cx="centerX"
+        :cy="centerY"
+        :r="innerRadius"
+        :fill="centerFill"
+      />
+
+      <!-- Center text for doughnut -->
+      <g v-if="doughnut && showCenterText">
+        <text
+          :x="centerX"
+          :y="centerY - 5"
+          :class="centerTextClasses"
+          text-anchor="middle"
+          dominant-baseline="middle"
+        >
+          {{ totalValue }}
+        </text>
+        <text
+          :x="centerX"
+          :y="centerY + 15"
+          :class="centerLabelClasses"
+          text-anchor="middle"
+          dominant-baseline="middle"
+        >
+          Total
+        </text>
+      </g>
+
+      <!-- Value labels on slices -->
+      <g v-if="showValues">
+        <text
+          v-for="(slice, index) in slices"
+          :key="`value-${index}`"
+          :x="slice.labelX"
+          :y="slice.labelY"
+          :class="valueLabelClasses"
+          text-anchor="middle"
+          dominant-baseline="middle"
+        >
+          {{ showPercentages ? `${slice.percentage}%` : slice.value }}
+        </text>
+      </g>
+
+      <!-- Legend -->
+      <g v-if="showLegend">
+        <g
+          v-for="(slice, index) in slices"
+          :key="`legend-${index}`"
+          :transform="`translate(${getLegendX(index)}, ${getLegendY(index)})`"
+        >
+          <rect
+            :width="12"
+            :height="12"
+            :fill="getSliceColor(index)"
+            rx="2"
+          />
+          <text
+            :x="18"
+            :y="10"
+            :class="legendTextClasses"
+          >
+            {{ slice.label }}
+          </text>
+        </g>
+      </g>
+    </svg>
+
+    <!-- Professional Tooltip -->
+    <div
+      v-if="tooltip.visible"
+      :style="{
+        position: 'fixed',
+        left: `${tooltip.x}px`,
+        top: `${tooltip.y}px`,
+        transform: 'translate(-50%, -120%)',
+        pointerEvents: 'none',
+        zIndex: 9999
+      }"
+      class="animate-in fade-in duration-200"
+    >
+      <div class="bg-slate-900 text-white px-4 py-3 rounded-lg shadow-2xl border border-slate-700 min-w-[180px]">
+        <div class="flex items-center gap-2 mb-1.5">
+          <div
+            :style="{ backgroundColor: tooltip.color }"
+            class="w-3 h-3 rounded-full shadow-sm"
+          />
+          <p class="font-semibold text-sm">
+            {{ tooltip.label }}
+          </p>
+        </div>
+        <div class="flex items-baseline gap-2 ml-5">
+          <span class="text-2xl font-bold">{{ tooltip.value }}</span>
+          <span class="text-xs text-slate-400">tasks</span>
+        </div>
+        <div class="mt-1 ml-5">
+          <span class="text-xs text-slate-300">{{ tooltip.percentage }}% of total</span>
+        </div>
+        <!-- Tooltip arrow -->
+        <div
+          class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 rotate-45 w-2 h-2 bg-slate-900 border-r border-b border-slate-700"
+        />
+      </div>
+    </div>
+  </div>
 </template>

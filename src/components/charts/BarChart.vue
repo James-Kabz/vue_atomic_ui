@@ -168,8 +168,8 @@ const handleMouseLeave = () => {
       <defs>
         <linearGradient
           v-for="(value, index) in data"
-          :key="`gradient-${index}`"
           :id="`barGradient-${index}`"
+          :key="`gradient-${index}`"
           x1="0%"
           y1="0%"
           x2="0%"
