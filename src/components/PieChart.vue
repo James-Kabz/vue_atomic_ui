@@ -114,9 +114,9 @@ const totalValue = computed(() => {
   return sum || 0
 })
 
-const hasValidData = computed(() => {
-  return props.data.length > 0 && totalValue.value > 0
-})
+// const hasValidData = computed(() => {
+//   return props.data.length > 0 && totalValue.value > 0
+// })
 
 const centerX = computed(() => {
   return props.showLegend && props.legendPosition === 'right' 
