@@ -110,7 +110,12 @@ const tooltip = ref({
 
 // Computed properties
 const totalValue = computed(() => {
-  return props.data.reduce((sum, value) => sum + value, 0)
+  const sum = props.data.reduce((sum, value) => sum + (value || 0), 0)
+  return sum || 0
+})
+
+const hasValidData = computed(() => {
+  return props.data.length > 0 && totalValue.value > 0
 })
 
 const centerX = computed(() => {

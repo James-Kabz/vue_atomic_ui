@@ -166,9 +166,17 @@ const handleDragEnd = () => {
 const chartComponentProps = computed(() => {
   if (!props.chartType || !props.chartData) return null
 
+  // Extract data safely
+  const rawData = props.chartData.datasets?.[0]?.data || props.chartData.data || []
+  const chartLabels = props.chartData.labels || []
+  
+  // Validate data
+  const validData = rawData.filter(val => val != null && !isNaN(val))
+  if (validData.length === 0) return null
+
   const baseProps = {
-    data: props.chartData.datasets?.[0]?.data || props.chartData.data || [],
-    labels: props.chartData.labels || [],
+    data: validData,
+    labels: chartLabels.slice(0, validData.length),
     ...props.chartOptions
   }
 
