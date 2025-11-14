@@ -2,9 +2,9 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import Icon from '../Icon.vue'
 import Loader from '../Loader.vue'
-import BarChart from './BarChart.vue'
-import LineChart from './LineChart.vue'
-import PieChart from './PieChart.vue'
+import BarChart from '../BarChart.vue'
+import LineChart from '../LineChart.vue'
+import PieChart from '../PieChart.vue'
 import { cn } from '../../utils/cn'
 
 const props = defineProps({
