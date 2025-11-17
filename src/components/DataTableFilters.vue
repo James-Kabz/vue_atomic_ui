@@ -668,20 +668,38 @@ const hasAddButton = computed(() => {
 const isAddButtonVisible = computed(() => {
   if (!hasAddButton.value) return props.showAdd
 
+  // Check permission first - hide if no permission
+  if (props.addButton.permission !== undefined) {
+    if (typeof props.addButton.permission === 'function') {
+      if (!props.addButton.permission()) {
+        return false
+      }
+    } else if (!props.addButton.permission) {
+      return false
+    }
+  }
+
+  // Then check visibility function
   if (props.addButton.visible && typeof props.addButton.visible === 'function') {
     return props.addButton.visible()
   }
+  
   return true
 })
 
 const hasAddButtonPermission = computed(() => {
   if (!hasAddButton.value) return true
 
-  if (props.addButton.permission && typeof props.addButton.permission === 'function') {
-    return props.addButton.permission()
+  if (props.addButton.permission !== undefined) {
+    if (typeof props.addButton.permission === 'function') {
+      return props.addButton.permission()
+    }
+    return props.addButton.permission
   }
+  
   return true
 })
+
 
 const isAddButtonDisabled = computed(() => {
   if (!hasAddButton.value) return false
