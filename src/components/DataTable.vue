@@ -294,10 +294,25 @@ const totalColumns = computed(() => {
 // Computed property to get visible actions for a specific item
 const getVisibleActions = (item) => {
   return props.actions.filter(action => {
+    // Check permission first - if no permission, don't show the action
+    if (action.permission !== undefined) {
+      // If permission is a function, call it
+      if (typeof action.permission === 'function') {
+        if (!action.permission(item)) {
+          return false
+        }
+      } 
+      // If permission is a boolean value
+      else if (!action.permission) {
+        return false
+      }
+    }
+    
     // Check visibility function
     if (action.visible && typeof action.visible === 'function') {
       return action.visible(item)
     }
+    
     return true
   })
 }
