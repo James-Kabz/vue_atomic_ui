@@ -16,6 +16,7 @@ const props = defineProps({
   companyLogo: { type: String, default: '' },
   organisationLogo: { type: String, default: '' },
   organisations: { type: Array, default: () => [] },
+  activeRoles: { type: Array, default: () => [] },
   // New props for customization
   showSearch: { type: Boolean, default: true },
   showNotifications: { type: Boolean, default: true },
@@ -59,8 +60,36 @@ const userInitials = computed(() => {
 
 const userRoleNames = computed(() => {
   if (props.userRoleDisplayOverride) return props.userRoleDisplayOverride
-  if (!props.user?.roles?.length) return 'No role'
-  return props.user.roles.map(role => role.name).join(', ')
+  
+  const roles = []
+  
+  // Add activeRoles if available
+  if (props.activeRoles?.length > 0) {
+    roles.push(...props.activeRoles.map(role => 
+      typeof role === 'string' ? role : role.name
+    ))
+  }
+  
+  // Add user.roles if available and not already included
+  if (props.user?.roles?.length > 0) {
+    const activeRoleNames = props.activeRoles?.map(role => 
+      typeof role === 'string' ? role.toLowerCase() : role.name?.toLowerCase()
+    ) || []
+    
+    props.user.roles.forEach(role => {
+      const roleName = typeof role === 'string' ? role : role.name
+      if (!activeRoleNames.includes(roleName?.toLowerCase())) {
+        roles.push(roleName)
+      }
+    })
+  }
+  
+  if (roles.length === 0) return 'No role'
+  
+  // Capitalize and format role names
+  return roles
+    .map(role => role.charAt(0).toUpperCase() + role.slice(1).replace(/-/g, ' '))
+    .join(', ')
 })
 
 const toggleNotifications = () => {
