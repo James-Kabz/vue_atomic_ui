@@ -15,13 +15,36 @@ const props = defineProps({
   currentOrganisation: { type: Object, default: null },
   companyLogo: { type: String, default: '' },
   organisationLogo: { type: String, default: '' },
-  organisations: { type: Array, default: () => [] }
+  organisations: { type: Array, default: () => [] },
+  // New props for customization
+  showSearch: { type: Boolean, default: true },
+  showNotifications: { type: Boolean, default: true },
+  showBreadcrumb: { type: Boolean, default: true },
+  showOrganisationInfo: { type: Boolean, default: true },
+  showUserDetails: { type: Boolean, default: true },
+  searchPlaceholder: { type: String, default: 'Search...' },
+  notificationsTitle: { type: String, default: 'Notifications' },
+  organisationSwitcherTitle: { type: String, default: 'Switch Organisation' },
+  organisationSwitcherDescription: { type: String, default: 'Select an organisation to view its data' },
+  // Allow custom user initials logic
+  userInitialsOverride: { type: String, default: '' },
+  // Allow custom user role display
+  userRoleDisplayOverride: { type: String, default: '' }
 })
 
-const emit = defineEmits(['search', 'profile-action', 'logout', 'navigate', 'toggle-mobile-sidebar', 'organisation-change'])
+const emit = defineEmits([
+  'search', 
+  'profile-action', 
+  'logout', 
+  'navigate', 
+  'toggle-mobile-sidebar', 
+  'organisation-change',
+  'notification-click',
+  'view-all-notifications'
+])
 
 const searchQuery = ref('')
-const showNotifications = ref(false)
+const showNotificationsDropdown = ref(false)
 const showProfile = ref(false)
 const notificationCount = ref(props.notifications.length)
 const showMobileSearch = ref(false)
@@ -29,30 +52,32 @@ const isMobile = ref(false)
 const showOrganisationDropdown = ref(false)
 
 const userInitials = computed(() => {
+  if (props.userInitialsOverride) return props.userInitialsOverride
   const name = props.user?.name || 'Guest'
   return name.split(' ').map(n => n[0] || '').join('').toUpperCase()
 })
 
 const userRoleNames = computed(() => {
+  if (props.userRoleDisplayOverride) return props.userRoleDisplayOverride
   if (!props.user?.roles?.length) return 'No role'
   return props.user.roles.map(role => role.name).join(', ')
 })
 
 const toggleNotifications = () => {
-  showNotifications.value = !showNotifications.value
+  showNotificationsDropdown.value = !showNotificationsDropdown.value
   showProfile.value = false
 }
 
 const toggleProfile = () => {
   showProfile.value = !showProfile.value
-  showNotifications.value = false
+  showNotificationsDropdown.value = false
   showOrganisationDropdown.value = false
 }
 
 const toggleOrganisationDropdown = () => {
   showOrganisationDropdown.value = !showOrganisationDropdown.value
   showProfile.value = false
-  showNotifications.value = false
+  showNotificationsDropdown.value = false
 }
 
 const handleNavigation = (item) => {
@@ -82,9 +107,18 @@ const handleOrganisationChange = (organisation) => {
   showOrganisationDropdown.value = false
 }
 
+const handleNotificationClick = (notification) => {
+  emit('notification-click', notification)
+}
+
+const handleViewAllNotifications = () => {
+  emit('view-all-notifications')
+  showNotificationsDropdown.value = false
+}
+
 const handleClickOutside = (event) => {
   if (!event.target.closest('.absolute') && !event.target.closest('button')) {
-    showNotifications.value = false
+    showNotificationsDropdown.value = false
     showProfile.value = false
     showOrganisationDropdown.value = false
   }
@@ -99,14 +133,18 @@ onMounted(() => {
   checkMobile()
   window.addEventListener('resize', checkMobile)
 })
+
 onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside)
   window.removeEventListener('resize', checkMobile)
 })
 
 watch(searchQuery, (newValue) => emit('search', newValue))
-</script>
 
+watch(() => props.notifications.length, (newLength) => {
+  notificationCount.value = newLength
+})
+</script>
 
 <template>
   <header
@@ -120,7 +158,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
       <div class="flex items-center">
         <!-- Organisation Info -->
         <div
-          v-if="currentOrganisation"
+          v-if="showOrganisationInfo && currentOrganisation"
           class="mr-4 flex-shrink-0 bg-gradient-to-r from-blue-50 to-indigo-50 px-3 py-2 rounded-lg border border-blue-100 flex items-center gap-3 relative"
         >
           <!-- Company Logo (Software Company) -->
@@ -210,10 +248,10 @@ watch(searchQuery, (newValue) => emit('search', newValue))
             >
               <div class="p-3 border-b border-gray-200">
                 <h3 class="text-sm font-semibold text-gray-900">
-                  Switch Organisation
+                  {{ organisationSwitcherTitle }}
                 </h3>
                 <p class="text-xs text-gray-500 mt-1">
-                  Select an organisation to view its data
+                  {{ organisationSwitcherDescription }}
                 </p>
               </div>
               <div class="py-2">
@@ -268,7 +306,10 @@ watch(searchQuery, (newValue) => emit('search', newValue))
         </div>
 
         <!-- Breadcrumb -->
-        <nav class="hidden md:flex items-center space-x-2 text-sm truncate">
+        <nav
+          v-if="showBreadcrumb"
+          class="hidden md:flex items-center space-x-2 text-sm truncate"
+        >
           <span class="text-gray-500 truncate">{{ currentSection }}</span>
           <svg
             class="w-4 h-4 text-gray-400 flex-shrink-0"
@@ -312,7 +353,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
 
         <!-- Search -->
         <div
-          v-if="!isMobile || showMobileSearch"
+          v-if="showSearch && (!isMobile || showMobileSearch)"
           class="relative"
         >
           <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -333,7 +374,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
           <input
             v-model="searchQuery"
             type="text"
-            placeholder="Search..."
+            :placeholder="searchPlaceholder"
             class="pl-10 pr-4 py-2 w-48 md:w-64 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
           >
           <!-- Close search button on mobile -->
@@ -346,7 +387,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
           </button>
         </div>
         <button
-          v-else-if="isMobile"
+          v-else-if="showSearch && isMobile"
           class="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-50 transition-colors"
           @click="showMobileSearch = true"
         >
@@ -367,6 +408,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
 
         <!-- Notifications -->
         <button
+          v-if="showNotifications"
           class="relative p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-50 transition-colors"
           @click="toggleNotifications"
         >
@@ -380,20 +422,14 @@ watch(searchQuery, (newValue) => emit('search', newValue))
               stroke-linecap="round"
               stroke-linejoin="round"
               stroke-width="2"
-              d="M15 17h5l-5 5v-5z"
-            />
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M13 3h2.586a1 1 0 01.707.293l6.414 6.414a1 1 0 01.293.707V19a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h4L13 3z"
+              d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
             />
           </svg>
           <span
             v-if="notificationCount > 0"
             class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center"
           >
-            {{ notificationCount }}
+            {{ notificationCount > 9 ? '9+' : notificationCount }}
           </span>
         </button>
 
@@ -407,19 +443,42 @@ watch(searchQuery, (newValue) => emit('search', newValue))
           leave-to-class="opacity-0 translate-y-2 scale-95"
         >
           <div
-            v-if="showNotifications"
+            v-if="showNotificationsDropdown"
             class="absolute right-4 md:right-6 top-16 mt-2 w-72 md:w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50"
           >
             <div class="p-4 border-b border-gray-200">
               <h3 class="text-lg font-semibold text-gray-900">
-                Notifications
+                {{ notificationsTitle }}
               </h3>
             </div>
             <div class="max-h-96 overflow-y-auto">
               <div
+                v-if="notifications.length === 0"
+                class="p-8 text-center"
+              >
+                <svg
+                  class="w-12 h-12 mx-auto text-gray-300 mb-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                  />
+                </svg>
+                <p class="text-sm text-gray-500">
+                  No notifications
+                </p>
+              </div>
+              <div
                 v-for="notification in notifications"
+                v-else
                 :key="notification.id"
                 class="p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer"
+                @click="handleNotificationClick(notification)"
               >
                 <div class="flex items-start space-x-3">
                   <div class="flex-shrink-0 w-2 h-2 mt-2 bg-blue-500 rounded-full" />
@@ -434,8 +493,14 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                 </div>
               </div>
             </div>
-            <div class="p-4 text-center">
-              <button class="text-sm text-blue-600 hover:text-blue-800">
+            <div
+              v-if="notifications.length > 0"
+              class="p-4 text-center"
+            >
+              <button
+                class="text-sm text-blue-600 hover:text-blue-800"
+                @click="handleViewAllNotifications"
+              >
                 View all notifications
               </button>
             </div>
@@ -451,8 +516,11 @@ watch(searchQuery, (newValue) => emit('search', newValue))
             <div class="w-8 h-8 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full flex items-center justify-center transition-colors shadow-sm">
               <span class="text-blue-700 text-sm font-medium">{{ userInitials }}</span>
             </div>
-            <!-- Hide details on mobile -->
-            <div class="hidden md:block text-left max-w-[160px] truncate">
+            <!-- Hide details on mobile or when showUserDetails is false -->
+            <div
+              v-if="showUserDetails"
+              class="hidden md:block text-left max-w-[160px] truncate"
+            >
               <p class="text-sm font-medium text-gray-900 truncate">
                 {{ user.name }}
               </p>
