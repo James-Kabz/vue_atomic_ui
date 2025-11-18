@@ -63,28 +63,27 @@ const userRoleNames = computed(() => {
   
   const roles = []
   
-  // Add activeRoles if available
+  // Add activeRoles if available (these take priority when switching organisations)
   if (props.activeRoles?.length > 0) {
     roles.push(...props.activeRoles.map(role => 
       typeof role === 'string' ? role : role.name
     ))
   }
   
-  // Add user.roles if available and not already included
-  if (props.user?.roles?.length > 0) {
-    const activeRoleNames = props.activeRoles?.map(role => 
-      typeof role === 'string' ? role.toLowerCase() : role.name?.toLowerCase()
-    ) || []
-    
-    props.user.roles.forEach(role => {
-      const roleName = typeof role === 'string' ? role : role.name
-      if (!activeRoleNames.includes(roleName?.toLowerCase())) {
-        roles.push(roleName)
-      }
-    })
+  // If no active roles, fall back to user.roles
+  if (roles.length === 0 && props.user?.roles?.length > 0) {
+    roles.push(...props.user.roles.map(role => 
+      typeof role === 'string' ? role : role.name
+    ))
   }
   
-  if (roles.length === 0) return 'No role'
+  // If still no roles, use the current organisation role if available
+  if (roles.length === 0 && props.currentOrganisation?.role) {
+    roles.push(props.currentOrganisation.role)
+  }
+  
+  // Final fallback
+  if (roles.length === 0) return 'Member'
   
   // Capitalize and format role names
   return roles
