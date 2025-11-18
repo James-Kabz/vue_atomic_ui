@@ -199,7 +199,7 @@ watch(() => props.notifications.length, (newLength) => {
 
           <!-- Company Logo (Software Company) -->
           <div v-if="companyLogo" class="flex-shrink-0">
-            <img :src="companyLogo" alt="Company logo" class="w-6 h-6 object-contain rounded">
+            <img :src="companyLogo" alt="Company logo" class="w-14 h-12 object-contain rounded">
           </div>
 
           <!-- Organisation Logo (Registered Organisation) -->
