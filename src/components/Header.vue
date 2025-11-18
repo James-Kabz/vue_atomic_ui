@@ -318,10 +318,10 @@ watch(() => props.notifications.length, (newLength) => {
                       {{ org.organisation_name }}
                     </p>
                     <p
-                      v-if="org.role"
-                      class="text-xs text-gray-500 truncate"
+                      v-if="formattedActiveRoles"
+                      class="text-xs text-blue-600 truncate font-medium"
                     >
-                      {{ org.role }}
+                      {{ formattedActiveRoles }}
                     </p>
                   </div>
                   <svg
