@@ -1,3 +1,115 @@
+<script setup>
+import { ref, computed, inject } from 'vue'
+import Icon from '../components/Icon.vue'
+
+// Layout reference
+const layoutRef = ref(null)
+
+// Inject layout context (if needed for nested components)
+const layoutContext = inject('dashboardLayout', null)
+
+// Demo data
+const stats = ref([
+  {
+    label: 'Total Users',
+    value: '2,847',
+    change: 12,
+    trend: 'up',
+    icon: 'users',
+    bgColor: 'bg-blue-100',
+    iconColor: 'text-blue-600'
+  },
+  {
+    label: 'Revenue',
+    value: '$45,231',
+    change: 8,
+    trend: 'up',
+    icon: 'dollar-sign',
+    bgColor: 'bg-green-100',
+    iconColor: 'text-green-600'
+  },
+  {
+    label: 'Orders',
+    value: '1,423',
+    change: 3,
+    trend: 'down',
+    icon: 'shopping-bag',
+    bgColor: 'bg-yellow-100',
+    iconColor: 'text-yellow-600'
+  },
+  {
+    label: 'Conversion Rate',
+    value: '3.24%',
+    change: 15,
+    trend: 'up',
+    icon: 'percent',
+    bgColor: 'bg-purple-100',
+    iconColor: 'text-purple-600'
+  }
+])
+
+const recentActivities = ref([
+  {
+    id: 1,
+    user: { name: 'Alice Johnson', email: 'alice@example.com', initials: 'AJ' },
+    action: 'Created new project',
+    status: 'Completed',
+    time: '2 minutes ago'
+  },
+  {
+    id: 2,
+    user: { name: 'Bob Smith', email: 'bob@example.com', initials: 'BS' },
+    action: 'Updated user profile',
+    status: 'In Progress',
+    time: '15 minutes ago'
+  },
+  {
+    id: 3,
+    user: { name: 'Carol Davis', email: 'carol@example.com', initials: 'CD' },
+    action: 'Deleted old files',
+    status: 'Failed',
+    time: '1 hour ago'
+  },
+  {
+    id: 4,
+    user: { name: 'David Wilson', email: 'david@example.com', initials: 'DW' },
+    action: 'Exported data report',
+    status: 'Completed',
+    time: '2 hours ago'
+  }
+])
+
+// Computed properties to track layout state
+const sidebarCollapsed = computed(() => layoutRef.value?.sidebarCollapsed || false)
+const sidebarWidth = computed(() => layoutRef.value?.sidebarWidth || 256)
+const currentSection = computed(() => layoutContext?.currentSection?.value || 'Dashboard')
+const currentPage = computed(() => layoutContext?.currentPage?.value || 'Demo')
+
+// Methods
+const toggleSidebar = () => {
+  if (layoutRef.value) {
+    layoutRef.value.toggleSidebar()
+  }
+}
+
+const refreshData = () => {
+  // Simulate data refresh
+  console.log('Refreshing data...')
+  // You would typically make API calls here
+}
+
+
+const getStatusColor = (status) => {
+  const colors = {
+    'Completed': 'bg-green-100 text-green-800',
+    'In Progress': 'bg-yellow-100 text-yellow-800',
+    'Failed': 'bg-red-100 text-red-800',
+    'Pending': 'bg-gray-100 text-gray-800'
+  }
+  return colors[status] || 'bg-gray-100 text-gray-800'
+}
+</script>
+
 <template>
   <!-- <DashboardLayout
     ref="layoutRef"
@@ -237,115 +349,3 @@
   </div>
   <!-- </DashboardLayout> -->
 </template>
-
-<script setup>
-import { ref, computed, inject } from 'vue'
-import Icon from '../components/Icon.vue'
-
-// Layout reference
-const layoutRef = ref(null)
-
-// Inject layout context (if needed for nested components)
-const layoutContext = inject('dashboardLayout', null)
-
-// Demo data
-const stats = ref([
-  {
-    label: 'Total Users',
-    value: '2,847',
-    change: 12,
-    trend: 'up',
-    icon: 'users',
-    bgColor: 'bg-blue-100',
-    iconColor: 'text-blue-600'
-  },
-  {
-    label: 'Revenue',
-    value: '$45,231',
-    change: 8,
-    trend: 'up',
-    icon: 'dollar-sign',
-    bgColor: 'bg-green-100',
-    iconColor: 'text-green-600'
-  },
-  {
-    label: 'Orders',
-    value: '1,423',
-    change: 3,
-    trend: 'down',
-    icon: 'shopping-bag',
-    bgColor: 'bg-yellow-100',
-    iconColor: 'text-yellow-600'
-  },
-  {
-    label: 'Conversion Rate',
-    value: '3.24%',
-    change: 15,
-    trend: 'up',
-    icon: 'percent',
-    bgColor: 'bg-purple-100',
-    iconColor: 'text-purple-600'
-  }
-])
-
-const recentActivities = ref([
-  {
-    id: 1,
-    user: { name: 'Alice Johnson', email: 'alice@example.com', initials: 'AJ' },
-    action: 'Created new project',
-    status: 'Completed',
-    time: '2 minutes ago'
-  },
-  {
-    id: 2,
-    user: { name: 'Bob Smith', email: 'bob@example.com', initials: 'BS' },
-    action: 'Updated user profile',
-    status: 'In Progress',
-    time: '15 minutes ago'
-  },
-  {
-    id: 3,
-    user: { name: 'Carol Davis', email: 'carol@example.com', initials: 'CD' },
-    action: 'Deleted old files',
-    status: 'Failed',
-    time: '1 hour ago'
-  },
-  {
-    id: 4,
-    user: { name: 'David Wilson', email: 'david@example.com', initials: 'DW' },
-    action: 'Exported data report',
-    status: 'Completed',
-    time: '2 hours ago'
-  }
-])
-
-// Computed properties to track layout state
-const sidebarCollapsed = computed(() => layoutRef.value?.sidebarCollapsed || false)
-const sidebarWidth = computed(() => layoutRef.value?.sidebarWidth || 256)
-const currentSection = computed(() => layoutContext?.currentSection?.value || 'Dashboard')
-const currentPage = computed(() => layoutContext?.currentPage?.value || 'Demo')
-
-// Methods
-const toggleSidebar = () => {
-  if (layoutRef.value) {
-    layoutRef.value.toggleSidebar()
-  }
-}
-
-const refreshData = () => {
-  // Simulate data refresh
-  console.log('Refreshing data...')
-  // You would typically make API calls here
-}
-
-
-const getStatusColor = (status) => {
-  const colors = {
-    'Completed': 'bg-green-100 text-green-800',
-    'In Progress': 'bg-yellow-100 text-yellow-800',
-    'Failed': 'bg-red-100 text-red-800',
-    'Pending': 'bg-gray-100 text-gray-800'
-  }
-  return colors[status] || 'bg-gray-100 text-gray-800'
-}
-</script>
