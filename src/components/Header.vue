@@ -24,7 +24,7 @@ const props = defineProps({
   showOrganisationInfo: { type: Boolean, default: true },
   showUserDetails: { type: Boolean, default: true },
   showHeaderLogo: { type: Boolean, default: true },
-  headerLogo: { type: String, default: '/dist/logo.png' },
+  headerLogo: { type: String, default: 'dist/logo.png' },
   searchPlaceholder: { type: String, default: 'Search...' },
   notificationsTitle: { type: String, default: 'Notifications' },
   organisationSwitcherTitle: { type: String, default: 'Switch Organisation' },
