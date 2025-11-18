@@ -284,10 +284,41 @@ const paginatedData = computed(() => {
   return filteredData.value.slice(start, end)
 })
 
+// Check if actions column should be displayed based on permissions
+const shouldShowActionsColumn = computed(() => {
+  if (!props.showActionsColumn) return false
+  
+  // If using custom actions slot, always show
+  if (props.$slots?.actions) return true
+  
+  // If no actions defined, don't show
+  if (!props.actions || props.actions.length === 0) return false
+  
+  // Check if user has any actionable permissions
+  const hasActionablePermission = props.actions.some(action => {
+    if (action.permission === undefined) return true
+    
+    // If permission is boolean, check it directly
+    if (typeof action.permission === 'boolean') {
+      return action.permission === true
+    }
+    
+    // If permission is a function, we assume it might grant access
+    // This will be filtered per-row by getVisibleActions
+    if (typeof action.permission === 'function') {
+      return true
+    }
+    
+    return false
+  })
+  
+  return hasActionablePermission
+})
+
 const totalColumns = computed(() => {
   let count = props.columns.length
   if (props.selectable) count++
-  if (props.$slots?.actions || (props.actions.length > 0 && props.showActionsColumn)) count++
+  if (shouldShowActionsColumn.value) count++
   return count
 })
 
@@ -781,7 +812,7 @@ defineExpose({
 
               <!-- Actions Column Header -->
               <th
-                v-if="$slots.actions || (actions.length > 0 && showActionsColumn)"
+                v-if="shouldShowActionsColumn"
                 :class="actionsCellClasses"
               >
                 Actions
@@ -817,7 +848,7 @@ defineExpose({
 
                 <!-- Actions column skeleton -->
                 <td
-                  v-if="$slots.actions || (actions.length > 0 && showActionsColumn)"
+                  v-if="shouldShowActionsColumn"
                   :class="actionsCellClasses"
                 >
                   <div class="flex gap-2 justify-center">
@@ -875,7 +906,7 @@ defineExpose({
 
                 <!-- Actions Column -->
                 <td
-                  v-if="$slots.actions || (actions.length > 0 && showActionsColumn)"
+                  v-if="shouldShowActionsColumn"
                   :class="actionsCellClasses"
                 >
                   <!-- Use slot if provided -->
@@ -888,7 +919,7 @@ defineExpose({
 
                   <!-- Otherwise render actions from prop -->
                   <div
-                    v-else-if="actions.length > 0 && showActionsColumn"
+                    v-else-if="actions.length > 0"
                     class="flex items-center gap-1 justify-center"
                   >
                     <Tooltip
