@@ -91,6 +91,15 @@ const userRoleNames = computed(() => {
     .join(', ')
 })
 
+const formattedActiveRoles = computed(() => {
+  if (!props.activeRoles || props.activeRoles.length === 0) return ''
+  
+  return props.activeRoles
+    .map(role => typeof role === 'string' ? role : role.name)
+    .map(role => role.charAt(0).toUpperCase() + role.slice(1).replace(/-/g, ' '))
+    .join(', ')
+})
+
 const toggleNotifications = () => {
   showNotificationsDropdown.value = !showNotificationsDropdown.value
   showProfile.value = false
@@ -224,10 +233,10 @@ watch(() => props.notifications.length, (newLength) => {
                 {{ currentOrganisation.organisation_name }}
               </p>
               <p
-                v-if="currentOrganisation.role"
+                v-if="formattedActiveRoles"
                 class="text-xs text-blue-600 truncate font-medium"
               >
-                {{ currentOrganisation.role }}
+                {{ formattedActiveRoles }}
               </p>
             </div>
             <svg
@@ -254,10 +263,10 @@ watch(() => props.notifications.length, (newLength) => {
               {{ currentOrganisation.organisation_name }}
             </p>
             <p
-              v-if="currentOrganisation.role"
+              v-if="formattedActiveRoles"
               class="text-xs text-blue-600 truncate font-medium"
             >
-              {{ currentOrganisation.role }}
+              {{ formattedActiveRoles }}
             </p>
           </div>
 
@@ -670,7 +679,7 @@ watch(() => props.notifications.length, (newLength) => {
                         stroke-linecap="round"
                         stroke-linejoin="round"
                         stroke-width="2"
-                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a2 2 0 013-3h4a3 3 0 013 3v1"
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a2 3 0 013-3h4a3 3 0 013 3v1"
                       />
                     </svg>
                   </div>
