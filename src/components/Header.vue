@@ -23,6 +23,8 @@ const props = defineProps({
   showBreadcrumb: { type: Boolean, default: true },
   showOrganisationInfo: { type: Boolean, default: true },
   showUserDetails: { type: Boolean, default: true },
+  showHeaderLogo: { type: Boolean, default: true },
+  headerLogo: { type: String, default: '/dist/logo.png' },
   searchPlaceholder: { type: String, default: 'Search...' },
   notificationsTitle: { type: String, default: 'Notifications' },
   organisationSwitcherTitle: { type: String, default: 'Switch Organisation' },
@@ -340,6 +342,18 @@ watch(() => props.notifications.length, (newLength) => {
               </div>
             </div>
           </transition>
+        </div>
+
+        <!-- Header Logo -->
+        <div
+          v-if="showHeaderLogo"
+          class="mr-4 flex-shrink-0"
+        >
+          <img
+            :src="headerLogo"
+            alt="Company Logo"
+            class="w-8 h-8 object-contain"
+          >
         </div>
 
         <!-- Breadcrumb -->
