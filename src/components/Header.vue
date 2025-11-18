@@ -30,7 +30,7 @@ const props = defineProps({
   organisationSwitcherTitle: { type: String, default: 'Switch Organisation' },
   organisationSwitcherDescription: { type: String, default: 'Select an organisation to view its data' },
   // Allow custom user initials logic
-  
+
   userInitialsOverride: { type: String, default: '' },
   // Allow custom user role display
   userRoleDisplayOverride: { type: String, default: '' }
@@ -221,7 +221,7 @@ watch(() => props.notifications.length, (newLength) => {
             <img
               :src="organisationLogo"
               :alt="`${currentOrganisation.organisation_name} logo`"
-              class="w-8 h-8 object-contain rounded border border-blue-200"
+              class="w-14 h-12 object-contain rounded border border-blue-200"
             >
           </div>
 
