@@ -199,13 +199,13 @@ watch(() => props.notifications.length, (newLength) => {
 
           <!-- Company Logo (Software Company) -->
           <div v-if="companyLogo" class="flex-shrink-0">
-            <img :src="companyLogo" alt="Company logo" class="w-14 h-12 object-contain rounded">
+            <img :src="companyLogo" alt="Company logo" class="w-12 h-12 object-contain rounded">
           </div>
 
           <!-- Organisation Logo (Registered Organisation) -->
           <div v-if="organisationLogo" class="flex-shrink-0">
             <img :src="organisationLogo" :alt="`${currentOrganisation.organisation_name} logo`"
-              class="w-14 h-12 object-contain rounded border border-blue-200">
+              class="w-12 h-12 object-contain rounded border border-blue-200">
           </div>
 
           <!-- Organisation Switcher -->

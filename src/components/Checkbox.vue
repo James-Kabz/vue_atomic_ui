@@ -51,23 +51,41 @@
 </template>
 
 <script setup>
-import { computed, ref, useId, watch } from 'vue'
+import { computed, ref, useId, watch, h } from 'vue'
 
 // Icon components
 const CheckIcon = {
-  template: `
-    <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-    </svg>
-  `
+  render() {
+    return h('svg', {
+      fill: 'none',
+      viewBox: '0 0 24 24',
+      'stroke-width': '2',
+      stroke: 'currentColor'
+    }, [
+      h('path', {
+        'stroke-linecap': 'round',
+        'stroke-linejoin': 'round',
+        d: 'm4.5 12.75 6 6 9-13.5'
+      })
+    ])
+  }
 }
 
 const MinusIcon = {
-  template: `
-    <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
-    </svg>
-  `
+  render() {
+    return h('svg', {
+      fill: 'none',
+      viewBox: '0 0 24 24',
+      'stroke-width': '2',
+      stroke: 'currentColor'
+    }, [
+      h('path', {
+        'stroke-linecap': 'round',
+        'stroke-linejoin': 'round',
+        d: 'M5 12h14'
+      })
+    ])
+  }
 }
 
 const props = defineProps({

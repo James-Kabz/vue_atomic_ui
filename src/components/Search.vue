@@ -123,26 +123,65 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch, h } from 'vue'
 import { cva } from 'class-variance-authority'
 import { cn } from '../utils/cn.js'
 
 // Icons
 const SearchIcon = {
-  template: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/>
-  </svg>`
+  render() {
+    return h('svg', {
+      fill: 'none',
+      viewBox: '0 0 24 24',
+      'stroke-width': '1.5',
+      stroke: 'currentColor'
+    }, [
+      h('path', {
+        'stroke-linecap': 'round',
+        'stroke-linejoin': 'round',
+        d: 'm21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z'
+      })
+    ])
+  }
 }
 const XMarkIcon = {
-  template: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
-  </svg>`
+  render() {
+    return h('svg', {
+      fill: 'none',
+      viewBox: '0 0 24 24',
+      'stroke-width': '1.5',
+      stroke: 'currentColor'
+    }, [
+      h('path', {
+        'stroke-linecap': 'round',
+        'stroke-linejoin': 'round',
+        d: 'M6 18 18 6M6 6l12 12'
+      })
+    ])
+  }
 }
 const LoadingIcon = {
-  template: `<svg fill="none" viewBox="0 0 24 24" class="animate-spin">
-    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
-    <path class="opacity-75" fill="currentColor" d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
-  </svg>`
+  render() {
+    return h('svg', {
+      fill: 'none',
+      viewBox: '0 0 24 24',
+      class: 'animate-spin'
+    }, [
+      h('circle', {
+        class: 'opacity-25',
+        cx: '12',
+        cy: '12',
+        r: '10',
+        stroke: 'currentColor',
+        'stroke-width': '4'
+      }),
+      h('path', {
+        class: 'opacity-75',
+        fill: 'currentColor',
+        d: 'm4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
+      })
+    ])
+  }
 }
 
 const props = defineProps({
