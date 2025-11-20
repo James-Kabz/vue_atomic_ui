@@ -187,16 +187,16 @@ const colorClasses = computed(() => {
   }
   
   const colors = {
-    default: 'text-slate-900 dark:text-slate-100',
-    primary: 'text-blue-600 dark:text-blue-400',
-    secondary: 'text-slate-600 dark:text-slate-400',
-    accent: 'text-purple-600 dark:text-purple-400',
-    success: 'text-green-600 dark:text-green-400',
-    warning: 'text-yellow-600 dark:text-yellow-400',
-    danger: 'text-red-600 dark:text-red-400',
-    info: 'text-cyan-600 dark:text-cyan-400',
-    muted: 'text-slate-500 dark:text-slate-500',
-    disabled: 'text-slate-400 dark:text-slate-600',
+    default: 'text-slate-900',
+    primary: 'text-blue-600',
+    secondary: 'text-slate-600',
+    accent: 'text-purple-600',
+    success: 'text-green-600',
+    warning: 'text-yellow-600',
+    danger: 'text-red-600',
+    info: 'text-cyan-600',
+    muted: 'text-slate-500',
+    disabled: 'text-slate-400',
     white: 'text-white',
     black: 'text-black'
   }
