@@ -45,21 +45,21 @@ const props = defineProps({
             'slider',
             'date',
             'color',
-            'email',          // NEW
-            'tel',            // NEW
-            'url',            // NEW
-            'time',           // NEW
-            'datetime-local', // NEW
-            'month',          // NEW
-            'week',           // NEW
-            'file',           // NEW
-            'radio',          // NEW
-            'switch',         // NEW (alternative to checkbox)
-            'range',          // NEW (alternative to slider)
-            'search',         // NEW
-            'hidden',         // NEW
-            'multiselect',    // NEW
-            'combobox',       // NEW
+            'email',
+            'tel',
+            'url',
+            'time',
+            'datetime-local',
+            'month',
+            'week',
+            'file',
+            'radio',
+            'switch',
+            'range',
+            'search',
+            'hidden',
+            'multiselect',
+            'combobox',
           ].includes(field.type),
       )
     },
@@ -104,11 +104,35 @@ const formData = ref({})
 const errors = ref({})
 const isInitialized = ref(false)
 
+// Helper function to get nested value from object using dot notation
+const getNestedValue = (obj, path) => {
+  if (!obj || !path) return undefined
+  return path.split('.').reduce((current, key) => current?.[key], obj)
+}
+
+// Helper function to set nested value in object using dot notation
+const setNestedValue = (obj, path, value) => {
+  const keys = path.split('.')
+  const lastKey = keys.pop()
+  const target = keys.reduce((current, key) => {
+    if (!current[key]) current[key] = {}
+    return current[key]
+  }, obj)
+  target[lastKey] = value
+}
+
 // Initialize form data based on fields
 const initializeFormData = () => {
   const data = {}
   props.fields.forEach((field) => {
-    if (field.type === 'checkbox' || field.type === 'switch') {
+    // Handle nested fields (e.g., 'socials.facebook')
+    if (field.name.includes('.')) {
+      const [parent] = field.name.split('.')
+      if (!data[parent]) {
+        data[parent] = {}
+      }
+      setNestedValue(data, field.name, getDefaultValue(field))
+    } else if (field.type === 'checkbox' || field.type === 'switch') {
       data[field.name] = false
     } else if (field.type === 'number' || field.type === 'slider' || field.type === 'range') {
       data[field.name] = field.min !== undefined ? field.min : 0
@@ -127,51 +151,61 @@ const initializeFormData = () => {
   return data
 }
 
+// Get default value for a field
+const getDefaultValue = (field) => {
+  if (field.type === 'checkbox' || field.type === 'switch') return false
+  if (field.type === 'number' || field.type === 'slider' || field.type === 'range') {
+    return field.min !== undefined ? field.min : 0
+  }
+  if (field.type === 'file') return null
+  if (field.type === 'radio') return field.options?.[0]?.value || ''
+  if (field.type === 'multiselect') return []
+  if (field.type === 'combobox') return ''
+  return ''
+}
+
+// Populate form data from initialData
+const populateFormData = (data) => {
+  const formValues = {}
+  
+  props.fields.forEach((field) => {
+    if (field.name.includes('.')) {
+      // Handle nested fields
+      const value = getNestedValue(data, field.name)
+      if (!formValues[field.name.split('.')[0]]) {
+        formValues[field.name.split('.')[0]] = {}
+      }
+      setNestedValue(formValues, field.name, value !== undefined ? value : getDefaultValue(field))
+    } else {
+      // Handle regular fields
+      const value = data?.[field.name]
+      
+      if (field.type === 'checkbox' || field.type === 'switch') {
+        formValues[field.name] = value ?? false
+      } else if (field.type === 'number' || field.type === 'slider' || field.type === 'range') {
+        formValues[field.name] = value ?? (field.min !== undefined ? field.min : 0)
+      } else if (field.type === 'file') {
+        formValues[field.name] = null
+      } else if (field.type === 'multiselect') {
+        formValues[field.name] = Array.isArray(value) ? value : []
+      } else {
+        formValues[field.name] = value ?? getDefaultValue(field)
+      }
+    }
+  })
+  
+  return formValues
+}
+
 // Watch for initialData changes to populate form
 watch(
   () => props.initialData,
   (newData) => {
     if (props.modalType === 'edit' && newData) {
-      const data = {}
-      props.fields.forEach((field) => {
-        if (field.type === 'checkbox' || field.type === 'switch') {
-          data[field.name] = newData[field.name] ?? false
-        } else if (field.type === 'number' || field.type === 'slider' || field.type === 'range') {
-          data[field.name] = newData[field.name] ?? (field.min !== undefined ? field.min : 0)
-        } else if (field.type === 'file') {
-          data[field.name] = null
-        } else if (field.type === 'multiselect') {
-          data[field.name] = Array.isArray(newData[field.name]) ? newData[field.name] : []
-        } else if (field.type === 'combobox') {
-          data[field.name] = newData[field.name] ?? ''
-        } else {
-          data[field.name] = newData[field.name] ?? ''
-        }
-      })
-      formData.value = data
+      formData.value = populateFormData(newData)
       isInitialized.value = true
     } else if (props.modalType === 'create' && newData && !isInitialized.value) {
-      const data = {}
-      props.fields.forEach((field) => {
-        if (newData[field.name] !== undefined && newData[field.name] !== null) {
-          data[field.name] = newData[field.name]
-        } else if (field.type === 'checkbox' || field.type === 'switch') {
-          data[field.name] = false
-        } else if (field.type === 'number' || field.type === 'slider' || field.type === 'range') {
-          data[field.name] = field.min !== undefined ? field.min : 0
-        } else if (field.type === 'file') {
-          data[field.name] = null
-        } else if (field.type === 'radio') {
-          data[field.name] = field.options?.[0]?.value || ''
-        } else if (field.type === 'multiselect') {
-          data[field.name] = []
-        } else if (field.type === 'combobox') {
-          data[field.name] = ''
-        } else {
-          data[field.name] = ''
-        }
-      })
-      formData.value = data
+      formData.value = populateFormData(newData)
       isInitialized.value = true
     } else if (props.modalType === 'create' && !newData) {
       formData.value = initializeFormData()
@@ -190,27 +224,7 @@ watch(
       if (props.modalType === 'create') {
         isInitialized.value = false
         if (props.initialData) {
-          const data = {}
-          props.fields.forEach((field) => {
-            if (props.initialData[field.name] !== undefined && props.initialData[field.name] !== null) {
-              data[field.name] = props.initialData[field.name]
-            } else if (field.type === 'checkbox' || field.type === 'switch') {
-              data[field.name] = false
-            } else if (field.type === 'number' || field.type === 'slider' || field.type === 'range') {
-              data[field.name] = field.min !== undefined ? field.min : 0
-            } else if (field.type === 'file') {
-              data[field.name] = null
-            } else if (field.type === 'radio') {
-              data[field.name] = field.options?.[0]?.value || ''
-            } else if (field.type === 'multiselect') {
-              data[field.name] = []
-            } else if (field.type === 'combobox') {
-              data[field.name] = ''
-            } else {
-              data[field.name] = ''
-            }
-          })
-          formData.value = data
+          formData.value = populateFormData(props.initialData)
         } else {
           formData.value = initializeFormData()
         }
@@ -225,11 +239,7 @@ watch(
   () => props.initialData,
   (newData) => {
     if (isInitialized.value && newData) {
-      Object.keys(newData).forEach((key) => {
-        if (Object.prototype.hasOwnProperty.call(formData.value, key) && newData[key] !== undefined && newData[key] !== null) {
-          formData.value[key] = newData[key]
-        }
-      })
+      formData.value = populateFormData(newData)
     }
   },
   { deep: true },
@@ -240,7 +250,9 @@ const validateForm = () => {
 
   props.fields.forEach((field) => {
     if (field.required && !field.disabled && field.type !== 'hidden') {
-      const value = formData.value[field.name]
+      const value = field.name.includes('.') 
+        ? getNestedValue(formData.value, field.name)
+        : formData.value[field.name]
 
       if (field.type === 'checkbox' || field.type === 'switch') {
         if (field.required && !value) {
@@ -302,7 +314,10 @@ const validateForm = () => {
     }
 
     if (field.validate && typeof field.validate === 'function') {
-      const customError = field.validate(formData.value[field.name], formData.value)
+      const value = field.name.includes('.') 
+        ? getNestedValue(formData.value, field.name)
+        : formData.value[field.name]
+      const customError = field.validate(value, formData.value)
       if (customError) {
         errors.value[field.name] = customError
       }
@@ -320,7 +335,11 @@ const validateForm = () => {
 }
 
 const handleSelectChange = async (field, value) => {
-  formData.value[field.name] = value
+  if (field.name.includes('.')) {
+    setNestedValue(formData.value, field.name, value)
+  } else {
+    formData.value[field.name] = value
+  }
 
   if (field.onChange && typeof field.onChange === 'function') {
     try {
@@ -333,7 +352,11 @@ const handleSelectChange = async (field, value) => {
 }
 
 const handleSliderChange = (field, value) => {
-  formData.value[field.name] = value
+  if (field.name.includes('.')) {
+    setNestedValue(formData.value, field.name, value)
+  } else {
+    formData.value[field.name] = value
+  }
 
   if (field.onChange && typeof field.onChange === 'function') {
     try {
@@ -347,7 +370,11 @@ const handleSliderChange = (field, value) => {
 
 const handleFileChange = (field, event) => {
   const file = event.target.files?.[0] || null
-  formData.value[field.name] = file
+  if (field.name.includes('.')) {
+    setNestedValue(formData.value, field.name, file)
+  } else {
+    formData.value[field.name] = file
+  }
 
   if (field.onChange && typeof field.onChange === 'function') {
     try {
@@ -368,21 +395,38 @@ const handleSubmit = async () => {
 
     const preparedData = {}
     props.fields.forEach((field) => {
-      const value = formData.value[field.name]
+      const value = field.name.includes('.') 
+        ? getNestedValue(formData.value, field.name)
+        : formData.value[field.name]
 
       if (field.type === 'number' || field.type === 'slider' || field.type === 'range') {
-        preparedData[field.name] = Number(value)
+        if (field.name.includes('.')) {
+          setNestedValue(preparedData, field.name, Number(value))
+        } else {
+          preparedData[field.name] = Number(value)
+        }
       } else if (field.type === 'text' || field.type === 'textarea' || field.type === 'date' ||
         field.type === 'email' || field.type === 'url' || field.type === 'tel' ||
         field.type === 'search' || field.type === 'time' || field.type === 'datetime-local' ||
         field.type === 'month' || field.type === 'week') {
-        preparedData[field.name] = typeof value === 'string' ? value.trim() : value
-      } else if (field.type === 'password') {
-        preparedData[field.name] = value
-      } else if (field.type === 'file') {
-        preparedData[field.name] = value
+        const trimmedValue = typeof value === 'string' ? value.trim() : value
+        if (field.name.includes('.')) {
+          setNestedValue(preparedData, field.name, trimmedValue)
+        } else {
+          preparedData[field.name] = trimmedValue
+        }
+      } else if (field.type === 'password' || field.type === 'file') {
+        if (field.name.includes('.')) {
+          setNestedValue(preparedData, field.name, value)
+        } else {
+          preparedData[field.name] = value
+        }
       } else {
-        preparedData[field.name] = value
+        if (field.name.includes('.')) {
+          setNestedValue(preparedData, field.name, value)
+        } else {
+          preparedData[field.name] = value
+        }
       }
     })
 
@@ -402,6 +446,22 @@ const handleClose = () => {
   errors.value = {}
   isInitialized.value = false
   emit('close')
+}
+
+// Helper to get field value (handles nested fields)
+const getFieldValue = (fieldName) => {
+  return fieldName.includes('.') 
+    ? getNestedValue(formData.value, fieldName)
+    : formData.value[fieldName]
+}
+
+// Helper to set field value (handles nested fields)
+const setFieldValue = (fieldName, value) => {
+  if (fieldName.includes('.')) {
+    setNestedValue(formData.value, fieldName, value)
+  } else {
+    formData.value[fieldName] = value
+  }
 }
 </script>
 
@@ -439,7 +499,7 @@ const handleClose = () => {
         <!-- Hidden fields don't need FormField wrapper -->
         <template v-if="field.type === 'hidden'">
           <input
-            v-model="formData[field.name]"
+            :value="getFieldValue(field.name)"
             type="hidden"
           >
         </template>
@@ -457,20 +517,21 @@ const handleClose = () => {
             <Input
               v-if="['text', 'number', 'password', 'color', 'email', 'tel', 'url', 'search'].includes(field.type)"
               :id="fieldId"
-              v-model="formData[field.name]"
+              :model-value="getFieldValue(field.name)"
               :type="field.type"
               :placeholder="field.placeholder"
               :disabled="isLoading || field.disabled"
               :readonly="field.disabled"
               :class="hasError ? 'border-red-500' : 'border-slate-300'"
               :aria-describedby="ariaDescribedBy"
+              @update:model-value="setFieldValue(field.name, $event)"
             />
 
             <!-- Textarea -->
             <Textarea
               v-else-if="field.type === 'textarea'"
               :id="fieldId"
-              v-model="formData[field.name]"
+              :model-value="getFieldValue(field.name)"
               :placeholder="field.placeholder"
               :disabled="isLoading || field.disabled"
               :rows="field.rows || 3"
@@ -479,13 +540,14 @@ const handleClose = () => {
                 hasError ? 'border-red-500' : 'border-slate-300',
               ]"
               :aria-describedby="ariaDescribedBy"
+              @update:model-value="setFieldValue(field.name, $event)"
             />
 
             <!-- Select Dropdown -->
             <Select
               v-else-if="field.type === 'select'"
               :id="fieldId"
-              :model-value="formData[field.name]"
+              :model-value="getFieldValue(field.name)"
               :options="field.options"
               :placeholder="field.placeholder || 'Select an option'"
               :disabled="isLoading || field.disabled"
@@ -498,20 +560,20 @@ const handleClose = () => {
             <MultiSelect
               v-else-if="field.type === 'multiselect'"
               :id="fieldId"
-              :model-value="formData[field.name]"
+              :model-value="getFieldValue(field.name)"
               :options="field.options"
               :disabled="isLoading || field.disabled"
               :placeholder="field.placeholder || 'Select options'"
               :has-error="hasError"
               :aria-describedby="ariaDescribedBy"
-              @update:model-value="formData[field.name] = $event"
+              @update:model-value="setFieldValue(field.name, $event)"
             />
 
             <!-- Combobox -->
             <Select
               v-else-if="field.type === 'combobox'"
               :id="fieldId"
-              :model-value="formData[field.name]"
+              :model-value="getFieldValue(field.name)"
               :options="field.options"
               :placeholder="field.placeholder || 'Select or type to add new'"
               :disabled="isLoading || field.disabled"
@@ -528,11 +590,12 @@ const handleClose = () => {
             >
               <Input
                 :id="fieldId"
-                v-model="formData[field.name]"
+                :model-value="getFieldValue(field.name)"
                 type="checkbox"
                 :disabled="isLoading || field.disabled"
                 class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                 :aria-describedby="ariaDescribedBy"
+                @update:model-value="setFieldValue(field.name, $event)"
               />
               <Label
                 :for="fieldId"
@@ -551,19 +614,19 @@ const handleClose = () => {
                 :id="fieldId"
                 type="button"
                 role="switch"
-                :aria-checked="formData[field.name]"
+                :aria-checked="getFieldValue(field.name)"
                 :disabled="isLoading || field.disabled"
                 :class="[
                   'relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
-                  formData[field.name] ? 'bg-blue-600' : 'bg-gray-200',
+                  getFieldValue(field.name) ? 'bg-blue-600' : 'bg-gray-200',
                   (isLoading || field.disabled) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
                 ]"
-                @click="formData[field.name] = !formData[field.name]"
+                @click="setFieldValue(field.name, !getFieldValue(field.name))"
               >
                 <span
                   :class="[
                     'inline-block h-4 w-4 transform rounded-full bg-white transition-transform',
-                    formData[field.name] ? 'translate-x-6' : 'translate-x-1'
+                    getFieldValue(field.name) ? 'translate-x-6' : 'translate-x-1'
                   ]"
                 />
               </button>
@@ -587,12 +650,13 @@ const handleClose = () => {
               >
                 <Input
                   :id="`${fieldId}-${option.value}`"
-                  v-model="formData[field.name]"
+                  :model-value="getFieldValue(field.name)"
                   type="radio"
                   :value="option.value"
                   :disabled="isLoading || field.disabled"
                   class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
                   :aria-describedby="ariaDescribedBy"
+                  @update:model-value="setFieldValue(field.name, $event)"
                 />
                 <Label
                   :for="`${fieldId}-${option.value}`"
@@ -631,7 +695,7 @@ const handleClose = () => {
             <!-- Slider -->
             <Slider
               v-else-if="field.type === 'slider'"
-              :model-value="formData[field.name]"
+              :model-value="getFieldValue(field.name)"
               :min="field.min"
               :max="field.max"
               :step="field.step"
@@ -647,7 +711,7 @@ const handleClose = () => {
               <div class="flex items-center gap-4">
                 <Input
                   :id="fieldId"
-                  v-model="formData[field.name]"
+                  :model-value="getFieldValue(field.name)"
                   type="range"
                   :min="field.min"
                   :max="field.max"
@@ -655,9 +719,10 @@ const handleClose = () => {
                   :disabled="isLoading || field.disabled"
                   class="flex-1"
                   :aria-describedby="ariaDescribedBy"
+                  @update:model-value="setFieldValue(field.name, $event)"
                 />
                 <span class="text-sm font-medium text-gray-700 min-w-[3rem] text-right">
-                  {{ formData[field.name] }}
+                  {{ getFieldValue(field.name) }}
                 </span>
               </div>
             </div>
@@ -666,7 +731,7 @@ const handleClose = () => {
             <DatePicker
               v-else-if="field.type === 'date'"
               :id="fieldId"
-              v-model="formData[field.name]"
+              :model-value="getFieldValue(field.name)"
               :disabled="isLoading || field.disabled"
               :required="field.required"
               :min="field.min"
@@ -677,50 +742,55 @@ const handleClose = () => {
               :show-today="field.showToday !== false"
               :calendar-position="field.calendarPosition || 'left-0 bottom-full'"
               :aria-describedby="ariaDescribedBy"
+              @update:model-value="setFieldValue(field.name, $event)"
             />
 
             <!-- Time Input -->
             <Input
               v-else-if="field.type === 'time'"
               :id="fieldId"
-              v-model="formData[field.name]"
+              :model-value="getFieldValue(field.name)"
               type="time"
               :disabled="isLoading || field.disabled"
               :class="hasError ? 'border-red-500' : 'border-slate-300'"
               :aria-describedby="ariaDescribedBy"
+              @update:model-value="setFieldValue(field.name, $event)"
             />
 
             <!-- DateTime Local Input -->
             <Input
               v-else-if="field.type === 'datetime-local'"
               :id="fieldId"
-              v-model="formData[field.name]"
+              :model-value="getFieldValue(field.name)"
               type="datetime-local"
               :disabled="isLoading || field.disabled"
               :class="hasError ? 'border-red-500' : 'border-slate-300'"
               :aria-describedby="ariaDescribedBy"
+              @update:model-value="setFieldValue(field.name, $event)"
             />
 
             <!-- Month Input -->
             <Input
               v-else-if="field.type === 'month'"
               :id="fieldId"
-              v-model="formData[field.name]"
+              :model-value="getFieldValue(field.name)"
               type="month"
               :disabled="isLoading || field.disabled"
               :class="hasError ? 'border-red-500' : 'border-slate-300'"
               :aria-describedby="ariaDescribedBy"
+              @update:model-value="setFieldValue(field.name, $event)"
             />
 
             <!-- Week Input -->
             <Input
               v-else-if="field.type === 'week'"
               :id="fieldId"
-              v-model="formData[field.name]"
+              :model-value="getFieldValue(field.name)"
               type="week"
               :disabled="isLoading || field.disabled"
               :class="hasError ? 'border-red-500' : 'border-slate-300'"
               :aria-describedby="ariaDescribedBy"
+              @update:model-value="setFieldValue(field.name, $event)"
             />
           </template>
         </FormField>
