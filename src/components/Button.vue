@@ -9,7 +9,8 @@
     <!-- Loading Spinner -->
     <svg
       v-if="loading"
-      class="animate-spin mr-2 h-4 w-4 text-current"
+      :class="spinnerSizeClass"
+      class="animate-spin mr-2 text-current"
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
@@ -36,7 +37,7 @@
     <Icon
       v-if="icon && !loading"
       :icon="icon"
-      class="h-4 w-4"
+      :class="iconSizeClass"
     />
 
     <!-- Button content -->
@@ -46,6 +47,7 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import { cva } from 'class-variance-authority'
 import { cn } from '../utils/cn.js'
 import Icon from './Icon.vue'
@@ -54,7 +56,7 @@ defineOptions({
   inheritAttrs: false
 })
 
-defineProps({
+const props = defineProps({
   variant: {
     type: String,
     default: 'default',
@@ -77,13 +79,12 @@ defineProps({
         'successOutline',
         'gradient',
       ].includes(value),
-
   },
   size: {
     type: String,
-    default: 'xs',
+    default: 'default',
     validator: (value) =>
-      ['default', 'xs', 'sm', 'lg', 'icon'].includes(value),
+      ['2xs', 'xs', 'sm', 'default', 'md', 'lg', 'xl', '2xl', 'icon-sm', 'icon', 'icon-lg'].includes(value),
   },
   disabled: {
     type: Boolean,
@@ -104,7 +105,7 @@ defineProps({
 })
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
@@ -140,14 +141,19 @@ const buttonVariants = cva(
           'border border-green-600 text-green-600 bg-transparent hover:bg-green-50',
         gradient:
           'bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700',
-      }
-      ,
+      },
       size: {
-        default: 'h-10 px-4 py-2',
-        xs: 'h-7 rounded-md px-1',
-        sm: 'h-10 rounded-md px-3',
-        lg: 'h-11 rounded-md px-8',
-        icon: 'h-10 w-10',
+        '2xs': 'h-6 px-2 py-1 text-xs rounded',
+        'xs': 'h-7 px-2.5 py-1 text-xs rounded-md',
+        'sm': 'h-8 px-3 py-1.5 text-sm rounded-md',
+        'default': 'h-10 px-4 py-2 text-sm rounded-md',
+        'md': 'h-10 px-4 py-2 text-sm rounded-md',
+        'lg': 'h-11 px-6 py-2.5 text-base rounded-md',
+        'xl': 'h-12 px-8 py-3 text-base rounded-lg',
+        '2xl': 'h-14 px-10 py-3.5 text-lg rounded-lg',
+        'icon-sm': 'h-8 w-8 p-0',
+        'icon': 'h-10 w-10 p-0',
+        'icon-lg': 'h-12 w-12 p-0',
       },
     },
     defaultVariants: {
@@ -156,4 +162,40 @@ const buttonVariants = cva(
     },
   }
 )
+
+// Dynamic icon sizing based on button size
+const iconSizeClass = computed(() => {
+  const sizeMap = {
+    '2xs': 'h-3 w-3',
+    'xs': 'h-3.5 w-3.5',
+    'sm': 'h-4 w-4',
+    'default': 'h-4 w-4',
+    'md': 'h-4 w-4',
+    'lg': 'h-5 w-5',
+    'xl': 'h-5 w-5',
+    '2xl': 'h-6 w-6',
+    'icon-sm': 'h-4 w-4',
+    'icon': 'h-5 w-5',
+    'icon-lg': 'h-6 w-6',
+  }
+  return sizeMap[props.size] || 'h-4 w-4'
+})
+
+// Dynamic spinner sizing based on button size
+const spinnerSizeClass = computed(() => {
+  const sizeMap = {
+    '2xs': 'h-3 w-3',
+    'xs': 'h-3.5 w-3.5',
+    'sm': 'h-4 w-4',
+    'default': 'h-4 w-4',
+    'md': 'h-4 w-4',
+    'lg': 'h-5 w-5',
+    'xl': 'h-5 w-5',
+    '2xl': 'h-6 w-6',
+    'icon-sm': 'h-4 w-4',
+    'icon': 'h-5 w-5',
+    'icon-lg': 'h-6 w-6',
+  }
+  return sizeMap[props.size] || 'h-4 w-4'
+})
 </script>
