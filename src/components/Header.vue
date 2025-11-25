@@ -187,62 +187,105 @@ watch(() => props.notifications.length, (newLength) => {
 </script>
 
 <template>
-  <header :class="cn(
-    'fixed top-0 z-50 bg-white border-b border-gray-200 transition-all duration-300 ease-in-out w-full'
-  )" :style="{ left: '0' }">
+  <header
+    :class="cn(
+      'fixed top-0 z-50 bg-white border-b border-gray-200 transition-all duration-300 ease-in-out w-full'
+    )"
+    :style="{ left: '0' }"
+  >
     <div class="flex items-center justify-between h-16 px-4 md:px-6">
       <!-- Left side - Page Title / Breadcrumb -->
       <div class="flex items-center">
         <!-- Organisation Info -->
-        <div v-if="showOrganisationInfo && currentOrganisation"
-          class="mr-4 flex-shrink-0 bg-gradient-to-r from-blue-50 to-indigo-50 px-3 py-2 rounded-lg border border-blue-100 flex items-center gap-3 relative">
-
+        <div
+          v-if="showOrganisationInfo && currentOrganisation"
+          class="mr-4 flex-shrink-0 bg-gradient-to-r from-blue-50 to-indigo-50 px-3 py-2 rounded-lg border border-blue-100 flex items-center gap-3 relative"
+        >
           <!-- Company Logo (Software Company) -->
-          <div v-if="companyLogo" class="flex-shrink-0">
-            <img :src="companyLogo" alt="Company logo" class="w-12 h-12 object-contain rounded">
+          <div
+            v-if="companyLogo"
+            class="flex-shrink-0"
+          >
+            <img
+              :src="companyLogo"
+              alt="Company logo"
+              class="w-12 h-12 object-contain rounded"
+            >
           </div>
 
           <!-- Organisation Logo (Registered Organisation) -->
-          <div v-if="organisationLogo" class="flex-shrink-0">
-            <img :src="organisationLogo" :alt="`${currentOrganisation.organisation_name} logo`"
-              class="w-12 h-12 object-contain rounded border border-blue-200">
+          <div
+            v-if="organisationLogo"
+            class="flex-shrink-0"
+          >
+            <img
+              :src="organisationLogo"
+              :alt="`${currentOrganisation.organisation_name} logo`"
+              class="w-12 h-12 object-contain rounded border border-blue-200"
+            >
           </div>
 
           <!-- Organisation Switcher -->
-          <button v-if="organisations.length > 1"
+          <button
+            v-if="organisations.length > 1"
             class="flex items-center gap-2 min-w-0 cursor-pointer hover:bg-blue-100/50 rounded-md px-2 py-1 transition-colors"
-            @click="toggleOrganisationDropdown">
+            @click="toggleOrganisationDropdown"
+          >
             <div class="min-w-0">
               <p class="text-lg font-bold text-blue-900 truncate max-w-[200px]">
                 {{ currentOrganisation.organisation_name }}
               </p>
-              <p v-if="formattedActiveRoles" class="text-xs text-blue-600 truncate font-medium">
+              <p
+                v-if="formattedActiveRoles"
+                class="text-xs text-blue-600 truncate font-medium"
+              >
                 {{ formattedActiveRoles }}
               </p>
             </div>
-            <svg class="w-4 h-4 text-blue-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                :d="showOrganisationDropdown ? 'm5 15 7-7 7 7' : 'm19 9-7 7-7-7'" />
+            <svg
+              class="w-4 h-4 text-blue-600 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                :d="showOrganisationDropdown ? 'm5 15 7-7 7 7' : 'm19 9-7 7-7-7'"
+              />
             </svg>
           </button>
 
           <!-- Static display when only one organisation -->
-          <div v-else class="min-w-0">
+          <div
+            v-else
+            class="min-w-0"
+          >
             <p class="text-lg font-bold text-blue-900 truncate max-w-[200px]">
               {{ currentOrganisation.organisation_name }}
             </p>
-            <p v-if="formattedActiveRoles" class="text-xs text-blue-600 truncate font-medium">
+            <p
+              v-if="formattedActiveRoles"
+              class="text-xs text-blue-600 truncate font-medium"
+            >
               {{ formattedActiveRoles }}
             </p>
           </div>
 
           <!-- Organisation Dropdown -->
-          <transition enter-active-class="transition-all duration-200 ease-out"
-            leave-active-class="transition-all duration-200 ease-in" enter-from-class="opacity-0 translate-y-2 scale-95"
-            enter-to-class="opacity-100 translate-y-0 scale-100" leave-from-class="opacity-100 translate-y-0 scale-100"
-            leave-to-class="opacity-0 translate-y-2 scale-95">
-            <div v-if="showOrganisationDropdown"
-              class="absolute top-full left-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50 max-h-96 overflow-y-auto">
+          <transition
+            enter-active-class="transition-all duration-200 ease-out"
+            leave-active-class="transition-all duration-200 ease-in"
+            enter-from-class="opacity-0 translate-y-2 scale-95"
+            enter-to-class="opacity-100 translate-y-0 scale-100"
+            leave-from-class="opacity-100 translate-y-0 scale-100"
+            leave-to-class="opacity-0 translate-y-2 scale-95"
+          >
+            <div
+              v-if="showOrganisationDropdown"
+              class="absolute top-full left-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50 max-h-96 overflow-y-auto"
+            >
               <div class="p-3 border-b border-gray-200">
                 <h3 class="text-sm font-semibold text-gray-900">
                   {{ organisationSwitcherTitle }}
@@ -252,14 +295,26 @@ watch(() => props.notifications.length, (newLength) => {
                 </p>
               </div>
               <div class="py-2">
-                <button v-for="org in organisations" :key="org.org_id || org.organisation_name" :class="cn(
-                  'flex items-center w-full px-3 py-2.5 text-sm transition-colors',
-                  org.org_id === currentOrganisation?.org_id
-                    ? 'bg-blue-50 text-blue-700 border-l-4 border-blue-500'
-                    : 'text-gray-700 hover:bg-gray-50'
-                )" @click="handleOrganisationChange(org)">
-                  <div v-if="org.logo" class="flex-shrink-0 mr-3">
-                    <img :src="org.logo" :alt="`${org.organisation_name} logo`" class="w-6 h-6 object-contain rounded">
+                <button
+                  v-for="org in organisations"
+                  :key="org.org_id || org.organisation_name"
+                  :class="cn(
+                    'flex items-center w-full px-3 py-2.5 text-sm transition-colors',
+                    org.org_id === currentOrganisation?.org_id
+                      ? 'bg-blue-50 text-blue-700 border-l-4 border-blue-500'
+                      : 'text-gray-700 hover:bg-gray-50'
+                  )"
+                  @click="handleOrganisationChange(org)"
+                >
+                  <div
+                    v-if="org.logo"
+                    class="flex-shrink-0 mr-3"
+                  >
+                    <img
+                      :src="org.logo"
+                      :alt="`${org.organisation_name} logo`"
+                      class="w-6 h-6 object-contain rounded"
+                    >
                   </div>
                   <div class="flex-1 text-left min-w-0">
                     <p class="font-medium truncate">
@@ -272,11 +327,17 @@ watch(() => props.notifications.length, (newLength) => {
                       {{ org.role }}
                     </p> -->
                   </div>
-                  <svg v-if="org.org_id === currentOrganisation?.org_id"
-                    class="w-4 h-4 text-blue-500 flex-shrink-0 ml-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd"
+                  <svg
+                    v-if="org.org_id === currentOrganisation?.org_id"
+                    class="w-4 h-4 text-blue-500 flex-shrink-0 ml-2"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
                       d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 01 1.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clip-rule="evenodd" />
+                      clip-rule="evenodd"
+                    />
                   </svg>
                 </button>
               </div>
@@ -285,15 +346,35 @@ watch(() => props.notifications.length, (newLength) => {
         </div>
 
         <!-- Header Logo -->
-        <div v-if="showHeaderLogo" class="mr-4 flex-shrink-0">
-          <img :src="headerLogo" alt="Company Logo" class="w-8 h-8 object-contain">
+        <div
+          v-if="showHeaderLogo"
+          class="mr-4 flex-shrink-0"
+        >
+          <img
+            :src="headerLogo"
+            alt="Company Logo"
+            class="w-8 h-8 object-contain"
+          >
         </div>
 
         <!-- Breadcrumb -->
-        <nav v-if="showBreadcrumb" class="hidden md:flex items-center space-x-2 text-sm truncate">
+        <nav
+          v-if="showBreadcrumb"
+          class="hidden md:flex items-center space-x-2 text-sm truncate"
+        >
           <span class="text-gray-500 truncate">{{ currentSection }}</span>
-          <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          <svg
+            class="w-4 h-4 text-gray-400 flex-shrink-0"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7"
+            />
           </svg>
           <span class="text-gray-900 font-medium truncate">{{ currentPage }}</span>
         </nav>
@@ -302,78 +383,155 @@ watch(() => props.notifications.length, (newLength) => {
       <!-- Right side -->
       <div class="flex items-center space-x-3 md:space-x-4">
         <!-- Mobile Sidebar Toggle -->
-        <button v-if="isMobile"
+        <button
+          v-if="isMobile"
           class="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-50 transition-colors"
-          @click="emit('toggle-mobile-sidebar')">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          @click="emit('toggle-mobile-sidebar')"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
           </svg>
         </button>
 
         <!-- Search -->
-        <div v-if="showSearch && (!isMobile || showMobileSearch)" class="relative">
+        <div
+          v-if="showSearch && (!isMobile || showMobileSearch)"
+          class="relative"
+        >
           <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            <svg
+              class="w-4 h-4 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
             </svg>
           </div>
-          <input v-model="searchQuery" type="text" :placeholder="searchPlaceholder"
-            class="pl-10 pr-4 py-2 w-48 md:w-64 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+          <input
+            v-model="searchQuery"
+            type="text"
+            :placeholder="searchPlaceholder"
+            class="pl-10 pr-4 py-2 w-48 md:w-64 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+          >
           <!-- Close search button on mobile -->
-          <button v-if="isMobile" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-            @click="showMobileSearch = false">
+          <button
+            v-if="isMobile"
+            class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            @click="showMobileSearch = false"
+          >
             ✕
           </button>
         </div>
-        <button v-else-if="showSearch && isMobile"
+        <button
+          v-else-if="showSearch && isMobile"
           class="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-50 transition-colors"
-          @click="showMobileSearch = true">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          @click="showMobileSearch = true"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
           </svg>
         </button>
 
         <!-- Notifications -->
-        <button v-if="showNotifications"
+        <button
+          v-if="showNotifications"
           class="relative p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-50 transition-colors"
-          @click="toggleNotifications">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+          @click="toggleNotifications"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+            />
           </svg>
-          <span v-if="notificationCount > 0"
-            class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+          <span
+            v-if="notificationCount > 0"
+            class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center"
+          >
             {{ notificationCount > 9 ? '9+' : notificationCount }}
           </span>
         </button>
 
         <!-- Notifications Dropdown -->
-        <transition enter-active-class="transition-all duration-300 ease-out"
-          leave-active-class="transition-all duration-300 ease-in" enter-from-class="opacity-0 translate-y-2 scale-95"
-          enter-to-class="opacity-100 translate-y-0 scale-100" leave-from-class="opacity-100 translate-y-0 scale-100"
-          leave-to-class="opacity-0 translate-y-2 scale-95">
-          <div v-if="showNotificationsDropdown"
-            class="absolute right-4 md:right-6 top-16 mt-2 w-72 md:w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+        <transition
+          enter-active-class="transition-all duration-300 ease-out"
+          leave-active-class="transition-all duration-300 ease-in"
+          enter-from-class="opacity-0 translate-y-2 scale-95"
+          enter-to-class="opacity-100 translate-y-0 scale-100"
+          leave-from-class="opacity-100 translate-y-0 scale-100"
+          leave-to-class="opacity-0 translate-y-2 scale-95"
+        >
+          <div
+            v-if="showNotificationsDropdown"
+            class="absolute right-4 md:right-6 top-16 mt-2 w-72 md:w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50"
+          >
             <div class="p-4 border-b border-gray-200">
               <h3 class="text-lg font-semibold text-gray-900">
                 {{ notificationsTitle }}
               </h3>
             </div>
             <div class="max-h-96 overflow-y-auto">
-              <div v-if="notifications.length === 0" class="p-8 text-center">
-                <svg class="w-12 h-12 mx-auto text-gray-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+              <div
+                v-if="notifications.length === 0"
+                class="p-8 text-center"
+              >
+                <svg
+                  class="w-12 h-12 mx-auto text-gray-300 mb-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                  />
                 </svg>
                 <p class="text-sm text-gray-500">
                   No notifications
                 </p>
               </div>
-              <div v-for="notification in notifications" v-else :key="notification.id"
+              <div
+                v-for="notification in notifications"
+                v-else
+                :key="notification.id"
                 class="p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer"
-                @click="handleNotificationClick(notification)">
+                @click="handleNotificationClick(notification)"
+              >
                 <div class="flex items-start space-x-3">
                   <div class="flex-shrink-0 w-2 h-2 mt-2 bg-blue-500 rounded-full" />
                   <div class="flex-1">
@@ -387,8 +545,14 @@ watch(() => props.notifications.length, (newLength) => {
                 </div>
               </div>
             </div>
-            <div v-if="notifications.length > 0" class="p-4 text-center">
-              <button class="text-sm text-blue-600 hover:text-blue-800" @click="handleViewAllNotifications">
+            <div
+              v-if="notifications.length > 0"
+              class="p-4 text-center"
+            >
+              <button
+                class="text-sm text-blue-600 hover:text-blue-800"
+                @click="handleViewAllNotifications"
+              >
                 View all notifications
               </button>
             </div>
@@ -397,14 +561,20 @@ watch(() => props.notifications.length, (newLength) => {
 
         <!-- Profile Dropdown -->
         <div class="relative">
-          <button class="flex items-center space-x-2 md:space-x-3 p-2 rounded-lg hover:bg-gray-50 transition-colors"
-            @click="toggleProfile">
+          <button
+            class="flex items-center space-x-2 md:space-x-3 p-2 rounded-lg hover:bg-gray-50 transition-colors"
+            @click="toggleProfile"
+          >
             <div
-              class="w-8 h-8 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full flex items-center justify-center transition-colors shadow-sm">
+              class="w-8 h-8 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full flex items-center justify-center transition-colors shadow-sm"
+            >
               <span class="text-blue-700 text-sm font-medium">{{ userInitials }}</span>
             </div>
             <!-- Hide details on mobile or when showUserDetails is false -->
-            <div v-if="showUserDetails" class="hidden md:block text-left max-w-[160px] truncate">
+            <div
+              v-if="showUserDetails"
+              class="hidden md:block text-left max-w-[160px] truncate"
+            >
               <p class="text-sm font-medium text-gray-900 truncate">
                 {{ user.name }}
               </p>
@@ -412,18 +582,34 @@ watch(() => props.notifications.length, (newLength) => {
                 {{ userRoleNames }}
               </p>
             </div>
-            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            <svg
+              class="w-4 h-4 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              />
             </svg>
           </button>
 
           <!-- Dropdown -->
-          <transition enter-active-class="transition-all duration-200 ease-out"
-            leave-active-class="transition-all duration-200 ease-in" enter-from-class="opacity-0 translate-y-2 scale-95"
-            enter-to-class="opacity-100 translate-y-0 scale-100" leave-from-class="opacity-100 translate-y-0 scale-100"
-            leave-to-class="opacity-0 translate-y-2 scale-95">
-            <div v-if="showProfile"
-              class="absolute right-0 mt-2 w-58 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+          <transition
+            enter-active-class="transition-all duration-200 ease-out"
+            leave-active-class="transition-all duration-200 ease-in"
+            enter-from-class="opacity-0 translate-y-2 scale-95"
+            enter-to-class="opacity-100 translate-y-0 scale-100"
+            leave-from-class="opacity-100 translate-y-0 scale-100"
+            leave-to-class="opacity-0 translate-y-2 scale-95"
+          >
+            <div
+              v-if="showProfile"
+              class="absolute right-0 mt-2 w-58 bg-white rounded-lg shadow-lg border border-gray-200 z-50"
+            >
               <div class="p-4 border-b border-gray-200">
                 <p class="text-sm font-medium text-gray-900">
                   {{ user.name }}
@@ -433,37 +619,62 @@ watch(() => props.notifications.length, (newLength) => {
                 </p>
               </div>
               <div class="py-2">
-                <template v-for="item in profileMenuItems" :key="item.name">
-                  <router-link v-if="item.route" :to="item.route" :class="cn(
-                    'flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative',
-                    isItemActive(item)
-                      ? 'bg-gradient-to-br from-blue-50 to-blue-100 text-blue-700 shadow-sm border border-blue-200'
-                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 border border-transparent'
-                  )" @click="handleNavigation(item)">
-                    <!-- Active indicator bar -->
-                    <div v-if="isItemActive(item)"
-                      class="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-blue-500 to-blue-600 rounded-r-full" />
-                    <div :class="cn(
-                      'flex items-center justify-center w-8 h-8 rounded-lg mr-3 flex-shrink-0 transition-colors ml-2',
+                <template
+                  v-for="item in profileMenuItems"
+                  :key="item.name"
+                >
+                  <router-link
+                    v-if="item.route"
+                    :to="item.route"
+                    :class="cn(
+                      'flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative',
                       isItemActive(item)
-                        ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md'
-                        : 'bg-gray-100 text-gray-600 group-hover:bg-gray-200'
-                    )">
-                      <Icon v-if="item.icon" :icon="item.icon" class="w-4 h-4" />
+                        ? 'bg-gradient-to-br from-blue-50 to-blue-100 text-blue-700 shadow-sm border border-blue-200'
+                        : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 border border-transparent'
+                    )"
+                    @click="handleNavigation(item)"
+                  >
+                    <!-- Active indicator bar -->
+                    <div
+                      v-if="isItemActive(item)"
+                      class="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-blue-500 to-blue-600 rounded-r-full"
+                    />
+                    <div
+                      :class="cn(
+                        'flex items-center justify-center w-8 h-8 rounded-lg mr-3 flex-shrink-0 transition-colors ml-2',
+                        isItemActive(item)
+                          ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md'
+                          : 'bg-gray-100 text-gray-600 group-hover:bg-gray-200'
+                      )"
+                    >
+                      <Icon
+                        v-if="item.icon"
+                        :icon="item.icon"
+                        class="w-4 h-4"
+                      />
                     </div>
-                    <span :class="cn(
-                      'flex-1 truncate font-semibold',
-                      isItemActive(item) ? 'text-blue-700' : 'text-gray-700'
-                    )">
+                    <span
+                      :class="cn(
+                        'flex-1 truncate font-semibold',
+                        isItemActive(item) ? 'text-blue-700' : 'text-gray-700'
+                      )"
+                    >
                       {{ item.label }}
                     </span>
                   </router-link>
-                  <button v-else
+                  <button
+                    v-else
                     class="flex items-center w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative text-gray-700 hover:bg-gray-50 hover:text-gray-900 border border-transparent"
-                    @click="handleProfileAction(item)">
+                    @click="handleProfileAction(item)"
+                  >
                     <div
-                      class="flex items-center justify-center w-8 h-8 rounded-lg mr-3 flex-shrink-0 transition-colors ml-2 bg-gray-100 text-gray-600 group-hover:bg-gray-200">
-                      <Icon v-if="item.icon" :icon="item.icon" class="w-4 h-4" />
+                      class="flex items-center justify-center w-8 h-8 rounded-lg mr-3 flex-shrink-0 transition-colors ml-2 bg-gray-100 text-gray-600 group-hover:bg-gray-200"
+                    >
+                      <Icon
+                        v-if="item.icon"
+                        :icon="item.icon"
+                        class="w-4 h-4"
+                      />
                     </div>
                     <span class="flex-1 truncate font-semibold text-gray-700">
                       {{ item.label }}
@@ -474,12 +685,23 @@ watch(() => props.notifications.length, (newLength) => {
               <div class="border-t border-gray-200 py-2">
                 <button
                   class="flex items-center w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative text-red-600 hover:bg-red-50 border border-transparent"
-                  @click="handleLogout">
+                  @click="handleLogout"
+                >
                   <div
-                    class="flex items-center justify-center w-8 h-8 rounded-lg mr-1 flex-shrink-0 transition-colors ml-2 bg-red-100 text-red-600 group-hover:bg-red-200">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a2 3 0 013-3h4a3 3 0 013 3v1" />
+                    class="flex items-center justify-center w-8 h-8 rounded-lg mr-1 flex-shrink-0 transition-colors ml-2 bg-red-100 text-red-600 group-hover:bg-red-200"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a2 3 0 013-3h4a3 3 0 013 3v1"
+                      />
                     </svg>
                   </div>
                   <span class="truncate font-semibold text-red-600">

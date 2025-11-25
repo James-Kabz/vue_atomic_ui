@@ -167,6 +167,8 @@ const chartComponentProps = computed(() => {
   const baseProps = {
     data: validData,
     labels: chartLabels.slice(0, validData.length),
+    width: 400,
+    height: 400,
     ...props.chartOptions
   }
 
@@ -190,7 +192,8 @@ const chartComponentProps = computed(() => {
   }
 
   if (props.chartData.datasets?.[0]?.backgroundColor) {
-    baseProps.colors = props.chartData.datasets[0].backgroundColor
+    const bgColors = props.chartData.datasets[0].backgroundColor
+    baseProps.colors = Array.isArray(bgColors) ? bgColors : [bgColors]
   }
   if (props.chartData.datasets?.[0]?.borderColor) {
     baseProps.lineColor = props.chartData.datasets[0].borderColor
@@ -401,7 +404,7 @@ onUnmounted(() => {
       
       <div
         v-if="chartType && chartData && chartComponent && chartComponentProps"
-        class="w-full h-full"
+        class="w-full h-full flex items-center justify-center"
         :class="paddingClasses[padding]"
       >
         <component
