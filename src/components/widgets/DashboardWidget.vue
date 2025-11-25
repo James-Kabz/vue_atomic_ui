@@ -164,11 +164,16 @@ const chartComponentProps = computed(() => {
   const validData = rawData.filter(val => val != null && !isNaN(val))
   if (validData.length === 0) return null
 
+  // Calculate appropriate dimensions based on container
+  const isPieOrDoughnut = props.chartType === 'pie' || props.chartType === 'doughnut'
+  const chartWidth = isPieOrDoughnut ? 450 : 400
+  const chartHeight = isPieOrDoughnut ? 450 : 400
+
   const baseProps = {
     data: validData,
     labels: chartLabels.slice(0, validData.length),
-    width: 400,
-    height: 400,
+    width: chartWidth,
+    height: chartHeight,
     ...props.chartOptions
   }
 
@@ -404,14 +409,16 @@ onUnmounted(() => {
       
       <div
         v-if="chartType && chartData && chartComponent && chartComponentProps"
-        class="w-full h-full flex items-center justify-center"
+        class="w-full h-full flex items-center justify-center p-4"
         :class="paddingClasses[padding]"
       >
-        <component
-          :is="chartComponent"
-          v-bind="chartComponentProps"
-          :doughnut="isDoughnut"
-        />
+        <div class="w-full h-full flex items-center justify-center">
+          <component
+            :is="chartComponent"
+            v-bind="chartComponentProps"
+            :doughnut="isDoughnut"
+          />
+        </div>
       </div>
       
       <div
