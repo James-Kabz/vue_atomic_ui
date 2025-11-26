@@ -36,13 +36,27 @@ const props = defineProps({
   currentPath: {
     type: String,
     default: ''
+  },
+  // Search props
+  showSearch: {
+    type: Boolean,
+    default: false
+  },
+  searchPlaceholder: {
+    type: String,
+    default: 'Search...'
+  },
+  searchableMenus: {
+    type: Array,
+    default: () => [] // Array of menu names that should have search (e.g., ['compliance', 'risks'])
   }
 })
 
 // Emits
 const emit = defineEmits([
   'navigate',
-  'update:mobileOpen'
+  'update:mobileOpen',
+  'search'
 ])
 
 // Internal State
@@ -50,6 +64,7 @@ const isMobile = ref(false)
 const submenuOpen = ref(false)
 const currentSubmenu = ref(null)
 const managementSettingsOpen = ref(false)
+const searchQuery = ref('')
 
 // Computed
 const isMobileOpen = computed(() => props.mobileOpen)
@@ -70,6 +85,33 @@ const managementStyle = computed(() => {
   return {
     left: `${props.sidebarWidth}px`,
   }
+})
+
+// Check if current submenu should show search
+const shouldShowSubmenuSearch = computed(() => {
+  if (!props.showSearch || !currentSubmenu.value) return false
+  
+  // Check if this menu is in the searchableMenus list
+  const menuName = currentSubmenu.value.name?.toLowerCase() || ''
+  return props.searchableMenus.some(name => 
+    menuName.includes(name.toLowerCase())
+  )
+})
+
+// Filter submenu items based on search query
+const filteredSubmenuItems = computed(() => {
+  if (!currentSubmenu.value?.subItems) return []
+  
+  if (!searchQuery.value.trim()) {
+    return currentSubmenu.value.subItems
+  }
+  
+  const query = searchQuery.value.toLowerCase().trim()
+  return currentSubmenu.value.subItems.filter(item => {
+    const label = item.label?.toLowerCase() || ''
+    const name = item.name?.toLowerCase() || ''
+    return label.includes(query) || name.includes(query)
+  })
 })
 
 // Computed for main content margin
@@ -118,10 +160,12 @@ const handleSubmenuClick = (item) => {
     setTimeout(() => {
       currentSubmenu.value = item
       submenuOpen.value = true
+      searchQuery.value = '' // Reset search when opening new submenu
     }, 300)
   } else if (!submenuOpen.value) {
     currentSubmenu.value = item
     submenuOpen.value = true
+    searchQuery.value = '' // Reset search when opening submenu
   } else if (currentSubmenu.value === item) {
     closeSubmenu()
   }
@@ -147,6 +191,7 @@ const handleManagementSettingsClick = () => {
 
 const closeSubmenu = () => {
   submenuOpen.value = false
+  searchQuery.value = '' // Reset search when closing submenu
   setTimeout(() => {
     currentSubmenu.value = null
   }, 300)
@@ -167,6 +212,15 @@ const handleSubmenuNavigation = (item) => {
 
 const handleManagementSettingsNavigation = (item) => {
   handleNavigation(item)
+}
+
+const handleSearch = (value) => {
+  searchQuery.value = value
+  emit('search', { query: value, menu: currentSubmenu.value?.name })
+}
+
+const clearSearch = () => {
+  searchQuery.value = ''
 }
 
 // Check if navigation item is active using passed currentPath prop
@@ -503,13 +557,49 @@ defineExpose({
               {{ currentSubmenu?.label }}
             </h3>
           </div>
+
+          <!-- Search Bar (Conditionally shown) -->
+          <div v-if="shouldShowSubmenuSearch" class="px-4 pb-3">
+            <div class="relative">
+              <input
+                v-model="searchQuery"
+                type="text"
+                :placeholder="searchPlaceholder"
+                class="w-full px-3 py-2 pl-9 pr-9 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                @input="handleSearch(searchQuery)"
+              />
+              <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                <Icon icon="search" class="w-4 h-4" />
+              </div>
+              <button
+                v-if="searchQuery"
+                class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors p-1"
+                @click="clearSearch"
+              >
+                <Icon icon="times" class="w-4 h-4" />
+              </button>
+            </div>
+            
+            <!-- Search Results Count -->
+            <div v-if="searchQuery" class="mt-2 text-xs text-gray-500 px-1">
+              {{ filteredSubmenuItems.length }} result{{ filteredSubmenuItems.length !== 1 ? 's' : '' }} found
+            </div>
+          </div>
         </div>
 
         <!-- Submenu Items -->
         <nav class="p-3">
-          <div class="space-y-1">
+          <!-- No Results Message -->
+          <div v-if="shouldShowSubmenuSearch && searchQuery && filteredSubmenuItems.length === 0" class="px-3 py-8 text-center">
+            <Icon icon="search" class="w-12 h-12 mx-auto text-gray-300 mb-3" />
+            <p class="text-sm text-gray-500 mb-1">No results found</p>
+            <p class="text-xs text-gray-400">Try a different search term</p>
+          </div>
+
+          <!-- Submenu Items List -->
+          <div v-else class="space-y-1">
             <router-link
-              v-for="subItem in currentSubmenu?.subItems"
+              v-for="subItem in filteredSubmenuItems"
               :key="subItem.name"
               :to="subItem.route"
               :class="
