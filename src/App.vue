@@ -23,6 +23,7 @@ import BarChart from './components/charts/BarChart.vue'
 import LineChart from './components/charts/LineChart.vue'
 import GraphFilters from './components/GraphFilters.vue'
 import DataTableTest from './views/DataTableTest.vue';
+import WidgetsTest from './views/WidgetsTest.vue';
 
 // Reactive data for examples
 const buttonLoading = ref(false);
@@ -82,6 +83,7 @@ const navigationItems = ref([
   { label: 'Layout', icon: 'th-large', route: '#layout', type: 'link' },
   { label: 'Graphs', icon: 'chart-bar', route: '#graphs', type: 'link' },
   { label: 'Loaders', icon: 'spinner', route: '#loaders', type: 'link' },
+  { label: 'Widgets Test', icon: 'chart-pie', route: '#widgets-test', type: 'link' },
 ]);
 
 const handleButtonClick = () => {
@@ -1027,6 +1029,18 @@ const currentPath = computed(() => `#${currentSection.value}`);
                 />
               </Graph>
             </div>
+          </section>
+
+          <!-- Widgets Test Section -->
+          <section
+            id="widgets-test"
+            class="space-y-8"
+          >
+            <h2 class="text-3xl font-bold border-b pb-4">
+              Widgets Test
+            </h2>
+
+            <WidgetsTest />
           </section>
         </div>
       </div>

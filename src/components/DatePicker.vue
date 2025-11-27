@@ -1,200 +1,5 @@
-<template>
-  <div class="relative w-full">
-    <!-- Input Field -->
-    <div class="relative">
-      <input
-        :id="id"
-        type="text"
-        :value="displayValue"
-        readonly
-        :disabled="disabled"
-        :placeholder="placeholder"
-        :required="required"
-        :aria-describedby="ariaDescribedby"
-        class="w-full px-3 py-2 pr-10 border border-slate-300 rounded-md bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer disabled:bg-slate-50 disabled:text-slate-500 disabled:cursor-not-allowed"
-        @click="toggleCalendar"
-      >
-
-      <!-- Calendar Icon -->
-      <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-        <svg
-          class="w-5 h-5 text-slate-400"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-          />
-        </svg>
-      </div>
-
-      <!-- Clear Button -->
-      <button
-        v-if="clearable && displayValue && !disabled"
-        type="button"
-        class="absolute right-9 top-1/2 -translate-y-1/2 p-1 hover:bg-slate-100 rounded"
-        aria-label="Clear date"
-        @click.stop="clearDate"
-      >
-        <svg
-          class="w-4 h-4 text-slate-500"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M6 18L18 6M6 6l12 12"
-          />
-        </svg>
-      </button>
-    </div>
-
-    <!-- Calendar Dropdown -->
-    <transition
-      enter-active-class="transition ease-out duration-100"
-      enter-from-class="transform opacity-0 scale-95"
-      enter-to-class="transform opacity-100 scale-100"
-      leave-active-class="transition ease-in duration-75"
-      leave-from-class="transform opacity-100 scale-100"
-      leave-to-class="transform opacity-0 scale-95"
-    >
-      <div
-        v-if="isOpen"
-        :class="['absolute z-[9999] mb-2 bg-white border border-slate-200 rounded-lg shadow-lg p-4', calendarPosition]"
-        @click.stop
-      >
-        <!-- Header -->
-        <div class="flex items-center justify-between mb-4">
-          <button
-            type="button"
-            class="p-2 rounded-lg hover:bg-slate-100 transition-colors"
-            aria-label="Previous Month"
-            @click="prevMonth"
-          >
-            <svg
-              class="w-5 h-5 text-slate-700"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15 18l-6-6 6-6"
-              />
-            </svg>
-          </button>
-
-          <div class="text-base font-semibold text-slate-900">
-            {{ monthName }} {{ currentYear }}
-          </div>
-
-          <button
-            type="button"
-            class="p-2 rounded-lg hover:bg-slate-100 transition-colors"
-            aria-label="Next Month"
-            @click="nextMonth"
-          >
-            <svg
-              class="w-5 h-5 text-slate-700"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 18l6-6-6-6"
-              />
-            </svg>
-          </button>
-        </div>
-
-        <!-- Weekdays -->
-        <div class="grid grid-cols-7 gap-1 mb-2">
-          <div
-            v-for="day in weekdays"
-            :key="day"
-            class="text-center text-xs font-medium text-slate-600 py-1"
-          >
-            {{ day }}
-          </div>
-        </div>
-
-        <!-- Calendar Grid -->
-        <div class="grid grid-cols-7 gap-1">
-          <!-- Previous month days -->
-          <div
-            v-for="(day, index) in leadingDays"
-            :key="'prev-' + index"
-            class="text-center text-sm text-slate-300 py-2"
-          >
-            {{ day }}
-          </div>
-
-          <!-- Current month days -->
-          <button
-            v-for="day in daysInMonth"
-            :key="day"
-            type="button"
-            :disabled="isDateDisabled(day)"
-            :class="[
-              'w-9 h-9 rounded-lg text-sm font-medium transition-colors',
-              isToday(day) && !isSelected(day) ? 'bg-blue-50 text-blue-600 border border-blue-200' : '',
-              isSelected(day) ? 'bg-blue-500 text-white hover:bg-blue-600' : 'text-slate-700 hover:bg-slate-100',
-              isDateDisabled(day) ? 'text-slate-300 cursor-not-allowed hover:bg-transparent' : 'cursor-pointer'
-            ]"
-            @click="selectDate(day)"
-          >
-            {{ day }}
-          </button>
-
-          <!-- Next month days -->
-          <div
-            v-for="(day, index) in trailingDays"
-            :key="'next-' + index"
-            class="text-center text-sm text-slate-300 py-2"
-          >
-            {{ day }}
-          </div>
-        </div>
-
-        <!-- Footer with Today button -->
-        <div
-          v-if="showToday"
-          class="mt-4 pt-3 border-t border-slate-200"
-        >
-          <button
-            type="button"
-            class="w-full px-3 py-2 text-sm font-medium text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-            @click="selectToday"
-          >
-            Today
-          </button>
-        </div>
-      </div>
-    </transition>
-
-    <!-- Backdrop to close calendar -->
-    <div
-      v-if="isOpen"
-      class="fixed inset-0 z-[9998]"
-      @click="closeCalendar"
-    />
-  </div>
-</template>
-
 <script setup>
-import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 
 const props = defineProps({
   id: String,
@@ -219,20 +24,31 @@ const props = defineProps({
     type: Boolean,
     default: true
   },
-  calendarPosition: {
-    type: String,
-    default: 'left-0 bottom-full'
+  ariaDescribedby: String,
+  // Custom validation function: (date: Date) => string | null
+  // Return error message string if invalid, null if valid
+  customValidation: {
+    type: Function,
+    default: null
   },
-  ariaDescribedby: String
+  // Array of disabled dates or function to determine if date is disabled
+  disabledDates: {
+    type: [Array, Function],
+    default: null
+  }
 })
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'validation-error'])
 
 const isOpen = ref(false)
+const calendarRef = ref(null)
+const inputRef = ref(null)
+const calendarStyle = ref({})
 const today = new Date()
 const currentMonth = ref(today.getMonth())
 const currentYear = ref(today.getFullYear())
 const selectedDate = ref(null)
+const hasValidationError = ref(false)
 
 const weekdays = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
 
@@ -284,7 +100,6 @@ function parseDate(value) {
   if (!value) return null
   if (value instanceof Date) return value
 
-  // Parse date string in local timezone to avoid offset issues
   if (typeof value === 'string') {
     const parts = value.split('-')
     if (parts.length === 3) {
@@ -295,7 +110,6 @@ function parseDate(value) {
     }
   }
 
-  // Fallback to regular Date parsing
   const date = new Date(value)
   return isNaN(date.getTime()) ? null : date
 }
@@ -321,6 +135,7 @@ function isSelected(day) {
 function isDateDisabled(day) {
   const date = new Date(currentYear.value, currentMonth.value, day)
 
+  // Check min/max constraints
   if (props.min) {
     const minDate = parseDate(props.min)
     if (minDate && date < minDate) return true
@@ -331,12 +146,100 @@ function isDateDisabled(day) {
     if (maxDate && date > maxDate) return true
   }
 
+  // Check custom disabled dates
+  if (props.disabledDates) {
+    if (typeof props.disabledDates === 'function') {
+      return props.disabledDates(date)
+    } else if (Array.isArray(props.disabledDates)) {
+      return props.disabledDates.some(disabledDate => {
+        const d = parseDate(disabledDate)
+        return d && d.getTime() === date.getTime()
+      })
+    }
+  }
+
+  // Check custom validation
+  if (props.customValidation) {
+    const error = props.customValidation(date)
+    if (error) return true
+  }
+
   return false
 }
 
-function toggleCalendar() {
+function validateDate(date) {
+  if (!date) {
+    hasValidationError.value = false
+    emit('validation-error', null)
+    return true
+  }
+
+  // Run custom validation if provided
+  if (props.customValidation) {
+    const error = props.customValidation(date)
+    if (error) {
+      hasValidationError.value = true
+      emit('validation-error', error)
+      return false
+    }
+  }
+
+  hasValidationError.value = false
+  emit('validation-error', null)
+  return true
+}
+
+async function calculatePosition() {
+  await nextTick()
+  
+  const input = document.getElementById(props.id)
+  if (!input || !calendarRef.value) return
+
+  const inputRect = input.getBoundingClientRect()
+  const calendarHeight = 320 // Approximate calendar height
+  const spaceBelow = window.innerHeight - inputRect.bottom
+  const spaceAbove = inputRect.top
+  const offset = 8 // Gap between input and calendar
+
+  let top, left
+
+  // Determine vertical position
+  if (spaceBelow >= calendarHeight || spaceBelow > spaceAbove) {
+    // Position below
+    top = inputRect.bottom + offset
+  } else {
+    // Position above
+    top = inputRect.top - calendarHeight - offset
+  }
+
+  // Horizontal position (align with input)
+  left = inputRect.left
+
+  // Ensure calendar doesn't overflow right edge
+  const calendarWidth = 256 // w-64 = 16rem = 256px
+  if (left + calendarWidth > window.innerWidth) {
+    left = window.innerWidth - calendarWidth - 16
+  }
+
+  // Ensure calendar doesn't overflow left edge
+  if (left < 16) {
+    left = 16
+  }
+
+  calendarStyle.value = {
+    top: `${top}px`,
+    left: `${left}px`
+  }
+}
+
+async function toggleCalendar() {
   if (props.disabled) return
+  
   isOpen.value = !isOpen.value
+  
+  if (isOpen.value) {
+    await calculatePosition()
+  }
 }
 
 function closeCalendar() {
@@ -365,9 +268,14 @@ function selectDate(day) {
   if (isDateDisabled(day)) return
 
   const date = new Date(currentYear.value, currentMonth.value, day)
+  
+  // Validate before setting
+  if (!validateDate(date)) {
+    return
+  }
+
   selectedDate.value = date
   
-  // Format date in local timezone to avoid timezone offset issues
   const year = date.getFullYear()
   const month = String(date.getMonth() + 1).padStart(2, '0')
   const dayStr = String(date.getDate()).padStart(2, '0')
@@ -375,7 +283,6 @@ function selectDate(day) {
   
   emit('update:modelValue', dateString)
 
-  // Close calendar after selection
   setTimeout(() => {
     isOpen.value = false
   }, 150)
@@ -389,7 +296,9 @@ function selectToday() {
 
 function clearDate() {
   selectedDate.value = null
+  hasValidationError.value = false
   emit('update:modelValue', '')
+  emit('validation-error', null)
 }
 
 // Watch for external changes
@@ -400,11 +309,20 @@ watch(() => props.modelValue, (newVal) => {
       selectedDate.value = date
       currentMonth.value = date.getMonth()
       currentYear.value = date.getFullYear()
+      validateDate(date)
     }
   } else {
     selectedDate.value = null
+    hasValidationError.value = false
   }
 }, { immediate: true })
+
+// Recalculate position on window resize
+function handleResize() {
+  if (isOpen.value) {
+    calculatePosition()
+  }
+}
 
 // Handle Escape key to close calendar
 function handleEscape(e) {
@@ -415,9 +333,215 @@ function handleEscape(e) {
 
 onMounted(() => {
   document.addEventListener('keydown', handleEscape)
+  window.addEventListener('resize', handleResize)
 })
 
 onBeforeUnmount(() => {
   document.removeEventListener('keydown', handleEscape)
+  window.removeEventListener('resize', handleResize)
 })
 </script>
+
+<template>
+  <div class="relative w-full">
+    <!-- Input Field -->
+    <div class="relative">
+      <input
+        :id="id"
+        type="text"
+        :value="displayValue"
+        readonly
+        :disabled="disabled"
+        :placeholder="placeholder"
+        :required="required"
+        :aria-describedby="ariaDescribedby"
+        :class="[
+          'w-full px-3 py-2 pr-10 border rounded-md bg-white text-slate-900 placeholder-slate-400 text-sm',
+          'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer transition-colors',
+          'disabled:bg-slate-50 disabled:text-slate-500 disabled:cursor-not-allowed',
+          hasValidationError ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : 'border-slate-300'
+        ]"
+        @click="toggleCalendar"
+      >
+
+      <!-- Calendar Icon -->
+      <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+        <svg
+          class="w-4 h-4 text-slate-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+          />
+        </svg>
+      </div>
+
+      <!-- Clear Button -->
+      <button
+        v-if="clearable && displayValue && !disabled"
+        type="button"
+        class="absolute right-9 top-1/2 -translate-y-1/2 p-1 hover:bg-slate-100 rounded transition-colors"
+        aria-label="Clear date"
+        @click.stop="clearDate"
+      >
+        <svg
+          class="w-3.5 h-3.5 text-slate-500"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Calendar Dropdown Portal -->
+    <Teleport to="body">
+      <transition
+        enter-active-class="transition ease-out duration-100"
+        enter-from-class="transform opacity-0 scale-95"
+        enter-to-class="transform opacity-100 scale-100"
+        leave-active-class="transition ease-in duration-75"
+        leave-from-class="transform opacity-100 scale-100"
+        leave-to-class="transform opacity-0 scale-95"
+      >
+        <div
+          v-if="isOpen"
+          ref="calendarRef"
+          :style="calendarStyle"
+          class="fixed z-[10000] bg-white border border-slate-200 rounded-lg shadow-xl p-3 w-64"
+          @click.stop
+        >
+          <!-- Header -->
+          <div class="flex items-center justify-between mb-3">
+            <button
+              type="button"
+              class="p-1.5 rounded hover:bg-slate-100 transition-colors"
+              aria-label="Previous Month"
+              @click="prevMonth"
+            >
+              <svg
+                class="w-4 h-4 text-slate-700"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 18l-6-6 6-6"
+                />
+              </svg>
+            </button>
+
+            <div class="text-sm font-semibold text-slate-900">
+              {{ monthName }} {{ currentYear }}
+            </div>
+
+            <button
+              type="button"
+              class="p-1.5 rounded hover:bg-slate-100 transition-colors"
+              aria-label="Next Month"
+              @click="nextMonth"
+            >
+              <svg
+                class="w-4 h-4 text-slate-700"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 18l6-6-6-6"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Weekdays -->
+          <div class="grid grid-cols-7 gap-1 mb-1">
+            <div
+              v-for="day in weekdays"
+              :key="day"
+              class="text-center text-xs font-medium text-slate-500 py-1"
+            >
+              {{ day }}
+            </div>
+          </div>
+
+          <!-- Calendar Grid -->
+          <div class="grid grid-cols-7 gap-1">
+            <!-- Previous month days -->
+            <div
+              v-for="(day, index) in leadingDays"
+              :key="'prev-' + index"
+              class="text-center text-xs text-slate-300 py-1.5"
+            >
+              {{ day }}
+            </div>
+
+            <!-- Current month days -->
+            <button
+              v-for="day in daysInMonth"
+              :key="day"
+              type="button"
+              :disabled="isDateDisabled(day)"
+              :class="[
+                'w-8 h-8 rounded text-xs font-medium transition-colors',
+                isToday(day) && !isSelected(day) ? 'bg-blue-50 text-blue-600 ring-1 ring-blue-200' : '',
+                isSelected(day) ? 'bg-blue-500 text-white hover:bg-blue-600' : 'text-slate-700 hover:bg-slate-100',
+                isDateDisabled(day) ? 'text-slate-300 cursor-not-allowed hover:bg-transparent line-through' : 'cursor-pointer'
+              ]"
+              @click="selectDate(day)"
+            >
+              {{ day }}
+            </button>
+
+            <!-- Next month days -->
+            <div
+              v-for="(day, index) in trailingDays"
+              :key="'next-' + index"
+              class="text-center text-xs text-slate-300 py-1.5"
+            >
+              {{ day }}
+            </div>
+          </div>
+
+          <!-- Footer with Today button -->
+          <div
+            v-if="showToday"
+            class="mt-3 pt-2 border-t border-slate-200"
+          >
+            <button
+              type="button"
+              class="w-full px-3 py-1.5 text-xs font-medium text-blue-600 hover:bg-blue-50 rounded transition-colors"
+              @click="selectToday"
+            >
+              Today
+            </button>
+          </div>
+        </div>
+      </transition>
+
+      <!-- Backdrop -->
+      <div
+        v-if="isOpen"
+        class="fixed inset-0 z-[9999]"
+        @click="closeCalendar"
+      />
+    </Teleport>
+  </div>
+</template>

@@ -20,6 +20,11 @@ const router = createRouter({
       name: 'table',
       component: () => import('../views/DataTableTest.vue')
     },
+    {
+      path: '/widgets-test',
+      name: 'widgets-test',
+      component: () => import('../views/WidgetsTest.vue')
+    },
     AuthRoutes,
     DashboardRoutes
   ],
