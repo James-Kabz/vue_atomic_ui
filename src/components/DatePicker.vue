@@ -42,7 +42,7 @@ const emit = defineEmits(['update:modelValue', 'validation-error'])
 
 const isOpen = ref(false)
 const calendarRef = ref(null)
-const inputRef = ref(null)
+// const inputRef = ref(null)
 const calendarStyle = ref({})
 const today = new Date()
 const currentMonth = ref(today.getMonth())
