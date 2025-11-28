@@ -1006,7 +1006,6 @@ defineExpose({
     <Modal
       v-model="showModal"
       size="lg"
-      height="auto"
       @close="closeModal"
     >
       <div class="p-6">
