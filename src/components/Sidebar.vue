@@ -559,7 +559,10 @@ defineExpose({
           </div>
 
           <!-- Search Bar (Conditionally shown) -->
-          <div v-if="shouldShowSubmenuSearch" class="px-4 pb-3">
+          <div
+            v-if="shouldShowSubmenuSearch"
+            class="px-4 pb-3"
+          >
             <div class="relative">
               <input
                 v-model="searchQuery"
@@ -567,21 +570,30 @@ defineExpose({
                 :placeholder="searchPlaceholder"
                 class="w-full px-3 py-2 pl-9 pr-9 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                 @input="handleSearch(searchQuery)"
-              />
+              >
               <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                <Icon icon="search" class="w-4 h-4" />
+                <Icon
+                  icon="search"
+                  class="w-4 h-4"
+                />
               </div>
               <button
                 v-if="searchQuery"
                 class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors p-1"
                 @click="clearSearch"
               >
-                <Icon icon="times" class="w-4 h-4" />
+                <Icon
+                  icon="times"
+                  class="w-4 h-4"
+                />
               </button>
             </div>
             
             <!-- Search Results Count -->
-            <div v-if="searchQuery" class="mt-2 text-xs text-gray-500 px-1">
+            <div
+              v-if="searchQuery"
+              class="mt-2 text-xs text-gray-500 px-1"
+            >
               {{ filteredSubmenuItems.length }} result{{ filteredSubmenuItems.length !== 1 ? 's' : '' }} found
             </div>
           </div>
@@ -590,14 +602,27 @@ defineExpose({
         <!-- Submenu Items -->
         <nav class="p-3">
           <!-- No Results Message -->
-          <div v-if="shouldShowSubmenuSearch && searchQuery && filteredSubmenuItems.length === 0" class="px-3 py-8 text-center">
-            <Icon icon="search" class="w-12 h-12 mx-auto text-gray-300 mb-3" />
-            <p class="text-sm text-gray-500 mb-1">No results found</p>
-            <p class="text-xs text-gray-400">Try a different search term</p>
+          <div
+            v-if="shouldShowSubmenuSearch && searchQuery && filteredSubmenuItems.length === 0"
+            class="px-3 py-8 text-center"
+          >
+            <Icon
+              icon="search"
+              class="w-12 h-12 mx-auto text-gray-300 mb-3"
+            />
+            <p class="text-sm text-gray-500 mb-1">
+              No results found
+            </p>
+            <p class="text-xs text-gray-400">
+              Try a different search term
+            </p>
           </div>
 
           <!-- Submenu Items List -->
-          <div v-else class="space-y-1">
+          <div
+            v-else
+            class="space-y-1"
+          >
             <router-link
               v-for="subItem in filteredSubmenuItems"
               :key="subItem.name"

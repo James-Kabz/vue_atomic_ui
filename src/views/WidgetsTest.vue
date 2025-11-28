@@ -34,7 +34,9 @@ const doughnutChartData = {
 <template>
   <div class="widgets-test-page p-6 bg-slate-50 min-h-screen">
     <div class="max-w-7xl mx-auto">
-      <h1 class="text-3xl font-bold text-slate-900 mb-8">Widgets Test Page</h1>
+      <h1 class="text-3xl font-bold text-slate-900 mb-8">
+        Widgets Test Page
+      </h1>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Bar Chart Widget -->

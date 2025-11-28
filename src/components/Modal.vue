@@ -5,7 +5,7 @@ import { cn } from '@/utils/cn'
 import Icon from './Icon.vue'
 
 const modalVariants = cva(
-  'relative w-full overflow-y-auto border bg-white pt-12 pr-12 pb-6 pl-6 shadow-lg duration-200 sm:rounded-lg',
+  'relative w-full max-h-[100vh] overflow-y-auto border bg-white pt-12 pr-12 pb-6 pl-6 shadow-lg duration-200 sm:rounded-lg',
   {
     variants: {
       size: {
@@ -22,25 +22,9 @@ const modalVariants = cva(
         '8xl': 'max-w-8xl',
         full: 'max-w-full',
       },
-      height: {
-        auto: 'max-h-[90vh]',
-        sm: 'max-h-[50vh]',
-        md: 'max-h-[70vh]',
-        lg: 'max-h-[80vh]',
-        xl: 'max-h-[90vh]',
-        '2xl': 'max-h-[90vh]',
-        '3xl': 'max-h-[90vh]',
-        '4xl': 'max-h-[100vh]',
-        '5xl': 'max-h-[100vh]',
-        '6xl': 'max-h-[100vh]',
-        '7xl': 'max-h-[100vh]',
-        '8xl': 'max-h-[100vh]',
-        full: 'max-h-[100vh]',
-      },
     },
     defaultVariants: {
-      size: '4xl',
-      height: 'auto',
+      size: '6xl',
     },
   }
 )
@@ -59,10 +43,6 @@ const props = defineProps({
     type: String,
     default: '4xl',
     validator: (value) => ['sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', 'full'].includes(value)
-  },
-  height: {
-    type: String,
-    default: '',
   },
   class: {
     type: String,
@@ -87,7 +67,7 @@ const handleBackdropClick = (event) => {
   }
 }
 
-// Handle escape key - FIXED VERSION
+// Handle escape key
 let handleEscape = null
 
 watch(() => props.modelValue, (isOpen) => {
@@ -132,7 +112,7 @@ onUnmounted(() => {
         @click="handleBackdropClick"
       >
         <div
-          :class="cn(modalVariants({ size }), height, props.class, resizable ? 'resize overflow-hidden pointer-events-auto relative' : '')"
+          :class="cn(modalVariants({ size }), props.class, resizable ? 'resize overflow-hidden pointer-events-auto relative' : '')"
           :style="resizable ? 'min-width: 400px; min-height: 200px; resize: both;' : ''"
         >
           <button
@@ -147,16 +127,6 @@ onUnmounted(() => {
             />
             <span class="sr-only">Close</span>
           </button>
-
-          <!-- Resize handle -->
-          <!-- <div
-            v-if="resizable"
-            class="absolute bottom-0 right-0 w-8 h-8 cursor-se-resize bg-gray-200 hover:bg-gray-300 border border-gray-300 rounded-tl-lg flex items-end justify-end transition-colors"
-          >
-            <svg class="w-5 h-5 text-gray-600 mb-1 mr-1" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l.293-.293L9 15.586V3a1 1 0 012 0v12.586l3.414-3.293a1 1 0 011.293-.001z" clip-rule="evenodd" />
-            </svg>
-          </div> -->
 
           <slot />
         </div>
