@@ -39,20 +39,20 @@ const props = defineProps({
             'slider',
             'date',
             'color',
-            'email',          // NEW
-            'tel',            // NEW
-            'url',            // NEW
-            'time',           // NEW
-            'datetime-local', // NEW
-            'month',          // NEW
-            'week',          // NEW
-            'file',           // NEW
-            'radio',          // NEW
-            'switch',         // NEW (alternative to checkbox)
-            'range',          // NEW (alternative to slider)
-            'search',         // NEW
-            'hidden',         // NEW
-            'multiselect',    // NEW
+            'email',
+            'tel',
+            'url',
+            'time',
+            'datetime-local',
+            'month',
+            'week',
+            'file',
+            'radio',
+            'switch',
+            'range',
+            'search',
+            'hidden',
+            'multiselect',
           ].includes(field.type),
       )
     },
@@ -71,7 +71,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['submit', 'reset'])
+const emit = defineEmits(['submit', 'reset', 'cancel'])
 
 const isLoading = computed(() => props.loading)
 
@@ -306,6 +306,10 @@ const handleReset = () => {
   errors.value = {}
   isInitialized.value = false
   emit('reset')
+}
+
+const handleCancel = () => {
+  emit('cancel')
 }
 </script>
 
@@ -612,6 +616,14 @@ const handleReset = () => {
           @click="handleReset"
         >
           Reset
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          :disabled="isLoading"
+          @click="handleCancel"
+        >
+          Cancel
         </Button>
         <Button
           type="submit"
