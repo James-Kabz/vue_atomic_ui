@@ -925,14 +925,14 @@ defineExpose({
                     <Tooltip
                       v-for="action in getVisibleActions(item)"
                       :key="action.key"
-                      :content="action.tooltip || action.label || action.key"
+                      :content="typeof action.tooltip === 'function' ? action.tooltip(item) : (action.tooltip || action.label || action.key)"
                       placement="top"
                     >
                       <Button
                         :variant="getButtonVariant(action.variant)"
                         size="xs"
                         :disabled="isActionDisabled(action, item) || !hasPermission(action, item)"
-                        class="h-8 w-8"
+                        :class="['h-8 w-8', typeof action.class === 'function' ? action.class(item) : action.class]"
                         @click.stop="handleActionClick(action, item)"
                       >
                         <Icon
