@@ -639,6 +639,7 @@ const handleCancel = () => {
               </p>
             </div>
 
+            <!-- Multi-file Upload -->
             <div v-else-if="field.type === 'multifile'" class="space-y-3">
               <!-- Dropzone -->
               <div :class="[
@@ -652,13 +653,107 @@ const handleCancel = () => {
               ]" @drop="handleMultiFileDrop(field, $event)" @dragover="handleMultiFileDragOver"
                 @dragenter="handleMultiFileDragEnter(field, $event)"
                 @dragleave="handleMultiFileDragLeave(field, $event)" @click="triggerFileInput(field.name)">
-                <!-- Use :ref with function to properly set refs -->
+                <!-- Use :ref with function to properly set refs in Vue 3 -->
                 <input :ref="(el) => setFileInputRef(field.name, el)" type="file" :multiple="field.multiple !== false"
                   :accept="field.accept" class="hidden" :disabled="isLoading || field.disabled"
                   @change="handleMultiFileSelect(field, $event)">
-                <!-- ... existing code for dropzone content ... -->
+                <div class="flex items-center justify-center px-4 py-4">
+                  <div class="bg-gray-100 rounded-full p-2.5 mr-3">
+                    <svg class="h-6 w-6 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none"
+                      viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                    </svg>
+                  </div>
+                  <div class="flex flex-col">
+                    <p class="text-sm font-medium text-gray-700">
+                      <span class="text-blue-600 font-semibold">Click to upload</span> or drag and drop
+                    </p>
+                    <p class="text-xs text-gray-500">
+                      {{ field.maxSize ? `Up to ${formatFileSize(field.maxSize)}` : 'No size limit' }}
+                      <span v-if="field.accept" class="ml-1">• {{ field.accept }}</span>
+                      <span v-if="field.maxFiles" class="ml-1">• Max {{ field.maxFiles }} files</span>
+                    </p>
+                  </div>
+                </div>
               </div>
 
+              <!-- Help text -->
+              <p v-if="field.helpText" class="text-xs text-gray-500">
+                {{ field.helpText }}
+              </p>
+
+              <!-- Uploading Files -->
+              <div v-if="uploadingFilesMap[field.name]?.length > 0" class="space-y-2">
+                <div v-for="fileItem in uploadingFilesMap[field.name]" :key="fileItem.id"
+                  class="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg">
+                  <div class="flex items-center space-x-3 flex-1 min-w-0">
+                    <div class="relative h-10 w-10 flex-shrink-0">
+                      <svg class="h-10 w-10 text-gray-300" viewBox="0 0 36 36">
+                        <circle cx="18" cy="18" r="16" fill="none" stroke="currentColor" stroke-width="3" />
+                        <circle cx="18" cy="18" r="16" fill="none" stroke="#3B82F6" stroke-width="3"
+                          stroke-linecap="round" :stroke-dasharray="`${fileItem.progress} 100`"
+                          transform="rotate(-90 18 18)" />
+                      </svg>
+                      <span class="absolute inset-0 flex items-center justify-center text-xs font-medium text-gray-700">
+                        {{ Math.round(fileItem.progress) }}%
+                      </span>
+                    </div>
+                    <div class="flex flex-col min-w-0">
+                      <span class="text-sm font-medium text-gray-900 truncate">{{ fileItem.file.name }}</span>
+                      <span class="text-xs text-gray-500">Uploading...</span>
+                    </div>
+                  </div>
+                  <button type="button"
+                    class="text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full p-1 transition-colors ml-2"
+                    @click.stop="cancelUpload(field, fileItem.id)">
+                    <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                      stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Uploaded Files -->
+              <div v-if="formData[field.name]?.length > 0" class="space-y-2">
+                <div v-for="(file, index) in formData[field.name]" :key="`uploaded-${index}`"
+                  class="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg hover:shadow-sm transition-shadow">
+                  <div class="flex items-center space-x-3 flex-1 min-w-0">
+                    <div :class="[
+                      'rounded-lg p-2 flex-shrink-0',
+                      getFileIconColor(file)
+                    ]">
+                      <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke-width="1.5" stroke="currentColor">
+                        <path v-if="getFileIcon(file) === 'image'" stroke-linecap="round" stroke-linejoin="round"
+                          d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                        <path v-else stroke-linecap="round" stroke-linejoin="round"
+                          d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                      </svg>
+                    </div>
+                    <div class="flex flex-col min-w-0">
+                      <span class="text-sm font-medium text-gray-900 truncate">{{ file.name }}</span>
+                      <span class="text-xs text-gray-500">{{ formatFileSize(file.size) }}</span>
+                    </div>
+                  </div>
+                  <button type="button"
+                    class="text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full p-1.5 transition-colors ml-2"
+                    :disabled="isLoading || field.disabled" @click.stop="removeMultiFile(field, index)">
+                    <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                      stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- File count summary -->
+              <p v-if="formData[field.name]?.length > 0" class="text-xs text-blue-600 font-medium">
+                {{ formData[field.name].length }} file(s) uploaded
+                <span v-if="field.maxFiles"> of {{ field.maxFiles }} max</span>
+              </p>
             </div>
 
             <!-- Slider -->
