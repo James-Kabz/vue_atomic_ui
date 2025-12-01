@@ -10,6 +10,7 @@ import MultiSelect from './MultiSelect.vue'
 import Button from './Button.vue'
 import { toast } from '../lib/toast'
 import Label from './Label.vue'
+import FileUpload from './FileUpload.vue'
 
 const props = defineProps({
   title: {
@@ -47,6 +48,7 @@ const props = defineProps({
             'month',
             'week',
             'file',
+            'multifile',
             'radio',
             'switch',
             'range',
@@ -89,6 +91,8 @@ const initializeFormData = () => {
       data[field.name] = field.min !== undefined ? field.min : 0
     } else if (field.type === 'file') {
       data[field.name] = null
+    } else if (field.type === 'multifile') {
+      data[field.name] = []
     } else if (field.type === 'radio') {
       data[field.name] = field.options?.[0]?.value || ''
     } else if (field.type === 'multiselect') {
@@ -113,6 +117,8 @@ watch(
           data[field.name] = newData[field.name] ?? (field.min !== undefined ? field.min : 0)
         } else if (field.type === 'file') {
           data[field.name] = null
+        } else if (field.type === 'multifile') {
+          data[field.name] = []
         } else if (field.type === 'multiselect') {
           data[field.name] = Array.isArray(newData[field.name]) ? newData[field.name] : []
         } else {
@@ -181,6 +187,10 @@ const validateForm = () => {
         }
       } else if (field.type === 'file') {
         if (!value) {
+          errors.value[field.name] = field.errorMessage || `${field.label} is required`
+        }
+      } else if (field.type === 'multifile') {
+        if (!Array.isArray(value) || value.length === 0) {
           errors.value[field.name] = field.errorMessage || `${field.label} is required`
         }
       } else if (field.type === 'radio') {
@@ -264,6 +274,31 @@ const handleFileChange = (field, event) => {
   }
 }
 
+const handleMultiFilesSelected = (field, files) => {
+  formData.value[field.name] = files
+
+  if (field.onChange && typeof field.onChange === 'function') {
+    try {
+      field.onChange(files, formData.value)
+    } catch (error) {
+      console.error('Error in onChange handler:', error)
+      toast.error('An error occurred while processing the files')
+    }
+  }
+}
+
+const handleMultiFileRemoved = (field, files) => {
+  formData.value[field.name] = files
+
+  if (field.onFileRemoved && typeof field.onFileRemoved === 'function') {
+    try {
+      field.onFileRemoved(files, formData.value)
+    } catch (error) {
+      console.error('Error in onFileRemoved handler:', error)
+    }
+  }
+}
+
 const handleSubmit = async () => {
   try {
     if (!validateForm()) {
@@ -284,7 +319,7 @@ const handleSubmit = async () => {
         preparedData[field.name] = typeof value === 'string' ? value.trim() : value
       } else if (field.type === 'password') {
         preparedData[field.name] = value
-      } else if (field.type === 'file') {
+      } else if (field.type === 'file' || field.type === 'multifile') {
         preparedData[field.name] = value
       } else {
         preparedData[field.name] = value
@@ -507,6 +542,33 @@ const handleCancel = () => {
                 class="text-xs text-gray-500"
               >
                 {{ field.helpText }}
+              </p>
+            </div>
+
+            <!-- Multi-File Upload -->
+            <div
+              v-else-if="field.type === 'multifile'"
+              class="space-y-2"
+            >
+              <FileUpload
+                :multiple="true"
+                :accept="field.accept"
+                :max-size="field.maxSize"
+                :variant="field.variant || 'default'"
+                @files-selected="handleMultiFilesSelected(field, $event)"
+                @file-removed="handleMultiFileRemoved(field, $event)"
+              />
+              <p
+                v-if="field.helpText"
+                class="text-xs text-gray-500"
+              >
+                {{ field.helpText }}
+              </p>
+              <p
+                v-if="formData[field.name] && formData[field.name].length > 0"
+                class="text-xs text-blue-600 font-medium"
+              >
+                {{ formData[field.name].length }} file(s) selected
               </p>
             </div>
 
