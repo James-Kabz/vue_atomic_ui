@@ -94,6 +94,7 @@ export { cn } from "./utils/cn.js"
 // Styles
 import "./styles/base.css"
 import Loader from "./components/Loader.vue"
+import EventsCalendar from "./components/EventsCalendar.vue"
 
 const components = {
   Avatar,
@@ -156,6 +157,7 @@ const components = {
   AccordionItem,
   Graph,
   Calendar,
+  EventsCalendar,
   DataTable,
   DataTableHeader,
   DataTableRow,
@@ -259,6 +261,7 @@ export {
   Graph,
   AccordionItem,
   Calendar,
+  EventsCalendar,
   DataTable,
   DataTableHeader,
   DataTableRow,
