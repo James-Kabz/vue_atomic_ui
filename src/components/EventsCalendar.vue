@@ -33,7 +33,9 @@ const calendarVariants = cva(
       size: {
         sm: 'p-3 max-w-xs',
         default: 'p-5 max-w-md',
-        lg: 'p-6 max-w-lg'
+        lg: 'p-6 max-w-2xl',
+        xl: 'p-8 max-w-4xl',
+        full: 'p-8 w-full max-w-full'
       }
     },
     defaultVariants: {
@@ -65,7 +67,7 @@ const buttonVariants = cva(
 )
 
 const dayVariants = cva(
-  'relative flex flex-col items-center justify-start p-2 min-h-[52px] rounded-lg cursor-pointer transition-all duration-200',
+  'relative flex flex-col items-center justify-start p-2 rounded-lg cursor-pointer transition-all duration-200',
   {
     variants: {
       isCurrentMonth: {
@@ -83,6 +85,13 @@ const dayVariants = cva(
       hasEvents: {
         true: '',
         false: ''
+      },
+      size: {
+        sm: 'min-h-[52px]',
+        default: 'min-h-[60px]',
+        lg: 'min-h-[70px]',
+        xl: 'min-h-[80px]',
+        full: 'min-h-[90px]'
       }
     },
     compoundVariants: [
@@ -96,7 +105,8 @@ const dayVariants = cva(
       isCurrentMonth: true,
       isToday: false,
       isSelected: false,
-      hasEvents: false
+      hasEvents: false,
+      size: 'default'
     }
   }
 )
@@ -238,6 +248,17 @@ const formatSelectedDate = computed(() => {
   })
 })
 
+const dotSize = computed(() => {
+  const sizeMap = {
+    sm: 'sm',
+    default: 'default',
+    lg: 'default',
+    xl: 'lg',
+    full: 'lg'
+  }
+  return sizeMap[props.size] || 'default'
+})
+
 // Methods
 function formatDate(date) {
   return date.toISOString().split('T')[0]
@@ -269,6 +290,10 @@ function selectDate(day) {
     date: day.date,
     events: day.events
   })
+}
+
+function selectEvent(event) {
+  emit('select-event', event)
 }
 </script>
 
@@ -319,28 +344,51 @@ function selectDate(day) {
           isCurrentMonth: day.isCurrentMonth, 
           isToday: day.isToday,
           isSelected: day.date === selectedDate,
-          hasEvents: day.events.length > 0
+          hasEvents: day.events.length > 0,
+          size: size
         })"
         @click="selectDate(day)"
       >
-        <span class="text-sm">{{ day.dayNumber }}</span>
+        <span :class="[
+          'text-sm font-medium mb-1',
+          size === 'full' || size === 'xl' ? 'text-base' : ''
+        ]">
+          {{ day.dayNumber }}
+        </span>
         
         <!-- Event Indicators -->
         <div
           v-if="day.events.length > 0"
-          class="flex gap-0.5 mt-1 justify-center flex-wrap"
+          class="flex gap-0.5 mt-1 justify-center flex-wrap max-w-full px-1"
         >
           <span
             v-for="(event, eventIndex) in day.events.slice(0, 3)"
             :key="eventIndex"
-            :class="eventDotVariants({ color: event.color })"
+            :class="eventDotVariants({ color: event.color, size: dotSize })"
+            :title="event.title"
           />
           <span
             v-if="day.events.length > 3"
-            class="text-xs text-gray-400"
+            class="text-xs text-gray-400 font-medium"
+            :title="`${day.events.length} total events`"
           >
             +{{ day.events.length - 3 }}
           </span>
+        </div>
+
+        <!-- Event count badge for larger sizes -->
+        <div
+          v-if="day.events.length > 0 && (size === 'full' || size === 'xl')"
+          class="mt-1 text-xs px-1.5 py-0.5 rounded-full"
+          :class="[
+            day.events[0].color === 'green' 
+              ? 'bg-green-100 text-green-700' 
+              : day.events[0].color === 'orange'
+              ? 'bg-orange-100 text-orange-700'
+              : 'bg-gray-100 text-gray-700'
+          ]"
+        >
+          {{ day.events.length }} {{ day.events.length === 1 ? 'event' : 'events' }}
         </div>
       </div>
     </div>
@@ -358,6 +406,7 @@ function selectDate(day) {
           v-for="event in selectedDateEvents"
           :key="event.id"
           :class="eventCardVariants({ color: event.color })"
+          @click="selectEvent(event)"
         >
           <div class="flex items-center gap-2">
             <span :class="eventDotVariants({ color: event.color, size: 'lg' })" />
@@ -370,6 +419,21 @@ function selectDate(day) {
             {{ event.time }}
           </p>
         </div>
+      </div>
+    </div>
+
+    <!-- Legend for compliance status -->
+    <div 
+      v-if="size === 'full' || size === 'xl'"
+      class="mt-4 pt-4 border-t flex items-center justify-center gap-6"
+    >
+      <div class="flex items-center gap-2">
+        <span class="w-3 h-3 rounded-full bg-green-500"></span>
+        <span class="text-xs text-gray-600 font-medium">Complied</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="w-3 h-3 rounded-full bg-orange-500"></span>
+        <span class="text-xs text-gray-600 font-medium">Pending</span>
       </div>
     </div>
   </div>
