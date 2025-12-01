@@ -281,7 +281,7 @@ function selectDate(day) {
         @click="previousMonth"
       >
         <Icon
-          name="chevron-left"
+          icon="chevron-left"
           class="w-5 h-5"
         />
       </button>
@@ -293,7 +293,7 @@ function selectDate(day) {
         @click="nextMonth"
       >
         <Icon
-          name="chevron-right"
+          icon="chevron-right"
           class="w-5 h-5"
         />
       </button>
