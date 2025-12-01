@@ -1,19 +1,3 @@
-<template>
-  <component
-    :is="tag"
-    :class="typographyClasses"
-    :style="customStyles"
-    v-bind="$attrs"
-  >
-    <slot />
-    <span
-      v-if="required"
-      class="text-red-600 ml-1"
-      aria-hidden="true"
-    >*</span>
-  </component>
-</template>
-
 <script setup>
 import { computed } from 'vue'
 
@@ -327,3 +311,19 @@ const typographyClasses = computed(() => [
   }
 ])
 </script>
+
+<template>
+  <component
+    :is="tag"
+    :class="typographyClasses"
+    :style="customStyles"
+    v-bind="$attrs"
+  >
+    <slot />
+    <span
+      v-if="required"
+      class="text-red-600 ml-1"
+      aria-hidden="true"
+    >*</span>
+  </component>
+</template>
