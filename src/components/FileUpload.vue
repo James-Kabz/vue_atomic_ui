@@ -109,6 +109,7 @@ const props = defineProps({
   multiple: Boolean,
   accept: String,
   maxSize: Number, // in bytes
+  maxFiles: Number, // maximum number of files
   variant: {
     type: String,
     default: 'default',
@@ -185,6 +186,18 @@ const addFiles = (newFiles) => {
     return true
   })
 
+  if (validFiles.length === 0) return
+
+  // Check maxFiles limit
+  if (props.maxFiles) {
+    const currentCount = files.value.length + uploadingFiles.value.length
+    if (currentCount >= props.maxFiles) {
+      return // Don't add more files
+    }
+    const remaining = props.maxFiles - currentCount
+    validFiles.splice(remaining) // Limit to remaining slots
+  }
+
   // Add files to uploading state with progress
   const filesWithProgress = validFiles.map(file => reactive({
     file,
@@ -212,14 +225,14 @@ const addFiles = (newFiles) => {
         // Move to files array after upload completes
         if (props.multiple) {
           files.value.push(fileItem.file)
+          emit('files-selected', files.value)
         } else {
           files.value = [fileItem.file]
+          emit('files-selected', fileItem.file)
         }
 
         // Remove from uploading
         uploadingFiles.value.splice(uploadingFiles.value.indexOf(fileItem), 1)
-
-        emit('files-selected', files.value)
       }
     }, intervalTime)
   })
@@ -227,7 +240,11 @@ const addFiles = (newFiles) => {
 
 const removeFile = (index) => {
   files.value.splice(index, 1)
-  emit('file-removed', files.value)
+  if (props.multiple) {
+    emit('file-removed', files.value)
+  } else {
+    emit('file-removed', files.value.length > 0 ? files.value[0] : null)
+  }
 }
 
 const formatFileSize = (bytes) => {
