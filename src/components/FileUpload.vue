@@ -1,103 +1,3 @@
-<template>
-  <div class="w-full">
-    <div
-      v-if="!files.length || multiple"
-      :class="dropzoneClasses"
-      @drop="handleDrop"
-      @dragover="handleDragOver"
-      @dragenter="handleDragEnter"
-      @dragleave="handleDragLeave"
-      @click="triggerFileInput"
-    >
-      <input
-        ref="fileInput"
-        type="file"
-        :multiple="multiple"
-        :accept="accept"
-        class="hidden"
-        @change="handleFileSelect"
-      >
-      
-      <div class="flex items-center justify-center px-4 py-3">
-        <div class="bg-gray-100 rounded-full p-2 mr-3">
-          <Icon
-            icon="upload"
-            class="h-6 w-6 text-gray-600"
-          />
-        </div>
-        <div class="flex flex-col">
-          <p class="text-sm font-medium text-gray-700">
-            <span class="text-blue-600 font-semibold">Click to upload</span> or drag and drop
-          </p>
-          <p class="text-xs text-gray-500">
-            {{ maxSize ? `Up to ${formatFileSize(maxSize)}` : 'No size limit' }}
-            <span
-              v-if="accept"
-              class="ml-2"
-            >• {{ accept }}</span>
-          </p>
-        </div>
-      </div>
-    </div>
-    
-    <div
-      v-if="files.length > 0 || uploadingFiles.length > 0"
-      class="mt-4 space-y-2"
-    >
-      <!-- Uploading files -->
-      <div
-        v-for="(fileItem, index) in uploadingFiles"
-        :key="`uploading-${index}`"
-        class="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg shadow-sm"
-      >
-        <div class="flex items-center space-x-3">
-          <CircularProgress
-            :value="fileItem.progress"
-            :max="100"
-            size="sm"
-            variant="default"
-            :dynamic-color="true"
-            class="flex-shrink-0"
-          />
-          <div class="flex flex-col">
-            <span class="text-sm font-medium text-gray-900">{{ fileItem.file.name }}</span>
-            <span class="text-xs text-gray-500">Uploading... {{ Math.round(fileItem.progress) }}%</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Uploaded files -->
-      <div
-        v-for="(file, index) in files"
-        :key="`uploaded-${index}`"
-        class="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow"
-      >
-        <div class="flex items-center space-x-3">
-          <div class="bg-green-100 rounded-md p-2">
-            <Icon
-              icon="file"
-              class="h-5 w-5 text-green-600"
-            />
-          </div>
-          <div class="flex flex-col">
-            <span class="text-sm font-medium text-gray-900">{{ file.name }}</span>
-            <span class="text-xs text-gray-500">{{ formatFileSize(file.size) }}</span>
-          </div>
-        </div>
-        <button
-          class="text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full p-1 transition-colors"
-          @click="removeFile(index)"
-        >
-          <Icon
-            icon="x"
-            class="h-4 w-4"
-          />
-        </button>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup>
 import { ref, computed, reactive } from 'vue'
 import { cva } from 'class-variance-authority'
@@ -255,3 +155,103 @@ const formatFileSize = (bytes) => {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
 }
 </script>
+
+<template>
+  <div class="w-full">
+    <div
+      v-if="!files.length || multiple"
+      :class="dropzoneClasses"
+      @drop="handleDrop"
+      @dragover="handleDragOver"
+      @dragenter="handleDragEnter"
+      @dragleave="handleDragLeave"
+      @click="triggerFileInput"
+    >
+      <input
+        ref="fileInput"
+        type="file"
+        :multiple="multiple"
+        :accept="accept"
+        class="hidden"
+        @change="handleFileSelect"
+      >
+      
+      <div class="flex items-center justify-center px-4 py-3">
+        <div class="bg-gray-100 rounded-full p-2 mr-3">
+          <Icon
+            icon="upload"
+            class="h-6 w-6 text-gray-600"
+          />
+        </div>
+        <div class="flex flex-col">
+          <p class="text-sm font-medium text-gray-700">
+            <span class="text-blue-600 font-semibold">Click to upload</span> or drag and drop
+          </p>
+          <p class="text-xs text-gray-500">
+            {{ maxSize ? `Up to ${formatFileSize(maxSize)}` : 'No size limit' }}
+            <span
+              v-if="accept"
+              class="ml-2"
+            >• {{ accept }}</span>
+          </p>
+        </div>
+      </div>
+    </div>
+    
+    <div
+      v-if="files.length > 0 || uploadingFiles.length > 0"
+      class="mt-4 space-y-2"
+    >
+      <!-- Uploading files -->
+      <div
+        v-for="(fileItem, index) in uploadingFiles"
+        :key="`uploading-${index}`"
+        class="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg shadow-sm"
+      >
+        <div class="flex items-center space-x-3">
+          <CircularProgress
+            :value="fileItem.progress"
+            :max="100"
+            size="sm"
+            variant="default"
+            :dynamic-color="true"
+            class="flex-shrink-0"
+          />
+          <div class="flex flex-col">
+            <span class="text-sm font-medium text-gray-900">{{ fileItem.file.name }}</span>
+            <span class="text-xs text-gray-500">Uploading... {{ Math.round(fileItem.progress) }}%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Uploaded files -->
+      <div
+        v-for="(file, index) in files"
+        :key="`uploaded-${index}`"
+        class="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow"
+      >
+        <div class="flex items-center space-x-3">
+          <div class="bg-green-100 rounded-md p-2">
+            <Icon
+              icon="file"
+              class="h-5 w-5 text-green-600"
+            />
+          </div>
+          <div class="flex flex-col">
+            <span class="text-sm font-medium text-gray-900">{{ file.name }}</span>
+            <span class="text-xs text-gray-500">{{ formatFileSize(file.size) }}</span>
+          </div>
+        </div>
+        <button
+          class="text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full p-1 transition-colors"
+          @click="removeFile(index)"
+        >
+          <Icon
+            icon="x"
+            class="h-4 w-4"
+          />
+        </button>
+      </div>
+    </div>
+  </div>
+</template>
