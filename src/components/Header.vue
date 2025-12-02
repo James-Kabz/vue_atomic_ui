@@ -29,10 +29,7 @@ const props = defineProps({
   notificationsTitle: { type: String, default: 'Notifications' },
   organisationSwitcherTitle: { type: String, default: 'Switch Organisation' },
   organisationSwitcherDescription: { type: String, default: 'Select an organisation to view its data' },
-  // Allow custom user initials logic
-
   userInitialsOverride: { type: String, default: '' },
-  // Allow custom user role display
   userRoleDisplayOverride: { type: String, default: '' }
 })
 
@@ -66,29 +63,24 @@ const userRoleNames = computed(() => {
 
   const roles = []
 
-  // Add activeRoles if available (these take priority when switching organisations)
   if (props.activeRoles?.length > 0) {
     roles.push(...props.activeRoles.map(role =>
       typeof role === 'string' ? role : role.name
     ))
   }
 
-  // If no active roles, fall back to user.roles
   if (roles.length === 0 && props.user?.roles?.length > 0) {
     roles.push(...props.user.roles.map(role =>
       typeof role === 'string' ? role : role.name
     ))
   }
 
-  // If still no roles, use the current organisation role if available
   if (roles.length === 0 && props.currentOrganisation?.role) {
     roles.push(props.currentOrganisation.role)
   }
 
-  // Final fallback
   if (roles.length === 0) return 'Member'
 
-  // Capitalize and format role names
   return roles
     .map(role => role.charAt(0).toUpperCase() + role.slice(1).replace(/-/g, ' '))
     .join(', ')
@@ -194,56 +186,80 @@ watch(() => props.notifications.length, (newLength) => {
     :style="{ left: '0' }"
   >
     <div class="flex items-center justify-between h-16 px-4 md:px-6">
-      <!-- Left side - Page Title / Breadcrumb -->
-      <div class="flex items-center">
-        <!-- Organisation Info -->
+      <!-- Left side - Organisation & Page Info -->
+      <div class="flex items-center gap-4 min-w-0 flex-1">
+        <!-- Company Logo (Software Provider) -->
+        <div
+          v-if="companyLogo && showHeaderLogo"
+          class="flex-shrink-0"
+        >
+          <img
+            :src="companyLogo"
+            alt="Company logo"
+            class="w-10 h-10 object-contain rounded-lg shadow-sm"
+          >
+        </div>
+
+        <!-- Divider -->
+        <div
+          v-if="companyLogo && showOrganisationInfo && currentOrganisation"
+          class="h-8 w-px bg-gray-300 flex-shrink-0"
+        />
+
+        <!-- Organisation Info Card -->
         <div
           v-if="showOrganisationInfo && currentOrganisation"
-          class="mr-4 flex-shrink-0 bg-gradient-to-r from-blue-50 to-indigo-50 px-3 py-2 rounded-lg border border-blue-100 flex items-center gap-3 relative"
+          class="flex-shrink-0 bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 px-4 py-2 rounded-xl border border-blue-200 shadow-sm flex items-center gap-3 relative hover:shadow-md transition-shadow"
         >
-          <!-- Company Logo (Software Company) -->
-          <div
-            v-if="companyLogo"
-            class="flex-shrink-0"
-          >
-            <img
-              :src="companyLogo"
-              alt="Company logo"
-              class="w-12 h-12 object-contain rounded"
-            >
-          </div>
-
-          <!-- Organisation Logo (Registered Organisation) -->
+          <!-- Organisation Logo -->
           <div
             v-if="organisationLogo"
             class="flex-shrink-0"
           >
-            <img
-              :src="organisationLogo"
-              :alt="`${currentOrganisation.organisation_name} logo`"
-              class="w-12 h-12 object-contain rounded border border-blue-200"
-            >
+            <div class="relative">
+              <img
+                :src="organisationLogo"
+                :alt="`${currentOrganisation.organisation_name} logo`"
+                class="w-10 h-10 object-contain rounded-lg bg-white p-1 border border-blue-200 shadow-sm"
+              >
+              <!-- Online indicator -->
+              <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 border-2 border-white rounded-full" />
+            </div>
           </div>
 
-          <!-- Organisation Switcher -->
+          <!-- Organisation Details with Switcher -->
           <button
             v-if="organisations.length > 1"
-            class="flex items-center gap-2 min-w-0 cursor-pointer hover:bg-blue-100/50 rounded-md px-2 py-1 transition-colors"
+            class="flex items-center gap-2 min-w-0 cursor-pointer hover:bg-white/50 rounded-lg px-2 py-1.5 transition-all group"
             @click="toggleOrganisationDropdown"
           >
             <div class="min-w-0">
-              <p class="text-lg font-bold text-blue-900 truncate max-w-[200px]">
+              <p class="text-sm font-bold text-blue-900 truncate max-w-[180px] group-hover:text-blue-700">
                 {{ currentOrganisation.organisation_name }}
               </p>
-              <p
-                v-if="formattedActiveRoles"
-                class="text-xs text-blue-600 truncate font-medium"
-              >
-                {{ formattedActiveRoles }}
-              </p>
+              <div class="flex items-center gap-1.5 mt-0.5">
+                <svg
+                  class="w-3 h-3 text-blue-600 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                <p
+                  v-if="formattedActiveRoles"
+                  class="text-xs text-blue-700 truncate font-medium"
+                >
+                  {{ formattedActiveRoles }}
+                </p>
+              </div>
             </div>
             <svg
-              class="w-4 h-4 text-blue-600 flex-shrink-0"
+              class="w-4 h-4 text-blue-600 flex-shrink-0 group-hover:text-blue-700 transition-transform"
+              :class="{ 'rotate-180': showOrganisationDropdown }"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -252,7 +268,7 @@ watch(() => props.notifications.length, (newLength) => {
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
-                :d="showOrganisationDropdown ? 'm5 15 7-7 7 7' : 'm19 9-7 7-7-7'"
+                d="m19 9-7 7-7-7"
               />
             </svg>
           </button>
@@ -262,15 +278,28 @@ watch(() => props.notifications.length, (newLength) => {
             v-else
             class="min-w-0"
           >
-            <p class="text-lg font-bold text-blue-900 truncate max-w-[200px]">
+            <p class="text-sm font-bold text-blue-900 truncate max-w-[180px]">
               {{ currentOrganisation.organisation_name }}
             </p>
-            <p
-              v-if="formattedActiveRoles"
-              class="text-xs text-blue-600 truncate font-medium"
-            >
-              {{ formattedActiveRoles }}
-            </p>
+            <div class="flex items-center gap-1.5 mt-0.5">
+              <svg
+                class="w-3 h-3 text-blue-600 flex-shrink-0"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              <p
+                v-if="formattedActiveRoles"
+                class="text-xs text-blue-700 truncate font-medium"
+              >
+                {{ formattedActiveRoles }}
+              </p>
+            </div>
           </div>
 
           <!-- Organisation Dropdown -->
@@ -284,25 +313,38 @@ watch(() => props.notifications.length, (newLength) => {
           >
             <div
               v-if="showOrganisationDropdown"
-              class="absolute top-full left-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50 max-h-96 overflow-y-auto"
+              class="absolute top-full left-0 mt-2 w-80 bg-white rounded-xl shadow-xl border border-gray-200 z-50 max-h-96 overflow-hidden"
             >
-              <div class="p-3 border-b border-gray-200">
-                <h3 class="text-sm font-semibold text-gray-900">
+              <div class="p-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+                <h3 class="text-sm font-bold text-gray-900 flex items-center gap-2">
+                  <svg
+                    class="w-4 h-4 text-blue-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8 7h12M8 12h12m-12 5h12M4 7h.01M4 12h.01M4 17h.01"
+                    />
+                  </svg>
                   {{ organisationSwitcherTitle }}
                 </h3>
-                <p class="text-xs text-gray-500 mt-1">
+                <p class="text-xs text-gray-600 mt-1">
                   {{ organisationSwitcherDescription }}
                 </p>
               </div>
-              <div class="py-2">
+              <div class="py-2 max-h-80 overflow-y-auto">
                 <button
                   v-for="org in organisations"
                   :key="org.org_id || org.organisation_name"
                   :class="cn(
-                    'flex items-center w-full px-3 py-2.5 text-sm transition-colors',
+                    'flex items-center w-full px-4 py-3 text-sm transition-all group',
                     org.org_id === currentOrganisation?.org_id
-                      ? 'bg-blue-50 text-blue-700 border-l-4 border-blue-500'
-                      : 'text-gray-700 hover:bg-gray-50'
+                      ? 'bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 border-l-4 border-blue-500'
+                      : 'text-gray-700 hover:bg-gray-50 border-l-4 border-transparent'
                   )"
                   @click="handleOrganisationChange(org)"
                 >
@@ -313,29 +355,45 @@ watch(() => props.notifications.length, (newLength) => {
                     <img
                       :src="org.logo"
                       :alt="`${org.organisation_name} logo`"
-                      class="w-6 h-6 object-contain rounded"
+                      class="w-8 h-8 object-contain rounded-lg bg-white p-1 border border-gray-200 group-hover:border-blue-200 transition-colors"
                     >
                   </div>
+                  <div
+                    v-else
+                    class="w-8 h-8 rounded-lg bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center mr-3 flex-shrink-0"
+                  >
+                    <svg
+                      class="w-4 h-4 text-gray-500"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </div>
                   <div class="flex-1 text-left min-w-0">
-                    <p class="font-medium truncate">
+                    <p class="font-semibold truncate">
                       {{ org.organisation_name }}
                     </p>
-                    <!-- <p
-                      v-if="org.role"
+                    <p
+                      v-if="org.type"
                       class="text-xs text-gray-500 truncate"
                     >
-                      {{ org.role }}
-                    </p> -->
+                      {{ org.type.name }}
+                    </p>
                   </div>
                   <svg
                     v-if="org.org_id === currentOrganisation?.org_id"
-                    class="w-4 h-4 text-blue-500 flex-shrink-0 ml-2"
+                    class="w-5 h-5 text-blue-600 flex-shrink-0 ml-2"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
                     <path
                       fill-rule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 01 1.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                       clip-rule="evenodd"
                     />
                   </svg>
@@ -345,22 +403,10 @@ watch(() => props.notifications.length, (newLength) => {
           </transition>
         </div>
 
-        <!-- Header Logo -->
-        <div
-          v-if="showHeaderLogo"
-          class="mr-4 flex-shrink-0"
-        >
-          <img
-            :src="headerLogo"
-            alt="Company Logo"
-            class="w-8 h-8 object-contain"
-          >
-        </div>
-
         <!-- Breadcrumb -->
         <nav
           v-if="showBreadcrumb"
-          class="hidden md:flex items-center space-x-2 text-sm truncate"
+          class="hidden lg:flex items-center space-x-2 text-sm truncate"
         >
           <span class="text-gray-500 truncate">{{ currentSection }}</span>
           <svg
@@ -376,12 +422,12 @@ watch(() => props.notifications.length, (newLength) => {
               d="M9 5l7 7-7 7"
             />
           </svg>
-          <span class="text-gray-900 font-medium truncate">{{ currentPage }}</span>
+          <span class="text-gray-900 font-semibold truncate">{{ currentPage }}</span>
         </nav>
       </div>
 
-      <!-- Right side -->
-      <div class="flex items-center space-x-3 md:space-x-4">
+      <!-- Right side - Actions -->
+      <div class="flex items-center space-x-2 md:space-x-3">
         <!-- Mobile Sidebar Toggle -->
         <button
           v-if="isMobile"
@@ -427,9 +473,8 @@ watch(() => props.notifications.length, (newLength) => {
             v-model="searchQuery"
             type="text"
             :placeholder="searchPlaceholder"
-            class="pl-10 pr-4 py-2 w-48 md:w-64 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+            class="pl-10 pr-4 py-2 w-48 md:w-64 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
           >
-          <!-- Close search button on mobile -->
           <button
             v-if="isMobile"
             class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
@@ -479,7 +524,7 @@ watch(() => props.notifications.length, (newLength) => {
           </svg>
           <span
             v-if="notificationCount > 0"
-            class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center"
+            class="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-semibold px-1"
           >
             {{ notificationCount > 9 ? '9+' : notificationCount }}
           </span>
@@ -496,10 +541,10 @@ watch(() => props.notifications.length, (newLength) => {
         >
           <div
             v-if="showNotificationsDropdown"
-            class="absolute right-4 md:right-6 top-16 mt-2 w-72 md:w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50"
+            class="absolute right-4 md:right-6 top-16 mt-2 w-72 md:w-80 bg-white rounded-xl shadow-xl border border-gray-200 z-50"
           >
-            <div class="p-4 border-b border-gray-200">
-              <h3 class="text-lg font-semibold text-gray-900">
+            <div class="p-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+              <h3 class="text-base font-bold text-gray-900">
                 {{ notificationsTitle }}
               </h3>
             </div>
@@ -529,13 +574,13 @@ watch(() => props.notifications.length, (newLength) => {
                 v-for="notification in notifications"
                 v-else
                 :key="notification.id"
-                class="p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer"
+                class="p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors"
                 @click="handleNotificationClick(notification)"
               >
                 <div class="flex items-start space-x-3">
                   <div class="flex-shrink-0 w-2 h-2 mt-2 bg-blue-500 rounded-full" />
                   <div class="flex-1">
-                    <p class="text-sm text-gray-900">
+                    <p class="text-sm font-medium text-gray-900">
                       {{ notification.title }}
                     </p>
                     <p class="text-xs text-gray-500 mt-1">
@@ -547,10 +592,10 @@ watch(() => props.notifications.length, (newLength) => {
             </div>
             <div
               v-if="notifications.length > 0"
-              class="p-4 text-center"
+              class="p-3 text-center border-t border-gray-200"
             >
               <button
-                class="text-sm text-blue-600 hover:text-blue-800"
+                class="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"
                 @click="handleViewAllNotifications"
               >
                 View all notifications
@@ -558,6 +603,7 @@ watch(() => props.notifications.length, (newLength) => {
             </div>
           </div>
         </transition>
+
 
         <!-- Profile Dropdown -->
         <div class="relative">
