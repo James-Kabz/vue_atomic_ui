@@ -2,7 +2,7 @@
 import Modal from './Modal.vue'
 import Slider from './Slider.vue'
 import DatePicker from './DatePicker.vue'
-import { ref, watch, computed, reactive } from 'vue'
+import { ref, watch, computed,  } from 'vue'
 import FormField from './FormField.vue'
 import Input from './Input.vue'
 import Textarea from './Textarea.vue'
@@ -11,10 +11,7 @@ import MultiSelect from './MultiSelect.vue'
 import Button from './Button.vue'
 import { toast } from '../lib/toast'
 import Label from './Label.vue'
-import Icon from './Icon.vue'
-import CircularProgress from './CircularProgress.vue'
 import FileUpload from './FileUpload.vue'
-import { cn } from '../utils/cn.js'
 
 const props = defineProps({
   modelValue: {
@@ -112,7 +109,6 @@ const isInitialized = ref(false)
 // Multi-upload state management (for non-multifile types)
 const uploadingFilesMap = ref({}) // Map of field.name -> uploading files array
 const dragOverFields = ref({}) // Map of field.name -> isDragOver boolean
-const fileInputRefs = ref({}) // Store refs for file inputs
 
 // Helper function to get nested value from object using dot notation
 const getNestedValue = (obj, path) => {

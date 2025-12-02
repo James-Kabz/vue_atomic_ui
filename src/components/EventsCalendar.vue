@@ -349,10 +349,12 @@ function selectEvent(event) {
         })"
         @click="selectDate(day)"
       >
-        <span :class="[
-          'text-sm font-medium mb-1',
-          size === 'full' || size === 'xl' ? 'text-base' : ''
-        ]">
+        <span
+          :class="[
+            'text-sm font-medium mb-1',
+            size === 'full' || size === 'xl' ? 'text-base' : ''
+          ]"
+        >
           {{ day.dayNumber }}
         </span>
         
@@ -384,8 +386,8 @@ function selectEvent(event) {
             day.events[0].color === 'green' 
               ? 'bg-green-100 text-green-700' 
               : day.events[0].color === 'orange'
-              ? 'bg-orange-100 text-orange-700'
-              : 'bg-gray-100 text-gray-700'
+                ? 'bg-orange-100 text-orange-700'
+                : 'bg-gray-100 text-gray-700'
           ]"
         >
           {{ day.events.length }} {{ day.events.length === 1 ? 'event' : 'events' }}
@@ -428,11 +430,11 @@ function selectEvent(event) {
       class="mt-4 pt-4 border-t flex items-center justify-center gap-6"
     >
       <div class="flex items-center gap-2">
-        <span class="w-3 h-3 rounded-full bg-green-500"></span>
+        <span class="w-3 h-3 rounded-full bg-green-500" />
         <span class="text-xs text-gray-600 font-medium">Complied</span>
       </div>
       <div class="flex items-center gap-2">
-        <span class="w-3 h-3 rounded-full bg-orange-500"></span>
+        <span class="w-3 h-3 rounded-full bg-orange-500" />
         <span class="text-xs text-gray-600 font-medium">Pending</span>
       </div>
     </div>
