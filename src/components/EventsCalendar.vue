@@ -5,14 +5,7 @@ import { ref, computed } from 'vue'
 const props = defineProps({
   events: {
     type: Array,
-    default: () => [
-      { id: 1, title: 'Team Meeting', date: '2025-06-05', time: '10:00 AM', color: 'blue', status: 'complied', description: 'Weekly team sync meeting' },
-      { id: 2, title: 'Project Deadline', date: '2025-06-12', time: '5:00 PM', color: 'red', status: 'pending', description: 'Submit project deliverables' },
-      { id: 3, title: 'Lunch with Client', date: '2025-06-12', time: '12:30 PM', color: 'green', status: 'complied', description: 'Business lunch meeting' },
-      { id: 4, title: 'Code Review', date: '2025-06-18', time: '2:00 PM', color: 'purple', status: 'complied', description: 'Review pull requests' },
-      { id: 5, title: 'Sprint Planning', date: '2025-06-20', time: '9:00 AM', color: 'orange', status: 'pending', description: 'Plan next sprint tasks' },
-      { id: 6, title: 'Workshop', date: '2025-06-20', time: '3:00 PM', color: 'blue', status: 'complied', description: 'Team workshop session' },
-    ]
+    default: () => []
   },
   size: {
     type: String,
@@ -34,6 +27,49 @@ const showEventPanel = ref(false)
 const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
   'July', 'August', 'September', 'October', 'November', 'December']
+
+// Helper Functions - All timezone-safe
+function formatDateToISO(date) {
+  // Format date to YYYY-MM-DD without timezone conversion
+  if (typeof date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(date)) {
+    return date
+  }
+  
+  if (date instanceof Date) {
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`
+  }
+  
+  return null
+}
+
+function parseDateSafe(dateString) {
+  // Parse YYYY-MM-DD string to Date object in local timezone
+  if (!dateString) return null
+  
+  if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+    const [year, month, day] = dateString.split('-').map(Number)
+    return new Date(year, month - 1, day)
+  }
+  
+  return new Date(dateString)
+}
+
+function isSameDay(date1, date2) {
+  if (!date1 || !date2) return false
+  const d1 = date1 instanceof Date ? date1 : parseDateSafe(date1)
+  const d2 = date2 instanceof Date ? date2 : parseDateSafe(date2)
+  return d1.getFullYear() === d2.getFullYear() &&
+         d1.getMonth() === d2.getMonth() &&
+         d1.getDate() === d2.getDate()
+}
+
+function getTodayISO() {
+  const today = new Date()
+  return formatDateToISO(today)
+}
 
 // Computed
 const monthYear = computed(() => {
@@ -58,19 +94,20 @@ const calendarDays = computed(() => {
   const daysInMonth = lastDayOfMonth.getDate()
 
   const days = []
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
+  const todayISO = getTodayISO()
 
   // Previous month days
   const prevMonthLastDay = new Date(year, month, 0).getDate()
   for (let i = startingDayOfWeek - 1; i >= 0; i--) {
     const dayNumber = prevMonthLastDay - i
-    const date = formatDate(new Date(year, month - 1, dayNumber))
+    const dateObj = new Date(year, month - 1, dayNumber)
+    const date = formatDateToISO(dateObj)
     days.push({
       dayNumber,
       date,
+      dateObj,
       isCurrentMonth: false,
-      isToday: false,
+      isToday: date === todayISO,
       events: getEventsForDate(date)
     })
   }
@@ -78,14 +115,14 @@ const calendarDays = computed(() => {
   // Current month days
   for (let i = 1; i <= daysInMonth; i++) {
     const dateObj = new Date(year, month, i)
-    const date = formatDate(dateObj)
-    dateObj.setHours(0, 0, 0, 0)
+    const date = formatDateToISO(dateObj)
 
     days.push({
       dayNumber: i,
       date,
+      dateObj,
       isCurrentMonth: true,
-      isToday: dateObj.getTime() === today.getTime(),
+      isToday: date === todayISO,
       events: getEventsForDate(date)
     })
   }
@@ -93,12 +130,14 @@ const calendarDays = computed(() => {
   // Next month days
   const remainingDays = 42 - days.length
   for (let i = 1; i <= remainingDays; i++) {
-    const date = formatDate(new Date(year, month + 1, i))
+    const dateObj = new Date(year, month + 1, i)
+    const date = formatDateToISO(dateObj)
     days.push({
       dayNumber: i,
       date,
+      dateObj,
       isCurrentMonth: false,
-      isToday: false,
+      isToday: date === todayISO,
       events: getEventsForDate(date)
     })
   }
@@ -114,51 +153,53 @@ const getMonthDays = (year, month) => {
   const daysInMonth = lastDayOfMonth.getDate()
 
   const days = []
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
+  const todayISO = getTodayISO()
 
   const prevMonthLastDay = new Date(year, month, 0).getDate()
   for (let i = startingDayOfWeek - 1; i >= 0; i--) {
     const dayNumber = prevMonthLastDay - i
-    const date = formatDate(new Date(year, month - 1, dayNumber))
+    const dateObj = new Date(year, month - 1, dayNumber)
+    const date = formatDateToISO(dateObj)
     days.push({
       dayNumber,
       date,
+      dateObj,
       isCurrentMonth: false,
-      isToday: false,
+      isToday: date === todayISO,
       events: getEventsForDate(date)
     })
   }
 
   for (let i = 1; i <= daysInMonth; i++) {
     const dateObj = new Date(year, month, i)
-    const date = formatDate(dateObj)
-    dateObj.setHours(0, 0, 0, 0)
+    const date = formatDateToISO(dateObj)
 
     days.push({
       dayNumber: i,
       date,
+      dateObj,
       isCurrentMonth: true,
-      isToday: dateObj.getTime() === today.getTime(),
+      isToday: date === todayISO,
       events: getEventsForDate(date)
     })
   }
 
   const remainingDays = 35 - days.length
   for (let i = 1; i <= remainingDays; i++) {
-    const date = formatDate(new Date(year, month + 1, i))
+    const dateObj = new Date(year, month + 1, i)
+    const date = formatDateToISO(dateObj)
     days.push({
       dayNumber: i,
       date,
+      dateObj,
       isCurrentMonth: false,
-      isToday: false,
+      isToday: date === todayISO,
       events: getEventsForDate(date)
     })
   }
 
   return days.slice(0, 35)
 }
-
 
 const dayViewDate = computed(() => {
   if (viewMode.value !== 'day') return null
@@ -172,17 +213,13 @@ const dayViewDate = computed(() => {
 
 const dayViewEvents = computed(() => {
   if (viewMode.value !== 'day') return []
-  const dateStr = formatDate(currentDate.value)
+  const dateStr = formatDateToISO(currentDate.value)
   return props.events.filter(event => event.date === dateStr).sort((a, b) => {
     return a.time.localeCompare(b.time)
   })
 })
 
 // Methods
-function formatDate(date) {
-  return date.toISOString().split('T')[0]
-}
-
 function getEventsForDate(date) {
   return props.events.filter(event => event.date === date)
 }
@@ -233,7 +270,8 @@ function nextPeriod() {
 
 function selectDate(day) {
   selectedDate.value = day.date
-  currentDate.value = new Date(day.date + 'T00:00:00')
+  // Use the dateObj which is already in local timezone
+  currentDate.value = new Date(day.dateObj)
   viewMode.value = 'day'
   emit('select-date', {
     date: day.date,
@@ -260,7 +298,7 @@ function selectMonth(monthIndex) {
 function setViewMode(mode) {
   viewMode.value = mode
   if (mode === 'day' && !selectedDate.value) {
-    selectedDate.value = formatDate(new Date())
+    selectedDate.value = getTodayISO()
     currentDate.value = new Date()
   }
 }
@@ -273,6 +311,19 @@ function getStatusForDate(date) {
   if (hasPending) return 'pending'
   if (hasComplied) return 'complied'
   return null
+}
+
+function formatEventDate(dateString) {
+  if (!dateString) return ''
+  const date = parseDateSafe(dateString)
+  if (!date) return dateString
+  
+  return date.toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  })
 }
 </script>
 
@@ -404,6 +455,7 @@ function getStatusForDate(date) {
                 <div class="flex items-center gap-2 mb-1">
                   <span class="font-semibold text-gray-900">{{ event.title }}</span>
                   <span
+                    v-if="event.status"
                     class="px-2 py-0.5 text-xs font-medium rounded-full"
                     :class="event.status === 'complied' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'"
                   >
@@ -623,7 +675,7 @@ function getStatusForDate(date) {
           </div>
 
           <!-- Status Badge -->
-          <div>
+          <div v-if="selectedEvent.status">
             <span
               class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium"
               :class="selectedEvent.status === 'complied'
@@ -675,12 +727,7 @@ function getStatusForDate(date) {
                 />
               </svg>
               <span class="text-sm">
-                {{ new Date(selectedEvent.date + 'T00:00:00').toLocaleDateString('en-US', {
-                  weekday: 'long',
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                }) }}
+                {{ formatEventDate(selectedEvent.date) }}
               </span>
             </div>
 
@@ -715,17 +762,12 @@ function getStatusForDate(date) {
             </p>
           </div>
 
-          <!-- Actions -->
+          <!-- Actions (can be customized via slots) -->
           <div class="pt-4 border-t space-y-2">
             <button
               class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
             >
-              Edit Event
-            </button>
-            <button
-              class="w-full px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
-            >
-              Delete Event
+              View Details
             </button>
           </div>
         </div>
