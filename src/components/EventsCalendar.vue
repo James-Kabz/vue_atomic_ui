@@ -312,17 +312,6 @@ const formatSelectedDate = computed(() => {
   })
 })
 
-const dotSize = computed(() => {
-  const sizeMap = {
-    sm: 'sm',
-    default: 'default',
-    lg: 'default',
-    xl: 'lg',
-    full: 'lg'
-  }
-  return sizeMap[props.size] || 'default'
-})
-
 // Methods
 function formatDate(date) {
   return date.toISOString().split('T')[0]
