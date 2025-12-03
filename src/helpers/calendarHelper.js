@@ -267,3 +267,68 @@ export function getMonthName(date, format = 'long') {
 export function getYear(date) {
   return date.getFullYear()
 }
+
+/**
+ * Format file size in human readable format
+ * @param {number} bytes - File size in bytes
+ * @returns {string} Formatted file size
+ */
+export function formatFileSize(bytes) {
+  if (bytes === 0) return '0 Bytes'
+  const k = 1024
+  const sizes = ['Bytes', 'KB', 'MB', 'GB']
+  const i = Math.floor(Math.log(bytes) / Math.log(k))
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
+}
+
+/**
+ * Format date for calendar display (YYYY-MM-DD) without timezone issues
+ * @param {string|Date} dateString - Date to format
+ * @returns {string|null} Formatted date or null
+ */
+export function formatDateForCalendar(dateString) {
+  if (!dateString) return null
+  // If already in YYYY-MM-DD format, return as is
+  if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+    return dateString
+  }
+  // Otherwise parse and format
+  const date = new Date(dateString)
+  if (isNaN(date.getTime())) return null
+  
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
+/**
+ * Format date for display without timezone shift (DD-MMM-YYYY)
+ * @param {string} dateString - Date string to format
+ * @returns {string} Formatted date or 'N/A'
+ */
+export function formatDateDisplay(dateString) {
+  if (!dateString) return 'N/A'
+
+  try {
+    // Handle YYYY-MM-DD format directly without timezone conversion
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+      const [year, month, day] = dateString.split('-')
+      const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                         'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+      return `${day}-${monthNames[parseInt(month) - 1]}-${year}`
+    }
+
+    // Fallback for other date formats
+    const date = new Date(dateString)
+    if (isNaN(date.getTime())) return 'N/A'
+    
+    const day = String(date.getDate()).padStart(2, '0')
+    const month = date.toLocaleString('en-GB', { month: 'short' })
+    const year = date.getFullYear()
+    return `${day}-${month}-${year}`
+  } catch (error) {
+    console.warn('Error formatting date:', error)
+    return 'N/A'
+  }
+}

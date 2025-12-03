@@ -160,10 +160,23 @@ export default {
       return colorMap[color] || 'bg-gray-500 border-gray-600'
     },
     getEventsAtTime(events, timeSlot) {
-      return events.filter(event => {
+      // If events have specific times, filter by time
+      const eventsWithTime = events.filter(event => {
         if (!event.time) return false
+        // Check if time is in HH:MM format
+        if (!/^\d{1,2}:\d{2}/.test(event.time)) return false
         const eventTime = event.time.split(':')[0].padStart(2, '0')
         return timeSlot.time.startsWith(eventTime)
+      })
+      
+      return eventsWithTime
+    },
+    getAllDayEvents(events) {
+      // Return events that don't have a specific time in HH:MM format
+      return events.filter(event => {
+        if (!event.time) return true
+        // If time doesn't match HH:MM format, it's an all-day event
+        return !/^\d{1,2}:\d{2}/.test(event.time)
       })
     }
   }
@@ -348,6 +361,31 @@ export default {
             </div>
           </div>
 
+          <!-- All-Day Events Row -->
+          <div class="grid grid-cols-8 border-b border-gray-200 bg-gray-50 min-h-[60px]">
+            <div class="border-r border-gray-200 px-2 py-1 text-xs text-gray-600 text-right flex items-center justify-end">
+              All Day
+            </div>
+            <div
+              v-for="day in weekViewDays"
+              :key="'allday-' + day.date"
+              class="border-r border-gray-200 p-1 space-y-1"
+              :class="day.isToday ? 'bg-blue-50 bg-opacity-30' : ''"
+            >
+              <div
+                v-for="event in getAllDayEvents(day.events)"
+                :key="event.id"
+                class="rounded border-l-2 p-1 text-xs font-medium text-white cursor-pointer hover:opacity-90 transition-opacity"
+                :class="getEventColorClass(event.color)"
+                @click="selectEvent(event, day)"
+              >
+                <div class="font-semibold truncate">
+                  {{ event.title }}
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- Time Grid -->
           <div class="flex-1 overflow-y-auto">
             <div class="grid grid-cols-8">
@@ -413,6 +451,35 @@ export default {
                 ]"
               >
                 {{ dayViewDate.dayNumber }}
+              </div>
+            </div>
+          </div>
+
+          <!-- All-Day Events Section -->
+          <div 
+            v-if="getAllDayEvents(dayViewDate.events).length > 0"
+            class="border-b border-gray-200 bg-gray-50 p-4"
+          >
+            <h4 class="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-2">
+              All Day Events
+            </h4>
+            <div class="space-y-2">
+              <div
+                v-for="event in getAllDayEvents(dayViewDate.events)"
+                :key="event.id"
+                class="rounded border-l-4 p-3 text-sm font-medium text-white cursor-pointer hover:opacity-90 transition-opacity shadow-sm"
+                :class="getEventColorClass(event.color)"
+                @click="selectEvent(event, dayViewDate)"
+              >
+                <div class="font-semibold">
+                  {{ event.title }}
+                </div>
+                <div
+                  v-if="event.description"
+                  class="text-xs opacity-80 mt-1"
+                >
+                  {{ event.description }}
+                </div>
               </div>
             </div>
           </div>
