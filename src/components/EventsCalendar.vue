@@ -1,186 +1,171 @@
-<script setup>
-import { ref, computed } from 'vue'
+<script>
+import {
+  formatDateToISO,
+  getTodayISO,
+  getMonthCalendarDays,
+  getWeekDays,
+  getWeekBounds,
+  formatEventDate,
+  getTimeSlots,
+  isSameDay,
+  getMonthName,
+  getYear
+} from '../helpers/calendarHelper.js'
 
-// Props
-const props = defineProps({
-  events: {
-    type: Array,
-    default: () => []
+export default {
+  name: 'EventsCalendar',
+  props: {
+    events: {
+      type: Array,
+      default: () => []
+    },
+    size: {
+      type: String,
+      default: 'default'
+    }
   },
-  size: {
-    type: String,
-    default: 'default'
+  emits: ['select-date', 'select-event'],
+  data() {
+    return {
+      currentDate: new Date(),
+      selectedDate: null,
+      viewMode: 'month', // 'month', 'week', 'day'
+      selectedEvent: null,
+      weekDays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+      weekDaysShort: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
+      timeSlots: getTimeSlots(0, 23, 60)
+    }
+  },
+  computed: {
+    displayTitle() {
+      if (this.viewMode === 'day') {
+        return formatEventDate(this.currentDate, 'full')
+      } else if (this.viewMode === 'week') {
+        const { startDate, endDate } = getWeekBounds(this.currentDate)
+        const startMonth = getMonthName(startDate, 'short')
+        const endMonth = getMonthName(endDate, 'short')
+        const year = getYear(this.currentDate)
+        
+        if (startDate.getMonth() === endDate.getMonth()) {
+          return `${startMonth} ${startDate.getDate()} - ${endDate.getDate()}, ${year}`
+        } else {
+          return `${startMonth} ${startDate.getDate()} - ${endMonth} ${endDate.getDate()}, ${year}`
+        }
+      } else {
+        return `${getMonthName(this.currentDate)} ${getYear(this.currentDate)}`
+      }
+    },
+    calendarDays() {
+      const days = getMonthCalendarDays(this.currentDate)
+      return days.map(day => ({
+        ...day,
+        events: this.getEventsForDate(day.date)
+      }))
+    },
+    weekViewDays() {
+      const days = getWeekDays(this.currentDate)
+      return days.map(dateObj => {
+        const date = formatDateToISO(dateObj)
+        return {
+          dateObj,
+          date,
+          dayNumber: dateObj.getDate(),
+          dayName: this.weekDays[dateObj.getDay()],
+          isToday: isSameDay(dateObj, getTodayISO()),
+          events: this.getEventsForDate(date)
+        }
+      })
+    },
+    dayViewDate() {
+      const date = formatDateToISO(this.currentDate)
+      return {
+        dateObj: this.currentDate,
+        date,
+        dayNumber: this.currentDate.getDate(),
+        dayName: this.weekDays[this.currentDate.getDay()],
+        isToday: isSameDay(this.currentDate, getTodayISO()),
+        events: this.getEventsForDate(date)
+      }
+    }
+  },
+  methods: {
+    getEventsForDate(date) {
+      return this.events.filter(event => event.date === date)
+    },
+    previousPeriod() {
+      if (this.viewMode === 'day') {
+        this.currentDate = new Date(
+          this.currentDate.getFullYear(),
+          this.currentDate.getMonth(),
+          this.currentDate.getDate() - 1
+        )
+      } else if (this.viewMode === 'week') {
+        this.currentDate = new Date(
+          this.currentDate.getFullYear(),
+          this.currentDate.getMonth(),
+          this.currentDate.getDate() - 7
+        )
+      } else {
+        this.currentDate = new Date(
+          this.currentDate.getFullYear(),
+          this.currentDate.getMonth() - 1,
+          1
+        )
+      }
+    },
+    nextPeriod() {
+      if (this.viewMode === 'day') {
+        this.currentDate = new Date(
+          this.currentDate.getFullYear(),
+          this.currentDate.getMonth(),
+          this.currentDate.getDate() + 1
+        )
+      } else if (this.viewMode === 'week') {
+        this.currentDate = new Date(
+          this.currentDate.getFullYear(),
+          this.currentDate.getMonth(),
+          this.currentDate.getDate() + 7
+        )
+      } else {
+        this.currentDate = new Date(
+          this.currentDate.getFullYear(),
+          this.currentDate.getMonth() + 1,
+          1
+        )
+      }
+    },
+    goToToday() {
+      this.currentDate = new Date()
+      this.selectedDate = getTodayISO()
+      this.$emit('select-date', { date: this.selectedDate, events: this.getEventsForDate(this.selectedDate) })
+    },
+    selectDay(day) {
+      this.selectedDate = day.date
+      this.$emit('select-date', { date: day.date, events: day.events })
+    },
+    selectEvent(event, day) {
+      this.selectedEvent = event
+      this.selectedDate = day.date
+      this.$emit('select-event', event)
+    },
+    getEventColorClass(color) {
+      const colorMap = {
+        blue: 'bg-blue-500 border-blue-600',
+        red: 'bg-red-500 border-red-600',
+        green: 'bg-green-500 border-green-600',
+        purple: 'bg-purple-500 border-purple-600',
+        orange: 'bg-orange-500 border-orange-600',
+      }
+      return colorMap[color] || 'bg-gray-500 border-gray-600'
+    },
+    getEventsAtTime(events, timeSlot) {
+      return events.filter(event => {
+        if (!event.time) return false
+        const eventTime = event.time.split(':')[0].padStart(2, '0')
+        return timeSlot.time.startsWith(eventTime)
+      })
+    }
   }
-})
-
-// Emits
-const emit = defineEmits(['select-date', 'select-event'])
-
-// State
-const currentDate = ref(new Date())
-const selectedDate = ref(null)
-const viewMode = ref('month') // 'month', 'week', 'day'
-const selectedEvent = ref(null)
-
-// Constants
-const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-
-// Helper Functions
-function formatDateToISO(date) {
-  if (typeof date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(date)) {
-    return date
-  }
-  
-  if (date instanceof Date) {
-    const year = date.getFullYear()
-    const month = String(date.getMonth() + 1).padStart(2, '0')
-    const day = String(date.getDate()).padStart(2, '0')
-    return `${year}-${month}-${day}`
-  }
-  
-  return null
-}
-
-function parseDateSafe(dateString) {
-  if (!dateString) return null
-  
-  if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
-    const [year, month, day] = dateString.split('-').map(Number)
-    return new Date(year, month - 1, day)
-  }
-  
-  return new Date(dateString)
-}
-
-function getTodayISO() {
-  const today = new Date()
-  return formatDateToISO(today)
-}
-
-// Computed
-const monthYear = computed(() => {
-  return currentDate.value.toLocaleDateString('en-US', {
-    month: 'long',
-    year: 'numeric'
-  })
-})
-
-const calendarDays = computed(() => {
-  const year = currentDate.value.getFullYear()
-  const month = currentDate.value.getMonth()
-
-  const firstDayOfMonth = new Date(year, month, 1)
-  const lastDayOfMonth = new Date(year, month + 1, 0)
-
-  const startingDayOfWeek = firstDayOfMonth.getDay()
-  const daysInMonth = lastDayOfMonth.getDate()
-
-  const days = []
-  const todayISO = getTodayISO()
-
-  // Previous month days
-  const prevMonthLastDay = new Date(year, month, 0).getDate()
-  for (let i = startingDayOfWeek - 1; i >= 0; i--) {
-    const dayNumber = prevMonthLastDay - i
-    const dateObj = new Date(year, month - 1, dayNumber)
-    const date = formatDateToISO(dateObj)
-    days.push({
-      dayNumber,
-      date,
-      dateObj,
-      isCurrentMonth: false,
-      isToday: date === todayISO,
-      events: getEventsForDate(date)
-    })
-  }
-
-  // Current month days
-  for (let i = 1; i <= daysInMonth; i++) {
-    const dateObj = new Date(year, month, i)
-    const date = formatDateToISO(dateObj)
-
-    days.push({
-      dayNumber: i,
-      date,
-      dateObj,
-      isCurrentMonth: true,
-      isToday: date === todayISO,
-      events: getEventsForDate(date)
-    })
-  }
-
-  // Next month days
-  const remainingDays = 42 - days.length
-  for (let i = 1; i <= remainingDays; i++) {
-    const dateObj = new Date(year, month + 1, i)
-    const date = formatDateToISO(dateObj)
-    days.push({
-      dayNumber: i,
-      date,
-      dateObj,
-      isCurrentMonth: false,
-      isToday: date === todayISO,
-      events: getEventsForDate(date)
-    })
-  }
-
-  return days
-})
-
-// Methods
-function getEventsForDate(date) {
-  return props.events.filter(event => event.date === date)
-}
-
-function previousPeriod() {
-  currentDate.value = new Date(
-    currentDate.value.getFullYear(),
-    currentDate.value.getMonth() - 1,
-    1
-  )
-}
-
-function nextPeriod() {
-  currentDate.value = new Date(
-    currentDate.value.getFullYear(),
-    currentDate.value.getMonth() + 1,
-    1
-  )
-}
-
-function goToToday() {
-  currentDate.value = new Date()
-  selectedDate.value = getTodayISO()
-}
-
-function selectEvent(event, day) {
-  selectedEvent.value = event
-  selectedDate.value = day.date
-  emit('select-event', event)
-}
-
-function formatEventDate(dateString) {
-  if (!dateString) return ''
-  const date = parseDateSafe(dateString)
-  if (!date) return dateString
-  
-  return date.toLocaleDateString('en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  })
-}
-
-function getEventColorClass(color) {
-  const colorMap = {
-    blue: 'bg-blue-500 border-blue-600',
-    red: 'bg-red-500 border-red-600',
-    green: 'bg-green-500 border-green-600',
-    purple: 'bg-purple-500 border-purple-600',
-    orange: 'bg-orange-500 border-orange-600',
-  }
-  return colorMap[color] || 'bg-gray-500 border-gray-600'
 }
 </script>
 
@@ -238,7 +223,7 @@ function getEventColorClass(color) {
           </div>
 
           <h2 class="text-xl font-semibold text-gray-900 ml-2">
-            {{ monthYear }}
+            {{ displayTitle }}
           </h2>
         </div>
 
@@ -269,58 +254,212 @@ function getEventColorClass(color) {
 
       <!-- Calendar Grid -->
       <div class="flex-1 flex flex-col p-4">
-        <!-- Weekday Headers -->
-        <div class="grid grid-cols-7 border-b border-gray-200">
-          <div
-            v-for="day in weekDays"
-            :key="day"
-            class="text-center text-xs font-semibold text-gray-600 py-3 uppercase tracking-wider"
-          >
-            {{ day }}
+        <!-- Month View -->
+        <div
+          v-if="viewMode === 'month'"
+          class="flex-1 flex flex-col"
+        >
+          <!-- Weekday Headers -->
+          <div class="grid grid-cols-7 border-b border-gray-200">
+            <div
+              v-for="day in weekDays"
+              :key="day"
+              class="text-center text-xs font-semibold text-gray-600 py-3 uppercase tracking-wider"
+            >
+              {{ day }}
+            </div>
+          </div>
+
+          <!-- Days Grid -->
+          <div class="grid grid-cols-7 flex-1 border-l border-t border-gray-200">
+            <div
+              v-for="(day, index) in calendarDays"
+              :key="index"
+              class="border-r border-b border-gray-200 p-1 min-h-[120px] relative cursor-pointer hover:bg-gray-50 transition-colors"
+              :class="[
+                !day.isCurrentMonth ? 'bg-gray-50' : 'bg-white',
+                day.isToday ? 'bg-blue-50' : '',
+                selectedDate === day.date ? 'ring-2 ring-blue-500 ring-inset' : ''
+              ]"
+              @click="selectDay(day)"
+            >
+              <!-- Date Number -->
+              <div class="flex items-center justify-between mb-1 px-1">
+                <span
+                  class="text-sm font-medium"
+                  :class="[
+                    day.isCurrentMonth ? 'text-gray-900' : 'text-gray-400',
+                    day.isToday ? 'bg-blue-600 text-white w-6 h-6 flex items-center justify-center rounded-full text-xs' : ''
+                  ]"
+                >
+                  {{ day.dayNumber }}
+                </span>
+              </div>
+
+              <!-- Events List -->
+              <div class="space-y-1">
+                <div
+                  v-for="(event, eventIndex) in day.events.slice(0, 3)"
+                  :key="eventIndex"
+                  class="text-xs px-2 py-1 rounded cursor-pointer truncate border-l-2 text-white font-medium hover:opacity-90 transition-opacity"
+                  :class="getEventColorClass(event.color)"
+                  @click.stop="selectEvent(event, day)"
+                >
+                  {{ event.title }}
+                </div>
+                
+                <div
+                  v-if="day.events.length > 3"
+                  class="text-xs px-2 py-1 text-gray-600 font-medium cursor-pointer hover:text-gray-900"
+                >
+                  +{{ day.events.length - 3 }} more
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- Days Grid -->
-        <div class="grid grid-cols-7 flex-1 border-l border-t border-gray-200">
-          <div
-            v-for="(day, index) in calendarDays"
-            :key="index"
-            class="border-r border-b border-gray-200 p-1 min-h-[120px] relative"
-            :class="[
-              !day.isCurrentMonth ? 'bg-gray-50' : 'bg-white',
-              day.isToday ? 'bg-blue-50' : ''
-            ]"
-          >
-            <!-- Date Number -->
-            <div class="flex items-center justify-between mb-1 px-1">
-              <span
-                class="text-sm font-medium"
+        <!-- Week View -->
+        <div
+          v-else-if="viewMode === 'week'"
+          class="flex-1 flex flex-col overflow-hidden"
+        >
+          <!-- Day Headers -->
+          <div class="grid grid-cols-8 border-b border-gray-200 bg-gray-50">
+            <div class="border-r border-gray-200 p-2" />
+            <div
+              v-for="day in weekViewDays"
+              :key="day.date"
+              class="text-center p-2 border-r border-gray-200"
+              :class="day.isToday ? 'bg-blue-50' : ''"
+            >
+              <div class="text-xs font-semibold text-gray-600 uppercase">
+                {{ day.dayName }}
+              </div>
+              <div
+                class="text-lg font-bold mt-1"
                 :class="[
-                  day.isCurrentMonth ? 'text-gray-900' : 'text-gray-400',
-                  day.isToday ? 'bg-blue-600 text-white w-6 h-6 flex items-center justify-center rounded-full text-xs' : ''
+                  day.isToday ? 'bg-blue-600 text-white w-8 h-8 flex items-center justify-center rounded-full mx-auto' : 'text-gray-900'
                 ]"
               >
                 {{ day.dayNumber }}
-              </span>
-            </div>
-
-            <!-- Events List -->
-            <div class="space-y-1">
-              <div
-                v-for="(event, eventIndex) in day.events.slice(0, 3)"
-                :key="eventIndex"
-                class="text-xs px-2 py-1 rounded cursor-pointer truncate border-l-2 text-white font-medium hover:opacity-90 transition-opacity"
-                :class="getEventColorClass(event.color)"
-                @click="selectEvent(event, day)"
-              >
-                {{ event.title }}
               </div>
-              
+            </div>
+          </div>
+
+          <!-- Time Grid -->
+          <div class="flex-1 overflow-y-auto">
+            <div class="grid grid-cols-8">
+              <!-- Time Column -->
+              <div class="border-r border-gray-200 bg-gray-50">
+                <div
+                  v-for="slot in timeSlots"
+                  :key="slot.time"
+                  class="h-16 border-b border-gray-200 px-2 py-1 text-xs text-gray-600 text-right"
+                >
+                  {{ slot.display }}
+                </div>
+              </div>
+
+              <!-- Day Columns -->
               <div
-                v-if="day.events.length > 3"
-                class="text-xs px-2 py-1 text-gray-600 font-medium cursor-pointer hover:text-gray-900"
+                v-for="day in weekViewDays"
+                :key="day.date"
+                class="border-r border-gray-200 relative"
               >
-                +{{ day.events.length - 3 }} more
+                <div
+                  v-for="slot in timeSlots"
+                  :key="slot.time"
+                  class="h-16 border-b border-gray-200 hover:bg-gray-50 transition-colors cursor-pointer relative"
+                  :class="day.isToday ? 'bg-blue-50 bg-opacity-30' : ''"
+                >
+                  <!-- Events at this time -->
+                  <div
+                    v-for="event in getEventsAtTime(day.events, slot)"
+                    :key="event.id"
+                    class="absolute inset-x-1 top-1 bottom-1 rounded border-l-2 p-1 text-xs font-medium text-white cursor-pointer hover:opacity-90 transition-opacity overflow-hidden"
+                    :class="getEventColorClass(event.color)"
+                    @click="selectEvent(event, day)"
+                  >
+                    <div class="font-semibold truncate">
+                      {{ event.title }}
+                    </div>
+                    <div class="text-xs opacity-90 truncate">
+                      {{ event.time }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Day View -->
+        <div
+          v-else-if="viewMode === 'day'"
+          class="flex-1 flex flex-col overflow-hidden"
+        >
+          <!-- Day Header -->
+          <div class="border-b border-gray-200 bg-gray-50 p-4">
+            <div class="text-center">
+              <div class="text-sm font-semibold text-gray-600 uppercase">
+                {{ dayViewDate.dayName }}
+              </div>
+              <div
+                class="text-3xl font-bold mt-2"
+                :class="[
+                  dayViewDate.isToday ? 'text-blue-600' : 'text-gray-900'
+                ]"
+              >
+                {{ dayViewDate.dayNumber }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Time Grid -->
+          <div class="flex-1 overflow-y-auto">
+            <div class="flex">
+              <!-- Time Column -->
+              <div class="w-24 border-r border-gray-200 bg-gray-50 flex-shrink-0">
+                <div
+                  v-for="slot in timeSlots"
+                  :key="slot.time"
+                  class="h-16 border-b border-gray-200 px-2 py-1 text-xs text-gray-600 text-right"
+                >
+                  {{ slot.display }}
+                </div>
+              </div>
+
+              <!-- Events Column -->
+              <div class="flex-1 relative">
+                <div
+                  v-for="slot in timeSlots"
+                  :key="slot.time"
+                  class="h-16 border-b border-gray-200 hover:bg-gray-50 transition-colors cursor-pointer relative"
+                  :class="dayViewDate.isToday ? 'bg-blue-50 bg-opacity-30' : ''"
+                >
+                  <!-- Events at this time -->
+                  <div
+                    v-for="event in getEventsAtTime(dayViewDate.events, slot)"
+                    :key="event.id"
+                    class="absolute inset-x-2 top-1 bottom-1 rounded border-l-4 p-2 text-sm font-medium text-white cursor-pointer hover:opacity-90 transition-opacity shadow-sm"
+                    :class="getEventColorClass(event.color)"
+                    @click="selectEvent(event, dayViewDate)"
+                  >
+                    <div class="font-semibold">
+                      {{ event.title }}
+                    </div>
+                    <div class="text-xs opacity-90 mt-1">
+                      {{ event.time }}
+                    </div>
+                    <div
+                      v-if="event.description"
+                      class="text-xs opacity-80 mt-1 line-clamp-2"
+                    >
+                      {{ event.description }}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -433,7 +572,7 @@ function getEventColorClass(color) {
               </svg>
               <div>
                 <p class="text-sm font-medium text-gray-900">
-                  {{ formatEventDate(selectedEvent.date) }}
+                  {{ formatEventDate(selectedEvent.date, 'full') }}
                 </p>
               </div>
             </div>
