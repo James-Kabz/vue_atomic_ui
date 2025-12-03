@@ -89,6 +89,7 @@ export default {
     }
   },
   methods: {
+    formatEventDate,
     getEventsForDate(date) {
       return this.events.filter(event => event.date === date)
     },
