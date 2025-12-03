@@ -24,8 +24,6 @@ const selectedEvent = ref(null)
 
 // Constants
 const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December']
 
 // Helper Functions
 function formatDateToISO(date) {
@@ -205,16 +203,36 @@ function getEventColorClass(color) {
               class="p-2 text-gray-600 hover:bg-gray-100 rounded transition-colors"
               @click="previousPeriod"
             >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 19l-7-7 7-7"
+                />
               </svg>
             </button>
             <button
               class="p-2 text-gray-600 hover:bg-gray-100 rounded transition-colors"
               @click="nextPeriod"
             >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"
+                />
               </svg>
             </button>
           </div>
@@ -323,13 +341,25 @@ function getEventColorClass(color) {
       >
         <!-- Sidebar Header -->
         <div class="px-6 py-4 border-b border-gray-200 flex items-start justify-between">
-          <h3 class="text-lg font-semibold text-gray-900">Event Details</h3>
+          <h3 class="text-lg font-semibold text-gray-900">
+            Event Details
+          </h3>
           <button
             class="text-gray-400 hover:text-gray-600 transition-colors"
             @click="selectedEvent = null"
           >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
         </div>
@@ -388,8 +418,18 @@ function getEventColorClass(color) {
           <!-- Date & Time -->
           <div class="space-y-3 pt-2">
             <div class="flex items-start gap-3">
-              <svg class="w-5 h-5 text-gray-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              <svg
+                class="w-5 h-5 text-gray-400 mt-0.5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                />
               </svg>
               <div>
                 <p class="text-sm font-medium text-gray-900">
@@ -399,31 +439,61 @@ function getEventColorClass(color) {
             </div>
 
             <div class="flex items-start gap-3">
-              <svg class="w-5 h-5 text-gray-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <svg
+                class="w-5 h-5 text-gray-400 mt-0.5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
               </svg>
-              <p class="text-sm text-gray-600">{{ selectedEvent.time }}</p>
+              <p class="text-sm text-gray-600">
+                {{ selectedEvent.time }}
+              </p>
             </div>
           </div>
 
           <!-- Description -->
-          <div v-if="selectedEvent.description" class="pt-4 border-t border-gray-200">
-            <h5 class="text-sm font-semibold text-gray-900 mb-2">Description</h5>
+          <div
+            v-if="selectedEvent.description"
+            class="pt-4 border-t border-gray-200"
+          >
+            <h5 class="text-sm font-semibold text-gray-900 mb-2">
+              Description
+            </h5>
             <p class="text-sm text-gray-600 leading-relaxed">
               {{ selectedEvent.description }}
             </p>
           </div>
 
           <!-- Additional Details from Compliance -->
-          <div v-if="selectedEvent.compliance" class="pt-4 border-t border-gray-200 space-y-3">
-            <h5 class="text-sm font-semibold text-gray-900 mb-2">Compliance Details</h5>
+          <div
+            v-if="selectedEvent.compliance"
+            class="pt-4 border-t border-gray-200 space-y-3"
+          >
+            <h5 class="text-sm font-semibold text-gray-900 mb-2">
+              Compliance Details
+            </h5>
             
-            <div v-if="selectedEvent.compliance.remarks" class="text-sm">
+            <div
+              v-if="selectedEvent.compliance.remarks"
+              class="text-sm"
+            >
               <span class="font-medium text-gray-700">Remarks:</span>
-              <p class="text-gray-600 mt-1">{{ selectedEvent.compliance.remarks }}</p>
+              <p class="text-gray-600 mt-1">
+                {{ selectedEvent.compliance.remarks }}
+              </p>
             </div>
             
-            <div v-if="selectedEvent.compliance.compliance_documents?.length" class="text-sm">
+            <div
+              v-if="selectedEvent.compliance.compliance_documents?.length"
+              class="text-sm"
+            >
               <span class="font-medium text-gray-700">Documents:</span>
               <p class="text-gray-600 mt-1">
                 {{ selectedEvent.compliance.compliance_documents.length }} document(s) attached
