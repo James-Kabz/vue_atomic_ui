@@ -57,14 +57,14 @@ function parseDateSafe(dateString) {
   return new Date(dateString)
 }
 
-function isSameDay(date1, date2) {
-  if (!date1 || !date2) return false
-  const d1 = date1 instanceof Date ? date1 : parseDateSafe(date1)
-  const d2 = date2 instanceof Date ? date2 : parseDateSafe(date2)
-  return d1.getFullYear() === d2.getFullYear() &&
-         d1.getMonth() === d2.getMonth() &&
-         d1.getDate() === d2.getDate()
-}
+// function isSameDay(date1, date2) {
+//   if (!date1 || !date2) return false
+//   const d1 = date1 instanceof Date ? date1 : parseDateSafe(date1)
+//   const d2 = date2 instanceof Date ? date2 : parseDateSafe(date2)
+//   return d1.getFullYear() === d2.getFullYear() &&
+//          d1.getMonth() === d2.getMonth() &&
+//          d1.getDate() === d2.getDate()
+// }
 
 function getTodayISO() {
   const today = new Date()
