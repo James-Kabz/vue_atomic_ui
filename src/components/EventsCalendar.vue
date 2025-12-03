@@ -8,12 +8,12 @@ const props = defineProps({
   events: {
     type: Array,
     default: () => [
-      { id: 1, title: 'Team Meeting', date: '2025-12-05', time: '10:00 AM', color: 'blue' },
-      { id: 2, title: 'Project Deadline', date: '2025-12-12', time: '5:00 PM', color: 'red' },
-      { id: 3, title: 'Lunch with Client', date: '2025-12-12', time: '12:30 PM', color: 'green' },
-      { id: 4, title: 'Code Review', date: '2025-12-18', time: '2:00 PM', color: 'blue' },
-      { id: 5, title: 'Sprint Planning', date: '2025-12-20', time: '9:00 AM', color: 'orange' },
-      { id: 6, title: 'Workshop', date: '2025-12-20', time: '3:00 PM', color: 'blue' },
+      { id: 1, title: 'Team Meeting', date: '2025-06-05', time: '10:00 AM', color: 'blue' },
+      { id: 2, title: 'Project Deadline', date: '2025-06-12', time: '5:00 PM', color: 'red' },
+      { id: 3, title: 'Lunch with Client', date: '2025-06-12', time: '12:30 PM', color: 'green' },
+      { id: 4, title: 'Code Review', date: '2025-06-18', time: '2:00 PM', color: 'purple' },
+      { id: 5, title: 'Sprint Planning', date: '2025-06-20', time: '9:00 AM', color: 'orange' },
+      { id: 6, title: 'Workshop', date: '2025-06-20', time: '3:00 PM', color: 'blue' },
     ]
   },
   size: {
@@ -27,19 +27,134 @@ const emit = defineEmits(['select-date', 'select-event'])
 
 // CVA Variants
 const calendarVariants = cva(
-  'bg-white rounded-3xl shadow-2xl overflow-hidden',
+  'bg-white rounded-xl shadow-lg border border-gray-100',
   {
     variants: {
       size: {
-        sm: 'max-w-xs',
-        default: 'max-w-md',
-        lg: 'max-w-2xl',
-        xl: 'max-w-4xl',
-        full: 'w-full max-w-6xl'
+        sm: 'p-3 max-w-xs',
+        default: 'p-5 max-w-md',
+        lg: 'p-6 max-w-2xl',
+        xl: 'p-8 max-w-4xl',
+        full: 'p-8 w-full max-w-full'
       }
     },
     defaultVariants: {
       size: 'default'
+    }
+  }
+)
+
+const buttonVariants = cva(
+  'inline-flex items-center justify-center rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2',
+  {
+    variants: {
+      variant: {
+        default: 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500',
+        ghost: 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 focus:ring-gray-300',
+        outline: 'border border-gray-300 text-gray-700 hover:bg-gray-50 focus:ring-gray-300'
+      },
+      size: {
+        sm: 'h-8 w-8',
+        default: 'h-10 w-10',
+        lg: 'h-12 w-12'
+      }
+    },
+    defaultVariants: {
+      variant: 'default',
+      size: 'default'
+    }
+  }
+)
+
+const dayVariants = cva(
+  'relative flex flex-col items-center justify-start p-2 rounded-lg cursor-pointer transition-all duration-200',
+  {
+    variants: {
+      isCurrentMonth: {
+        true: 'text-gray-900',
+        false: 'text-gray-300'
+      },
+      isToday: {
+        true: 'bg-blue-50 ring-2 ring-blue-500 ring-inset font-bold',
+        false: ''
+      },
+      isSelected: {
+        true: 'bg-blue-600 text-white hover:bg-blue-700',
+        false: 'hover:bg-gray-100'
+      },
+      hasEvents: {
+        true: '',
+        false: ''
+      },
+      size: {
+        sm: 'min-h-[52px]',
+        default: 'min-h-[60px]',
+        lg: 'min-h-[70px]',
+        xl: 'min-h-[80px]',
+        full: 'min-h-[90px]'
+      }
+    },
+    compoundVariants: [
+      {
+        isSelected: true,
+        isToday: true,
+        class: 'ring-white'
+      }
+    ],
+    defaultVariants: {
+      isCurrentMonth: true,
+      isToday: false,
+      isSelected: false,
+      hasEvents: false,
+      size: 'default'
+    }
+  }
+)
+
+const eventDotVariants = cva(
+  'rounded-full',
+  {
+    variants: {
+      color: {
+        blue: 'bg-blue-500',
+        red: 'bg-red-500',
+        green: 'bg-green-500',
+        purple: 'bg-purple-500',
+        orange: 'bg-orange-500',
+        pink: 'bg-pink-500',
+        yellow: 'bg-yellow-500',
+        gray: 'bg-gray-500'
+      },
+      size: {
+        sm: 'w-1.5 h-1.5',
+        default: 'w-2 h-2',
+        lg: 'w-2.5 h-2.5'
+      }
+    },
+    defaultVariants: {
+      color: 'blue',
+      size: 'default'
+    }
+  }
+)
+
+const eventCardVariants = cva(
+  'p-3 rounded-lg border transition-colors cursor-pointer',
+  {
+    variants: {
+      color: {
+        blue: 'bg-blue-50 border-blue-200 hover:bg-blue-100',
+        red: 'bg-red-50 border-red-200 hover:bg-red-100',
+        green: 'bg-green-50 border-green-200 hover:bg-green-100',
+        purple: 'bg-purple-50 border-purple-200 hover:bg-purple-100',
+        orange: 'bg-orange-50 border-orange-200 hover:bg-orange-100',
+        pink: 'bg-pink-50 border-pink-200 hover:bg-pink-100',
+        yellow: 'bg-yellow-50 border-yellow-200 hover:bg-yellow-100',
+        gray: 'bg-gray-50 border-gray-200 hover:bg-gray-100'
+      }
+    },
+    defaultVariants: {
+      color: 'blue'
     }
   }
 )
@@ -179,7 +294,7 @@ const getMonthDays = (year, month) => {
     })
   }
   
-  return days.slice(0, 35)
+  return days.slice(0, 35) // Only show 5 weeks for year view
 }
 
 const selectedDateEvents = computed(() => {
@@ -193,9 +308,19 @@ const formatSelectedDate = computed(() => {
   return date.toLocaleDateString('en-US', {
     weekday: 'long',
     month: 'long',
-    day: 'numeric',
-    year: 'numeric'
+    day: 'numeric'
   })
+})
+
+const dotSize = computed(() => {
+  const sizeMap = {
+    sm: 'sm',
+    default: 'default',
+    lg: 'default',
+    xl: 'lg',
+    full: 'lg'
+  }
+  return sizeMap[props.size] || 'default'
 })
 
 // Methods
@@ -240,7 +365,6 @@ function nextYear() {
 }
 
 function selectDate(day) {
-  if (!day.isCurrentMonth) return
   selectedDate.value = day.date
   emit('select-date', {
     date: day.date,
@@ -261,202 +385,237 @@ function toggleViewMode() {
   viewMode.value = viewMode.value === 'month' ? 'year' : 'month'
 }
 
-function goToToday() {
-  currentDate.value = new Date()
-  selectedDate.value = formatDate(new Date())
-  viewMode.value = 'month'
-}
-
 function getEventColorForDate(date) {
   const events = getEventsForDate(date)
   if (events.length === 0) return null
   return events[0].color
 }
-
-function isCurrentMonthInYear(monthIndex) {
-  const now = new Date()
-  return monthIndex === now.getMonth() && currentYear.value === now.getFullYear()
-}
 </script>
 
 <template>
   <div :class="calendarVariants({ size })">
-    <!-- Header with gradient -->
-    <div class="bg-gradient-to-br from-slate-700 via-slate-600 to-blue-600 px-6 py-5">
-      <div class="flex items-center justify-between mb-4">
+    <!-- Header with View Toggle -->
+    <div class="flex items-center justify-between mb-4">
+      <button
+        :class="buttonVariants({ variant: 'ghost' })"
+        @click="viewMode === 'month' ? previousMonth() : previousYear()"
+      >
+        <Icon
+          icon="chevron-left"
+          class="w-5 h-5"
+        />
+      </button>
+      
+      <div class="flex items-center gap-3">
         <button
-          @click="viewMode === 'month' ? previousMonth() : previousYear()"
-          class="p-2 hover:bg-white/10 rounded-full transition-all duration-200"
-        >
-          <Icon icon="chevron-left" class="w-5 h-5 text-white" />
-        </button>
-        
-        <button
+          class="text-lg font-semibold text-gray-900 hover:text-blue-600 transition-colors"
           @click="toggleViewMode"
-          class="text-white font-semibold text-xl hover:bg-white/10 px-5 py-2 rounded-full transition-all duration-200"
         >
           {{ viewMode === 'month' ? monthYear : currentYear }}
         </button>
         
-        <button
-          @click="viewMode === 'month' ? nextMonth() : nextYear()"
-          class="p-2 hover:bg-white/10 rounded-full transition-all duration-200"
-        >
-          <Icon icon="chevron-right" class="w-5 h-5 text-white" />
-        </button>
+        <!-- View Mode Switch -->
+        <div class="flex items-center gap-2 px-3 py-1.5 bg-gray-100 rounded-full">
+          <span 
+            class="text-xs font-medium transition-colors"
+            :class="viewMode === 'month' ? 'text-blue-600' : 'text-gray-500'"
+          >
+            Month
+          </span>
+          <button
+            @click="toggleViewMode"
+            class="relative w-11 h-6 bg-blue-600 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            :class="viewMode === 'year' ? 'bg-blue-600' : 'bg-gray-300'"
+          >
+            <span
+              class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-200 ease-in-out"
+              :class="viewMode === 'year' ? 'translate-x-5' : 'translate-x-0'"
+            />
+          </button>
+          <span 
+            class="text-xs font-medium transition-colors"
+            :class="viewMode === 'year' ? 'text-blue-600' : 'text-gray-500'"
+          >
+            Year
+          </span>
+        </div>
       </div>
+      
+      <button
+        :class="buttonVariants({ variant: 'ghost' })"
+        @click="viewMode === 'month' ? nextMonth() : nextYear()"
+      >
+        <Icon
+          icon="chevron-right"
+          class="w-5 h-5"
+        />
+      </button>
+    </div>
 
-      <!-- Weekday headers for month view -->
-      <div v-if="viewMode === 'month'" class="grid grid-cols-7 gap-2">
+    <!-- Month View -->
+    <div v-if="viewMode === 'month'">
+      <!-- Weekday Headers -->
+      <div class="grid grid-cols-7 mb-2">
         <div
           v-for="day in weekDays"
           :key="day"
-          class="text-center text-white/80 text-xs font-semibold uppercase tracking-wider"
+          class="text-center text-sm font-medium text-gray-500 py-2"
         >
           {{ day }}
         </div>
       </div>
-    </div>
 
-    <!-- Month View -->
-    <div v-if="viewMode === 'month'" class="p-5">
-      <div class="grid grid-cols-7 gap-2">
-        <button
+      <!-- Calendar Grid -->
+      <div class="grid grid-cols-7 gap-1">
+        <div
           v-for="(day, index) in calendarDays"
           :key="index"
+          :class="dayVariants({ 
+            isCurrentMonth: day.isCurrentMonth, 
+            isToday: day.isToday,
+            isSelected: day.date === selectedDate,
+            hasEvents: day.events.length > 0,
+            size: size
+          })"
           @click="selectDate(day)"
-          :disabled="!day.isCurrentMonth"
-          class="relative aspect-square rounded-xl flex items-center justify-center text-sm font-medium transition-all duration-200"
-          :class="{
-            'text-gray-300 cursor-not-allowed': !day.isCurrentMonth,
-            'text-gray-800 hover:bg-gray-100 hover:scale-105': day.isCurrentMonth && !day.isToday && day.date !== selectedDate,
-            'bg-blue-50 text-blue-700 ring-2 ring-blue-500 ring-inset font-bold': day.isToday && day.date !== selectedDate,
-            'bg-gradient-to-br from-slate-600 to-blue-600 text-white shadow-lg scale-105 ring-2 ring-blue-400': day.date === selectedDate,
-            'cursor-pointer': day.isCurrentMonth
-          }"
         >
-          <span class="z-10">{{ day.dayNumber }}</span>
+          <!-- Date with event circle indicator -->
+          <div class="relative inline-flex items-center justify-center">
+            <span
+              :class="[
+                'text-sm font-medium mb-1 z-10',
+                size === 'full' || size === 'xl' ? 'text-base' : ''
+              ]"
+            >
+              {{ day.dayNumber }}
+            </span>
+            
+            <!-- Circle indicator for events -->
+            <span
+              v-if="day.events.length > 0"
+              class="absolute inset-0 rounded-full border-2"
+              :class="{
+                'border-blue-500': getEventColorForDate(day.date) === 'blue',
+                'border-red-500': getEventColorForDate(day.date) === 'red',
+                'border-green-500': getEventColorForDate(day.date) === 'green',
+                'border-purple-500': getEventColorForDate(day.date) === 'purple',
+                'border-orange-500': getEventColorForDate(day.date) === 'orange',
+                'border-pink-500': getEventColorForDate(day.date) === 'pink',
+                'border-yellow-500': getEventColorForDate(day.date) === 'yellow',
+                'border-gray-500': getEventColorForDate(day.date) === 'gray',
+              }"
+              style="width: 32px; height: 32px; margin-top: -4px; margin-left: -8px;"
+            />
+          </div>
           
-          <!-- Event indicator dot -->
-          <span
-            v-if="day.events.length > 0 && day.isCurrentMonth"
-            class="absolute bottom-1 w-1 h-1 rounded-full z-10"
-            :class="{
-              'bg-blue-500': getEventColorForDate(day.date) === 'blue' && day.date !== selectedDate,
-              'bg-red-500': getEventColorForDate(day.date) === 'red' && day.date !== selectedDate,
-              'bg-green-500': getEventColorForDate(day.date) === 'green' && day.date !== selectedDate,
-              'bg-purple-500': getEventColorForDate(day.date) === 'purple' && day.date !== selectedDate,
-              'bg-orange-500': getEventColorForDate(day.date) === 'orange' && day.date !== selectedDate,
-              'bg-white': day.date === selectedDate
-            }"
-          />
-        </button>
-      </div>
-
-      <!-- Today button -->
-      <button
-        @click="goToToday"
-        class="w-full mt-6 py-3 bg-gradient-to-r from-slate-600 to-blue-600 text-white rounded-2xl font-semibold hover:shadow-lg hover:scale-[1.02] transition-all duration-200 flex items-center justify-center gap-2"
-      >
-        <Icon icon="calendar" class="w-4 h-4" />
-        Today
-      </button>
-
-      <!-- Selected Date Events -->
-      <div
-        v-if="selectedDateEvents.length > 0"
-        class="mt-6 border-t border-gray-200 pt-6"
-      >
-        <h3 class="text-sm font-bold text-gray-700 mb-3 uppercase tracking-wide">
-          {{ formatSelectedDate }}
-        </h3>
-        <div class="space-y-2">
-          <button
-            v-for="event in selectedDateEvents"
-            :key="event.id"
-            @click="selectEvent(event)"
-            class="w-full text-left p-4 rounded-xl border-2 transition-all duration-200 hover:scale-[1.02] hover:shadow-md"
-            :class="{
-              'bg-blue-50 border-blue-200 hover:border-blue-300': event.color === 'blue',
-              'bg-red-50 border-red-200 hover:border-red-300': event.color === 'red',
-              'bg-green-50 border-green-200 hover:border-green-300': event.color === 'green',
-              'bg-purple-50 border-purple-200 hover:border-purple-300': event.color === 'purple',
-              'bg-orange-50 border-orange-200 hover:border-orange-300': event.color === 'orange',
-            }"
+          <!-- Event count for larger sizes -->
+          <div
+            v-if="day.events.length > 0 && (size === 'full' || size === 'xl')"
+            class="mt-1 text-xs px-1.5 py-0.5 rounded-full"
+            :class="[
+              day.events[0].color === 'green' 
+                ? 'bg-green-100 text-green-700' 
+                : day.events[0].color === 'orange'
+                  ? 'bg-orange-100 text-orange-700'
+                  : 'bg-gray-100 text-gray-700'
+            ]"
           >
-            <div class="flex items-center gap-3">
-              <div
-                class="w-3 h-3 rounded-full flex-shrink-0"
-                :class="{
-                  'bg-blue-500': event.color === 'blue',
-                  'bg-red-500': event.color === 'red',
-                  'bg-green-500': event.color === 'green',
-                  'bg-purple-500': event.color === 'purple',
-                  'bg-orange-500': event.color === 'orange',
-                }"
-              />
-              <div class="flex-1">
-                <p class="font-semibold text-gray-900">{{ event.title }}</p>
-                <p v-if="event.time" class="text-xs text-gray-600 mt-1">{{ event.time }}</p>
-              </div>
-            </div>
-          </button>
+            {{ day.events.length }} {{ day.events.length === 1 ? 'event' : 'events' }}
+          </div>
         </div>
       </div>
     </div>
 
     <!-- Year View -->
-    <div v-else class="p-6">
-      <div class="grid grid-cols-3 gap-6">
-        <button
-          v-for="(monthName, monthIndex) in monthNames"
-          :key="monthIndex"
-          @click="selectMonth(monthIndex)"
-          class="p-4 rounded-2xl transition-all duration-200 hover:shadow-lg hover:scale-105"
-          :class="{
-            'bg-blue-50 ring-2 ring-blue-500': isCurrentMonthInYear(monthIndex),
-            'bg-gray-50 hover:bg-gray-100': !isCurrentMonthInYear(monthIndex)
-          }"
-        >
-          <h3 
-            class="font-bold text-sm mb-3 text-center"
-            :class="{
-              'text-blue-700': isCurrentMonthInYear(monthIndex),
-              'text-gray-700': !isCurrentMonthInYear(monthIndex)
-            }"
+    <div v-else class="grid grid-cols-3 gap-4">
+      <div
+        v-for="(monthName, monthIndex) in monthNames"
+        :key="monthIndex"
+        class="bg-gray-50 rounded-lg p-3 hover:bg-gray-100 transition-colors cursor-pointer"
+        @click="selectMonth(monthIndex)"
+      >
+        <h3 class="text-sm font-semibold text-gray-700 mb-2 text-center">
+          {{ monthName }}
+        </h3>
+        
+        <!-- Mini calendar grid -->
+        <div class="grid grid-cols-7 gap-0.5">
+          <div
+            v-for="(day, dayIndex) in getMonthDays(currentYear, monthIndex)"
+            :key="dayIndex"
+            class="aspect-square flex items-center justify-center relative"
           >
-            {{ monthName }}
-          </h3>
-          
-          <!-- Mini calendar grid -->
-          <div class="grid grid-cols-7 gap-1">
-            <div
-              v-for="(day, dayIndex) in getMonthDays(currentYear, monthIndex)"
-              :key="dayIndex"
-              class="aspect-square flex items-center justify-center relative text-[10px] rounded-md"
-              :class="{
-                'text-gray-300': !day.isCurrentMonth,
-                'text-gray-600': day.isCurrentMonth && !day.isToday,
-                'bg-gradient-to-br from-slate-600 to-blue-600 text-white font-bold': day.isToday
-              }"
+            <span
+              :class="[
+                'text-[10px]',
+                !day.isCurrentMonth ? 'text-gray-300' : 'text-gray-600',
+                day.isToday ? 'font-bold text-blue-600' : ''
+              ]"
             >
               {{ day.dayNumber }}
-              
-              <!-- Mini event dot -->
-              <span
-                v-if="day.events.length > 0 && day.isCurrentMonth && !day.isToday"
-                class="absolute bottom-0 w-0.5 h-0.5 rounded-full"
-                :class="{
-                  'bg-blue-400': getEventColorForDate(day.date) === 'blue',
-                  'bg-red-400': getEventColorForDate(day.date) === 'red',
-                  'bg-green-400': getEventColorForDate(day.date) === 'green',
-                  'bg-purple-400': getEventColorForDate(day.date) === 'purple',
-                  'bg-orange-400': getEventColorForDate(day.date) === 'orange',
-                }"
-              />
-            </div>
+            </span>
+            
+            <!-- Mini circle indicator for events -->
+            <span
+              v-if="day.events.length > 0 && day.isCurrentMonth"
+              class="absolute inset-0 rounded-full border"
+              :class="{
+                'border-blue-400': getEventColorForDate(day.date) === 'blue',
+                'border-red-400': getEventColorForDate(day.date) === 'red',
+                'border-green-400': getEventColorForDate(day.date) === 'green',
+                'border-purple-400': getEventColorForDate(day.date) === 'purple',
+                'border-orange-400': getEventColorForDate(day.date) === 'orange',
+                'border-pink-400': getEventColorForDate(day.date) === 'pink',
+                'border-yellow-400': getEventColorForDate(day.date) === 'yellow',
+                'border-gray-400': getEventColorForDate(day.date) === 'gray',
+              }"
+            />
           </div>
-        </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Selected Date Events -->
+    <div
+      v-if="selectedDateEvents.length > 0 && viewMode === 'month'"
+      class="mt-4 border-t pt-4"
+    >
+      <h3 class="text-sm font-semibold text-gray-700 mb-2">
+        Events for {{ formatSelectedDate }}
+      </h3>
+      <div class="space-y-2">
+        <div
+          v-for="event in selectedDateEvents"
+          :key="event.id"
+          :class="eventCardVariants({ color: event.color })"
+          @click="selectEvent(event)"
+        >
+          <div class="flex items-center gap-2">
+            <span :class="eventDotVariants({ color: event.color, size: 'lg' })" />
+            <span class="font-medium">{{ event.title }}</span>
+          </div>
+          <p
+            v-if="event.time"
+            class="text-xs text-gray-500 mt-1 ml-5"
+          >
+            {{ event.time }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Legend for compliance status -->
+    <div 
+      v-if="(size === 'full' || size === 'xl') && viewMode === 'month'"
+      class="mt-4 pt-4 border-t flex items-center justify-center gap-6"
+    >
+      <div class="flex items-center gap-2">
+        <span class="w-3 h-3 rounded-full bg-green-500" />
+        <span class="text-xs text-gray-600 font-medium">Complied</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="w-3 h-3 rounded-full bg-orange-500" />
+        <span class="text-xs text-gray-600 font-medium">Pending</span>
       </div>
     </div>
   </div>
