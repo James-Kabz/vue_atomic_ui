@@ -312,12 +312,14 @@ export default {
                     :class="[
                       !day.isCurrentMonth ? 'text-gray-300' : 'text-gray-700',
                       day.isToday ? 'bg-blue-600 text-white font-bold' : '',
-                      day.events.length > 0 ? 'font-semibold' : ''
+                      day.events.length > 0 && !day.isToday ? 'bg-red-100 font-semibold text-red-800' : '',
+                      day.events.length > 0 && day.isCurrentMonth ? 'font-bold' : ''
                     ]">
                     {{ day.dayNumber }}
-                    <div v-if="day.events.length > 0" 
-                      class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 rounded-full bg-blue-500"
-                      :class="day.isToday ? 'bg-white' : 'bg-blue-500'" />
+                    <!-- Event indicator dot - more visible -->
+                    <div v-if="day.events.length > 0 && day.isCurrentMonth" 
+                      class="absolute bottom-0.5 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 rounded-full"
+                      :class="day.isToday ? 'bg-white' : 'bg-red-500'" />
                   </div>
                 </div>
               </div>
