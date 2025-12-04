@@ -2,7 +2,7 @@
 import Modal from './Modal.vue'
 import Slider from './Slider.vue'
 import DatePicker from './DatePicker.vue'
-import { ref, watch, computed,  } from 'vue'
+import { ref, watch, computed, } from 'vue'
 import FormField from './FormField.vue'
 import Input from './Input.vue'
 import Textarea from './Textarea.vue'
@@ -176,7 +176,7 @@ const getDefaultValue = (field) => {
 // Populate form data from initialData
 const populateFormData = (data) => {
   const formValues = {}
-  
+
   props.fields.forEach((field) => {
     if (field.name.includes('.')) {
       // Handle nested fields
@@ -188,7 +188,7 @@ const populateFormData = (data) => {
     } else {
       // Handle regular fields
       const value = data?.[field.name]
-      
+
       if (field.type === 'checkbox' || field.type === 'switch') {
         formValues[field.name] = value ?? false
       } else if (field.type === 'number' || field.type === 'slider' || field.type === 'range') {
@@ -204,7 +204,7 @@ const populateFormData = (data) => {
       }
     }
   })
-  
+
   return formValues
 }
 
@@ -260,7 +260,7 @@ const validateForm = () => {
   errors.value = {}
   props.fields.forEach((field) => {
     if (field.required && !field.disabled && field.type !== 'hidden') {
-      const value = field.name.includes('.') 
+      const value = field.name.includes('.')
         ? getNestedValue(formData.value, field.name)
         : formData.value[field.name]
 
@@ -332,7 +332,7 @@ const validateForm = () => {
     }
 
     if (field.validate && typeof field.validate === 'function') {
-      const value = field.name.includes('.') 
+      const value = field.name.includes('.')
         ? getNestedValue(formData.value, field.name)
         : formData.value[field.name]
       const customError = field.validate(value, formData.value)
@@ -390,12 +390,12 @@ const handleSliderChange = (field, value) => {
 
 const handleSubmit = async () => {
   try {
-    // Check if any files are still uploading (excluding multifile as FileUpload handles it internally)
+    // Check if any files are still uploading
     const hasUploadingFiles = props.fields.some(field =>
       field.type !== 'multifile' &&
       uploadingFilesMap.value[field.name]?.length > 0
     )
-    
+
     if (hasUploadingFiles) {
       toast.error('Please wait for all files to finish uploading')
       return
@@ -407,8 +407,10 @@ const handleSubmit = async () => {
     }
 
     const preparedData = {}
+    let hasFiles = false
+
     props.fields.forEach((field) => {
-      const value = field.name.includes('.') 
+      const value = field.name.includes('.')
         ? getNestedValue(formData.value, field.name)
         : formData.value[field.name]
 
@@ -417,6 +419,23 @@ const handleSubmit = async () => {
           setNestedValue(preparedData, field.name, Number(value))
         } else {
           preparedData[field.name] = Number(value)
+        }
+      } else if (field.type === 'file') {
+        if (value instanceof File) {
+          hasFiles = true
+          preparedData[field.name] = value
+        } else if (props.modalType === 'edit') {
+          if (value) {
+            preparedData[field.name] = value
+          }
+        }
+      } else if (field.type === 'multifile') {
+        // Check if array contains File objects
+        if (Array.isArray(value) && value.some(v => v instanceof File)) {
+          hasFiles = true
+          preparedData[field.name] = value
+        } else if (props.modalType === 'edit' && Array.isArray(value) && value.length > 0) {
+          preparedData[field.name] = value
         }
       } else if (field.type === 'text' || field.type === 'textarea' || field.type === 'date' ||
         field.type === 'email' || field.type === 'url' || field.type === 'tel' ||
@@ -428,7 +447,7 @@ const handleSubmit = async () => {
         } else {
           preparedData[field.name] = trimmedValue
         }
-      } else if (field.type === 'password' || field.type === 'file' || field.type === 'multifile') {
+      } else if (field.type === 'password') {
         if (field.name.includes('.')) {
           setNestedValue(preparedData, field.name, value)
         } else {
@@ -443,15 +462,59 @@ const handleSubmit = async () => {
       }
     })
 
+    let finalData = preparedData
+    if (hasFiles) {
+      finalData = convertToFormData(preparedData)
+
+      if (props.modalType === 'edit') {
+        finalData.append('_method', 'PUT')
+      }
+    }
+
     emit('submit', {
-      formData: preparedData,
+      formData: finalData,
       modalType: props.modalType,
       originalData: props.initialData,
+      hasFiles: hasFiles,
     })
   } catch (error) {
     console.error('Error during form submission:', error)
     toast.error('An error occurred during submission')
   }
+}
+
+// Helper function to convert object to FormData
+const convertToFormData = (data) => {
+  const formData = new FormData()
+
+  Object.keys(data).forEach(key => {
+    const value = data[key]
+
+    if (value === null || value === undefined) {
+      return
+    }
+
+    if (value instanceof File) {
+      formData.append(key, value)
+    } else if (Array.isArray(value)) {
+      value.forEach((item, index) => {
+        if (item instanceof File) {
+          formData.append(`${key}[]`, item)
+        } else {
+          formData.append(`${key}[${index}]`, item)
+        }
+      })
+    } else if (typeof value === 'object' && !(value instanceof Date)) {
+      Object.keys(value).forEach(nestedKey => {
+        formData.append(`${key}[${nestedKey}]`, value[nestedKey])
+      })
+    } else {
+      // Regular value
+      formData.append(key, value)
+    }
+  })
+
+  return formData
 }
 
 const handleClose = () => {
@@ -465,7 +528,7 @@ const handleClose = () => {
 
 // Helper to get field value (handles nested fields)
 const getFieldValue = (fieldName) => {
-  return fieldName.includes('.') 
+  return fieldName.includes('.')
     ? getNestedValue(formData.value, fieldName)
     : formData.value[fieldName]
 }
@@ -528,15 +591,8 @@ const handleMultiFileRemoved = (field, files) => {
 </script>
 
 <template>
-  <Modal
-    v-model="isOpen"
-    :show-close="true"
-    :close-on-backdrop="true"
-    :size="modalSize"
-    :class="modalHeight === 'auto' ? '' : modalHeight"
-    :resizable="modalResizable"
-    @close="handleClose"
-  >
+  <Modal v-model="isOpen" :show-close="true" :close-on-backdrop="true" :size="modalSize"
+    :class="modalHeight === 'auto' ? '' : modalHeight" :resizable="modalResizable" @close="handleClose">
     <div class="mb-6">
       <h2 class="text-xl font-semibold text-gray-900">
         {{ modalType === 'create' ? `Add New ${entityName}` : `Edit ${entityName}` }}
@@ -550,259 +606,125 @@ const handleMultiFileRemoved = (field, files) => {
       </p>
     </div>
 
-    <form
-      class="space-y-6 overflow-y-auto"
-      @submit.prevent="handleSubmit"
-    >
-      <div
-        v-for="field in fields"
-        :key="field.name"
-      >
+    <form class="space-y-6 overflow-y-auto" @submit.prevent="handleSubmit">
+      <div v-for="field in fields" :key="field.name">
         <!-- Hidden fields don't need FormField wrapper -->
         <template v-if="field.type === 'hidden'">
-          <input
-            :value="getFieldValue(field.name)"
-            type="hidden"
-          >
+          <input :value="getFieldValue(field.name)" type="hidden">
         </template>
 
-        <FormField
-          v-else
-          :id="`form-${entityName}-${field.name}-${Math.random().toString(36).slice(2, 5)}`"
-          :label="field.label"
-          :required="field.required && !field.disabled"
-          :error="errors[field.name]"
-          :error-message="errors[field.name]"
-        >
+        <FormField v-else :id="`form-${entityName}-${field.name}-${Math.random().toString(36).slice(2, 5)}`"
+          :label="field.label" :required="field.required && !field.disabled" :error="errors[field.name]"
+          :error-message="errors[field.name]">
           <template #default="{ fieldId, hasError, ariaDescribedBy }">
             <!-- Text/Number/Password/Color/Email/Tel/URL/Search Input -->
-            <Input
-              v-if="['text', 'number', 'password', 'color', 'email', 'tel', 'url', 'search'].includes(field.type)"
-              :id="fieldId"
-              :model-value="getFieldValue(field.name)"
-              :type="field.type"
-              :placeholder="field.placeholder"
-              :disabled="isLoading || field.disabled"
-              :readonly="field.disabled"
-              :class="hasError ? 'border-red-500' : 'border-slate-300'"
-              :aria-describedby="ariaDescribedBy"
-              @update:model-value="setFieldValue(field.name, $event)"
-            />
+            <Input v-if="['text', 'number', 'password', 'color', 'email', 'tel', 'url', 'search'].includes(field.type)"
+              :id="fieldId" :model-value="getFieldValue(field.name)" :type="field.type" :placeholder="field.placeholder"
+              :disabled="isLoading || field.disabled" :readonly="field.disabled"
+              :class="hasError ? 'border-red-500' : 'border-slate-300'" :aria-describedby="ariaDescribedBy"
+              @update:model-value="setFieldValue(field.name, $event)" />
 
             <!-- Textarea -->
-            <Textarea
-              v-else-if="field.type === 'textarea'"
-              :id="fieldId"
-              :model-value="getFieldValue(field.name)"
-              :placeholder="field.placeholder"
-              :disabled="isLoading || field.disabled"
-              :rows="field.rows || 3"
-              :class="[
+            <Textarea v-else-if="field.type === 'textarea'" :id="fieldId" :model-value="getFieldValue(field.name)"
+              :placeholder="field.placeholder" :disabled="isLoading || field.disabled" :rows="field.rows || 3" :class="[
                 'w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500',
                 hasError ? 'border-red-500' : 'border-slate-300',
-              ]"
-              :aria-describedby="ariaDescribedBy"
-              @update:model-value="setFieldValue(field.name, $event)"
-            />
+              ]" :aria-describedby="ariaDescribedBy" @update:model-value="setFieldValue(field.name, $event)" />
 
             <!-- Select Dropdown -->
-            <Select
-              v-else-if="field.type === 'select'"
-              :id="fieldId"
-              :model-value="getFieldValue(field.name)"
-              :options="field.options"
-              :placeholder="field.placeholder || 'Select an option'"
-              :disabled="isLoading || field.disabled"
-              :has-error="hasError"
-              :aria-describedby="ariaDescribedBy"
-              @update:model-value="handleSelectChange(field, $event)"
-            />
+            <Select v-else-if="field.type === 'select'" :id="fieldId" :model-value="getFieldValue(field.name)"
+              :options="field.options" :placeholder="field.placeholder || 'Select an option'"
+              :disabled="isLoading || field.disabled" :has-error="hasError" :aria-describedby="ariaDescribedBy"
+              @update:model-value="handleSelectChange(field, $event)" />
 
             <!-- MultiSelect Dropdown -->
-            <MultiSelect
-              v-else-if="field.type === 'multiselect'"
-              :id="fieldId"
-              :model-value="getFieldValue(field.name)"
-              :options="field.options"
-              :disabled="isLoading || field.disabled"
-              :placeholder="field.placeholder || 'Select options'"
-              :has-error="hasError"
-              :aria-describedby="ariaDescribedBy"
-              @update:model-value="setFieldValue(field.name, $event)"
-            />
+            <MultiSelect v-else-if="field.type === 'multiselect'" :id="fieldId" :model-value="getFieldValue(field.name)"
+              :options="field.options" :disabled="isLoading || field.disabled"
+              :placeholder="field.placeholder || 'Select options'" :has-error="hasError"
+              :aria-describedby="ariaDescribedBy" @update:model-value="setFieldValue(field.name, $event)" />
 
             <!-- Combobox -->
-            <Select
-              v-else-if="field.type === 'combobox'"
-              :id="fieldId"
-              :model-value="getFieldValue(field.name)"
-              :options="field.options"
-              :placeholder="field.placeholder || 'Select or type to add new'"
-              :disabled="isLoading || field.disabled"
-              :has-error="hasError"
-              :aria-describedby="ariaDescribedBy"
-              :allow-create="field.allowCreate"
-              @update:model-value="handleSelectChange(field, $event)"
-            />
+            <Select v-else-if="field.type === 'combobox'" :id="fieldId" :model-value="getFieldValue(field.name)"
+              :options="field.options" :placeholder="field.placeholder || 'Select or type to add new'"
+              :disabled="isLoading || field.disabled" :has-error="hasError" :aria-describedby="ariaDescribedBy"
+              :allow-create="field.allowCreate" @update:model-value="handleSelectChange(field, $event)" />
 
             <!-- Checkbox -->
-            <div
-              v-else-if="field.type === 'checkbox'"
-              class="flex items-center"
-            >
-              <Input
-                :id="fieldId"
-                :model-value="getFieldValue(field.name)"
-                type="checkbox"
+            <div v-else-if="field.type === 'checkbox'" class="flex items-center">
+              <Input :id="fieldId" :model-value="getFieldValue(field.name)" type="checkbox"
                 :disabled="isLoading || field.disabled"
                 class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                :aria-describedby="ariaDescribedBy"
-                @update:model-value="setFieldValue(field.name, $event)"
-              />
-              <Label
-                :for="fieldId"
-                class="ml-2 text-sm text-gray-700"
-              >
+                :aria-describedby="ariaDescribedBy" @update:model-value="setFieldValue(field.name, $event)" />
+              <Label :for="fieldId" class="ml-2 text-sm text-gray-700">
                 {{ field.checkboxLabel || field.label }}
               </Label>
             </div>
 
             <!-- Switch (styled checkbox) -->
-            <div
-              v-else-if="field.type === 'switch'"
-              class="flex items-center"
-            >
-              <button
-                :id="fieldId"
-                type="button"
-                role="switch"
-                :aria-checked="getFieldValue(field.name)"
-                :disabled="isLoading || field.disabled"
-                :class="[
+            <div v-else-if="field.type === 'switch'" class="flex items-center">
+              <button :id="fieldId" type="button" role="switch" :aria-checked="getFieldValue(field.name)"
+                :disabled="isLoading || field.disabled" :class="[
                   'relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
                   getFieldValue(field.name) ? 'bg-blue-600' : 'bg-gray-200',
                   (isLoading || field.disabled) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
-                ]"
-                @click="setFieldValue(field.name, !getFieldValue(field.name))"
-              >
-                <span
-                  :class="[
-                    'inline-block h-4 w-4 transform rounded-full bg-white transition-transform',
-                    getFieldValue(field.name) ? 'translate-x-6' : 'translate-x-1'
-                  ]"
-                />
+                ]" @click="setFieldValue(field.name, !getFieldValue(field.name))">
+                <span :class="[
+                  'inline-block h-4 w-4 transform rounded-full bg-white transition-transform',
+                  getFieldValue(field.name) ? 'translate-x-6' : 'translate-x-1'
+                ]" />
               </button>
-              <Label
-                :for="fieldId"
-                class="ml-3 text-sm text-gray-700"
-              >
+              <Label :for="fieldId" class="ml-3 text-sm text-gray-700">
                 {{ field.checkboxLabel || field.label }}
               </Label>
             </div>
 
             <!-- Radio Buttons -->
-            <div
-              v-else-if="field.type === 'radio'"
-              class="space-y-2"
-            >
-              <div
-                v-for="option in field.options"
-                :key="option.value"
-                class="flex items-center"
-              >
-                <Input
-                  :id="`${fieldId}-${option.value}`"
-                  :model-value="getFieldValue(field.name)"
-                  type="radio"
-                  :value="option.value"
-                  :disabled="isLoading || field.disabled"
-                  class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
-                  :aria-describedby="ariaDescribedBy"
-                  @update:model-value="setFieldValue(field.name, $event)"
-                />
-                <Label
-                  :for="`${fieldId}-${option.value}`"
-                  class="ml-2 text-sm text-gray-700"
-                >
+            <div v-else-if="field.type === 'radio'" class="space-y-2">
+              <div v-for="option in field.options" :key="option.value" class="flex items-center">
+                <Input :id="`${fieldId}-${option.value}`" :model-value="getFieldValue(field.name)" type="radio"
+                  :value="option.value" :disabled="isLoading || field.disabled"
+                  class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300" :aria-describedby="ariaDescribedBy"
+                  @update:model-value="setFieldValue(field.name, $event)" />
+                <Label :for="`${fieldId}-${option.value}`" class="ml-2 text-sm text-gray-700">
                   {{ option.label }}
                 </Label>
               </div>
             </div>
 
             <!-- Single File Input -->
-            <div
-              v-else-if="field.type === 'file'"
-              class="w-full"
-            >
-              <FileUpload
-                :multiple="false"
-                :accept="field.accept"
-                :max-size="field.maxSize"
-                :variant="field.variant || 'default'"
-                @files-selected="handleFileSelected(field, $event)"
-                @file-removed="handleFileRemoved(field, $event)"
-              />
+            <div v-else-if="field.type === 'file'" class="w-full">
+              <FileUpload :multiple="false" :accept="field.accept" :max-size="field.maxSize"
+                :variant="field.variant || 'default'" @files-selected="handleFileSelected(field, $event)"
+                @file-removed="handleFileRemoved(field, $event)" />
               <!-- Help text -->
-              <p
-                v-if="field.helpText"
-                class="mt-2 text-xs text-gray-500"
-              >
+              <p v-if="field.helpText" class="mt-2 text-xs text-gray-500">
                 {{ field.helpText }}
               </p>
             </div>
 
             <!-- Multi-File Upload -->
-            <div
-              v-else-if="field.type === 'multifile'"
-              class="w-full"
-            >
-              <FileUpload
-                :multiple="field.multiple !== false"
-                :accept="field.accept"
-                :max-size="field.maxSize"
-                :max-files="field.maxFiles"
-                :variant="field.variant || 'default'"
+            <div v-else-if="field.type === 'multifile'" class="w-full">
+              <FileUpload :multiple="field.multiple !== false" :accept="field.accept" :max-size="field.maxSize"
+                :max-files="field.maxFiles" :variant="field.variant || 'default'"
                 @files-selected="handleMultiFileSelected(field, $event)"
-                @file-removed="handleMultiFileRemoved(field, $event)"
-              />
+                @file-removed="handleMultiFileRemoved(field, $event)" />
               <!-- Help text -->
-              <p
-                v-if="field.helpText"
-                class="mt-2 text-xs text-gray-500"
-              >
+              <p v-if="field.helpText" class="mt-2 text-xs text-gray-500">
                 {{ field.helpText }}
               </p>
             </div>
 
             <!-- Slider -->
-            <Slider
-              v-else-if="field.type === 'slider'"
-              :model-value="getFieldValue(field.name)"
-              :min="field.min"
-              :max="field.max"
-              :step="field.step"
-              :disabled="isLoading || field.disabled"
-              @update:model-value="handleSliderChange(field, $event)"
-            />
+            <Slider v-else-if="field.type === 'slider'" :model-value="getFieldValue(field.name)" :min="field.min"
+              :max="field.max" :step="field.step" :disabled="isLoading || field.disabled"
+              @update:model-value="handleSliderChange(field, $event)" />
 
             <!-- Range (HTML5 native range input) -->
-            <div
-              v-else-if="field.type === 'range'"
-              class="space-y-2"
-            >
+            <div v-else-if="field.type === 'range'" class="space-y-2">
               <div class="flex items-center gap-4">
-                <Input
-                  :id="fieldId"
-                  :model-value="getFieldValue(field.name)"
-                  type="range"
-                  :min="field.min"
-                  :max="field.max"
-                  :step="field.step || 1"
-                  :disabled="isLoading || field.disabled"
-                  class="flex-1"
-                  :aria-describedby="ariaDescribedBy"
-                  @update:model-value="setFieldValue(field.name, $event)"
-                />
+                <Input :id="fieldId" :model-value="getFieldValue(field.name)" type="range" :min="field.min"
+                  :max="field.max" :step="field.step || 1" :disabled="isLoading || field.disabled" class="flex-1"
+                  :aria-describedby="ariaDescribedBy" @update:model-value="setFieldValue(field.name, $event)" />
                 <span class="text-sm font-medium text-gray-700 min-w-[3rem] text-right">
                   {{ getFieldValue(field.name) }}
                 </span>
@@ -810,89 +732,43 @@ const handleMultiFileRemoved = (field, files) => {
             </div>
 
             <!-- Date Picker -->
-            <DatePicker
-              v-else-if="field.type === 'date'"
-              :id="fieldId"
-              :model-value="getFieldValue(field.name)"
-              :disabled="isLoading || field.disabled"
-              :required="field.required"
-              :min="field.min"
-              :max="field.max"
-              :placeholder="field.placeholder || 'Select date'"
-              :format="field.format || 'MM/DD/YYYY'"
-              :clearable="field.clearable !== false"
-              :show-today="field.showToday !== false"
-              :calendar-position="field.calendarPosition || 'left-0 bottom-full'"
-              :aria-describedby="ariaDescribedBy"
-              @update:model-value="setFieldValue(field.name, $event)"
-            />
+            <DatePicker v-else-if="field.type === 'date'" :id="fieldId" :model-value="getFieldValue(field.name)"
+              :disabled="isLoading || field.disabled" :required="field.required" :min="field.min" :max="field.max"
+              :placeholder="field.placeholder || 'Select date'" :format="field.format || 'MM/DD/YYYY'"
+              :clearable="field.clearable !== false" :show-today="field.showToday !== false"
+              :calendar-position="field.calendarPosition || 'left-0 bottom-full'" :aria-describedby="ariaDescribedBy"
+              @update:model-value="setFieldValue(field.name, $event)" />
 
             <!-- Time Input -->
-            <Input
-              v-else-if="field.type === 'time'"
-              :id="fieldId"
-              :model-value="getFieldValue(field.name)"
-              type="time"
-              :disabled="isLoading || field.disabled"
-              :class="hasError ? 'border-red-500' : 'border-slate-300'"
-              :aria-describedby="ariaDescribedBy"
-              @update:model-value="setFieldValue(field.name, $event)"
-            />
+            <Input v-else-if="field.type === 'time'" :id="fieldId" :model-value="getFieldValue(field.name)" type="time"
+              :disabled="isLoading || field.disabled" :class="hasError ? 'border-red-500' : 'border-slate-300'"
+              :aria-describedby="ariaDescribedBy" @update:model-value="setFieldValue(field.name, $event)" />
 
             <!-- DateTime Local Input -->
-            <Input
-              v-else-if="field.type === 'datetime-local'"
-              :id="fieldId"
-              :model-value="getFieldValue(field.name)"
-              type="datetime-local"
-              :disabled="isLoading || field.disabled"
-              :class="hasError ? 'border-red-500' : 'border-slate-300'"
-              :aria-describedby="ariaDescribedBy"
-              @update:model-value="setFieldValue(field.name, $event)"
-            />
+            <Input v-else-if="field.type === 'datetime-local'" :id="fieldId" :model-value="getFieldValue(field.name)"
+              type="datetime-local" :disabled="isLoading || field.disabled"
+              :class="hasError ? 'border-red-500' : 'border-slate-300'" :aria-describedby="ariaDescribedBy"
+              @update:model-value="setFieldValue(field.name, $event)" />
 
             <!-- Month Input -->
-            <Input
-              v-else-if="field.type === 'month'"
-              :id="fieldId"
-              :model-value="getFieldValue(field.name)"
-              type="month"
-              :disabled="isLoading || field.disabled"
-              :class="hasError ? 'border-red-500' : 'border-slate-300'"
-              :aria-describedby="ariaDescribedBy"
-              @update:model-value="setFieldValue(field.name, $event)"
-            />
+            <Input v-else-if="field.type === 'month'" :id="fieldId" :model-value="getFieldValue(field.name)"
+              type="month" :disabled="isLoading || field.disabled"
+              :class="hasError ? 'border-red-500' : 'border-slate-300'" :aria-describedby="ariaDescribedBy"
+              @update:model-value="setFieldValue(field.name, $event)" />
 
             <!-- Week Input -->
-            <Input
-              v-else-if="field.type === 'week'"
-              :id="fieldId"
-              :model-value="getFieldValue(field.name)"
-              type="week"
-              :disabled="isLoading || field.disabled"
-              :class="hasError ? 'border-red-500' : 'border-slate-300'"
-              :aria-describedby="ariaDescribedBy"
-              @update:model-value="setFieldValue(field.name, $event)"
-            />
+            <Input v-else-if="field.type === 'week'" :id="fieldId" :model-value="getFieldValue(field.name)" type="week"
+              :disabled="isLoading || field.disabled" :class="hasError ? 'border-red-500' : 'border-slate-300'"
+              :aria-describedby="ariaDescribedBy" @update:model-value="setFieldValue(field.name, $event)" />
           </template>
         </FormField>
       </div>
 
       <div class="flex justify-end gap-3 pt-6">
-        <Button
-          type="button"
-          variant="outline"
-          :disabled="isLoading"
-          @click="handleClose"
-        >
+        <Button type="button" variant="outline" :disabled="isLoading" @click="handleClose">
           Cancel
         </Button>
-        <Button
-          type="submit"
-          :disabled="isLoading"
-          :loading="isLoading"
-          variant="default"
-        >
+        <Button type="submit" :disabled="isLoading" :loading="isLoading" variant="default">
           {{ modalType === 'create' ? `Create ${entityName}` : `Update ${entityName}` }}
         </Button>
       </div>
