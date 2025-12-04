@@ -29,16 +29,20 @@ export default {
     return {
       currentDate: new Date(),
       selectedDate: null,
-      viewMode: 'month', // 'month', 'week', 'day'
+      viewMode: 'month', // 'year', 'month', 'week', 'day'
       selectedEvent: null,
       weekDays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
       weekDaysShort: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
-      timeSlots: getTimeSlots(0, 23, 60)
+      timeSlots: getTimeSlots(0, 23, 60),
+      monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 
+                   'July', 'August', 'September', 'October', 'November', 'December']
     }
   },
   computed: {
     displayTitle() {
-      if (this.viewMode === 'day') {
+      if (this.viewMode === 'year') {
+        return getYear(this.currentDate)
+      } else if (this.viewMode === 'day') {
         return formatEventDate(this.currentDate, 'full')
       } else if (this.viewMode === 'week') {
         const { startDate, endDate } = getWeekBounds(this.currentDate)
@@ -86,6 +90,21 @@ export default {
         isToday: isSameDay(this.currentDate, getTodayISO()),
         events: this.getEventsForDate(date)
       }
+    },
+    yearViewMonths() {
+      const year = this.currentDate.getFullYear()
+      return this.monthNames.map((monthName, index) => {
+        const monthDate = new Date(year, index, 1)
+        const days = getMonthCalendarDays(monthDate)
+        return {
+          name: monthName,
+          index,
+          days: days.map(day => ({
+            ...day,
+            events: this.getEventsForDate(day.date)
+          }))
+        }
+      })
     }
   },
   methods: {
@@ -94,7 +113,13 @@ export default {
       return this.events.filter(event => event.date === date)
     },
     previousPeriod() {
-      if (this.viewMode === 'day') {
+      if (this.viewMode === 'year') {
+        this.currentDate = new Date(
+          this.currentDate.getFullYear() - 1,
+          0,
+          1
+        )
+      } else if (this.viewMode === 'day') {
         this.currentDate = new Date(
           this.currentDate.getFullYear(),
           this.currentDate.getMonth(),
@@ -115,7 +140,13 @@ export default {
       }
     },
     nextPeriod() {
-      if (this.viewMode === 'day') {
+      if (this.viewMode === 'year') {
+        this.currentDate = new Date(
+          this.currentDate.getFullYear() + 1,
+          0,
+          1
+        )
+      } else if (this.viewMode === 'day') {
         this.currentDate = new Date(
           this.currentDate.getFullYear(),
           this.currentDate.getMonth(),
@@ -155,6 +186,9 @@ export default {
       const [year, month, dayNum] = day.date.split('-').map(Number)
       this.currentDate = new Date(year, month - 1, dayNum)
 
+      // Switch to month view when event is selected
+      this.viewMode = 'month'
+
       this.$emit('select-event', event)
     },
     getEventColorClass(color) {
@@ -182,6 +216,10 @@ export default {
         if (!event.time) return true
         return !/^\d{1,2}:\d{2}/.test(event.time)
       })
+    },
+    selectMonthFromYear(monthIndex) {
+      this.currentDate = new Date(this.currentDate.getFullYear(), monthIndex, 1)
+      this.viewMode = 'month'
     }
   }
 }
@@ -220,6 +258,11 @@ export default {
 
         <div class="flex items-center gap-2">
           <button class="px-3 py-2 text-sm font-medium rounded transition-colors"
+            :class="viewMode === 'year' ? 'bg-blue-100 text-blue-700' : 'text-gray-700 hover:bg-gray-100'"
+            @click="viewMode = 'year'">
+            Year
+          </button>
+          <button class="px-3 py-2 text-sm font-medium rounded transition-colors"
             :class="viewMode === 'month' ? 'bg-blue-100 text-blue-700' : 'text-gray-700 hover:bg-gray-100'"
             @click="viewMode = 'month'">
             Month
@@ -239,6 +282,49 @@ export default {
 
       <!-- Calendar Grid -->
       <div class="flex-1 flex flex-col p-4">
+        <!-- Year View -->
+        <div v-if="viewMode === 'year'" class="flex-1 overflow-y-auto">
+          <div class="grid grid-cols-3 gap-6 pb-6">
+            <div v-for="month in yearViewMonths" :key="month.index" 
+              class="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-shadow cursor-pointer"
+              @click="selectMonthFromYear(month.index)">
+              <!-- Month Header -->
+              <div class="bg-gray-50 px-3 py-2 border-b border-gray-200">
+                <h3 class="text-sm font-semibold text-gray-900 text-center">
+                  {{ month.name }}
+                </h3>
+              </div>
+
+              <!-- Mini Calendar -->
+              <div class="p-2">
+                <!-- Weekday Headers -->
+                <div class="grid grid-cols-7 mb-1">
+                  <div v-for="day in weekDaysShort" :key="day"
+                    class="text-center text-[10px] font-medium text-gray-500">
+                    {{ day }}
+                  </div>
+                </div>
+
+                <!-- Days Grid -->
+                <div class="grid grid-cols-7 gap-0.5">
+                  <div v-for="(day, index) in month.days" :key="index"
+                    class="aspect-square flex items-center justify-center text-[11px] rounded relative"
+                    :class="[
+                      !day.isCurrentMonth ? 'text-gray-300' : 'text-gray-700',
+                      day.isToday ? 'bg-blue-600 text-white font-bold' : '',
+                      day.events.length > 0 ? 'font-semibold' : ''
+                    ]">
+                    {{ day.dayNumber }}
+                    <div v-if="day.events.length > 0" 
+                      class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 rounded-full bg-blue-500"
+                      :class="day.isToday ? 'bg-white' : 'bg-blue-500'" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Month View -->
         <div v-if="viewMode === 'month'" class="flex-1 flex flex-col">
           <!-- Weekday Headers -->
