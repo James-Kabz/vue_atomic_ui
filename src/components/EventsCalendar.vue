@@ -142,11 +142,19 @@ export default {
     },
     selectDay(day) {
       this.selectedDate = day.date
+
+      const [year, month, dayNum] = day.date.split('-').map(Number)
+      this.currentDate = new Date(year, month - 1, dayNum)
+
       this.$emit('select-date', { date: day.date, events: day.events })
     },
     selectEvent(event, day) {
       this.selectedEvent = event
       this.selectedDate = day.date
+
+      const [year, month, dayNum] = day.date.split('-').map(Number)
+      this.currentDate = new Date(year, month - 1, dayNum)
+
       this.$emit('select-event', event)
     },
     getEventColorClass(color) {
@@ -160,10 +168,8 @@ export default {
       return colorMap[color] || 'bg-gray-500 border-gray-600'
     },
     getEventsAtTime(events, timeSlot) {
-      // If events have specific times, filter by time
       const eventsWithTime = events.filter(event => {
         if (!event.time) return false
-        // Check if time is in HH:MM format
         if (!/^\d{1,2}:\d{2}/.test(event.time)) return false
         const eventTime = event.time.split(':')[0].padStart(2, '0')
         return timeSlot.time.startsWith(eventTime)
@@ -172,10 +178,8 @@ export default {
       return eventsWithTime
     },
     getAllDayEvents(events) {
-      // Return events that don't have a specific time in HH:MM format
       return events.filter(event => {
         if (!event.time) return true
-        // If time doesn't match HH:MM format, it's an all-day event
         return !/^\d{1,2}:\d{2}/.test(event.time)
       })
     }
@@ -529,13 +533,6 @@ export default {
             </div>
           </div>
 
-          <!-- Action Buttons -->
-          <div class="px-6 py-4 border-t border-gray-200 space-y-2">
-            <button
-              class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm">
-              View Full Details
-            </button>
-          </div>
         </div>
       </transition>
     </slot>
