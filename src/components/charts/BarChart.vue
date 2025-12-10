@@ -53,6 +53,14 @@ const props = defineProps({
   maxValue: {
     type: Number,
     default: null
+  },
+  xAxisLabel: {
+    type: String,
+    default: ''
+  },
+  yAxisLabel: {
+    type: String,
+    default: ''
   }
 })
 
@@ -71,23 +79,28 @@ const maxDataValue = computed(() => {
   return props.maxValue || Math.max(...props.data)
 })
 
+const chartHeight = computed(() => {
+  return props.height - props.padding.top - props.padding.bottom
+})
+
+const chartWidth = computed(() => {
+  return props.width - props.padding.left - props.padding.right
+})
+
 const barWidth = computed(() => {
-  const availableWidth = props.width - props.padding.left - props.padding.right
-  return availableWidth / props.data.length * 0.7
+  return chartWidth.value / props.data.length * 0.7
 })
 
 const barSpacing = computed(() => {
-  const availableWidth = props.width - props.padding.left - props.padding.right
-  return availableWidth / props.data.length * 0.3
+  return chartWidth.value / props.data.length * 0.3
 })
 
 const yTicks = computed(() => {
   const ticks = []
-  const chartHeight = props.height - props.padding.top - props.padding.bottom
   const numTicks = 5
 
   for (let i = 0; i <= numTicks; i++) {
-    const y = props.padding.top + (chartHeight / numTicks) * i
+    const y = props.padding.top + (chartHeight.value / numTicks) * i
     ticks.push(y)
   }
 
@@ -99,14 +112,12 @@ const getBarX = (index) => {
 }
 
 const getBarY = (value) => {
-  const chartHeight = props.height - props.padding.top - props.padding.bottom
-  const scale = chartHeight / maxDataValue.value
-  return props.padding.top + chartHeight - (value * scale)
+  const scale = chartHeight.value / maxDataValue.value
+  return props.padding.top + chartHeight.value - (value * scale)
 }
 
 const getBarHeight = (value) => {
-  const chartHeight = props.height - props.padding.top - props.padding.bottom
-  const scale = chartHeight / maxDataValue.value
+  const scale = chartHeight.value / maxDataValue.value
   return value * scale
 }
 
@@ -115,8 +126,7 @@ const getBarColor = (index) => {
 }
 
 const getYAxisLabel = (tick) => {
-  const chartHeight = props.height - props.padding.top - props.padding.bottom
-  const value = ((props.height - props.padding.bottom - tick) / chartHeight) * maxDataValue.value
+  const value = ((props.height - props.padding.bottom - tick) / chartHeight.value) * maxDataValue.value
   return Math.round(value)
 }
 
@@ -137,6 +147,11 @@ const handleMouseEnter = (event, value, index) => {
 
 const handleMouseLeave = () => {
   tooltip.value.visible = false
+}
+
+const handleBarClick = (value, index) => {
+  const label = props.labels[index] || `Item ${index + 1}`
+  emit('bar-click', { value, index, label })
 }
 </script>
 
@@ -201,6 +216,7 @@ const handleMouseLeave = () => {
           rx="4"
           @mouseenter="handleMouseEnter($event, value, index)"
           @mouseleave="handleMouseLeave"
+          @click="handleBarClick(value, index)"
         >
           <animate
             attributeName="height"
@@ -211,7 +227,7 @@ const handleMouseLeave = () => {
           />
           <animate
             attributeName="y"
-            :from="padding.top + (height - padding.top - padding.bottom)"
+            :from="padding.top + chartHeight"
             :to="getBarY(value)"
             dur="0.8s"
             fill="freeze"
@@ -233,6 +249,18 @@ const handleMouseLeave = () => {
         </text>
       </g>
 
+      <!-- X-axis title -->
+      <g v-if="xAxisLabel">
+        <text
+          :x="padding.left + chartWidth / 2"
+          :y="height - 10"
+          class="fill-slate-700 text-sm font-semibold"
+          text-anchor="middle"
+        >
+          {{ xAxisLabel }}
+        </text>
+      </g>
+
       <!-- Y-axis labels -->
       <g v-if="showYAxis">
         <text
@@ -244,6 +272,19 @@ const handleMouseLeave = () => {
           text-anchor="end"
         >
           {{ getYAxisLabel(tick) }}
+        </text>
+      </g>
+
+      <!-- Y-axis title -->
+      <g v-if="yAxisLabel">
+        <text
+          :x="-(padding.top + chartHeight / 2)"
+          :y="15"
+          class="fill-slate-700 text-sm font-semibold"
+          text-anchor="middle"
+          transform="rotate(-90)"
+        >
+          {{ yAxisLabel }}
         </text>
       </g>
 
@@ -290,7 +331,7 @@ const handleMouseLeave = () => {
           </p>
         </div>
         <div class="ml-5">
-          <span class="text-2xl font-bold">{{ tooltip.value }}</span>
+          <span class="text-2xl font-bold">{{ tooltip.value }}%</span>
         </div>
         <!-- Tooltip arrow -->
         <div
