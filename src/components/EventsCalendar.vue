@@ -29,7 +29,7 @@ export default {
     return {
       currentDate: new Date(),
       selectedDate: null,
-      viewMode: 'month', // 'year', 'month', 'week', 'day'
+      viewMode: 'month',
       selectedEvent: null,
       weekDays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
       weekDaysShort: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
@@ -186,7 +186,6 @@ export default {
       const [year, month, dayNum] = day.date.split('-').map(Number)
       this.currentDate = new Date(year, month - 1, dayNum)
 
-      // Switch to month view when event is selected
       this.viewMode = 'month'
 
       this.$emit('select-event', event)
@@ -354,19 +353,19 @@ export default {
                   <div
                     v-for="(day, index) in month.days"
                     :key="index"
-                    class="aspect-square flex items-center justify-center text-[11px] rounded relative"
+                    class="aspect-square flex flex-col items-center justify-center text-[11px] rounded relative p-0.5"
                     :class="[
                       !day.isCurrentMonth ? 'text-gray-300' : 'text-gray-700',
                       day.isToday ? 'bg-blue-600 text-white font-bold' : '',
-                      day.events.length > 0 && !day.isToday ? 'bg-red-100 font-semibold text-red-800' : '',
-                      day.events.length > 0 && day.isCurrentMonth ? 'font-bold' : ''
+                      day.events.length > 0 && !day.isToday && day.isCurrentMonth ? 'font-semibold' : ''
                     ]"
                   >
-                    {{ day.dayNumber }}
-                    <!-- Event indicator dot - more visible -->
+                    <span class="leading-none">{{ day.dayNumber }}</span>
+                    
+                    <!-- Event indicator - circular dot -->
                     <div
                       v-if="day.events.length > 0 && day.isCurrentMonth"
-                      class="absolute bottom-0.5 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 rounded-full"
+                      class="mt-0.5 w-1 h-1 rounded-full flex-shrink-0"
                       :class="day.isToday ? 'bg-white' : 'bg-red-500'"
                     />
                   </div>
