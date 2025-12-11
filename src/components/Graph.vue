@@ -1,71 +1,3 @@
-<template>
-  <div :class="cn(graphContainerVariants({ variant, padding }))">
-    <!-- Header Slot -->
-    <div
-      v-if="$slots.header || title || description"
-      :class="cn(headerVariants({ padding }))"
-    >
-      <slot name="header">
-        <div class="flex items-start justify-between">
-          <div class="flex-1 min-w-0">
-            <h3
-              v-if="title"
-              :class="titleClasses"
-            >
-              {{ title }}
-            </h3>
-            <p
-              v-if="description"
-              :class="subtitleClasses"
-            >
-              {{ description }}
-            </p>
-          </div>
-
-          <div
-            v-if="$slots.actions"
-            class="flex-shrink-0 ml-4"
-          >
-            <slot name="actions" />
-          </div>
-        </div>
-      </slot>
-    </div>
-
-    <!-- Filters Slot -->
-    <div
-      v-if="$slots.filters"
-      :class="cn(filtersVariants({ padding }))"
-    >
-      <slot name="filters" />
-    </div>
-
-    <!-- Graph Content -->
-    <div
-      v-if="$slots.default"
-      :class="cn(contentVariants({ padding }))"
-    >
-      <slot />
-    </div>
-
-    <!-- Legend Slot -->
-    <div
-      v-if="$slots.legend"
-      :class="cn(legendVariants({ padding }))"
-    >
-      <slot name="legend" />
-    </div>
-
-    <!-- Footer Slot -->
-    <div
-      v-if="$slots.footer"
-      :class="cn(footerVariants({ padding }))"
-    >
-      <slot name="footer" />
-    </div>
-  </div>
-</template>
-
 <script setup>
 import { cva } from 'class-variance-authority'
 import { cn } from '../utils/cn.js'
@@ -187,3 +119,71 @@ const footerVariants = cva(
 const titleClasses = 'text-lg font-semibold text-slate-900 truncate'
 const subtitleClasses = 'text-sm text-slate-600 mt-1'
 </script>
+
+<template>
+  <div :class="cn(graphContainerVariants({ variant, padding }))">
+    <!-- Header Slot -->
+    <div
+      v-if="$slots.header || title || description"
+      :class="cn(headerVariants({ padding }))"
+    >
+      <slot name="header">
+        <div class="flex items-start justify-between">
+          <div class="flex-1 min-w-0">
+            <h3
+              v-if="title"
+              :class="titleClasses"
+            >
+              {{ title }}
+            </h3>
+            <p
+              v-if="description"
+              :class="subtitleClasses"
+            >
+              {{ description }}
+            </p>
+          </div>
+
+          <div
+            v-if="$slots.actions"
+            class="flex-shrink-0 ml-4"
+          >
+            <slot name="actions" />
+          </div>
+        </div>
+      </slot>
+    </div>
+
+    <!-- Filters Slot -->
+    <div
+      v-if="$slots.filters"
+      :class="cn(filtersVariants({ padding }))"
+    >
+      <slot name="filters" />
+    </div>
+
+    <!-- Graph Content -->
+    <div
+      v-if="$slots.default"
+      :class="cn(contentVariants({ padding }))"
+    >
+      <slot />
+    </div>
+
+    <!-- Legend Slot -->
+    <div
+      v-if="$slots.legend"
+      :class="cn(legendVariants({ padding }))"
+    >
+      <slot name="legend" />
+    </div>
+
+    <!-- Footer Slot -->
+    <div
+      v-if="$slots.footer"
+      :class="cn(footerVariants({ padding }))"
+    >
+      <slot name="footer" />
+    </div>
+  </div>
+</template>
