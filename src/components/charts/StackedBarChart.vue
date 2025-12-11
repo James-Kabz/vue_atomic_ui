@@ -13,11 +13,11 @@ const props = defineProps({
   },
   colors: {
     type: Array,
-    default: () => ['#10b981', '#f97316'], // [complied color, uncomplied color]
+    default: () => ['#f97316', '#10b981'], // [uncomplied color (bottom), complied color (top)]
   },
   stackKeys: {
     type: Array,
-    default: () => ['complied', 'uncomplied']
+    default: () => ['uncomplied', 'complied'] // Bottom to top order
   },
   width: {
     type: Number,
@@ -78,6 +78,7 @@ const tooltip = ref({
   label: '',
   segmentLabel: '',
   value: 0,
+  percentage: 0,
   color: ''
 })
 
@@ -90,12 +91,14 @@ const chartWidth = computed(() => {
 })
 
 const barWidth = computed(() => {
-  return chartWidth.value / props.data.length * 0.7
+  const spacing = Math.min(chartWidth.value / props.data.length * 0.3, 40)
+  return (chartWidth.value - spacing * (props.data.length + 1)) / props.data.length
 })
 
-const barSpacing = computed(() => {
-  return chartWidth.value / props.data.length * 0.3
-})
+const getBarX = (index) => {
+  const spacing = Math.min(chartWidth.value / props.data.length * 0.3, 40)
+  return props.padding.left + spacing + index * (barWidth.value + spacing)
+}
 
 const yTicks = computed(() => {
   const ticks = []
@@ -109,21 +112,19 @@ const yTicks = computed(() => {
   return ticks
 })
 
-const getBarX = (index) => {
-  return props.padding.left + index * (barWidth.value + barSpacing.value) + barSpacing.value / 2
-}
-
+// Calculate the Y position for a segment (from bottom)
 const getSegmentY = (dataIndex, stackIndex) => {
   const item = props.data[dataIndex]
   const scale = chartHeight.value / props.maxValue
   
-  // Calculate cumulative height up to this segment
+  // Calculate cumulative height from bottom up to and including this segment
   let cumulativeValue = 0
-  for (let i = 0; i < stackIndex; i++) {
+  for (let i = 0; i <= stackIndex; i++) {
     const key = props.stackKeys[i]
     cumulativeValue += item[key] || 0
   }
   
+  // Y position is from top, so we subtract from bottom
   return props.padding.top + chartHeight.value - (cumulativeValue * scale)
 }
 
@@ -148,10 +149,17 @@ const formatSegmentLabel = (key) => {
   return key.charAt(0).toUpperCase() + key.slice(1)
 }
 
+const getTotalValue = (dataIndex) => {
+  const item = props.data[dataIndex]
+  return props.stackKeys.reduce((sum, key) => sum + (item[key] || 0), 0)
+}
+
 const handleMouseEnter = (event, dataIndex, stackIndex) => {
   const item = props.data[dataIndex]
   const key = props.stackKeys[stackIndex]
   const value = item[key] || 0
+  const total = getTotalValue(dataIndex)
+  const percentage = total > 0 ? Math.round((value / total) * 100) : 0
   const label = props.labels[dataIndex] || `Item ${dataIndex + 1}`
   const segmentLabel = formatSegmentLabel(key)
 
@@ -162,6 +170,7 @@ const handleMouseEnter = (event, dataIndex, stackIndex) => {
     label,
     segmentLabel,
     value,
+    percentage,
     color: getSegmentColor(stackIndex)
   }
 
@@ -220,17 +229,17 @@ const handleSegmentClick = (dataIndex, stackIndex) => {
           <stop
             offset="0%"
             :stop-color="getSegmentColor(stackIndex)"
-            stop-opacity="1"
+            stop-opacity="0.95"
           />
           <stop
             offset="100%"
             :stop-color="getSegmentColor(stackIndex)"
-            stop-opacity="0.8"
+            stop-opacity="0.85"
           />
         </linearGradient>
       </defs>
 
-      <!-- Stacked Bar Segments -->
+      <!-- Stacked Bar Segments (render bottom to top) -->
       <g>
         <g
           v-for="(item, dataIndex) in data"
@@ -245,8 +254,7 @@ const handleSegmentClick = (dataIndex, stackIndex) => {
             :height="getSegmentHeight(dataIndex, stackIndex)"
             :fill="`url(#stackGradient-${stackIndex})`"
             :class="barClasses"
-            :rx="stackIndex === stackKeys.length - 1 ? 4 : 0"
-            :ry="stackIndex === stackKeys.length - 1 ? 4 : 0"
+            rx="0"
             @mouseenter="handleMouseEnter($event, dataIndex, stackIndex)"
             @mouseleave="handleMouseLeave"
             @click="handleSegmentClick(dataIndex, stackIndex)"
@@ -255,16 +263,16 @@ const handleSegmentClick = (dataIndex, stackIndex) => {
               attributeName="height"
               :from="0"
               :to="getSegmentHeight(dataIndex, stackIndex)"
-              dur="0.8s"
-              :begin="`${stackIndex * 0.1}s`"
+              dur="0.6s"
+              :begin="`${stackIndex * 0.05}s`"
               fill="freeze"
             />
             <animate
               attributeName="y"
               :from="padding.top + chartHeight"
               :to="getSegmentY(dataIndex, stackIndex)"
-              dur="0.8s"
-              :begin="`${stackIndex * 0.1}s`"
+              dur="0.6s"
+              :begin="`${stackIndex * 0.05}s`"
               fill="freeze"
             />
           </rect>
@@ -357,7 +365,7 @@ const handleSegmentClick = (dataIndex, stackIndex) => {
       class="animate-in fade-in duration-200"
     >
       <div class="bg-slate-900 text-white px-4 py-3 rounded-lg shadow-2xl border border-slate-700 min-w-[180px]">
-        <div class="flex items-center gap-2 mb-1">
+        <div class="flex items-center gap-2 mb-2">
           <div
             :style="{ backgroundColor: tooltip.color }"
             class="w-3 h-3 rounded shadow-sm"
