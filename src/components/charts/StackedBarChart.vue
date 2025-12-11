@@ -95,19 +95,13 @@ const groupWidth = computed(() => {
 })
 
 // Spacing between groups
-const groupSpacing = computed(() => {
-  return chartWidth.value / props.data.length * 0.2
-})
+const groupSpacing = computed(() => 0)
 
 // Width of individual bars within a group
-const barWidth = computed(() => {
-  return groupWidth.value / props.groupKeys.length * 0.9
-})
+const barWidth = computed(() => groupWidth.value / props.groupKeys.length)
 
 // Spacing between bars within a group
-const barSpacing = computed(() => {
-  return groupWidth.value / props.groupKeys.length * 0.1
-})
+const barSpacing = computed(() => 0)
 
 const yTicks = computed(() => {
   const ticks = []
@@ -318,17 +312,17 @@ const handleBarClick = (dataIndex, barIndex) => {
       </g>
 
       <!-- Y-axis title -->
-      <g v-if="yAxisLabel">
+        <g v-if="yAxisLabel">
         <text
-          :x="-(padding.top + chartHeight / 2)"
-          :y="15"
-          class="fill-slate-700 text-sm font-semibold"
-          text-anchor="middle"
-          transform="rotate(-90)"
+            :x="-(padding.top + chartHeight / 2)"
+            :y="padding.left - 40"
+            class="fill-slate-700 text-sm font-semibold"
+            text-anchor="middle"
+            transform="rotate(-90)"
         >
-          {{ yAxisLabel }}
+            {{ yAxisLabel }}
         </text>
-      </g>
+        </g>
 
       <!-- Axes lines -->
       <line
