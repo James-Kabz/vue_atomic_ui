@@ -95,7 +95,9 @@ const groupWidth = computed(() => {
 })
 
 // Spacing between groups
-const groupSpacing = computed(() => 0)
+const groupSpacing = computed(() => {
+  return chartWidth.value / props.data.length * 0.2
+})
 
 // Width of individual bars within a group
 const barWidth = computed(() => groupWidth.value / props.groupKeys.length)
