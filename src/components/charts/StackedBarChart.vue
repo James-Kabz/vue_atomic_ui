@@ -13,11 +13,11 @@ const props = defineProps({
   },
   colors: {
     type: Array,
-    default: () => ['#f97316', '#10b981'], // [uncomplied color (bottom), complied color (top)]
+    default: () => ['#f97316', '#10b981'], // [complied color, uncomplied color]
   },
-  stackKeys: {
+  groupKeys: {
     type: Array,
-    default: () => ['uncomplied', 'complied'] // Bottom to top order
+    default: () => ['complied', 'uncomplied'] // Left to right order
   },
   width: {
     type: Number,
@@ -69,16 +69,15 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['bar-click', 'bar-hover', 'segment-click', 'segment-hover'])
+const emit = defineEmits(['bar-click', 'bar-hover'])
 
 const tooltip = ref({
   visible: false,
   x: 0,
   y: 0,
   label: '',
-  segmentLabel: '',
+  barLabel: '',
   value: 0,
-  percentage: 0,
   color: ''
 })
 
@@ -90,15 +89,25 @@ const chartWidth = computed(() => {
   return props.width - props.padding.left - props.padding.right
 })
 
-const barWidth = computed(() => {
-  const spacing = Math.min(chartWidth.value / props.data.length * 0.3, 40)
-  return (chartWidth.value - spacing * (props.data.length + 1)) / props.data.length
+// Width for each group (all bars for one label)
+const groupWidth = computed(() => {
+  return chartWidth.value / props.data.length * 0.8
 })
 
-const getBarX = (index) => {
-  const spacing = Math.min(chartWidth.value / props.data.length * 0.3, 40)
-  return props.padding.left + spacing + index * (barWidth.value + spacing)
-}
+// Spacing between groups
+const groupSpacing = computed(() => {
+  return chartWidth.value / props.data.length * 0.2
+})
+
+// Width of individual bars within a group
+const barWidth = computed(() => {
+  return groupWidth.value / props.groupKeys.length * 0.9
+})
+
+// Spacing between bars within a group
+const barSpacing = computed(() => {
+  return groupWidth.value / props.groupKeys.length * 0.1
+})
 
 const yTicks = computed(() => {
   const ticks = []
@@ -112,32 +121,29 @@ const yTicks = computed(() => {
   return ticks
 })
 
-// Calculate the Y position for a segment (from bottom)
-const getSegmentY = (dataIndex, stackIndex) => {
-  const item = props.data[dataIndex]
-  const scale = chartHeight.value / props.maxValue
-  
-  // Calculate cumulative height from bottom up to and including this segment
-  let cumulativeValue = 0
-  for (let i = 0; i <= stackIndex; i++) {
-    const key = props.stackKeys[i]
-    cumulativeValue += item[key] || 0
-  }
-  
-  // Y position is from top, so we subtract from bottom
-  return props.padding.top + chartHeight.value - (cumulativeValue * scale)
+// Get X position for the start of a group
+const getGroupX = (dataIndex) => {
+  return props.padding.left + dataIndex * (groupWidth.value + groupSpacing.value) + groupSpacing.value / 2
 }
 
-const getSegmentHeight = (dataIndex, stackIndex) => {
-  const item = props.data[dataIndex]
-  const key = props.stackKeys[stackIndex]
-  const value = item[key] || 0
+// Get X position for a specific bar within a group
+const getBarX = (dataIndex, barIndex) => {
+  const groupX = getGroupX(dataIndex)
+  return groupX + barIndex * (barWidth.value + barSpacing.value)
+}
+
+const getBarY = (value) => {
+  const scale = chartHeight.value / props.maxValue
+  return props.padding.top + chartHeight.value - (value * scale)
+}
+
+const getBarHeight = (value) => {
   const scale = chartHeight.value / props.maxValue
   return value * scale
 }
 
-const getSegmentColor = (stackIndex) => {
-  return props.colors[stackIndex % props.colors.length]
+const getBarColor = (barIndex) => {
+  return props.colors[barIndex % props.colors.length]
 }
 
 const getYAxisLabel = (tick) => {
@@ -145,49 +151,41 @@ const getYAxisLabel = (tick) => {
   return Math.round(value)
 }
 
-const formatSegmentLabel = (key) => {
+const formatBarLabel = (key) => {
   return key.charAt(0).toUpperCase() + key.slice(1)
 }
 
-const getTotalValue = (dataIndex) => {
+const handleMouseEnter = (event, dataIndex, barIndex) => {
   const item = props.data[dataIndex]
-  return props.stackKeys.reduce((sum, key) => sum + (item[key] || 0), 0)
-}
-
-const handleMouseEnter = (event, dataIndex, stackIndex) => {
-  const item = props.data[dataIndex]
-  const key = props.stackKeys[stackIndex]
+  const key = props.groupKeys[barIndex]
   const value = item[key] || 0
-  const total = getTotalValue(dataIndex)
-  const percentage = total > 0 ? Math.round((value / total) * 100) : 0
   const label = props.labels[dataIndex] || `Item ${dataIndex + 1}`
-  const segmentLabel = formatSegmentLabel(key)
+  const barLabel = formatBarLabel(key)
 
   tooltip.value = {
     visible: true,
     x: event.clientX,
     y: event.clientY,
     label,
-    segmentLabel,
+    barLabel,
     value,
-    percentage,
-    color: getSegmentColor(stackIndex)
+    color: getBarColor(barIndex)
   }
 
-  emit('segment-hover', { dataIndex, stackIndex, key, value, label })
+  emit('bar-hover', { dataIndex, barIndex, key, value, label })
 }
 
 const handleMouseLeave = () => {
   tooltip.value.visible = false
 }
 
-const handleSegmentClick = (dataIndex, stackIndex) => {
+const handleBarClick = (dataIndex, barIndex) => {
   const item = props.data[dataIndex]
-  const key = props.stackKeys[stackIndex]
+  const key = props.groupKeys[barIndex]
   const value = item[key] || 0
   const label = props.labels[dataIndex] || `Item ${dataIndex + 1}`
 
-  emit('segment-click', { dataIndex, stackIndex, key, value, label })
+  emit('bar-click', { dataIndex, barIndex, key, value, label })
 }
 </script>
 
@@ -215,12 +213,12 @@ const handleSegmentClick = (dataIndex, stackIndex) => {
         />
       </g>
 
-      <!-- Gradients for each segment type -->
+      <!-- Gradients for each bar type -->
       <defs>
         <linearGradient
-          v-for="(key, stackIndex) in stackKeys"
-          :id="`stackGradient-${stackIndex}`"
-          :key="`gradient-${stackIndex}`"
+          v-for="(key, barIndex) in groupKeys"
+          :id="`barGradient-${barIndex}`"
+          :key="`gradient-${barIndex}`"
           x1="0%"
           y1="0%"
           x2="0%"
@@ -228,63 +226,63 @@ const handleSegmentClick = (dataIndex, stackIndex) => {
         >
           <stop
             offset="0%"
-            :stop-color="getSegmentColor(stackIndex)"
+            :stop-color="getBarColor(barIndex)"
             stop-opacity="0.95"
           />
           <stop
             offset="100%"
-            :stop-color="getSegmentColor(stackIndex)"
+            :stop-color="getBarColor(barIndex)"
             stop-opacity="0.85"
           />
         </linearGradient>
       </defs>
 
-      <!-- Stacked Bar Segments (render bottom to top) -->
+      <!-- Grouped Bars -->
       <g>
         <g
           v-for="(item, dataIndex) in data"
           :key="`bar-group-${dataIndex}`"
         >
           <rect
-            v-for="(key, stackIndex) in stackKeys"
-            :key="`segment-${dataIndex}-${stackIndex}`"
-            :x="getBarX(dataIndex)"
-            :y="getSegmentY(dataIndex, stackIndex)"
+            v-for="(key, barIndex) in groupKeys"
+            :key="`bar-${dataIndex}-${barIndex}`"
+            :x="getBarX(dataIndex, barIndex)"
+            :y="getBarY(item[key] || 0)"
             :width="barWidth"
-            :height="getSegmentHeight(dataIndex, stackIndex)"
-            :fill="`url(#stackGradient-${stackIndex})`"
+            :height="getBarHeight(item[key] || 0)"
+            :fill="`url(#barGradient-${barIndex})`"
             :class="barClasses"
-            rx="0"
-            @mouseenter="handleMouseEnter($event, dataIndex, stackIndex)"
+            rx="4"
+            @mouseenter="handleMouseEnter($event, dataIndex, barIndex)"
             @mouseleave="handleMouseLeave"
-            @click="handleSegmentClick(dataIndex, stackIndex)"
+            @click="handleBarClick(dataIndex, barIndex)"
           >
             <animate
               attributeName="height"
               :from="0"
-              :to="getSegmentHeight(dataIndex, stackIndex)"
+              :to="getBarHeight(item[key] || 0)"
               dur="0.6s"
-              :begin="`${stackIndex * 0.05}s`"
+              :begin="`${barIndex * 0.1}s`"
               fill="freeze"
             />
             <animate
               attributeName="y"
               :from="padding.top + chartHeight"
-              :to="getSegmentY(dataIndex, stackIndex)"
+              :to="getBarY(item[key] || 0)"
               dur="0.6s"
-              :begin="`${stackIndex * 0.05}s`"
+              :begin="`${barIndex * 0.1}s`"
               fill="freeze"
             />
           </rect>
         </g>
       </g>
 
-      <!-- X-axis labels -->
+      <!-- X-axis labels (centered under each group) -->
       <g v-if="showXAxis">
         <text
           v-for="(label, index) in labels"
           :key="`xlabel-${index}`"
-          :x="getBarX(index) + barWidth / 2"
+          :x="getGroupX(index) + groupWidth / 2"
           :y="height - padding.bottom + 20"
           :class="axisLabelClasses"
           text-anchor="middle"
@@ -375,7 +373,7 @@ const handleSegmentClick = (dataIndex, stackIndex) => {
           </p>
         </div>
         <div class="ml-5">
-          <p class="text-xs text-slate-300 mb-1">{{ tooltip.segmentLabel }}</p>
+          <p class="text-xs text-slate-300 mb-1">{{ tooltip.barLabel }}</p>
           <span class="text-2xl font-bold">{{ tooltip.value }}%</span>
         </div>
         <!-- Tooltip arrow -->
