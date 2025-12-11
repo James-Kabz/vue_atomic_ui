@@ -95,6 +95,7 @@ export { cn } from "./utils/cn.js"
 import "./styles/base.css"
 import Loader from "./components/Loader.vue"
 import EventsCalendar from "./components/EventsCalendar.vue"
+import StackedBarChart from "./components/charts/StackedBarChart.vue"
 
 const components = {
   Avatar,
@@ -152,6 +153,7 @@ const components = {
   TabPanel,
   BarChart,
   LineChart,
+  StackedBarChart,
   GraphFilters,
   Accordion,
   AccordionItem,
@@ -253,6 +255,7 @@ export {
   BarChart,
   GraphFilters,
   LineChart,
+  StackedBarChart,
   Stepper,
   StepperItem,
   Tab,
