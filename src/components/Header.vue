@@ -162,6 +162,57 @@ const checkMobile = () => {
   isMobile.value = window.innerWidth < 768
 }
 
+const getNotificationTypeClass = (type) => {
+  const classes = {
+    'due_date_reminder': 'bg-amber-100 text-amber-600',
+    'info': 'bg-blue-100 text-blue-600',
+    'success': 'bg-green-100 text-green-600',
+    'warning': 'bg-yellow-100 text-yellow-600',
+    'error': 'bg-red-100 text-red-600'
+  }
+  
+  return classes[type] || classes.info
+}
+
+const formatModelName = (model) => {
+  if (!model) return ''
+  
+  const parts = model.split('\\')
+  const modelName = parts[parts.length - 1]
+  
+  return modelName
+    .replace(/([A-Z])/g, ' $1')
+    .trim()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ')
+}
+
+const formatDueDate = (dateString) => {
+  if (!dateString) return ''
+  
+  const date = new Date(dateString)
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  
+  const dueDate = new Date(date)
+  dueDate.setHours(0, 0, 0, 0)
+  
+  const diffTime = dueDate - today
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+  
+  if (diffDays === 0) return 'Due Today'
+  if (diffDays === 1) return 'Due Tomorrow'
+  if (diffDays < 0) return `${Math.abs(diffDays)} days overdue`
+  if (diffDays <= 7) return `Due in ${diffDays} days`
+  
+  return date.toLocaleDateString('en-KE', { 
+    month: 'short', 
+    day: 'numeric',
+    year: date.getFullYear() !== today.getFullYear() ? 'numeric' : undefined
+  })
+}
+
 onMounted(() => {
   document.addEventListener('click', handleClickOutside)
   checkMobile()
@@ -529,7 +580,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
         </button>
 
         <!-- Notifications Dropdown -->
-        <transition
+          <transition
           enter-active-class="transition-all duration-300 ease-out"
           leave-active-class="transition-all duration-300 ease-in"
           enter-from-class="opacity-0 translate-y-2 scale-95"
@@ -539,13 +590,17 @@ watch(searchQuery, (newValue) => emit('search', newValue))
         >
           <div
             v-if="showNotificationsDropdown"
-            class="absolute right-4 md:right-6 top-16 mt-2 w-72 md:w-80 bg-white rounded-xl shadow-xl border border-gray-200 z-50"
+            class="absolute right-4 md:right-6 top-16 mt-2 w-80 md:w-96 bg-white rounded-xl shadow-xl border border-gray-200 z-50"
           >
             <div class="p-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
               <h3 class="text-base font-bold text-gray-900">
                 {{ notificationsTitle }}
               </h3>
+              <p v-if="notificationCount > 0" class="text-xs text-gray-600 mt-1">
+                You have {{ notificationCount }} unread notification{{ notificationCount > 1 ? 's' : '' }}
+              </p>
             </div>
+            
             <div class="max-h-96 overflow-y-auto">
               <div
                 v-if="notifications.length === 0"
@@ -568,6 +623,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                   No notifications
                 </p>
               </div>
+              
               <div
                 v-for="notification in notifications"
                 v-else
@@ -579,35 +635,117 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                 @click="handleNotificationClick(notification)"
               >
                 <div class="flex items-start space-x-3">
-                  <!-- Only show blue dot for unread notifications -->
+                  <!-- Notification Type Icon -->
                   <div 
-                    v-if="!notification.read"
-                    class="shrink-0 w-2 h-2 mt-2 bg-blue-500 rounded-full" 
-                  />
-                  <div 
-                    v-else
-                    class="shrink-0 w-2 h-2 mt-2"
-                  />
-                  <div class="flex-1">
-                    <p class="text-sm font-medium text-gray-900">
-                      {{ notification.title }}
-                    </p>
-                    <p class="text-xs text-gray-500 mt-1">
+                    :class="[
+                      'shrink-0 w-9 h-9 rounded-lg flex items-center justify-center',
+                      getNotificationTypeClass(notification.type)
+                    ]"
+                  >
+                    <svg
+                      v-if="notification.type === 'due_date_reminder' && notification.title.includes('Overdue')"
+                      class="w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                    <svg
+                      v-else-if="notification.type === 'due_date_reminder'"
+                      class="w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                    <svg
+                      v-else
+                      class="w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"
+                      />
+                    </svg>
+                  </div>
+                  
+                  <div class="flex-1 min-w-0">
+                    <!-- Notification Title -->
+                    <div class="flex items-start justify-between gap-2">
+                      <p class="text-sm font-semibold text-gray-900 flex-1">
+                        {{ notification.title }}
+                      </p>
+                      <!-- Unread indicator -->
+                      <div 
+                        v-if="!notification.read"
+                        class="shrink-0 w-2 h-2 mt-1.5 bg-blue-500 rounded-full" 
+                      />
+                    </div>
+                    
+                    <!-- Model/Type Badge -->
+                    <div class="flex items-center gap-2 mt-1.5">
+                      <span 
+                        v-if="notification.model"
+                        class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800"
+                      >
+                        {{ formatModelName(notification.model) }}
+                      </span>
+                      
+                      <!-- Due Date Badge -->
+                      <span 
+                        v-if="notification.due_date"
+                        :class="[
+                          'inline-flex items-center px-2 py-0.5 rounded text-xs font-medium',
+                          notification.title.includes('Overdue') 
+                            ? 'bg-red-100 text-red-800' 
+                            : 'bg-amber-100 text-amber-800'
+                        ]"
+                      >
+                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                          <path
+                            fill-rule="evenodd"
+                            d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                        {{ formatDueDate(notification.due_date) }}
+                      </span>
+                    </div>
+                    
+                    <!-- Time -->
+                    <p class="text-xs text-gray-500 mt-1.5 flex items-center">
+                      <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          fill-rule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
                       {{ notification.time }}
                     </p>
                   </div>
                 </div>
               </div>
             </div>
+            
             <div
               v-if="notifications.length > 0"
-              class="p-3 text-center border-t border-gray-200"
+              class="p-3 text-center border-t border-gray-200 bg-gray-50"
             >
               <button
-                class="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"
+                class="text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors"
                 @click="handleViewAllNotifications"
               >
-                View all notifications
+                View all notifications →
               </button>
             </div>
           </div>
