@@ -162,7 +162,15 @@ const checkMobile = () => {
   isMobile.value = window.innerWidth < 768
 }
 
-const getNotificationTypeClass = (type) => {
+const getNotificationTypeClass = (notification) => {
+  if (notification.title.includes('Overdue')) {
+    return 'bg-red-100 text-red-600'
+  }
+  
+  if (notification.title.includes('Due in 0')) {
+    return 'bg-orange-100 text-orange-600'
+  }
+  
   const classes = {
     'due_date_reminder': 'bg-amber-100 text-amber-600',
     'info': 'bg-blue-100 text-blue-600',
@@ -171,8 +179,9 @@ const getNotificationTypeClass = (type) => {
     'error': 'bg-red-100 text-red-600'
   }
   
-  return classes[type] || classes.info
+  return classes[notification.type] || classes.info
 }
+
 
 const formatModelName = (model) => {
   if (!model) return ''
@@ -639,11 +648,11 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                   <div 
                     :class="[
                       'shrink-0 w-9 h-9 rounded-lg flex items-center justify-center',
-                      getNotificationTypeClass(notification.type)
+                      getNotificationTypeClass(notification)
                     ]"
                   >
                     <svg
-                      v-if="notification.type === 'due_date_reminder' && notification.title.includes('Overdue')"
+                      v-if="notification.title.includes('Overdue')"
                       class="w-5 h-5"
                       fill="currentColor"
                       viewBox="0 0 20 20"
@@ -691,12 +700,33 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                       />
                     </div>
                     
-                    <!-- Model/Type Badge -->
-                    <div class="flex items-center gap-2 mt-1.5">
+                    <div 
+                      v-if="notification.source"
+                      class="flex items-center gap-1.5 mt-1.5"
+                    >
+                      <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-indigo-100 text-indigo-800 border border-indigo-200">
+                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1.323l3.954 1.582 1.599-.8a1 1 0 01.894 1.79l-1.233.616 1.738 5.42a1 1 0 01-.285 1.05A3.989 3.989 0 0115 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.715-5.349L11 6.477V16h2a1 1 0 110 2H7a1 1 0 110-2h2V6.477L6.237 7.582l1.715 5.349a1 1 0 01-.285 1.05A3.989 3.989 0 015 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.738-5.42-1.233-.617a1 1 0 01.894-1.788l1.599.799L9 4.323V3a1 1 0 011-1zm-5 8.274l-.818 2.552c.25.112.526.174.818.174.292 0 .569-.062.818-.174L5 10.274zm10 0l-.818 2.552c.25.112.526.174.818.174.292 0 .569-.062.818-.174L15 10.274z" clip-rule="evenodd"/>
+                        </svg>
+                        {{ notification.source.body_code }}
+                      </span>
+                      <svg class="w-3 h-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+                      </svg>
+                      <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-700 border border-gray-200">
+                        {{ notification.source.code }}
+                      </span>
+                    </div>
+                    
+                    <!-- Model & Due Date Badges -->
+                    <div class="flex items-center gap-2 mt-2">
                       <span 
                         v-if="notification.model"
                         class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800"
                       >
+                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"/>
+                        </svg>
                         {{ formatModelName(notification.model) }}
                       </span>
                       
@@ -706,8 +736,10 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                         :class="[
                           'inline-flex items-center px-2 py-0.5 rounded text-xs font-medium',
                           notification.title.includes('Overdue') 
-                            ? 'bg-red-100 text-red-800' 
-                            : 'bg-amber-100 text-amber-800'
+                            ? 'bg-red-100 text-red-800 border border-red-200' 
+                            : notification.title.includes('Due in 0')
+                            ? 'bg-orange-100 text-orange-800 border border-orange-200'
+                            : 'bg-amber-100 text-amber-800 border border-amber-200'
                         ]"
                       >
                         <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -722,7 +754,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                     </div>
                     
                     <!-- Time -->
-                    <p class="text-xs text-gray-500 mt-1.5 flex items-center">
+                    <p class="text-xs text-gray-500 mt-2 flex items-center">
                       <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                         <path
                           fill-rule="evenodd"
