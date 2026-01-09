@@ -188,7 +188,7 @@ const headerVariants = cva(
   }
 )
 
-const chevronVariants = cva('ml-4 flex-shrink-0 text-slate-400 transition-all duration-200', {
+const chevronVariants = cva('ml-4 shrink-0 text-slate-400 transition-all duration-200', {
   variants: {
     expanded: {
       true: 'rotate-180 text-blue-500',

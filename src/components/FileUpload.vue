@@ -215,7 +215,7 @@ const formatFileSize = (bytes) => {
             size="sm"
             variant="default"
             :dynamic-color="true"
-            class="flex-shrink-0"
+            class="shrink-0"
           />
           <div class="flex flex-col">
             <span class="text-sm font-medium text-gray-900">{{ fileItem.file.name }}</span>

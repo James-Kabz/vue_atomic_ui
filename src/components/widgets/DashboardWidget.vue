@@ -255,7 +255,7 @@ onUnmounted(() => {
   >
     <div
       v-if="showHeader"
-      class="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-slate-100 flex-shrink-0"
+      class="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-slate-100 shrink-0"
     >
       <div class="flex items-center gap-3">
         <Icon
@@ -432,7 +432,7 @@ onUnmounted(() => {
 
     <div
       v-if="$slots.footer"
-      class="border-t border-slate-200 px-6 py-3 bg-slate-50 flex-shrink-0"
+      class="border-t border-slate-200 px-6 py-3 bg-slate-50 shrink-0"
     >
       <slot name="footer" />
     </div>

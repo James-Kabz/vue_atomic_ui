@@ -489,7 +489,7 @@ export default {
           <div class="flex-1 overflow-y-auto">
             <div class="flex">
               <!-- Time Column -->
-              <div class="w-24 border-r border-gray-200 bg-gray-50 flex-shrink-0">
+              <div class="w-24 border-r border-gray-200 bg-gray-50 shrink-0">
                 <div v-for="slot in timeSlots" :key="slot.time"
                   class="h-16 border-b border-gray-200 px-2 py-1 text-xs text-gray-600 text-right">
                   {{ slot.display }}

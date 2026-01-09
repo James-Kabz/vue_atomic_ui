@@ -76,7 +76,7 @@
             <component
               :is="result.icon"
               v-if="result.icon"
-              class="w-4 h-4 mr-3 flex-shrink-0"
+              class="w-4 h-4 mr-3 shrink-0"
             />
 
             <div class="flex-1 text-left">

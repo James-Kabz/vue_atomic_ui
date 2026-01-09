@@ -156,7 +156,7 @@
                     :key="index"
                     class="flex items-start gap-3 text-sm text-slate-600"
                   >
-                    <span :class="`w-4 h-4 text-${item.iconColor || 'slate-400'} flex-shrink-0 mt-0.5`">
+                    <span :class="`w-4 h-4 text-${item.iconColor || 'slate-400'} shrink-0 mt-0.5`">
                       {{ item.icon }}
                     </span>
                     <span>{{ item.text }}</span>

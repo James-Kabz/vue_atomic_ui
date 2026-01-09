@@ -16,7 +16,7 @@
       <div class="flex items-start space-x-3">
         <div
           v-if="showIcon"
-          class="flex-shrink-0"
+          class="shrink-0"
         >
           <Icon
             :name="iconName"
@@ -43,7 +43,7 @@
         
         <button
           v-if="dismissible"
-          class="flex-shrink-0 rounded-md p-1.5 hover:bg-black/5 focus:outline-none focus:ring-2 focus:ring-offset-2"
+          class="shrink-0 rounded-md p-1.5 hover:bg-black/5 focus:outline-none focus:ring-2 focus:ring-offset-2"
           @click="dismiss"
         >
           <Icon

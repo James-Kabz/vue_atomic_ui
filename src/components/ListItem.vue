@@ -11,7 +11,7 @@
     >
       <div
         v-if="$slots.icon || icon"
-        class="flex-shrink-0"
+        class="shrink-0"
       >
         <slot name="icon">
           <Icon
@@ -40,7 +40,7 @@
       
       <div
         v-if="$slots.action"
-        class="flex-shrink-0"
+        class="shrink-0"
       >
         <slot name="action" />
       </div>

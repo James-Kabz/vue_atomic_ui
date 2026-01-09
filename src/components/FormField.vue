@@ -75,7 +75,7 @@
       >
         <font-awesome-icon
           icon="exclamation-triangle"
-          class="w-4 h-4 flex-shrink-0 mt-0.5"
+          class="w-4 h-4 shrink-0 mt-0.5"
         />
         <span>{{ error }}</span>
       </div>
@@ -105,7 +105,7 @@
       >
         <font-awesome-icon
           icon="check"
-          class="w-4 h-4 flex-shrink-0 mt-0.5"
+          class="w-4 h-4 shrink-0 mt-0.5"
         />
         <span>{{ success }}</span>
       </div>

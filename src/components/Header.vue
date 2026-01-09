@@ -47,11 +47,13 @@ const emit = defineEmits([
 const searchQuery = ref('')
 const showNotificationsDropdown = ref(false)
 const showProfile = ref(false)
-const notificationCount = ref(props.notifications.length)
 const showMobileSearch = ref(false)
 const isMobile = ref(false)
 const showOrganisationDropdown = ref(false)
 
+const notificationCount = computed(() => {
+  return props.notifications.filter(n => !n.read).length
+})
 const userInitials = computed(() => {
   if (props.userInitialsOverride) return props.userInitialsOverride
   const name = props.user?.name || 'Guest'
@@ -172,10 +174,6 @@ onUnmounted(() => {
 })
 
 watch(searchQuery, (newValue) => emit('search', newValue))
-
-watch(() => props.notifications.length, (newLength) => {
-  notificationCount.value = newLength
-})
 </script>
 
 <template>
@@ -191,7 +189,7 @@ watch(() => props.notifications.length, (newLength) => {
         <!-- Company Logo (Software Provider) -->
         <div
           v-if="companyLogo && showHeaderLogo"
-          class="flex-shrink-0"
+          class="shrink-0"
         >
           <img
             :src="companyLogo"
@@ -203,18 +201,18 @@ watch(() => props.notifications.length, (newLength) => {
         <!-- Divider -->
         <div
           v-if="companyLogo && showOrganisationInfo && currentOrganisation"
-          class="h-8 w-px bg-gray-300 flex-shrink-0"
+          class="h-8 w-px bg-gray-300 shrink-0"
         />
 
         <!-- Organisation Info Card -->
         <div
           v-if="showOrganisationInfo && currentOrganisation"
-          class="flex-shrink-0 bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 px-4 py-2 rounded-xl border border-blue-200 shadow-sm flex items-center gap-3 relative hover:shadow-md transition-shadow"
+          class="shrink-0 bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 px-4 py-2 rounded-xl border border-blue-200 shadow-sm flex items-center gap-3 relative hover:shadow-md transition-shadow"
         >
           <!-- Organisation Logo -->
           <div
             v-if="organisationLogo"
-            class="flex-shrink-0"
+            class="shrink-0"
           >
             <div class="relative">
               <img
@@ -239,7 +237,7 @@ watch(() => props.notifications.length, (newLength) => {
               </p>
               <div class="flex items-center gap-1.5 mt-0.5">
                 <svg
-                  class="w-3 h-3 text-blue-600 flex-shrink-0"
+                  class="w-3 h-3 text-blue-600 shrink-0"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                 >
@@ -258,7 +256,7 @@ watch(() => props.notifications.length, (newLength) => {
               </div>
             </div>
             <svg
-              class="w-4 h-4 text-blue-600 flex-shrink-0 group-hover:text-blue-700 transition-transform"
+              class="w-4 h-4 text-blue-600 shrink-0 group-hover:text-blue-700 transition-transform"
               :class="{ 'rotate-180': showOrganisationDropdown }"
               fill="none"
               stroke="currentColor"
@@ -283,7 +281,7 @@ watch(() => props.notifications.length, (newLength) => {
             </p>
             <div class="flex items-center gap-1.5 mt-0.5">
               <svg
-                class="w-3 h-3 text-blue-600 flex-shrink-0"
+                class="w-3 h-3 text-blue-600 shrink-0"
                 fill="currentColor"
                 viewBox="0 0 20 20"
               >
@@ -350,7 +348,7 @@ watch(() => props.notifications.length, (newLength) => {
                 >
                   <div
                     v-if="org.logo"
-                    class="flex-shrink-0 mr-3"
+                    class="shrink-0 mr-3"
                   >
                     <img
                       :src="org.logo"
@@ -360,7 +358,7 @@ watch(() => props.notifications.length, (newLength) => {
                   </div>
                   <div
                     v-else
-                    class="w-8 h-8 rounded-lg bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center mr-3 flex-shrink-0"
+                    class="w-8 h-8 rounded-lg bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center mr-3 shrink-0"
                   >
                     <svg
                       class="w-4 h-4 text-gray-500"
@@ -387,7 +385,7 @@ watch(() => props.notifications.length, (newLength) => {
                   </div>
                   <svg
                     v-if="org.org_id === currentOrganisation?.org_id"
-                    class="w-5 h-5 text-blue-600 flex-shrink-0 ml-2"
+                    class="w-5 h-5 text-blue-600 shrink-0 ml-2"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
@@ -410,7 +408,7 @@ watch(() => props.notifications.length, (newLength) => {
         >
           <span class="text-gray-500 truncate">{{ currentSection }}</span>
           <svg
-            class="w-4 h-4 text-gray-400 flex-shrink-0"
+            class="w-4 h-4 text-gray-400 shrink-0"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -574,11 +572,22 @@ watch(() => props.notifications.length, (newLength) => {
                 v-for="notification in notifications"
                 v-else
                 :key="notification.id"
-                class="p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors"
+                :class="[
+                  'p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors',
+                  notification.read ? 'opacity-60' : ''
+                ]"
                 @click="handleNotificationClick(notification)"
               >
                 <div class="flex items-start space-x-3">
-                  <div class="flex-shrink-0 w-2 h-2 mt-2 bg-blue-500 rounded-full" />
+                  <!-- Only show blue dot for unread notifications -->
+                  <div 
+                    v-if="!notification.read"
+                    class="shrink-0 w-2 h-2 mt-2 bg-blue-500 rounded-full" 
+                  />
+                  <div 
+                    v-else
+                    class="shrink-0 w-2 h-2 mt-2"
+                  />
                   <div class="flex-1">
                     <p class="text-sm font-medium text-gray-900">
                       {{ notification.title }}
@@ -687,7 +696,7 @@ watch(() => props.notifications.length, (newLength) => {
                     />
                     <div
                       :class="cn(
-                        'flex items-center justify-center w-8 h-8 rounded-lg mr-3 flex-shrink-0 transition-colors ml-2',
+                        'flex items-center justify-center w-8 h-8 rounded-lg mr-3 shrink-0 transition-colors ml-2',
                         isItemActive(item)
                           ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md'
                           : 'bg-gray-100 text-gray-600 group-hover:bg-gray-200'
@@ -714,7 +723,7 @@ watch(() => props.notifications.length, (newLength) => {
                     @click="handleProfileAction(item)"
                   >
                     <div
-                      class="flex items-center justify-center w-8 h-8 rounded-lg mr-3 flex-shrink-0 transition-colors ml-2 bg-gray-100 text-gray-600 group-hover:bg-gray-200"
+                      class="flex items-center justify-center w-8 h-8 rounded-lg mr-3 shrink-0 transition-colors ml-2 bg-gray-100 text-gray-600 group-hover:bg-gray-200"
                     >
                       <Icon
                         v-if="item.icon"
@@ -734,7 +743,7 @@ watch(() => props.notifications.length, (newLength) => {
                   @click="handleLogout"
                 >
                   <div
-                    class="flex items-center justify-center w-8 h-8 rounded-lg mr-1 flex-shrink-0 transition-colors ml-2 bg-red-100 text-red-600 group-hover:bg-red-200"
+                    class="flex items-center justify-center w-8 h-8 rounded-lg mr-1 shrink-0 transition-colors ml-2 bg-red-100 text-red-600 group-hover:bg-red-200"
                   >
                     <svg
                       class="w-4 h-4"

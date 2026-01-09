@@ -45,7 +45,7 @@
 
           <div
             v-if="$slots.actions"
-            class="flex-shrink-0"
+            class="shrink-0"
           >
             <slot name="actions" />
           </div>

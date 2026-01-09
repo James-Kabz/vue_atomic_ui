@@ -829,7 +829,7 @@ const handleCancel = () => {
                   class="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg"
                 >
                   <div class="flex items-center space-x-3 flex-1 min-w-0">
-                    <div class="relative h-10 w-10 flex-shrink-0">
+                    <div class="relative h-10 w-10 shrink-0">
                       <svg
                         class="h-10 w-10 text-gray-300"
                         viewBox="0 0 36 36"
@@ -899,7 +899,7 @@ const handleCancel = () => {
                   <div class="flex items-center space-x-3 flex-1 min-w-0">
                     <div
                       :class="[
-                        'rounded-lg p-2 flex-shrink-0',
+                        'rounded-lg p-2 shrink-0',
                         getFileIconColor(file)
                       ]"
                     >

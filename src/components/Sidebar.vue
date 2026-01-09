@@ -321,7 +321,7 @@ defineExpose({
       <!-- Mobile Header with Close Button -->
       <div
         v-if="isMobile"
-        class="flex items-center justify-between p-4 border-b border-gray-200 flex-shrink-0 lg:hidden"
+        class="flex items-center justify-between p-4 border-b border-gray-200 shrink-0 lg:hidden"
       >
         <h2 class="text-lg font-bold text-gray-900">
           {{ header?.title }}
@@ -467,7 +467,7 @@ defineExpose({
       <!-- Bottom Navigation - Management Settings -->
       <div
         v-if="showManagementSettings"
-        class="border-t border-gray-200 p-4 flex-shrink-0"
+        class="border-t border-gray-200 p-4 shrink-0"
       >
         <div
           :class="cn(
@@ -646,7 +646,7 @@ defineExpose({
               <div
                 :class="
                   cn(
-                    'flex items-center justify-center w-8 h-8 rounded-lg mr-3 flex-shrink-0 transition-colors ml-2',
+                    'flex items-center justify-center w-8 h-8 rounded-lg mr-3 shrink-0 transition-colors ml-2',
                     isItemActive(subItem)
                       ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md'
                       : 'bg-gray-100 text-gray-600 group-hover:bg-gray-200',
@@ -763,7 +763,7 @@ defineExpose({
                 <div
                   :class="
                     cn(
-                      'flex items-center justify-center w-8 h-8 rounded-lg mr-3 flex-shrink-0 transition-colors',
+                      'flex items-center justify-center w-8 h-8 rounded-lg mr-3 shrink-0 transition-colors',
                       isItemActive(setting)
                         ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md'
                         : 'bg-gray-100 text-gray-600 group-hover:bg-gray-200',

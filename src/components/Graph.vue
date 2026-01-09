@@ -146,7 +146,7 @@ const subtitleClasses = 'text-sm text-slate-600 mt-1'
 
           <div
             v-if="$slots.actions"
-            class="flex-shrink-0 ml-4"
+            class="shrink-0 ml-4"
           >
             <slot name="actions" />
           </div>

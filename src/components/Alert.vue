@@ -16,7 +16,7 @@
         <!-- Icon -->
         <div
           v-if="showIcon"
-          class="flex-shrink-0 mt-0.5"
+          class="shrink-0 mt-0.5"
         >
           <component
             :is="iconComponent"
@@ -259,6 +259,6 @@ const dismissButtonClasses = computed(() => {
     danger:
       'text-danger hover:text-danger/80 hover:bg-danger/10'
   }
-  return ['flex-shrink-0 p-1 rounded-md transition-colors duration-200', colors[props.variant]]
+  return ['shrink-0 p-1 rounded-md transition-colors duration-200', colors[props.variant]]
 })
 </script>
