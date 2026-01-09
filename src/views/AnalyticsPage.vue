@@ -10,7 +10,7 @@
   >
     <!-- Custom logo -->
     <template #logo>
-      <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+      <div class="w-8 h-8 bg-linear-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
         <span class="text-white font-bold text-sm">D</span>
       </div>
     </template>

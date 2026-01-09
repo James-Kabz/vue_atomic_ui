@@ -364,7 +364,7 @@ defineExpose({
                 :class="cn(
                   'flex flex-col items-center justify-center rounded-xl transition-all duration-200 group relative py-4 px-3',
                   isItemActive(item)
-                    ? 'bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 shadow-sm'
+                    ? 'bg-linear-to-br from-blue-50 to-blue-100 border border-blue-200 shadow-sm'
                     : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900 border border-transparent'
                 )"
                 @click="handleNavigation(item)"
@@ -375,7 +375,7 @@ defineExpose({
                     'flex items-center justify-center rounded-lg transition-colors mb-2',
                     'w-12 h-12',
                     isItemActive(item)
-                      ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md'
+                      ? 'bg-linear-to-br from-blue-500 to-blue-600 text-white shadow-md'
                       : 'text-gray-500 group-hover:text-gray-900 bg-gray-100 group-hover:bg-gray-200'
                   )"
                 >
@@ -412,7 +412,7 @@ defineExpose({
                 :class="cn(
                   'flex flex-col items-center justify-center rounded-xl transition-all duration-200 cursor-pointer group relative py-4 px-3',
                   isItemActive(item)
-                    ? 'bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 shadow-sm'
+                    ? 'bg-linear-to-br from-blue-50 to-blue-100 border border-blue-200 shadow-sm'
                     : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900 border border-transparent'
                 )"
                 @click="handleSubmenuClick(item)"
@@ -423,7 +423,7 @@ defineExpose({
                     'flex items-center justify-center rounded-lg transition-colors mb-2',
                     'w-12 h-12',
                     isItemActive(item)
-                      ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md'
+                      ? 'bg-linear-to-br from-blue-500 to-blue-600 text-white shadow-md'
                       : 'text-gray-500 group-hover:text-gray-900 bg-gray-100 group-hover:bg-gray-200'
                   )"
                 >
@@ -473,7 +473,7 @@ defineExpose({
           :class="cn(
             'flex flex-col items-center justify-center rounded-xl transition-all duration-200 cursor-pointer group relative py-4 px-3',
             isManagementSettingsActive
-              ? 'bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 shadow-sm'
+              ? 'bg-linear-to-br from-blue-50 to-blue-100 border border-blue-200 shadow-sm'
               : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900 border border-transparent'
           )"
           @click="handleManagementSettingsClick"
@@ -483,7 +483,7 @@ defineExpose({
               'flex items-center justify-center rounded-lg transition-colors mb-2',
               'w-12 h-12',
               isManagementSettingsActive
-                ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md'
+                ? 'bg-linear-to-br from-blue-500 to-blue-600 text-white shadow-md'
                 : 'text-gray-500 group-hover:text-gray-900 bg-gray-100 group-hover:bg-gray-200'
             )"
           >
@@ -631,7 +631,7 @@ defineExpose({
                 cn(
                   'flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative',
                   isItemActive(subItem)
-                    ? 'bg-gradient-to-br from-blue-50 to-blue-100 text-blue-700 shadow-sm border border-blue-200'
+                    ? 'bg-linear-to-br from-blue-50 to-blue-100 text-blue-700 shadow-sm border border-blue-200'
                     : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 border border-transparent',
                 )
               "
@@ -640,7 +640,7 @@ defineExpose({
               <!-- Active indicator bar -->
               <div
                 v-if="isItemActive(subItem)"
-                class="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-blue-500 to-blue-600 rounded-r-full"
+                class="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-8 bg-linear-to-b from-blue-500 to-blue-600 rounded-r-full"
               />
 
               <div
@@ -648,7 +648,7 @@ defineExpose({
                   cn(
                     'flex items-center justify-center w-8 h-8 rounded-lg mr-3 shrink-0 transition-colors ml-2',
                     isItemActive(subItem)
-                      ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md'
+                      ? 'bg-linear-to-br from-blue-500 to-blue-600 text-white shadow-md'
                       : 'bg-gray-100 text-gray-600 group-hover:bg-gray-200',
                   )
                 "
@@ -748,7 +748,7 @@ defineExpose({
                   cn(
                     'flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative',
                     isItemActive(setting)
-                      ? 'bg-gradient-to-br from-blue-50 to-blue-100 text-blue-700 shadow-sm border border-blue-200'
+                      ? 'bg-linear-to-br from-blue-50 to-blue-100 text-blue-700 shadow-sm border border-blue-200'
                       : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 border border-transparent',
                   )
                 "
@@ -757,7 +757,7 @@ defineExpose({
                 <!-- Active indicator bar -->
                 <div
                   v-if="isItemActive(setting)"
-                  class="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-blue-500 to-blue-600 rounded-r-full"
+                  class="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-8 bg-linear-to-b from-blue-500 to-blue-600 rounded-r-full"
                 />
 
                 <div
@@ -765,7 +765,7 @@ defineExpose({
                     cn(
                       'flex items-center justify-center w-8 h-8 rounded-lg mr-3 shrink-0 transition-colors',
                       isItemActive(setting)
-                        ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md'
+                        ? 'bg-linear-to-br from-blue-500 to-blue-600 text-white shadow-md'
                         : 'bg-gray-100 text-gray-600 group-hover:bg-gray-200',
                     )
                   "

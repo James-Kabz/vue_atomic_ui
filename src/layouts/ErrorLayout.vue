@@ -6,7 +6,7 @@
       :class="backgroundClasses"
     >
       <slot name="background">
-        <div class="absolute inset-0 bg-gradient-to-br from-slate-50 to-slate-100" />
+        <div class="absolute inset-0 bg-linear-to-br from-slate-50 to-slate-100" />
       </slot>
     </div>
 

@@ -358,7 +358,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                   </div>
                   <div
                     v-else
-                    class="w-8 h-8 rounded-lg bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center mr-3 shrink-0"
+                    class="w-8 h-8 rounded-lg bg-linear-to-br from-gray-200 to-gray-300 flex items-center justify-center mr-3 shrink-0"
                   >
                     <svg
                       class="w-4 h-4 text-gray-500"
@@ -621,7 +621,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
             @click="toggleProfile"
           >
             <div
-              class="w-8 h-8 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full flex items-center justify-center transition-colors shadow-sm"
+              class="w-8 h-8 bg-linear-to-br from-blue-100 to-indigo-100 rounded-full flex items-center justify-center transition-colors shadow-sm"
             >
               <span class="text-blue-700 text-sm font-medium">{{ userInitials }}</span>
             </div>
@@ -684,7 +684,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                     :class="cn(
                       'flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative',
                       isItemActive(item)
-                        ? 'bg-gradient-to-br from-blue-50 to-blue-100 text-blue-700 shadow-sm border border-blue-200'
+                        ? 'bg-linear-to-br from-blue-50 to-blue-100 text-blue-700 shadow-sm border border-blue-200'
                         : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 border border-transparent'
                     )"
                     @click="handleNavigation(item)"
@@ -692,13 +692,13 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                     <!-- Active indicator bar -->
                     <div
                       v-if="isItemActive(item)"
-                      class="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-blue-500 to-blue-600 rounded-r-full"
+                      class="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-8 bg-linear-to-b from-blue-500 to-blue-600 rounded-r-full"
                     />
                     <div
                       :class="cn(
                         'flex items-center justify-center w-8 h-8 rounded-lg mr-3 shrink-0 transition-colors ml-2',
                         isItemActive(item)
-                          ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md'
+                          ? 'bg-linear-to-br from-blue-500 to-blue-600 text-white shadow-md'
                           : 'bg-gray-100 text-gray-600 group-hover:bg-gray-200'
                       )"
                     >

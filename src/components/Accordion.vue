@@ -163,7 +163,7 @@ const itemVariants = cva('transition-all duration-200', {
     variant: {
       default: 'bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md',
       bordered: 'border-2 border-slate-200 rounded-xl overflow-hidden hover:border-blue-300',
-      filled: 'bg-gradient-to-br from-slate-50 to-white border border-slate-200 rounded-xl overflow-hidden shadow-sm',
+      filled: 'bg-linear-to-br from-slate-50 to-white border border-slate-200 rounded-xl overflow-hidden shadow-sm',
       flush: ''
     }
   }

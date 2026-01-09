@@ -168,7 +168,7 @@ const currentPath = computed(() => `#${currentSection.value}`);
             :class="[
               'w-full flex flex-col items-center justify-center rounded-xl transition-all duration-200 group relative py-4 px-3',
               currentPath === item.route
-                ? 'bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 shadow-sm'
+                ? 'bg-linear-to-br from-blue-50 to-blue-100 border border-blue-200 shadow-sm'
                 : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900 border border-transparent'
             ]"
             @click="handleSidebarNavigate(item)"
@@ -178,7 +178,7 @@ const currentPath = computed(() => `#${currentSection.value}`);
               :class="[
                 'flex items-center justify-center rounded-lg transition-colors mb-2 w-12 h-12',
                 currentPath === item.route
-                  ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md'
+                  ? 'bg-linear-to-br from-blue-500 to-blue-600 text-white shadow-md'
                   : 'text-gray-500 group-hover:text-gray-900 bg-gray-100 group-hover:bg-gray-200'
               ]"
             >
