@@ -296,17 +296,10 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                 {{ currentOrganisation.organisation_name }}
               </p>
               <div class="flex items-center gap-1.5 mt-0.5">
-                <svg
+                <Icon
+                  icon="user"
                   class="w-3 h-3 text-blue-600 shrink-0"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
+                />
                 <p
                   v-if="formattedActiveRoles"
                   class="text-xs text-blue-700 truncate font-medium"
@@ -315,20 +308,11 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                 </p>
               </div>
             </div>
-            <svg
+            <Icon
+              icon="chevron-down"
               class="w-4 h-4 text-blue-600 shrink-0 group-hover:text-blue-700 transition-transform"
               :class="{ 'rotate-180': showOrganisationDropdown }"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="m19 9-7 7-7-7"
-              />
-            </svg>
+            />
           </button>
 
           <!-- Static display when only one organisation -->
@@ -340,17 +324,10 @@ watch(searchQuery, (newValue) => emit('search', newValue))
               {{ currentOrganisation.organisation_name }}
             </p>
             <div class="flex items-center gap-1.5 mt-0.5">
-              <svg
+              <Icon
+                icon="user"
                 class="w-3 h-3 text-blue-600 shrink-0"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                  clip-rule="evenodd"
-                />
-              </svg>
+              />
               <p
                 v-if="formattedActiveRoles"
                 class="text-xs text-blue-700 truncate font-medium"
@@ -375,19 +352,10 @@ watch(searchQuery, (newValue) => emit('search', newValue))
             >
               <div class="p-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
                 <h3 class="text-sm font-bold text-gray-900 flex items-center gap-2">
-                  <svg
+                  <Icon
+                    icon="list"
                     class="w-4 h-4 text-blue-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M8 7h12M8 12h12m-12 5h12M4 7h.01M4 12h.01M4 17h.01"
-                    />
-                  </svg>
+                  />
                   {{ organisationSwitcherTitle }}
                 </h3>
                 <p class="text-xs text-gray-600 mt-1">
@@ -420,17 +388,10 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                     v-else
                     class="w-8 h-8 rounded-lg bg-linear-to-br from-gray-200 to-gray-300 flex items-center justify-center mr-3 shrink-0"
                   >
-                    <svg
+                    <Icon
+                      icon="building"
                       class="w-4 h-4 text-gray-500"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
+                    />
                   </div>
                   <div class="flex-1 text-left min-w-0">
                     <p class="font-semibold truncate">
@@ -443,18 +404,11 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                       {{ org.type.name }}
                     </p>
                   </div>
-                  <svg
+                  <Icon
                     v-if="org.org_id === currentOrganisation?.org_id"
+                    icon="check-circle"
                     class="w-5 h-5 text-blue-600 shrink-0 ml-2"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
+                  />
                 </button>
               </div>
             </div>
@@ -467,19 +421,10 @@ watch(searchQuery, (newValue) => emit('search', newValue))
           class="hidden lg:flex items-center space-x-2 text-sm truncate"
         >
           <span class="text-gray-500 truncate">{{ currentSection }}</span>
-          <svg
+          <Icon
+            icon="chevron-right"
             class="w-4 h-4 text-gray-400 shrink-0"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 5l7 7-7 7"
-            />
-          </svg>
+          />
           <span class="text-gray-900 font-semibold truncate">{{ currentPage }}</span>
         </nav>
       </div>
@@ -492,19 +437,10 @@ watch(searchQuery, (newValue) => emit('search', newValue))
           class="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-50 transition-colors"
           @click="emit('toggle-mobile-sidebar')"
         >
-          <svg
+          <Icon
+            icon="bars"
             class="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M4 6h16M4 12h16M4 18h16"
-            />
-          </svg>
+          />
         </button>
 
         <!-- Search -->
@@ -513,19 +449,10 @@ watch(searchQuery, (newValue) => emit('search', newValue))
           class="relative"
         >
           <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <svg
+            <Icon
+              icon="search"
               class="w-4 h-4 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
+            />
           </div>
           <input
             v-model="searchQuery"
@@ -546,19 +473,10 @@ watch(searchQuery, (newValue) => emit('search', newValue))
           class="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-50 transition-colors"
           @click="showMobileSearch = true"
         >
-          <svg
+          <Icon
+            icon="search"
             class="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
+          />
         </button>
 
         <!-- Notifications -->
@@ -567,19 +485,10 @@ watch(searchQuery, (newValue) => emit('search', newValue))
           class="relative p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-50 transition-colors"
           @click="toggleNotifications"
         >
-          <svg
+          <Icon
+            icon="bell"
             class="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-            />
-          </svg>
+          />
           <span
             v-if="notificationCount > 0"
             class="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-semibold px-1"
@@ -615,19 +524,10 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                 v-if="notifications.length === 0"
                 class="p-8 text-center"
               >
-                <svg
+                <Icon
+                  icon="bell"
                   class="w-12 h-12 mx-auto text-gray-300 mb-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                  />
-                </svg>
+                />
                 <p class="text-sm text-gray-500">
                   No notifications
                 </p>
@@ -651,40 +551,21 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                       getNotificationTypeClass(notification)
                     ]"
                   >
-                    <svg
+                    <Icon
                       v-if="notification.title.includes('Overdue')"
+                      icon="exclamation-triangle"
                       class="w-5 h-5"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
-                    <svg
+                    />
+                    <Icon
                       v-else-if="notification.type === 'due_date_reminder'"
+                      icon="clock"
                       class="w-5 h-5"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
-                    <svg
+                    />
+                    <Icon
                       v-else
+                      icon="bell"
                       class="w-5 h-5"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"
-                      />
-                    </svg>
+                    />
                   </div>
                   
                   <div class="flex-1 min-w-0">
@@ -705,14 +586,10 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                       class="flex items-center gap-1.5 mt-1.5"
                     >
                       <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-indigo-100 text-indigo-800 border border-indigo-200">
-                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                          <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1.323l3.954 1.582 1.599-.8a1 1 0 01.894 1.79l-1.233.616 1.738 5.42a1 1 0 01-.285 1.05A3.989 3.989 0 0115 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.715-5.349L11 6.477V16h2a1 1 0 110 2H7a1 1 0 110-2h2V6.477L6.237 7.582l1.715 5.349a1 1 0 01-.285 1.05A3.989 3.989 0 015 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.738-5.42-1.233-.617a1 1 0 01.894-1.788l1.599.799L9 4.323V3a1 1 0 011-1zm-5 8.274l-.818 2.552c.25.112.526.174.818.174.292 0 .569-.062.818-.174L5 10.274zm10 0l-.818 2.552c.25.112.526.174.818.174.292 0 .569-.062.818-.174L15 10.274z" clip-rule="evenodd"/>
-                        </svg>
+                        <Icon icon="tag" class="w-3 h-3 mr-1" />
                         {{ notification.source.body_code }}
                       </span>
-                      <svg class="w-3 h-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
-                      </svg>
+                      <Icon icon="chevron-right" class="w-3 h-3 text-gray-400" />
                       <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-700 border border-gray-200">
                         {{ notification.source.code }}
                       </span>
@@ -720,48 +597,34 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                     
                     <!-- Model & Due Date Badges -->
                     <div class="flex items-center gap-2 mt-2">
-                      <span 
+                      <span
                         v-if="notification.model"
                         class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800"
                       >
-                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                          <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"/>
-                        </svg>
+                        <Icon icon="file" class="w-3 h-3 mr-1" />
                         {{ formatModelName(notification.model) }}
                       </span>
                       
                       <!-- Due Date Badge -->
-                      <span 
+                      <span
                         v-if="notification.due_date"
                         :class="[
                           'inline-flex items-center px-2 py-0.5 rounded text-xs font-medium',
-                          notification.title.includes('Overdue') 
-                            ? 'bg-red-100 text-red-800 border border-red-200' 
+                          notification.title.includes('Overdue')
+                            ? 'bg-red-100 text-red-800 border border-red-200'
                             : notification.title.includes('Due in 0')
                             ? 'bg-orange-100 text-orange-800 border border-orange-200'
                             : 'bg-amber-100 text-amber-800 border border-amber-200'
                         ]"
                       >
-                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                          <path
-                            fill-rule="evenodd"
-                            d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                            clip-rule="evenodd"
-                          />
-                        </svg>
+                        <Icon icon="calendar" class="w-3 h-3 mr-1" />
                         {{ formatDueDate(notification.due_date) }}
                       </span>
                     </div>
                     
                     <!-- Time -->
                     <p class="text-xs text-gray-500 mt-2 flex items-center">
-                      <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fill-rule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
-                          clip-rule="evenodd"
-                        />
-                      </svg>
+                      <Icon icon="clock" class="w-3 h-3 mr-1" />
                       {{ notification.time }}
                     </p>
                   </div>
@@ -807,19 +670,10 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                 {{ userRoleNames }}
               </p>
             </div>
-            <svg
+            <Icon
+              icon="chevron-down"
               class="w-4 h-4 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
+            />
           </button>
 
           <!-- Dropdown -->
@@ -915,19 +769,10 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                   <div
                     class="flex items-center justify-center w-8 h-8 rounded-lg mr-1 shrink-0 transition-colors ml-2 bg-red-100 text-red-600 group-hover:bg-red-200"
                   >
-                    <svg
+                    <Icon
+                      icon="sign-out-alt"
                       class="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a2 3 0 013-3h4a3 3 0 013 3v1"
-                      />
-                    </svg>
+                    />
                   </div>
                   <span class="truncate font-semibold text-red-600">
                     Sign out
