@@ -255,7 +255,7 @@ onUnmounted(() => {
   >
     <div
       v-if="showHeader"
-      class="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-slate-100 shrink-0"
+      class="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-linear-to-r from-slate-50 to-slate-100 shrink-0"
     >
       <div class="flex items-center gap-3">
         <Icon

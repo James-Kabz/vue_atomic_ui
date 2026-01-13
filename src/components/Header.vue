@@ -15,6 +15,7 @@ const props = defineProps({
   currentOrganisation: { type: Object, default: null },
   companyLogo: { type: String, default: '' },
   organisationLogo: { type: String, default: '' },
+  organisationLogos: { type: Object, default: () => ({}) },
   organisations: { type: Array, default: () => [] },
   activeRoles: { type: Array, default: () => [] },
   // New props for customization
@@ -222,6 +223,12 @@ const formatDueDate = (dateString) => {
   })
 }
 
+const getOrgLogoUrl = (org) => {
+  if (!org?.org_id) return null
+  return props.organisationLogos[org.org_id] || null
+}
+
+
 onMounted(() => {
   document.addEventListener('click', handleClickOutside)
   checkMobile()
@@ -279,12 +286,12 @@ watch(searchQuery, (newValue) => emit('search', newValue))
         <!-- Organisation Info Card - Simplified for mobile -->
         <div
           v-if="showOrganisationInfo && currentOrganisation"
-          class="shrink-0 bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl border border-blue-200 shadow-sm flex items-center gap-2 sm:gap-3 relative hover:shadow-md transition-shadow max-w-[180px] sm:max-w-none"
+          class="shrink-0 bg-linear-to-r from-blue-50 via-indigo-50 to-purple-50 px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl border border-blue-200 shadow-sm flex items-center gap-2 sm:gap-3 relative hover:shadow-md transition-shadow max-w-[180px] sm:max-w-none"
         >
           <!-- Organisation Logo - Hidden on very small screens -->
           <div
             v-if="organisationLogo"
-            class="shrink-0 hidden xs:block"
+            class="shrink-0 hidden sm:block"
           >
             <div class="relative">
               <img
@@ -362,7 +369,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
               v-if="showOrganisationDropdown"
               class="absolute top-full left-0 right-0 sm:left-0 sm:right-auto mt-2 w-full sm:w-80 bg-white rounded-xl shadow-xl border border-gray-200 z-50 max-h-96 overflow-hidden"
             >
-              <div class="p-3 sm:p-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+              <div class="p-3 sm:p-4 border-b border-gray-200 bg-linear-to-r from-blue-50 to-indigo-50">
                 <h3 class="text-sm font-bold text-gray-900 flex items-center gap-2">
                   <Icon
                     icon="list"
@@ -381,17 +388,17 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                   :class="cn(
                     'flex items-center w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm transition-all group',
                     org.org_id === currentOrganisation?.org_id
-                      ? 'bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 border-l-4 border-blue-500'
+                      ? 'bg-linear-to-r from-blue-50 to-indigo-50 text-blue-700 border-l-4 border-blue-500'
                       : 'text-gray-700 hover:bg-gray-50 border-l-4 border-transparent'
                   )"
                   @click="handleOrganisationChange(org)"
                 >
                   <div
-                    v-if="org.logo"
+                    v-if="getOrgLogoUrl(org)"
                     class="shrink-0 mr-2 sm:mr-3"
                   >
                     <img
-                      :src="org.logo"
+                      :src="getOrgLogoUrl(org)"
                       :alt="`${org.organisation_name} logo`"
                       class="w-7 h-7 sm:w-8 sm:h-8 object-contain rounded-lg bg-white p-0.5 sm:p-1 border border-gray-200 group-hover:border-blue-200 transition-colors"
                     >
@@ -491,7 +498,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
           />
           <span
             v-if="notificationCount > 0"
-            class="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 min-w-[16px] h-[16px] sm:min-w-[18px] sm:h-[18px] bg-red-500 text-white text-[10px] sm:text-xs rounded-full flex items-center justify-center font-semibold px-0.5 sm:px-1"
+            class="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 min-w-4 h-4 sm:min-w-[18px] sm:h-[18px] bg-red-500 text-white text-[10px] sm:text-xs rounded-full flex items-center justify-center font-semibold px-0.5 sm:px-1"
           >
             {{ notificationCount > 9 ? '9+' : notificationCount }}
           </span>
@@ -510,7 +517,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
             v-if="showNotificationsDropdown"
             class="absolute right-2 sm:right-4 md:right-6 top-14 sm:top-16 mt-2 w-[calc(100vw-1rem)] max-w-sm sm:w-80 md:w-96 bg-white rounded-xl shadow-xl border border-gray-200 z-50"
           >
-            <div class="p-3 sm:p-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+            <div class="p-3 sm:p-4 border-b border-gray-200 bg-linear-to-r from-blue-50 to-indigo-50">
               <h3 class="text-sm sm:text-base font-bold text-gray-900">
                 {{ notificationsTitle }}
               </h3>
@@ -660,7 +667,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
             <!-- Hide details on mobile or when showUserDetails is false -->
             <div
               v-if="showUserDetails"
-              class="hidden md:block text-left max-w-[160px] truncate"
+              class="hidden md:block text-left max-w-40 truncate"
             >
               <p class="text-sm font-medium text-gray-900 truncate">
                 {{ user.name }}

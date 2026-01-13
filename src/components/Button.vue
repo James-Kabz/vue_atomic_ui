@@ -92,7 +92,7 @@ const buttonVariants = cva(
         successOutline:
           'border border-green-600 text-green-600 bg-transparent hover:bg-green-50',
         gradient:
-          'bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700',
+          'bg-linear-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700',
       },
       size: {
         '2xs': 'h-6 px-2 py-1 text-xs rounded',

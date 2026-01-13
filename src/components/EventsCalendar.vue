@@ -288,7 +288,7 @@ export default {
               class="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
               @click="selectMonthFromYear(month.index)">
               <!-- Month Header -->
-              <div class="bg-gradient-to-r from-blue-500 to-blue-600 px-3 py-3">
+              <div class="bg-linear-to-r from-blue-500 to-blue-600 px-3 py-3">
                 <h3 class="text-sm font-bold text-white text-center">
                   {{ month.name }}
                 </h3>

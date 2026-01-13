@@ -113,7 +113,7 @@ describe('Badge', () => {
     const wrapper = mount(Badge, {
       props: { variant: 'gradient' }
     })
-    expect(wrapper.classes()).toContain('bg-gradient-to-r')
+    expect(wrapper.classes()).toContain('bg-linear-to-r')
   })
 
   it('applies size classes', () => {

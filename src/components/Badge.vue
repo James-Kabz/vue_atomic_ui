@@ -107,7 +107,7 @@ const badgeVariants = cva(
         successOutline:
           'border border-green-500 text-green-500 bg-transparent hover:bg-green-50',
         gradient:
-          'bg-gradient-to-r from-blue-400 to-purple-500 text-white hover:from-blue-500 hover:to-purple-600',
+          'bg-linear-to-r from-blue-400 to-purple-500 text-white hover:from-blue-500 hover:to-purple-600',
       },
       size: {
         sm: 'px-2 py-0.5 text-xs',

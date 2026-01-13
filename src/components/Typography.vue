@@ -167,7 +167,7 @@ const variantClasses = computed(() => {
 
 const colorClasses = computed(() => {
   if (props.gradient) {
-    return 'bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent'
+    return 'bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent'
   }
   
   const colors = {
