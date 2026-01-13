@@ -30,7 +30,7 @@ export default {
     },
     backgroundImage: {
       type: String,
-      default: 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2069&q=80'
+      default: 'https://lh3.googleusercontent.com/gps-cs-s/AG0ilSxeN2zWMjNsmwOrn8a8dDwnu2e5jjzYNembgPZFUXus_sLxUfpCJSKS-8Z7fj3ta1Q_xXDZ-skeFTUoGR75RTIlxQCIYrmjLOqfBNsk8Cjd_qrJaa72l1D2-aEoDwJJKKeTpUmeEg=s1360-w1360-h1020-rw'
     },
     backgroundOpacity: {
       type: Number,
