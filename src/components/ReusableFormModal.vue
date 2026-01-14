@@ -619,11 +619,9 @@ const handleMultiFileRemoved = (field, files) => {
             :error-message="errors[field.name]">
             <template #default="{ fieldId, hasError, ariaDescribedBy }">
               <!-- Text/Number/Password/Color/Email/Tel/URL/Search Input -->
-              <div v-for="field in fields" :key="field.name" :class="field.wrapperClass || 'col-span-12'"></div>
-              <Input
-                v-if="['text', 'number', 'password', 'color', 'email', 'tel', 'url', 'search'].includes(field.type)"
-                :id="fieldId" :model-value="getFieldValue(field.name)" :type="field.type"
-                :placeholder="field.placeholder" :disabled="isLoading || field.disabled" :readonly="field.disabled"
+              <Input v-if="['text', 'number', 'password', 'color', 'email', 'tel', 'url', 'search'].includes(field.type)"
+                :id="fieldId" :model-value="getFieldValue(field.name)" :type="field.type" :placeholder="field.placeholder"
+                :disabled="isLoading || field.disabled" :readonly="field.disabled"
                 :class="hasError ? 'border-red-500' : 'border-slate-300'" :aria-describedby="ariaDescribedBy"
                 @update:model-value="setFieldValue(field.name, $event)" />
 
@@ -641,11 +639,10 @@ const handleMultiFileRemoved = (field, files) => {
                 @update:model-value="handleSelectChange(field, $event)" />
 
               <!-- MultiSelect Dropdown -->
-              <MultiSelect v-else-if="field.type === 'multiselect'" :id="fieldId"
-                :model-value="getFieldValue(field.name)" :options="field.options"
-                :disabled="isLoading || field.disabled" :placeholder="field.placeholder || 'Select options'"
-                :has-error="hasError" :aria-describedby="ariaDescribedBy"
-                @update:model-value="setFieldValue(field.name, $event)" />
+              <MultiSelect v-else-if="field.type === 'multiselect'" :id="fieldId" :model-value="getFieldValue(field.name)"
+                :options="field.options" :disabled="isLoading || field.disabled"
+                :placeholder="field.placeholder || 'Select options'" :has-error="hasError"
+                :aria-describedby="ariaDescribedBy" @update:model-value="setFieldValue(field.name, $event)" />
 
               <!-- Combobox -->
               <Select v-else-if="field.type === 'combobox'" :id="fieldId" :model-value="getFieldValue(field.name)"
@@ -687,8 +684,8 @@ const handleMultiFileRemoved = (field, files) => {
                 <div v-for="option in field.options" :key="option.value" class="flex items-center">
                   <Input :id="`${fieldId}-${option.value}`" :model-value="getFieldValue(field.name)" type="radio"
                     :value="option.value" :disabled="isLoading || field.disabled"
-                    class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
-                    :aria-describedby="ariaDescribedBy" @update:model-value="setFieldValue(field.name, $event)" />
+                    class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300" :aria-describedby="ariaDescribedBy"
+                    @update:model-value="setFieldValue(field.name, $event)" />
                   <Label :for="`${fieldId}-${option.value}`" class="ml-2 text-sm text-gray-700">
                     {{ option.label }}
                   </Label>
@@ -744,10 +741,9 @@ const handleMultiFileRemoved = (field, files) => {
                 @update:model-value="setFieldValue(field.name, $event)" />
 
               <!-- Time Input -->
-              <Input v-else-if="field.type === 'time'" :id="fieldId" :model-value="getFieldValue(field.name)"
-                type="time" :disabled="isLoading || field.disabled"
-                :class="hasError ? 'border-red-500' : 'border-slate-300'" :aria-describedby="ariaDescribedBy"
-                @update:model-value="setFieldValue(field.name, $event)" />
+              <Input v-else-if="field.type === 'time'" :id="fieldId" :model-value="getFieldValue(field.name)" type="time"
+                :disabled="isLoading || field.disabled" :class="hasError ? 'border-red-500' : 'border-slate-300'"
+                :aria-describedby="ariaDescribedBy" @update:model-value="setFieldValue(field.name, $event)" />
 
               <!-- DateTime Local Input -->
               <Input v-else-if="field.type === 'datetime-local'" :id="fieldId" :model-value="getFieldValue(field.name)"
@@ -762,10 +758,9 @@ const handleMultiFileRemoved = (field, files) => {
                 @update:model-value="setFieldValue(field.name, $event)" />
 
               <!-- Week Input -->
-              <Input v-else-if="field.type === 'week'" :id="fieldId" :model-value="getFieldValue(field.name)"
-                type="week" :disabled="isLoading || field.disabled"
-                :class="hasError ? 'border-red-500' : 'border-slate-300'" :aria-describedby="ariaDescribedBy"
-                @update:model-value="setFieldValue(field.name, $event)" />
+              <Input v-else-if="field.type === 'week'" :id="fieldId" :model-value="getFieldValue(field.name)" type="week"
+                :disabled="isLoading || field.disabled" :class="hasError ? 'border-red-500' : 'border-slate-300'"
+                :aria-describedby="ariaDescribedBy" @update:model-value="setFieldValue(field.name, $event)" />
             </template>
           </FormField>
         </div>
