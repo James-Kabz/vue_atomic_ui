@@ -606,8 +606,9 @@ const handleMultiFileRemoved = (field, files) => {
       </p>
     </div>
 
-    <form class="space-y-6 overflow-y-auto" @submit.prevent="handleSubmit">
-      <div v-for="field in fields" :key="field.name">
+    <form class="overflow-y-auto" @submit.prevent="handleSubmit">
+      <div class="grid grid-cols-12 gap-6">
+      <div v-for="field in fields" :key="field.name" :class="field.wrapperClass || 'col-span-12'">
         <!-- Hidden fields don't need FormField wrapper -->
         <template v-if="field.type === 'hidden'">
           <input :value="getFieldValue(field.name)" type="hidden">
@@ -618,6 +619,7 @@ const handleMultiFileRemoved = (field, files) => {
           :error-message="errors[field.name]">
           <template #default="{ fieldId, hasError, ariaDescribedBy }">
             <!-- Text/Number/Password/Color/Email/Tel/URL/Search Input -->
+             <div v-for="field in fields" :key="field.name" :class="field.wrapperClass || 'col-span-12'"></div>
             <Input v-if="['text', 'number', 'password', 'color', 'email', 'tel', 'url', 'search'].includes(field.type)"
               :id="fieldId" :model-value="getFieldValue(field.name)" :type="field.type" :placeholder="field.placeholder"
               :disabled="isLoading || field.disabled" :readonly="field.disabled"
@@ -762,6 +764,7 @@ const handleMultiFileRemoved = (field, files) => {
               :aria-describedby="ariaDescribedBy" @update:model-value="setFieldValue(field.name, $event)" />
           </template>
         </FormField>
+      </div>
       </div>
 
       <div class="flex justify-end gap-3 pt-6">
