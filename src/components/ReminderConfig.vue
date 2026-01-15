@@ -116,7 +116,7 @@ const saveRecipients = () => {
         <div class="flex items-center gap-4 mb-3">
           <div class="w-12 h-12 bg-linear-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
             <Icon
-              icon="mail"
+              icon="envelope"
               class="w-6 h-6 text-white"
             />
           </div>
@@ -190,7 +190,7 @@ const saveRecipients = () => {
             >
               <div class="w-16 h-16 bg-linear-to-br from-slate-200 to-slate-300 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <Icon
-                  icon="mail"
+                  icon="envelope"
                   class="w-8 h-8 text-slate-400"
                 />
               </div>
@@ -251,7 +251,7 @@ const saveRecipients = () => {
                           @click="updateSendType(model.id, reminder.id, option.value)"
                         >
                           <Icon
-                            :icon="option.value === 'Email' ? 'mail' : 'message-square'"
+                            :icon="option.value === 'Email' ? 'envelope' : 'message'"
                             class="w-4 h-4"
                           />
                           {{ option.label }}
