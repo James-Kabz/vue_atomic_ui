@@ -1,10 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import Button from './Button.vue'
 import Icon from './Icon.vue'
-import Modal from './Modal.vue'
-import Accordion from './Accordion.vue'
-import Select from './Select.vue'
 
 const props = defineProps({
   models: {
@@ -119,13 +115,18 @@ const saveRecipients = () => {
       <div class="bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl p-8 mb-8">
         <div class="flex items-center gap-4 mb-3">
           <div class="w-12 h-12 bg-linear-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
-            <Icon icon="mail" class="w-6 h-6 text-white" />
+            <Icon
+              icon="mail"
+              class="w-6 h-6 text-white"
+            />
           </div>
           <div>
             <h1 class="text-3xl font-bold bg-linear-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
               Reminder Configuration
             </h1>
-            <p class="text-slate-600 mt-1">Configure reminder schedules for different models</p>
+            <p class="text-slate-600 mt-1">
+              Configure reminder schedules for different models
+            </p>
           </div>
         </div>
       </div>
@@ -139,8 +140,8 @@ const saveRecipients = () => {
         >
           <!-- Model Header -->
           <div
-            @click="toggleModel(model.id)"
             class="p-6 cursor-pointer hover:bg-linear-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-300 border-b border-slate-100"
+            @click="toggleModel(model.id)"
           >
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-4">
@@ -150,37 +151,61 @@ const saveRecipients = () => {
                   </span>
                 </div>
                 <div>
-                  <h2 class="text-lg font-bold text-slate-800">{{ model.name }}</h2>
+                  <h2 class="text-lg font-bold text-slate-800">
+                    {{ model.name }}
+                  </h2>
                   <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-linear-to-r from-blue-100 to-indigo-100 text-blue-700 text-xs font-semibold rounded-full mt-1">
-                    <div class="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></div>
+                    <div class="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse" />
                     {{ model.reminders.length }} reminder{{ model.reminders.length !== 1 ? 's' : '' }}
                   </span>
                 </div>
               </div>
               <div class="flex items-center gap-3">
                 <button
-                  @click.stop="addReminder(model.id)"
                   class="px-4 py-2 bg-linear-to-r from-green-500 to-emerald-600 text-white rounded-xl font-semibold text-sm hover:from-green-600 hover:to-emerald-700 transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2"
+                  @click.stop="addReminder(model.id)"
                 >
-                  <Icon icon="plus" class="w-4 h-4" />
+                  <Icon
+                    icon="plus"
+                    class="w-4 h-4"
+                  />
                   Add
                 </button>
-                <Icon :icon="model.expanded ? 'chevron-up' : 'chevron-down'" class="w-5 h-5 text-slate-400" />
+                <Icon
+                  :icon="model.expanded ? 'chevron-up' : 'chevron-down'"
+                  class="w-5 h-5 text-slate-400"
+                />
               </div>
             </div>
           </div>
 
           <!-- Model Content -->
-          <div v-if="model.expanded" class="p-6 bg-linear-to-br from-slate-50/50 to-blue-50/30">
-            <div v-if="model.reminders.length === 0" class="text-center py-12">
+          <div
+            v-if="model.expanded"
+            class="p-6 bg-linear-to-br from-slate-50/50 to-blue-50/30"
+          >
+            <div
+              v-if="model.reminders.length === 0"
+              class="text-center py-12"
+            >
               <div class="w-16 h-16 bg-linear-to-br from-slate-200 to-slate-300 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <Icon icon="mail" class="w-8 h-8 text-slate-400" />
+                <Icon
+                  icon="mail"
+                  class="w-8 h-8 text-slate-400"
+                />
               </div>
-              <p class="text-slate-500 font-medium">No reminders configured yet</p>
-              <p class="text-slate-400 text-sm mt-1">Click "Add" to create your first reminder</p>
+              <p class="text-slate-500 font-medium">
+                No reminders configured yet
+              </p>
+              <p class="text-slate-400 text-sm mt-1">
+                Click "Add" to create your first reminder
+              </p>
             </div>
             
-            <div v-else class="space-y-4">
+            <div
+              v-else
+              class="space-y-4"
+            >
               <div
                 v-for="reminder in model.reminders"
                 :key="reminder.id"
@@ -198,10 +223,10 @@ const saveRecipients = () => {
                           type="number"
                           min="0"
                           :value="reminder.days"
-                          @input="updateReminderDays(model.id, reminder.id, $event.target.value)"
                           class="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all duration-300 font-semibold text-slate-800"
                           placeholder="0"
-                        />
+                          @input="updateReminderDays(model.id, reminder.id, $event.target.value)"
+                        >
                         <div class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm font-medium">
                           days
                         </div>
@@ -217,15 +242,18 @@ const saveRecipients = () => {
                         <button
                           v-for="option in sendTypeOptions"
                           :key="option.value"
-                          @click="updateSendType(model.id, reminder.id, option.value)"
                           :class="[
                             'flex-1 px-4 py-3 rounded-xl font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2',
                             reminder.sendType === option.value
                               ? 'bg-linear-to-r from-blue-500 to-indigo-600 text-white shadow-lg'
                               : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                           ]"
+                          @click="updateSendType(model.id, reminder.id, option.value)"
                         >
-                          <Icon :icon="option.value === 'Email' ? 'mail' : 'message-square'" class="w-4 h-4" />
+                          <Icon
+                            :icon="option.value === 'Email' ? 'mail' : 'message-square'"
+                            class="w-4 h-4"
+                          />
                           {{ option.label }}
                         </button>
                       </div>
@@ -237,18 +265,27 @@ const saveRecipients = () => {
                         Recipients
                       </label>
                       <button
-                        @click="openRecipientModal(model.id, reminder.id)"
                         class="w-full px-4 py-3 bg-linear-to-r from-slate-50 to-blue-50 border-2 border-slate-200 rounded-xl hover:border-blue-400 transition-all duration-300 flex items-center justify-between group"
+                        @click="openRecipientModal(model.id, reminder.id)"
                       >
                         <div class="flex items-center gap-2">
-                          <Icon icon="users" class="w-4 h-4 text-slate-600 group-hover:text-blue-600 transition-colors" />
+                          <Icon
+                            icon="users"
+                            class="w-4 h-4 text-slate-600 group-hover:text-blue-600 transition-colors"
+                          />
                           <span class="text-sm font-semibold text-slate-700">
                             {{ reminder.recipients.length === 0 ? 'Select recipients' : `${reminder.recipients.length} selected` }}
                           </span>
                         </div>
-                        <Icon icon="chevron-down" class="w-4 h-4 text-slate-400 group-hover:text-blue-600 transition-colors" />
+                        <Icon
+                          icon="chevron-down"
+                          class="w-4 h-4 text-slate-400 group-hover:text-blue-600 transition-colors"
+                        />
                       </button>
-                      <div v-if="reminder.recipients.length > 0" class="mt-3 flex flex-wrap gap-2">
+                      <div
+                        v-if="reminder.recipients.length > 0"
+                        class="mt-3 flex flex-wrap gap-2"
+                      >
                         <span
                           v-for="recipient in reminder.recipients"
                           :key="recipient"
@@ -262,10 +299,13 @@ const saveRecipients = () => {
 
                   <!-- Delete Button -->
                   <button
-                    @click="deleteReminder(model.id, reminder.id)"
                     class="p-3 bg-linear-to-r from-red-500 to-rose-600 text-white rounded-xl hover:from-red-600 hover:to-rose-700 transition-all duration-300 shadow-md hover:shadow-lg"
+                    @click="deleteReminder(model.id, reminder.id)"
                   >
-                    <Icon icon="trash" class="w-4 h-4" />
+                    <Icon
+                      icon="trash"
+                      class="w-4 h-4"
+                    />
                   </button>
                 </div>
               </div>
@@ -284,7 +324,10 @@ const saveRecipients = () => {
           leave-from-class="opacity-100"
           leave-to-class="opacity-0"
         >
-          <div v-if="showRecipientModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div
+            v-if="showRecipientModal"
+            class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+          >
             <Transition
               enter-active-class="transition-all duration-300 ease-out"
               enter-from-class="opacity-0 scale-95"
@@ -293,19 +336,29 @@ const saveRecipients = () => {
               leave-from-class="opacity-100 scale-100"
               leave-to-class="opacity-0 scale-95"
             >
-              <div v-if="showRecipientModal" class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden">
+              <div
+                v-if="showRecipientModal"
+                class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden"
+              >
                 <!-- Modal Header -->
                 <div class="bg-linear-to-r from-blue-500 to-indigo-600 p-6 text-white">
                   <div class="flex items-center justify-between">
                     <div>
-                      <h3 class="text-xl font-bold">Select Recipients</h3>
-                      <p class="text-blue-100 text-sm mt-1">Choose who should receive this reminder</p>
+                      <h3 class="text-xl font-bold">
+                        Select Recipients
+                      </h3>
+                      <p class="text-blue-100 text-sm mt-1">
+                        Choose who should receive this reminder
+                      </p>
                     </div>
                     <button
-                      @click="showRecipientModal = false"
                       class="p-2 hover:bg-white/20 rounded-lg transition-colors"
+                      @click="showRecipientModal = false"
                     >
-                      <Icon icon="x" class="w-5 h-5" />
+                      <Icon
+                        icon="x"
+                        class="w-5 h-5"
+                      />
                     </button>
                   </div>
                 </div>
@@ -327,19 +380,21 @@ const saveRecipients = () => {
                         <input
                           type="checkbox"
                           :checked="currentReminder?.recipients.includes(recipient)"
-                          @change="toggleRecipient(recipient)"
                           class="w-5 h-5 text-blue-600 rounded-md border-2 border-slate-300 focus:ring-4 focus:ring-blue-100 transition-all"
-                        />
+                          @change="toggleRecipient(recipient)"
+                        >
                         <Icon
                           v-if="currentReminder?.recipients.includes(recipient)"
                           icon="check"
                           class="w-3 h-3 text-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
                         />
                       </div>
-                      <span :class="[
-                        'text-sm font-semibold',
-                        currentReminder?.recipients.includes(recipient) ? 'text-blue-700' : 'text-slate-700'
-                      ]">
+                      <span
+                        :class="[
+                          'text-sm font-semibold',
+                          currentReminder?.recipients.includes(recipient) ? 'text-blue-700' : 'text-slate-700'
+                        ]"
+                      >
                         {{ recipient }}
                       </span>
                     </label>
@@ -349,14 +404,14 @@ const saveRecipients = () => {
                 <!-- Modal Footer -->
                 <div class="p-6 bg-slate-50 border-t border-slate-200 flex gap-3">
                   <button
-                    @click="showRecipientModal = false"
                     class="flex-1 px-6 py-3 bg-white border-2 border-slate-300 text-slate-700 rounded-xl font-semibold hover:bg-slate-50 transition-all duration-300"
+                    @click="showRecipientModal = false"
                   >
                     Cancel
                   </button>
                   <button
-                    @click="saveRecipients"
                     class="flex-1 px-6 py-3 bg-linear-to-r from-green-500 to-emerald-600 text-white rounded-xl font-semibold hover:from-green-600 hover:to-emerald-700 transition-all duration-300 shadow-lg"
+                    @click="saveRecipients"
                   >
                     Save Recipients
                   </button>

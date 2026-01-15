@@ -472,7 +472,10 @@ watch(searchQuery, (newValue) => emit('search', newValue))
             class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1"
             @click="showMobileSearch = false"
           >
-            <Icon icon="times" class="w-4 h-4" />
+            <Icon
+              icon="times"
+              class="w-4 h-4"
+            />
           </button>
         </div>
         <button
@@ -521,7 +524,10 @@ watch(searchQuery, (newValue) => emit('search', newValue))
               <h3 class="text-sm sm:text-base font-bold text-gray-900">
                 {{ notificationsTitle }}
               </h3>
-              <p v-if="notificationCount > 0" class="text-xs text-gray-600 mt-1">
+              <p
+                v-if="notificationCount > 0"
+                class="text-xs text-gray-600 mt-1"
+              >
                 You have {{ notificationCount }} unread notification{{ notificationCount > 1 ? 's' : '' }}
               </p>
             </div>
@@ -593,10 +599,16 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                       class="flex items-center gap-1 sm:gap-1.5 mt-1.5 flex-wrap"
                     >
                       <span class="inline-flex items-center px-1.5 sm:px-2 py-0.5 rounded text-[10px] sm:text-xs font-semibold bg-indigo-100 text-indigo-800 border border-indigo-200">
-                        <Icon icon="tag" class="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-0.5 sm:mr-1" />
+                        <Icon
+                          icon="tag"
+                          class="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-0.5 sm:mr-1"
+                        />
                         {{ notification.source.body_code }}
                       </span>
-                      <Icon icon="chevron-right" class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gray-400 hidden xs:block" />
+                      <Icon
+                        icon="chevron-right"
+                        class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gray-400 hidden xs:block"
+                      />
                       <span class="inline-flex items-center px-1.5 sm:px-2 py-0.5 rounded text-[10px] sm:text-xs font-medium bg-gray-100 text-gray-700 border border-gray-200">
                         {{ notification.source.code }}
                       </span>
@@ -608,7 +620,10 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                         v-if="notification.model"
                         class="inline-flex items-center px-1.5 sm:px-2 py-0.5 rounded text-[10px] sm:text-xs font-medium bg-blue-100 text-blue-800"
                       >
-                        <Icon icon="file" class="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-0.5 sm:mr-1" />
+                        <Icon
+                          icon="file"
+                          class="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-0.5 sm:mr-1"
+                        />
                         <span class="truncate max-w-[100px] sm:max-w-none">{{ formatModelName(notification.model) }}</span>
                       </span>
                       
@@ -620,18 +635,24 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                           notification.title.includes('Overdue') 
                             ? 'bg-red-100 text-red-800 border border-red-200' 
                             : notification.title.includes('Due in 0')
-                            ? 'bg-orange-100 text-orange-800 border border-orange-200'
-                            : 'bg-amber-100 text-amber-800 border border-amber-200'
+                              ? 'bg-orange-100 text-orange-800 border border-orange-200'
+                              : 'bg-amber-100 text-amber-800 border border-amber-200'
                         ]"
                       >
-                        <Icon icon="calendar" class="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-0.5 sm:mr-1 shrink-0" />
+                        <Icon
+                          icon="calendar"
+                          class="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-0.5 sm:mr-1 shrink-0"
+                        />
                         {{ formatDueDate(notification.due_date) }}
                       </span>
                     </div>
                     
                     <!-- Time -->
                     <p class="text-[10px] sm:text-xs text-gray-500 mt-1.5 sm:mt-2 flex items-center">
-                      <Icon icon="clock" class="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-0.5 sm:mr-1" />
+                      <Icon
+                        icon="clock"
+                        class="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-0.5 sm:mr-1"
+                      />
                       {{ notification.time }}
                     </p>
                   </div>

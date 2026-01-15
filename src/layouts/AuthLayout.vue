@@ -96,11 +96,14 @@ export default {
               :src="logoUrl"
               alt="Company Logo"
               class="h-52 lg:h-72 w-auto object-contain"
-            />
+            >
           </div>
 
           <!-- Quote -->
-          <div v-if="quote" class="max-w-md mx-auto lg:mx-0">
+          <div
+            v-if="quote"
+            class="max-w-md mx-auto lg:mx-0"
+          >
             <p class="text-sm lg:text-base font-light text-white/70 italic leading-relaxed">
               "{{ quote }}"
             </p>
@@ -115,7 +118,7 @@ export default {
               :src="logoUrl"
               alt="Company Logo"
               class="h-24 w-auto object-contain"
-            />
+            >
           </div>
 
           <div class="bg-white rounded-lg shadow-xl p-4 sm:p-6 lg:p-8 max-w-md mx-auto w-full">
@@ -173,11 +176,17 @@ export default {
         :src="logoUrl"
         alt="Company Logo"
         class="hidden sm:block h-20 sm:h-32 lg:h-40 w-auto object-contain ml-auto mb-2"
-      />
+      >
       <div class="text-white/90 text-[10px] sm:text-xs bg-black/30 sm:bg-transparent px-2 py-1 sm:p-0 rounded">
-        <div class="font-medium">{{ appName }}</div>
-        <div class="hidden sm:block">({{ appVersion }})</div>
-        <div class="hidden sm:block">{{ copyright }}</div>
+        <div class="font-medium">
+          {{ appName }}
+        </div>
+        <div class="hidden sm:block">
+          ({{ appVersion }})
+        </div>
+        <div class="hidden sm:block">
+          {{ copyright }}
+        </div>
       </div>
     </div>
 
