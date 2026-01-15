@@ -269,53 +269,54 @@ watch(searchQuery, (newValue) => emit('search', newValue))
 
         <!-- Organisation Info Card - Simplified for mobile -->
         <div v-if="showOrganisationInfo && currentOrganisation"
-          class="shrink-0 bg-linear-to-r from-blue-50 via-indigo-50 to-purple-50 px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl border border-blue-200 shadow-sm flex items-center gap-2 sm:gap-3 relative hover:shadow-md transition-shadow max-w-[180px] sm:max-w-none">
-          <!-- Organisation Logo - Hidden on very small screens -->
-          <div v-if="organisationLogo" class="shrink-0 hidden sm:block">
+          class="shrink-0 bg-linear-to-r from-blue-50 via-indigo-50 to-purple-50 px-2 py-1.5 rounded-lg border border-blue-200 shadow-sm flex items-center gap-2 relative hover:shadow-md transition-shadow max-w-[160px] sm:max-w-xs">
+          <!-- Organisation Logo - Smaller on all screens -->
+          <div v-if="organisationLogo" class="shrink-0">
             <div class="relative">
               <img :src="organisationLogo" :alt="`${currentOrganisation.organisation_name} logo`"
-                class="w-7 h-7 sm:w-10 sm:h-10 object-contain rounded-lg bg-white p-0.5 sm:p-1 border border-blue-200 shadow-sm">
-              <!-- Online indicator -->
-              <div
-                class="absolute -bottom-0.5 -right-0.5 w-2 h-2 sm:w-3 sm:h-3 bg-green-500 border-2 border-white rounded-full" />
+                class="w-6 h-6 sm:w-8 sm:h-8 object-contain rounded-md bg-white p-0.5 border border-blue-200 shadow-sm">
+              <!-- Online indicator - smaller -->
+              <div class="absolute -bottom-0.5 -right-0.5 w-2 h-2 bg-green-500 border border-white rounded-full" />
             </div>
           </div>
 
           <!-- Organisation Details with Switcher -->
           <button v-if="organisations.length > 1"
-            class="flex items-center gap-1.5 sm:gap-2 min-w-0 cursor-pointer hover:bg-white/50 rounded-lg px-1.5 sm:px-2 py-1 sm:py-1.5 transition-all group"
+            class="flex items-center gap-1.5 min-w-0 cursor-pointer hover:bg-white/50 rounded-md px-1.5 py-0.5 transition-all group flex-1"
             @click="toggleOrganisationDropdown">
             <div class="min-w-0 flex-1">
               <p
-                class="text-xs sm:text-sm font-bold text-blue-900 truncate max-w-[120px] sm:max-w-[180px] group-hover:text-blue-700">
+                class="text-xs font-bold text-blue-900 truncate max-w-[100px] sm:max-w-40 group-hover:text-blue-700 leading-tight">
                 {{ currentOrganisation.organisation_name }}
               </p>
-              <div class="flex items-center gap-1 sm:gap-1.5 mt-0.5 hidden sm:flex">
-                <Icon icon="user" class="w-3 h-3 text-blue-600 shrink-0" />
-                <p v-if="formattedActiveRoles" class="text-xs text-blue-700 truncate font-medium">
+              <div class="flex items-center gap-1 mt-0.5">
+                <Icon icon="user" class="w-2.5 h-2.5 text-blue-600 shrink-0" />
+                <p v-if="formattedActiveRoles"
+                  class="text-[10px] sm:text-xs text-blue-700 truncate font-medium leading-tight">
                   {{ formattedActiveRoles }}
                 </p>
               </div>
             </div>
             <Icon icon="chevron-down"
-              class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600 shrink-0 group-hover:text-blue-700 transition-transform"
+              class="w-3 h-3 text-blue-600 shrink-0 group-hover:text-blue-700 transition-transform"
               :class="{ 'rotate-180': showOrganisationDropdown }" />
           </button>
 
           <!-- Static display when only one organisation -->
           <div v-else class="min-w-0 flex-1">
-            <p class="text-xs sm:text-sm font-bold text-blue-900 truncate max-w-[120px] sm:max-w-[180px]">
+            <p class="text-xs font-bold text-blue-900 truncate max-w-[100px] sm:max-w-40 leading-tight">
               {{ currentOrganisation.organisation_name }}
             </p>
-            <div class="flex items-center gap-1 sm:gap-1.5 mt-0.5 hidden sm:flex">
-              <Icon icon="user" class="w-3 h-3 text-blue-600 shrink-0" />
-              <p v-if="formattedActiveRoles" class="text-xs text-blue-700 truncate font-medium">
+            <div class="flex items-center gap-1 mt-0.5">
+              <Icon icon="user" class="w-2.5 h-2.5 text-blue-600 shrink-0" />
+              <p v-if="formattedActiveRoles"
+                class="text-[10px] sm:text-xs text-blue-700 truncate font-medium leading-tight">
                 {{ formattedActiveRoles }}
               </p>
             </div>
           </div>
 
-          <!-- Organisation Dropdown - Mobile optimized -->
+          <!-- Organisation Dropdown - Same as before but positioned better -->
           <transition enter-active-class="transition-all duration-200 ease-out"
             leave-active-class="transition-all duration-200 ease-in" enter-from-class="opacity-0 translate-y-2 scale-95"
             enter-to-class="opacity-100 translate-y-0 scale-100" leave-from-class="opacity-100 translate-y-0 scale-100"
@@ -472,7 +473,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                         class="inline-flex items-center px-1.5 sm:px-2 py-0.5 rounded text-[10px] sm:text-xs font-medium bg-blue-100 text-blue-800">
                         <Icon icon="file" class="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-0.5 sm:mr-1" />
                         <span class="truncate max-w-[100px] sm:max-w-none">{{ formatModelName(notification.model)
-                          }}</span>
+                        }}</span>
                       </span>
 
                       <!-- Due Date Badge -->
