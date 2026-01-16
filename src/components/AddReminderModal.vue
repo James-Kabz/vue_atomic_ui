@@ -1,138 +1,130 @@
 <script setup>
 import { ref, computed } from 'vue'
 import Modal from './Modal.vue'
+import MultiSelect from './MultiSelect.vue'
 
 const emit = defineEmits(['update:modelValue', 'save'])
 
 const props = defineProps({
-  modelValue: Boolean,
-  availableRecipients: {
-    type: Array,
-    default: () => []
-  },
-  sendTypeOptions: {
-    type: Array,
-    default: () => []
-  },
-  modelName: {
-    type: String,
-    default: ''
-  }
+    modelValue: Boolean,
+    availableRecipients: {
+        type: Array,
+        default: () => []
+    },
+    sendTypeOptions: {
+        type: Array,
+        default: () => []
+    },
+    modelName: {
+        type: String,
+        default: ''
+    }
 })
 
 /**
  * v-model proxy (prevents prop mutation)
  */
 const isOpen = computed({
-  get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value)
+    get: () => props.modelValue,
+    set: (value) => emit('update:modelValue', value)
 })
 
 const days = ref(0)
 const sendType = ref('Email')
 const recipients = ref([])
 
-const toggleRecipient = (recipient) => {
-  const index = recipients.value.indexOf(recipient)
-  index > -1
-    ? recipients.value.splice(index, 1)
-    : recipients.value.push(recipient)
-}
+/**
+ * Normalize recipients for MultiSelect
+ * Expected: [{ value, label }]
+ */
+const recipientOptions = computed(() =>
+    props.availableRecipients.map(r => ({
+        value: r,
+        label: r
+    }))
+)
 
 const reset = () => {
-  days.value = 0
-  sendType.value = 'Email'
-  recipients.value = []
+    days.value = 0
+    sendType.value = 'Email'
+    recipients.value = []
 }
 
 const save = () => {
-  emit('save', {
-    days: Number(days.value) || 0,
-    sendType: sendType.value,
-    recipients: [...recipients.value]
-  })
-  isOpen.value = false
-  reset()
+    emit('save', {
+        days: Number(days.value) || 0,
+        sendType: sendType.value,
+        recipients: [...recipients.value]
+    })
+    isOpen.value = false
+    reset()
 }
 
 const cancel = () => {
-  isOpen.value = false
-  reset()
+    isOpen.value = false
+    reset()
 }
 </script>
 
 <template>
-  <Modal
-    v-model="isOpen"
-    size="md"
-  >
-    <div class="p-6">
-      <h3 class="text-xl font-bold mb-4">
-        Add Reminder for {{ modelName }}
-      </h3>
+    <Modal v-model="isOpen" size="xl">
+        <div class="p-6 space-y-6">
+            <!-- Header -->
+            <div>
+                <h3 class="text-xl font-semibold text-gray-900">
+                    Add Reminder
+                </h3>
+                <p class="text-sm text-gray-500">
+                    Configure reminder rules for <span class="font-medium">{{ modelName }}</span>
+                </p>
+            </div>
 
-      <!-- Days -->
-      <div class="mb-4">
-        <label class="block text-sm font-medium mb-2">Days Before</label>
-        <input
-          v-model="days"
-          type="number"
-          min="0"
-          class="w-full px-3 py-2 border rounded"
-        >
-      </div>
+            <!-- Days Before -->
+            <div class="space-y-1.5">
+                <label class="text-sm font-medium text-gray-700">
+                    Days Before Due Date
+                </label>
+                <input v-model="days" type="number" min="0"
+                    class="w-full px-3 py-2.5 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            </div>
 
-      <!-- Send Type -->
-      <div class="mb-4">
-        <label class="block text-sm font-medium mb-2">Send Type</label>
-        <div class="flex gap-2">
-          <button
-            v-for="option in sendTypeOptions"
-            :key="option.value"
-            :class="sendType === option.value
-              ? 'bg-blue-500 text-white'
-              : 'bg-gray-200'"
-            class="px-4 py-2 rounded"
-            @click="sendType = option.value"
-          >
-            {{ option.label }}
-          </button>
+            <!-- Send Type -->
+            <div class="space-y-2">
+                <label class="text-sm font-medium text-gray-700">
+                    Notification Channel
+                </label>
+                <div class="flex flex-wrap gap-2">
+                    <button v-for="option in sendTypeOptions" :key="option.value" type="button"
+                        @click="sendType = option.value" class="px-4 py-2 rounded-md text-sm font-medium transition"
+                        :class="sendType === option.value
+                            ? 'bg-blue-600 text-white shadow'
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'">
+                        {{ option.label }}
+                    </button>
+                </div>
+            </div>
+
+            <!-- Recipients -->
+            <div class="space-y-2">
+                <label class="text-sm font-medium text-gray-700">
+                    Recipients
+                </label>
+
+                <MultiSelect v-model="recipients" :options="recipientOptions" placeholder="Select recipients..." />
+            </div>
+
+            <!-- Actions -->
+            <div class="flex justify-end gap-3 pt-4 border-t">
+                <button type="button" class="px-4 py-2 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    @click="cancel">
+                    Cancel
+                </button>
+
+                <button type="button" class="px-5 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 shadow"
+                    @click="save">
+                    Add Reminder
+                </button>
+            </div>
         </div>
-      </div>
-
-      <!-- Recipients -->
-      <div class="mb-4">
-        <label class="block text-sm font-medium mb-2">Recipients</label>
-        <div class="space-y-2 max-h-40 overflow-y-auto">
-          <label
-            v-for="recipient in availableRecipients"
-            :key="recipient"
-            class="flex items-center gap-2"
-          >
-            <input
-              type="checkbox"
-              :checked="recipients.includes(recipient)"
-              @change="toggleRecipient(recipient)"
-            >
-            {{ recipient }}
-          </label>
-        </div>
-      </div>
-
-      <div class="flex gap-2">
-        <button
-          class="px-4 py-2 bg-gray-200 rounded"
-          @click="cancel"
-        >
-          Cancel
-        </button>
-        <button
-          class="px-4 py-2 bg-blue-500 text-white rounded"
-          @click="save"
-        >
-          Add Reminder
-        </button>
-      </div>
-    </div>
-  </Modal>
+    </Modal>
 </template>
