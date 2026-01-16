@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from 'vue'
 import Icon from './Icon.vue'
+import Modal from './Modal.vue'
+import AddReminderModal from './AddReminderModal.vue'
 
 const props = defineProps({
   models: {
@@ -25,6 +27,8 @@ const emit = defineEmits(['update:models'])
 const selectedModel = ref(null)
 const showRecipientModal = ref(false)
 const currentReminder = ref(null)
+const showAddModal = ref(false)
+const selectedModelForAdd = ref(null)
 
 const toggleModel = (modelId) => {
   const model = props.models.find((m) => m.id === modelId)
@@ -35,13 +39,16 @@ const toggleModel = (modelId) => {
 }
 
 const addReminder = (modelId) => {
-  const model = props.models.find((m) => m.id === modelId)
+  selectedModelForAdd.value = modelId
+  showAddModal.value = true
+}
+
+const onSaveAddReminder = (data) => {
+  const model = props.models.find((m) => m.id === selectedModelForAdd.value)
   if (model) {
     const newReminder = {
       id: model.reminders.length + 1,
-      days: 0,
-      recipients: [],
-      sendType: 'Email',
+      ...data
     }
     model.reminders.push(newReminder)
     emit('update:models', [...props.models])
@@ -314,113 +321,94 @@ const saveRecipients = () => {
         </div>
       </div>
 
+      <!-- Add Reminder Modal -->
+      <AddReminderModal
+        v-model="showAddModal"
+        :availableRecipients="availableRecipients"
+        :sendTypeOptions="sendTypeOptions"
+        :modelName="models.find(m => m.id === selectedModelForAdd)?.name"
+        @save="onSaveAddReminder"
+      />
+
       <!-- Recipient Modal -->
-      <Teleport to="body">
-        <Transition
-          enter-active-class="transition-all duration-300 ease-out"
-          enter-from-class="opacity-0"
-          enter-to-class="opacity-100"
-          leave-active-class="transition-all duration-200 ease-in"
-          leave-from-class="opacity-100"
-          leave-to-class="opacity-0"
-        >
-          <div
-            v-if="showRecipientModal"
-            class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
-          >
-            <Transition
-              enter-active-class="transition-all duration-300 ease-out"
-              enter-from-class="opacity-0 scale-95"
-              enter-to-class="opacity-100 scale-100"
-              leave-active-class="transition-all duration-200 ease-in"
-              leave-from-class="opacity-100 scale-100"
-              leave-to-class="opacity-0 scale-95"
+      <Modal v-model="showRecipientModal" size="md" :showClose="false">
+        <!-- Modal Header -->
+        <div class="bg-linear-to-r from-blue-500 to-indigo-600 p-6 text-white">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-xl font-bold">
+                Select Recipients
+              </h3>
+              <p class="text-blue-100 text-sm mt-1">
+                Choose who should receive this reminder
+              </p>
+            </div>
+            <button
+              class="p-2 hover:bg-white/20 rounded-lg transition-colors"
+              @click="showRecipientModal = false"
             >
-              <div
-                v-if="showRecipientModal"
-                class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden"
-              >
-                <!-- Modal Header -->
-                <div class="bg-linear-to-r from-blue-500 to-indigo-600 p-6 text-white">
-                  <div class="flex items-center justify-between">
-                    <div>
-                      <h3 class="text-xl font-bold">
-                        Select Recipients
-                      </h3>
-                      <p class="text-blue-100 text-sm mt-1">
-                        Choose who should receive this reminder
-                      </p>
-                    </div>
-                    <button
-                      class="p-2 hover:bg-white/20 rounded-lg transition-colors"
-                      @click="showRecipientModal = false"
-                    >
-                      <Icon
-                        icon="x"
-                        class="w-5 h-5"
-                      />
-                    </button>
-                  </div>
-                </div>
-
-                <!-- Modal Body -->
-                <div class="p-6 max-h-96 overflow-y-auto">
-                  <div class="space-y-2">
-                    <label
-                      v-for="recipient in availableRecipients"
-                      :key="recipient"
-                      :class="[
-                        'flex items-center gap-3 p-4 rounded-xl cursor-pointer transition-all duration-300',
-                        currentReminder?.recipients.includes(recipient)
-                          ? 'bg-linear-to-r from-blue-50 to-indigo-50 border-2 border-blue-300'
-                          : 'bg-slate-50 border-2 border-transparent hover:border-slate-200'
-                      ]"
-                    >
-                      <div class="relative">
-                        <input
-                          type="checkbox"
-                          :checked="currentReminder?.recipients.includes(recipient)"
-                          class="w-5 h-5 text-blue-600 rounded-md border-2 border-slate-300 focus:ring-4 focus:ring-blue-100 transition-all"
-                          @change="toggleRecipient(recipient)"
-                        >
-                        <Icon
-                          v-if="currentReminder?.recipients.includes(recipient)"
-                          icon="check"
-                          class="w-3 h-3 text-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-                        />
-                      </div>
-                      <span
-                        :class="[
-                          'text-sm font-semibold',
-                          currentReminder?.recipients.includes(recipient) ? 'text-blue-700' : 'text-slate-700'
-                        ]"
-                      >
-                        {{ recipient }}
-                      </span>
-                    </label>
-                  </div>
-                </div>
-
-                <!-- Modal Footer -->
-                <div class="p-6 bg-slate-50 border-t border-slate-200 flex gap-3">
-                  <button
-                    class="flex-1 px-6 py-3 bg-white border-2 border-slate-300 text-slate-700 rounded-xl font-semibold hover:bg-slate-50 transition-all duration-300"
-                    @click="showRecipientModal = false"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    class="flex-1 px-6 py-3 bg-linear-to-r from-green-500 to-emerald-600 text-white rounded-xl font-semibold hover:from-green-600 hover:to-emerald-700 transition-all duration-300 shadow-lg"
-                    @click="saveRecipients"
-                  >
-                    Save Recipients
-                  </button>
-                </div>
-              </div>
-            </Transition>
+              <Icon
+                icon="x"
+                class="w-5 h-5"
+              />
+            </button>
           </div>
-        </Transition>
-      </Teleport>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="p-6 max-h-96 overflow-y-auto">
+          <div class="space-y-2">
+            <label
+              v-for="recipient in availableRecipients"
+              :key="recipient"
+              :class="[
+                'flex items-center gap-3 p-4 rounded-xl cursor-pointer transition-all duration-300',
+                currentReminder?.recipients.includes(recipient)
+                  ? 'bg-linear-to-r from-blue-50 to-indigo-50 border-2 border-blue-300'
+                  : 'bg-slate-50 border-2 border-transparent hover:border-slate-200'
+              ]"
+            >
+              <div class="relative">
+                <input
+                  type="checkbox"
+                  :checked="currentReminder?.recipients.includes(recipient)"
+                  class="w-5 h-5 text-blue-600 rounded-md border-2 border-slate-300 focus:ring-4 focus:ring-blue-100 transition-all"
+                  @change="toggleRecipient(recipient)"
+                >
+                <Icon
+                  v-if="currentReminder?.recipients.includes(recipient)"
+                  icon="check"
+                  class="w-3 h-3 text-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+                />
+              </div>
+              <span
+                :class="[
+                  'text-sm font-semibold',
+                  currentReminder?.recipients.includes(recipient) ? 'text-blue-700' : 'text-slate-700'
+                ]"
+              >
+                {{ recipient }}
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="p-6 bg-slate-50 border-t border-slate-200 flex gap-3">
+          <button
+            class="flex-1 px-6 py-3 bg-white border-2 border-slate-300 text-slate-700 rounded-xl font-semibold hover:bg-slate-50 transition-all duration-300"
+            @click="showRecipientModal = false"
+          >
+            Cancel
+          </button>
+          <button
+            class="flex-1 px-6 py-3 bg-linear-to-r from-green-500 to-emerald-600 text-white rounded-xl font-semibold hover:from-green-600 hover:to-emerald-700 transition-all duration-300 shadow-lg"
+            @click="saveRecipients"
+          >
+            Save Recipients
+          </button>
+        </div>
+      </Modal>
     </div>
   </div>
 </template>
