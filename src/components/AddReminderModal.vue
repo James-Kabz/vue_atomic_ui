@@ -1,7 +1,8 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import Modal from './Modal.vue'
-import Icon from './Icon.vue'
+
+const emit = defineEmits(['update:modelValue', 'save'])
 
 const props = defineProps({
   modelValue: Boolean,
@@ -19,7 +20,13 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['update:modelValue', 'save'])
+/**
+ * v-model proxy (prevents prop mutation)
+ */
+const isOpen = computed({
+  get: () => props.modelValue,
+  set: (value) => emit('update:modelValue', value)
+})
 
 const days = ref(0)
 const sendType = ref('Email')
@@ -27,38 +34,42 @@ const recipients = ref([])
 
 const toggleRecipient = (recipient) => {
   const index = recipients.value.indexOf(recipient)
-  if (index > -1) {
-    recipients.value.splice(index, 1)
-  } else {
-    recipients.value.push(recipient)
-  }
+  index > -1
+    ? recipients.value.splice(index, 1)
+    : recipients.value.push(recipient)
+}
+
+const reset = () => {
+  days.value = 0
+  sendType.value = 'Email'
+  recipients.value = []
 }
 
 const save = () => {
   emit('save', {
-    days: parseInt(days.value) || 0,
+    days: Number(days.value) || 0,
     sendType: sendType.value,
     recipients: [...recipients.value]
   })
-  emit('update:modelValue', false)
-  // reset
-  days.value = 0
-  sendType.value = 'Email'
-  recipients.value = []
+  isOpen.value = false
+  reset()
 }
 
 const cancel = () => {
-  emit('update:modelValue', false)
-  days.value = 0
-  sendType.value = 'Email'
-  recipients.value = []
+  isOpen.value = false
+  reset()
 }
 </script>
 
 <template>
-  <Modal v-model="modelValue" size="md">
+  <Modal
+    v-model="isOpen"
+    size="md"
+  >
     <div class="p-6">
-      <h3 class="text-xl font-bold mb-4">Add Reminder for {{ modelName }}</h3>
+      <h3 class="text-xl font-bold mb-4">
+        Add Reminder for {{ modelName }}
+      </h3>
 
       <!-- Days -->
       <div class="mb-4">
@@ -68,7 +79,7 @@ const cancel = () => {
           type="number"
           min="0"
           class="w-full px-3 py-2 border rounded"
-        />
+        >
       </div>
 
       <!-- Send Type -->
@@ -78,7 +89,9 @@ const cancel = () => {
           <button
             v-for="option in sendTypeOptions"
             :key="option.value"
-            :class="sendType === option.value ? 'bg-blue-500 text-white' : 'bg-gray-200'"
+            :class="sendType === option.value
+              ? 'bg-blue-500 text-white'
+              : 'bg-gray-200'"
             class="px-4 py-2 rounded"
             @click="sendType = option.value"
           >
@@ -100,15 +113,25 @@ const cancel = () => {
               type="checkbox"
               :checked="recipients.includes(recipient)"
               @change="toggleRecipient(recipient)"
-            />
+            >
             {{ recipient }}
           </label>
         </div>
       </div>
 
       <div class="flex gap-2">
-        <button @click="cancel" class="px-4 py-2 bg-gray-200 rounded">Cancel</button>
-        <button @click="save" class="px-4 py-2 bg-blue-500 text-white rounded">Add Reminder</button>
+        <button
+          class="px-4 py-2 bg-gray-200 rounded"
+          @click="cancel"
+        >
+          Cancel
+        </button>
+        <button
+          class="px-4 py-2 bg-blue-500 text-white rounded"
+          @click="save"
+        >
+          Add Reminder
+        </button>
       </div>
     </div>
   </Modal>

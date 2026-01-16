@@ -324,14 +324,18 @@ const saveRecipients = () => {
       <!-- Add Reminder Modal -->
       <AddReminderModal
         v-model="showAddModal"
-        :availableRecipients="availableRecipients"
-        :sendTypeOptions="sendTypeOptions"
-        :modelName="models.find(m => m.id === selectedModelForAdd)?.name"
+        :available-recipients="availableRecipients"
+        :send-type-options="sendTypeOptions"
+        :model-name="models.find(m => m.id === selectedModelForAdd)?.name"
         @save="onSaveAddReminder"
       />
 
       <!-- Recipient Modal -->
-      <Modal v-model="showRecipientModal" size="md" :showClose="false">
+      <Modal
+        v-model="showRecipientModal"
+        size="md"
+        :show-close="false"
+      >
         <!-- Modal Header -->
         <div class="bg-linear-to-r from-blue-500 to-indigo-600 p-6 text-white">
           <div class="flex items-center justify-between">
