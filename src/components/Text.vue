@@ -52,9 +52,9 @@ const textVariants = cva(
         xl: 'text-xl'
       },
       variant: {
-        default: 'text-foreground',
-        muted: 'text-muted-foreground',
-        danger: 'text-danger'
+        default: 'text-(--ui-text)',
+        muted: 'text-(--ui-text-muted)',
+        danger: 'text-(--ui-danger)'
       },
       weight: {
         normal: 'font-normal',

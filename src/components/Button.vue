@@ -57,42 +57,42 @@ const props = defineProps({
 })
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ui-primary) focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
         default:
-          'bg-blue-600 text-white hover:bg-blue-700',
+          'ui-glossy-button-strong text-(--ui-text-inverse) hover:brightness-110',
         danger:
-          'bg-red-600 text-white hover:bg-red-700',
+          'ui-glossy-overlay text-(--ui-text-inverse) bg-(--ui-danger) hover:bg-(--ui-danger-strong)',
         outline:
-          'border border-gray-300 bg-white text-gray-900 hover:bg-gray-100',
+          'ui-glossy-button ui-glossy-border border text-(--ui-text) bg-(--ui-surface) hover:brightness-105',
         secondary:
-          'bg-gray-600 text-white hover:bg-gray-700',
+          'ui-glossy-button ui-glossy-border border text-(--ui-text) bg-(--ui-surface) hover:brightness-105',
         ghost:
-          'bg-transparent text-gray-700 hover:bg-gray-100',
+          'bg-transparent text-(--ui-text-muted) hover:bg-[color:color-mix(in oklab, var(--ui-accent-soft), transparent 70%)] hover:backdrop-blur-sm',
         link:
-          'text-blue-600 hover:underline',
+          'text-(--ui-primary) hover:underline',
         success:
-          'bg-green-600 text-white hover:bg-green-700',
+          'ui-glossy-overlay text-(--ui-text-inverse) bg-(--ui-success) hover:bg-(--ui-success-strong)',
         warning:
-          'bg-yellow-500 text-black hover:bg-yellow-600',
+          'ui-glossy-overlay text-(--ui-text) bg-(--ui-warning) hover:bg-(--ui-warning)',
         info:
-          'bg-cyan-600 text-white hover:bg-cyan-700',
+          'ui-glossy-button-strong text-(--ui-text-inverse) hover:brightness-110',
         subtle:
-          'bg-gray-100 text-gray-800 hover:bg-gray-200',
+          'ui-glossy-button ui-glossy-border border text-(--ui-text) bg-(--ui-surface) hover:brightness-105',
         dark:
-          'bg-gray-900 text-white hover:bg-black',
+          'ui-glossy-button ui-glossy-border border text-(--ui-text-inverse) bg-(--ui-surface-strong) hover:brightness-105',
         light:
-          'bg-gray-50 text-gray-800 border border-gray-200 hover:bg-gray-100',
+          'ui-glossy-button ui-glossy-border border text-(--ui-text) bg-(--ui-surface) hover:brightness-105',
         primaryOutline:
-          'border border-blue-600 text-blue-600 bg-transparent hover:bg-blue-50',
+          'ui-glossy-button border border-(--ui-primary) text-(--ui-primary) hover:brightness-105',
         dangerOutline:
-          'border border-red-600 text-red-600 bg-transparent hover:bg-red-50',
+          'ui-glossy-button border border-(--ui-danger) text-(--ui-danger) hover:brightness-105',
         successOutline:
-          'border border-green-600 text-green-600 bg-transparent hover:bg-green-50',
+          'ui-glossy-button border border-(--ui-success) text-(--ui-success) hover:brightness-105',
         gradient:
-          'bg-linear-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700',
+          'ui-glossy-button-strong bg-linear-to-r from-(--ui-primary) to-(--ui-accent) text-(--ui-text-inverse) hover:from-(--ui-primary) hover:to-(--ui-accent-strong)',
       },
       size: {
         '2xs': 'h-6 px-2 py-1 text-xs rounded',

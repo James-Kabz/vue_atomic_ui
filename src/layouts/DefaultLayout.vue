@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="min-h-screen bg-(--ui-surface-muted)">
     <!-- Header -->
     <Header>
       <template #logo>
@@ -32,7 +32,7 @@
       <!-- Breadcrumb -->
       <div
         v-if="showBreadcrumb"
-        class="bg-white border-b border-gray-200"
+        class="bg-(--ui-surface) border-b border-(--ui-border)"
       >
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <slot name="breadcrumb">
@@ -52,7 +52,7 @@
       <template #brand>
         <slot name="footer-brand">
           <Logo class="mb-4" />
-          <Text class="text-gray-600 max-w-md">
+          <Text class="text-(--ui-text-muted) max-w-md">
             Your application description goes here.
           </Text>
         </slot>

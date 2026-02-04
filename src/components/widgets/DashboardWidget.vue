@@ -244,9 +244,10 @@ onUnmounted(() => {
     tabindex="0"
     :style="containerStyles"
     :class="cn(
-      'bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden transition-all select-none flex flex-col relative',
+      'ui-glossy-surface rounded-xl border ui-glossy-border overflow-hidden transition-all select-none flex flex-col relative',
+      'shadow-sm',
       isDragging ? 'opacity-50 scale-95' : 'hover:shadow-lg cursor-move',
-      isFocused ? 'ring-2 ring-blue-400 ring-offset-2' : ''
+      isFocused ? 'ring-2 ring-(--ui-primary) ring-offset-2' : ''
     )"
     @dragstart="handleDragStart"
     @dragend="handleDragEnd"
@@ -255,15 +256,15 @@ onUnmounted(() => {
   >
     <div
       v-if="showHeader"
-      class="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-linear-to-r from-slate-50 to-slate-100 shrink-0"
+      class="flex items-center justify-between px-6 py-4 border-b border-(--ui-border) bg-linear-to-r from-(--ui-surface-muted) to-(--ui-surface-muted) shrink-0"
     >
       <div class="flex items-center gap-3">
         <Icon
           v-if="icon"
           :icon="icon"
-          class="w-5 h-5 text-slate-700"
+          class="w-5 h-5 text-(--ui-text-muted)"
         />
-        <h3 class="font-semibold text-lg text-slate-900">
+        <h3 class="font-semibold text-lg text-(--ui-text)">
           {{ title }}
         </h3>
       </div>
@@ -271,32 +272,32 @@ onUnmounted(() => {
         <slot name="header-actions" />
         
         <button
-          class="p-2 rounded-lg hover:bg-white/80 transition-all duration-200 hover:scale-105 active:scale-95"
+          class="p-2 rounded-lg hover:bg-[color:color-mix(in oklab, var(--ui-surface), transparent 20%)] transition-all duration-200 hover:scale-105 active:scale-95"
           title="Keyboard shortcuts (?)"
           @click="showKeyboardHelp = !showKeyboardHelp"
         >
           <Icon
             icon="circle-info"
-            class="w-4 h-4 text-slate-600"
+            class="w-4 h-4 text-(--ui-text-muted)"
           />
         </button>
 
         <button
           v-if="customizationOptions.length > 0"
-          class="p-2 rounded-lg hover:bg-white/80 transition-all duration-200 hover:scale-105 active:scale-95"
-          :class="{ 'bg-blue-100': showCustomization }"
+          class="p-2 rounded-lg hover:bg-[color:color-mix(in oklab, var(--ui-surface), transparent 20%)] transition-all duration-200 hover:scale-105 active:scale-95"
+          :class="{ 'bg-(--ui-primary-soft)': showCustomization }"
           title="Customize (C)"
           @click="toggleCustomization"
         >
           <Icon
             icon="gear"
-            class="w-4 h-4 text-slate-600"
+            class="w-4 h-4 text-(--ui-text-muted)"
           />
         </button>
 
         <button
           v-if="showRefresh"
-          class="p-2 rounded-lg hover:bg-white/80 transition-all duration-200 hover:scale-105 active:scale-95"
+          class="p-2 rounded-lg hover:bg-[color:color-mix(in oklab, var(--ui-surface), transparent 20%)] transition-all duration-200 hover:scale-105 active:scale-95"
           :disabled="loading"
           title="Refresh (R)"
           @click="$emit('refresh')"
@@ -304,7 +305,7 @@ onUnmounted(() => {
           <Icon
             icon="refresh"
             :class="[
-              'w-4 h-4 text-slate-600 transition-transform duration-500',
+              'w-4 h-4 text-(--ui-text-muted) transition-transform duration-500',
               { 'animate-spin': loading }
             ]"
           />
@@ -314,19 +315,19 @@ onUnmounted(() => {
 
     <div
       v-if="showCustomization"
-      class="absolute top-16 right-4 z-20 bg-white rounded-lg shadow-xl border border-slate-200 p-4 min-w-[250px]"
+      class="absolute top-16 right-4 z-20 bg-(--ui-surface) rounded-lg shadow-xl border border-(--ui-border) p-4 min-w-[250px]"
     >
       <div class="flex items-center justify-between mb-3">
-        <h4 class="font-semibold text-sm text-slate-900">
+        <h4 class="font-semibold text-sm text-(--ui-text)">
           Customize Widget
         </h4>
         <button
-          class="p-1 rounded hover:bg-slate-100"
+          class="p-1 rounded hover:bg-(--ui-surface-muted)"
           @click="showCustomization = false"
         >
           <Icon
             icon="x"
-            class="w-4 h-4 text-slate-600"
+            class="w-4 h-4 text-(--ui-text-muted)"
           />
         </button>
       </div>
@@ -339,7 +340,7 @@ onUnmounted(() => {
         >
           <label
             :for="`setting-${option.id}`"
-            class="text-sm text-slate-700 cursor-pointer"
+            class="text-sm text-(--ui-text-muted) cursor-pointer"
           >
             {{ option.label }}
           </label>
@@ -347,13 +348,13 @@ onUnmounted(() => {
             :id="`setting-${option.id}`"
             :class="[
               'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
-              customSettings[option.id] ? 'bg-blue-600' : 'bg-slate-300'
+              customSettings[option.id] ? 'bg-(--ui-primary)' : 'bg-(--ui-surface-soft)'
             ]"
             @click="updateSetting(option.id, !customSettings[option.id])"
           >
             <span
               :class="[
-                'inline-block h-4 w-4 transform rounded-full bg-white transition-transform',
+                'inline-block h-4 w-4 transform rounded-full bg-(--ui-surface) transition-transform',
                 customSettings[option.id] ? 'translate-x-6' : 'translate-x-1'
               ]"
             />
@@ -364,19 +365,19 @@ onUnmounted(() => {
 
     <div
       v-if="showKeyboardHelp"
-      class="absolute top-16 right-4 z-20 bg-white rounded-lg shadow-xl border border-slate-200 p-4 min-w-[280px]"
+      class="absolute top-16 right-4 z-20 bg-(--ui-surface) rounded-lg shadow-xl border border-(--ui-border) p-4 min-w-[280px]"
     >
       <div class="flex items-center justify-between mb-3">
-        <h4 class="font-semibold text-sm text-slate-900">
+        <h4 class="font-semibold text-sm text-(--ui-text)">
           Keyboard Shortcuts
         </h4>
         <button
-          class="p-1 rounded hover:bg-slate-100"
+          class="p-1 rounded hover:bg-(--ui-surface-muted)"
           @click="showKeyboardHelp = false"
         >
           <Icon
             icon="x"
-            class="w-4 h-4 text-slate-600"
+            class="w-4 h-4 text-(--ui-text-muted)"
           />
         </button>
       </div>
@@ -387,8 +388,8 @@ onUnmounted(() => {
           :key="shortcut.key"
           class="flex items-center justify-between text-sm"
         >
-          <span class="text-slate-700">{{ shortcut.description }}</span>
-          <kbd class="px-2 py-1 bg-slate-100 border border-slate-300 rounded text-xs font-mono">
+          <span class="text-(--ui-text-muted)">{{ shortcut.description }}</span>
+          <kbd class="px-2 py-1 bg-(--ui-surface-muted) border border-(--ui-border) rounded text-xs font-mono">
             {{ shortcut.key }}
           </kbd>
         </div>
@@ -398,7 +399,7 @@ onUnmounted(() => {
     <div class="relative flex-1 overflow-hidden">
       <div
         v-if="loading"
-        class="absolute inset-0 bg-white/90 backdrop-blur-sm z-10 flex items-center justify-center"
+        class="absolute inset-0 bg-[color:color-mix(in oklab, var(--ui-surface), transparent 10%)] backdrop-blur-sm z-10 flex items-center justify-center"
       >
         <Loader
           type="spin"
@@ -432,7 +433,7 @@ onUnmounted(() => {
 
     <div
       v-if="$slots.footer"
-      class="border-t border-slate-200 px-6 py-3 bg-slate-50 shrink-0"
+      class="border-t border-(--ui-border) px-6 py-3 bg-(--ui-surface-muted) shrink-0"
     >
       <slot name="footer" />
     </div>

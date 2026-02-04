@@ -10,14 +10,14 @@
   >
     <!-- Custom logo -->
     <template #logo>
-      <div class="w-8 h-8 bg-linear-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-        <span class="text-white font-bold text-sm">D</span>
+      <div class="w-8 h-8 bg-linear-to-br from-(--ui-primary) to-(--ui-accent) rounded-lg flex items-center justify-center">
+        <span class="text-(--ui-text-inverse) font-bold text-sm">D</span>
       </div>
     </template>
 
     <!-- Header right content -->
     <template #header-right>
-      <button class="p-2 rounded-lg text-gray-600 hover:bg-gray-100 relative">
+      <button class="p-2 rounded-lg text-(--ui-text-muted) hover:bg-(--ui-surface-muted) relative">
         <svg
           class="w-6 h-6"
           fill="none"
@@ -31,26 +31,26 @@
             d="M15 17h5l-5-5 5-5h-5m-6 10v-2a3 3 0 10-6 0v2h6z"
           />
         </svg>
-        <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full" />
+        <span class="absolute top-0 right-0 w-2 h-2 bg-(--ui-danger) rounded-full" />
       </button>
     </template>
 
     <!-- Main content -->
     <div class="space-y-6">
-      <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
-        <h2 class="text-2xl font-bold text-gray-900 mb-4">
+      <div class="bg-(--ui-surface) rounded-lg p-6 shadow-sm border border-(--ui-border)">
+        <h2 class="text-2xl font-bold text-(--ui-text) mb-4">
           Welcome to Dashboard
         </h2>
-        <p class="text-gray-600">
+        <p class="text-(--ui-text-muted)">
           This is a demo of the Vue Dashboard Layout package. The sidebar can be collapsed,
           and all components are fully customizable through props and slots.
         </p>
         
-        <div class="mt-6 p-4 bg-blue-50 rounded-lg">
-          <h3 class="font-semibold text-blue-900 mb-2">
+        <div class="mt-6 p-4 bg-(--ui-primary-soft) rounded-lg">
+          <h3 class="font-semibold text-(--ui-primary) mb-2">
             Features:
           </h3>
-          <ul class="text-blue-800 space-y-1">
+          <ul class="text-(--ui-primary) space-y-1">
             <li>• Responsive design with mobile support</li>
             <li>• Collapsible sidebar with smooth transitions</li>
             <li>• Customizable through props and slots</li>

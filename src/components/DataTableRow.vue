@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { cva } from 'class-variance-authority'
 import { cn } from '../utils/cn.js'
 import Checkbox from './Checkbox.vue'
+import DataTableCell from './DataTableCell.vue'
 
 const props = defineProps({
   item: {
@@ -56,32 +57,32 @@ const emit = defineEmits(['toggle-selection', 'row-click'])
 const rowVariants = cva('transition-colors', {
   variants: {
     striped: {
-      true: 'odd:bg-slate-50/50',
+      true: 'odd:bg-[color:color-mix(in oklab, var(--ui-primary-soft), transparent 75%)]',
       false: ''
     },
     hoverable: {
-      true: 'hover:bg-slate-50',
+      true: 'hover:bg-[color:color-mix(in oklab, var(--ui-primary-soft), transparent 65%)]',
       false: ''
     },
     clickable: {
-      true: 'cursor-pointer hover:bg-slate-100',
+      true: 'cursor-pointer hover:bg-[color:color-mix(in oklab, var(--ui-primary-soft), transparent 65%)]',
       false: ''
     },
     selected: {
-      true: 'bg-blue-50 border-blue-200',
+      true: 'bg-(--ui-primary-soft) border-l-2 border-(--ui-primary)',
       false: ''
     },
     variant: {
-      default: '',
-      bordered: 'border-b border-slate-200',
-      minimal: 'border-b border-slate-100'
+      default: 'border-b border-(--ui-ring) ui-glossy-border',
+      bordered: 'border-b border-(--ui-ring) ui-glossy-border',
+      minimal: 'border-b border-(--ui-ring) ui-glossy-border'
     }
   },
   compoundVariants: [
     {
       hoverable: true,
       clickable: true,
-      class: 'hover:bg-slate-100'
+      class: 'hover:bg-(--ui-surface-muted)'
     }
   ],
   defaultVariants: {
@@ -93,7 +94,7 @@ const rowVariants = cva('transition-colors', {
   }
 })
 
-const cellVariants = cva('whitespace-nowrap text-sm text-slate-900', {
+const cellVariants = cva('whitespace-nowrap text-sm text-(--ui-text)', {
   variants: {
     density: {
       compact: 'px-4 py-2',
@@ -182,16 +183,25 @@ const rowClasses = computed(() =>
   }))
 )
 
-const getCellClasses = (column) => {
-  const alignmentClass = getAlignmentClass(column)
+// const getCellClasses = (column) => {
+//   const alignmentClass = getAlignmentClass(column)
   
-  return cn(
-    cellVariants({
-      density: props.density,
-      align: alignmentClass
-    }),
-    column.cellClasses
-  )
+//   return cn(
+//     cellVariants({
+//       density: props.density,
+//       align: alignmentClass
+//     }),
+//     column.cellClasses
+//   )
+// }
+
+const getCellTextSize = () => {
+  const sizes = {
+    compact: 'xs',
+    normal: 'sm',
+    comfortable: 'base'
+  }
+  return sizes[props.density] || 'sm'
 }
 
 const checkboxCellClasses = computed(() => 
@@ -229,10 +239,16 @@ const actionsCellClasses = computed(() =>
     </td>
 
     <!-- Data Columns -->
-    <td
+    <DataTableCell
       v-for="column in columns"
       :key="getColumnKey(column)"
-      :class="getCellClasses(column)"
+      :item="item"
+      :column="column"
+      :value="getCellValue(item, column)"
+      :align="getAlignmentClass(column)"
+      :padding="density"
+      :text-size="getCellTextSize()"
+      :text-color="column.textColor"
     >
       <slot
         :name="`cell-${getColumnKey(column)}`"
@@ -243,7 +259,7 @@ const actionsCellClasses = computed(() =>
       >
         {{ formatCellValue(item, column) }}
       </slot>
-    </td>
+    </DataTableCell>
 
     <!-- Actions Column -->
     <td

@@ -161,23 +161,23 @@ const accordionVariants = cva('w-full', {
 const itemVariants = cva('transition-all duration-200', {
   variants: {
     variant: {
-      default: 'bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md',
-      bordered: 'border-2 border-slate-200 rounded-xl overflow-hidden hover:border-blue-300',
-      filled: 'bg-linear-to-br from-slate-50 to-white border border-slate-200 rounded-xl overflow-hidden shadow-sm',
+      default: 'ui-glossy-surface border ui-glossy-border rounded-lg overflow-hidden shadow-sm hover:shadow-md',
+      bordered: 'ui-glossy-surface border-2 ui-glossy-border rounded-xl overflow-hidden hover:border-(--ui-primary-soft)',
+      filled: 'ui-glossy-surface border ui-glossy-border rounded-xl overflow-hidden shadow-sm',
       flush: ''
     }
   }
 })
 
 const headerVariants = cva(
-  'flex items-center justify-between w-full text-left transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+  'flex items-center justify-between w-full text-left transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
   {
     variants: {
       variant: {
-        default: 'hover:bg-slate-50',
-        bordered: 'hover:bg-blue-50/50',
-        filled: 'hover:bg-white/70',
-        flush: 'hover:bg-slate-50'
+        default: 'hover:bg-(--ui-surface-muted)',
+        bordered: 'hover:bg-[color:color-mix(in oklab, var(--ui-primary-soft), transparent 50%)]',
+        filled: 'hover:bg-[color:color-mix(in oklab, var(--ui-surface), transparent 30%)]',
+        flush: 'hover:bg-(--ui-surface-muted)'
       },
       size: {
         sm: 'px-4 py-3',
@@ -188,16 +188,16 @@ const headerVariants = cva(
   }
 )
 
-const chevronVariants = cva('ml-4 shrink-0 text-slate-400 transition-all duration-200', {
+const chevronVariants = cva('ml-4 shrink-0 text-(--ui-text-soft) transition-all duration-200', {
   variants: {
     expanded: {
-      true: 'rotate-180 text-blue-500',
+      true: 'rotate-180 text-(--ui-primary)',
       false: ''
     }
   }
 })
 
-const contentVariants = cva('overflow-hidden text-slate-600 bg-white', {
+const contentVariants = cva('overflow-hidden text-(--ui-text-muted) bg-(--ui-surface)', {
   variants: {
     size: {
       sm: 'px-4 py-3 text-sm',
@@ -218,9 +218,9 @@ const itemClasses = computed(() =>
 const headerClasses = (index) =>
   cn(
     headerVariants({ variant: props.variant, size: props.size }),
-    isExpanded(index) && props.variant === 'bordered' && 'bg-blue-50/30 border-blue-300',
-    isExpanded(index) && props.variant === 'filled' && 'bg-white',
-    isExpanded(index) && props.variant === 'default' && 'bg-slate-50',
+    isExpanded(index) && props.variant === 'bordered' && 'bg-[color:color-mix(in oklab, var(--ui-primary-soft), transparent 70%)] border-(--ui-primary-soft)',
+    isExpanded(index) && props.variant === 'filled' && 'bg-(--ui-surface)',
+    isExpanded(index) && props.variant === 'default' && 'bg-(--ui-surface-muted)',
     (props.disabled || props.items[index]?.disabled) && 'cursor-not-allowed opacity-50'
   )
 

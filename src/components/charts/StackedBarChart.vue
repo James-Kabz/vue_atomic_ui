@@ -53,7 +53,7 @@ const props = defineProps({
   },
   axisLabelClasses: {
     type: String,
-    default: 'fill-slate-600 text-xs font-medium'
+    default: 'fill-(--ui-text-muted) text-xs font-medium'
   },
   maxValue: {
     type: Number,
@@ -292,7 +292,7 @@ const handleBarClick = (dataIndex, barIndex) => {
         <text
           :x="padding.left + chartWidth / 2"
           :y="height - 10"
-          class="fill-slate-700 text-sm font-semibold"
+          class="fill-(--ui-text-muted) text-sm font-semibold"
           text-anchor="middle"
         >
           {{ xAxisLabel }}
@@ -318,7 +318,7 @@ const handleBarClick = (dataIndex, barIndex) => {
         <text
           :x="-(padding.top + chartHeight / 2)"
           :y="padding.left - 40"
-          class="fill-slate-700 text-sm font-semibold"
+          class="fill-(--ui-text-muted) text-sm font-semibold"
           text-anchor="middle"
           transform="rotate(-90)"
         >
@@ -358,7 +358,7 @@ const handleBarClick = (dataIndex, barIndex) => {
       }"
       class="animate-in fade-in duration-200"
     >
-      <div class="bg-slate-900 text-white px-4 py-3 rounded-lg shadow-2xl border border-slate-700 min-w-[180px]">
+      <div class="bg-(--ui-surface-strong) text-(--ui-text-inverse) px-4 py-3 rounded-lg shadow-2xl border border-(--ui-border-strong) min-w-[180px]">
         <div class="flex items-center gap-2 mb-2">
           <div
             :style="{ backgroundColor: tooltip.color }"
@@ -369,14 +369,14 @@ const handleBarClick = (dataIndex, barIndex) => {
           </p>
         </div>
         <div class="ml-5">
-          <p class="text-xs text-slate-300 mb-1">
+          <p class="text-xs text-(--ui-text-soft) mb-1">
             {{ tooltip.barLabel }}
           </p>
           <span class="text-2xl font-bold">{{ tooltip.value }}%</span>
         </div>
         <!-- Tooltip arrow -->
         <div
-          class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 rotate-45 w-2 h-2 bg-slate-900 border-r border-b border-slate-700"
+          class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 rotate-45 w-2 h-2 bg-(--ui-surface-strong) border-r border-b border-(--ui-border-strong)"
         />
       </div>
     </div>

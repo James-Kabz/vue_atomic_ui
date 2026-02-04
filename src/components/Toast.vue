@@ -4,55 +4,58 @@
     <div
       :class="cn(
         containerClasses,
-        'fixed z-[100] flex max-h-screen w-full p-4 md:max-w-[420px]'
+        'fixed z-100 flex max-h-screen w-full p-4 md:max-w-[420px] pointer-events-none'
       )"
     >
       <TransitionGroup
-        enter-active-class="transition-all duration-300 ease-out"
-        enter-from-class="transform translate-x-full opacity-0 scale-95"
+        enter-active-class="transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)]"
+        enter-from-class="transform translate-x-full opacity-0 scale-90"
         enter-to-class="transform translate-x-0 opacity-100 scale-100"
-        leave-active-class="transition-all duration-200 ease-in"
+        leave-active-class="transition-all duration-300 ease-[cubic-bezier(0.4,0,1,1)]"
         leave-from-class="transform translate-x-0 opacity-100 scale-100"
-        leave-to-class="transform translate-x-full opacity-0 scale-95"
-        move-class="transition-all duration-200"
+        leave-to-class="transform translate-x-full opacity-0 scale-90"
+        move-class="transition-all duration-300 ease-out"
         tag="div"
-        class="space-y-2"
+        class="w-full space-y-3"
       >
         <div
-          v-for="toast in toasts"
+          v-for="toast in visibleToastsList"
           :key="toast.id"
           :class="toastClasses(toast)"
           role="alert"
           :aria-live="toast.variant === 'error' ? 'assertive' : 'polite'"
-          class="group pointer-events-auto relative flex w-full items-center justify-between space-x-4 overflow-hidden rounded-md border p-6 pr-8 shadow-lg transition-all"
+          class="group pointer-events-auto relative flex w-full items-start gap-3 overflow-hidden rounded-xl border p-4 shadow-lg transition-all hover:shadow-xl"
         >
-          <!-- Icon -->
-          <Icon
+          <!-- Icon with animated background glow -->
+          <div
             v-if="showIcon(toast)"
-            :icon="getIconName(toast)"
-            :class="getIconClasses(toast)"
-            class="h-4 w-4 shrink-0"
-          />
+            :class="cn(
+              'relative flex h-10 w-10 shrink-0 items-center justify-center rounded-lg transition-all duration-300',
+              getIconBackgroundClasses(toast)
+            )"
+          >
+            <Icon
+              :icon="getIconName(toast)"
+              :class="cn(
+                'h-5 w-5 transition-transform duration-300 group-hover:scale-110',
+                getIconClasses(toast)
+              )"
+            />
+          </div>
 
           <!-- Content -->
-          <div class="flex-1 grid gap-1">
+          <div class="flex-1 min-w-0 pt-0.5">
             <div
               v-if="toast.title"
-              class="text-lg font-extrabold"
+              class="text-sm font-semibold leading-tight text-(--ui-text) mb-1"
             >
               {{ toast.title }}
             </div>
             <div
-              v-if="toast.message"
-              class="text-md opacity-90"
+              v-if="toast.message || toast.description"
+              class="text-sm leading-relaxed text-(--ui-text-muted)"
             >
-              {{ toast.message }}
-            </div>
-            <div
-              v-if="toast.description"
-              class="text-md opacity-90"
-            >
-              {{ toast.description }}
+              {{ toast.message || toast.description }}
             </div>
 
             <!-- Custom component slot -->
@@ -60,22 +63,29 @@
               :is="toast.component"
               v-if="toast.component"
               v-bind="toast.componentProps"
+              class="mt-3"
             />
-          </div>
 
-          <!-- Action Button -->
-          <button
-            v-if="toast.action"
-            class="inline-flex h-8 shrink-0 items-center justify-center rounded-md border bg-transparent px-3 text-xs font-medium ring-offset-background transition-colors hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
-            @click="toast.action.onClick"
-          >
-            {{ toast.action.label }}
-          </button>
+            <!-- Action Button -->
+            <button
+              v-if="toast.action"
+              class="mt-3 inline-flex items-center gap-1.5 text-xs font-medium transition-colors"
+              :class="getActionButtonClasses(toast)"
+              @click="toast.action.onClick"
+            >
+              {{ toast.action.label }}
+              <Icon
+                icon="arrow-right"
+                class="h-3 w-3"
+              />
+            </button>
+          </div>
 
           <!-- Close Button -->
           <button
             v-if="isDismissible(toast)"
-            class="absolute right-2 top-2 rounded-md p-1 text-foreground/50 opacity-0 transition-opacity hover:text-foreground focus:opacity-100 focus:outline-none focus:ring-2 group-hover:opacity-100"
+            class="absolute right-2 top-2 flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-(--ui-text-soft) opacity-0 transition-all hover:bg-black/5 dark:hover:bg-white/5 hover:text-(--ui-text) focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-(--ui-ring) focus:ring-offset-1 group-hover:opacity-100"
+            aria-label="Dismiss"
             @click="dismiss(toast.id)"
           >
             <Icon
@@ -83,6 +93,20 @@
               class="h-4 w-4"
             />
           </button>
+
+          <!-- Progress bar for auto-dismiss -->
+          <div
+            v-if="toast.duration && toast.duration > 0"
+            class="absolute bottom-0 left-0 right-0 h-0.5 overflow-hidden"
+          >
+            <div
+              :class="cn(
+                'h-full origin-left animate-toast-progress',
+                getProgressBarClasses(toast)
+              )"
+              :style="{ animationDuration: `${toast.duration}ms` }"
+            />
+          </div>
         </div>
       </TransitionGroup>
     </div>
@@ -99,7 +123,7 @@ import Icon from './Icon.vue'
 const props = defineProps({
   position: {
     type: String,
-    default: 'top-center',
+    default: 'top-right',
     validator: (value) => [
       'top-left', 'top-center', 'top-right',
       'bottom-left', 'bottom-center', 'bottom-right'
@@ -111,7 +135,7 @@ const props = defineProps({
   },
   richColors: {
     type: Boolean,
-    default: false
+    default: true
   },
   expand: {
     type: Boolean,
@@ -119,42 +143,47 @@ const props = defineProps({
   },
   visibleToasts: {
     type: Number,
-    default: 3
+    default: 4
   },
   closeButton: {
     type: Boolean,
-    default: false
+    default: true
   }
 })
 
 const { toasts, dismiss } = useToaster()
 
+// Limit visible toasts
+const visibleToastsList = computed(() => 
+  toasts.value.slice(0, props.visibleToasts)
+)
+
 // Position classes
 const positionClasses = {
-  'top-left': 'top-0 left-0 flex-col',
-  'top-center': 'top-0 left-1/2 -translate-x-1/2 flex-col',
-  'top-right': 'top-0 right-0 flex-col',
-  'bottom-left': 'bottom-0 left-0 flex-col-reverse',
-  'bottom-center': 'bottom-0 left-1/2 -translate-x-1/2 flex-col-reverse',
-  'bottom-right': 'bottom-0 right-0 flex-col-reverse'
+  'top-left': 'top-0 left-0 flex-col items-start',
+  'top-center': 'top-0 left-1/2 -translate-x-1/2 flex-col items-center',
+  'top-right': 'top-0 right-0 flex-col items-end',
+  'bottom-left': 'bottom-0 left-0 flex-col-reverse items-start',
+  'bottom-center': 'bottom-0 left-1/2 -translate-x-1/2 flex-col-reverse items-center',
+  'bottom-right': 'bottom-0 right-0 flex-col-reverse items-end'
 }
 
 const containerClasses = computed(() =>
   cn(positionClasses[props.position])
 )
 
-// Toast styling with improved error/danger variant
+// Toast styling with refined variants
 const toastVariants = cva(
-  'group pointer-events-auto relative flex w-full items-center justify-between space-x-4 overflow-hidden rounded-md border p-6 pr-8 shadow-lg transition-all',
+  'group pointer-events-auto relative flex w-full items-start gap-3 overflow-hidden rounded-xl border backdrop-blur-xl bg-white/95 dark:bg-(--ui-surface)/95 text-(--ui-text) transition-all',
   {
     variants: {
       variant: {
-        default: 'border border-gray-300 bg-gray-50 text-gray-800 dark:border-gray-800 dark:bg-gray-500 dark:text-gray-50',
-        info: 'border-blue-500/20 bg-blue-50 text-blue-900 dark:border-blue-500/30 dark:bg-blue-950 dark:text-blue-50',
-        success: 'border border-green-200 bg-green-50 text-green-800 dark:border-green-200 dark:bg-green-50 dark:text-green-900',
-        warning: 'border-yellow-500/20 bg-yellow-50 text-yellow-900 dark:border-yellow-500/30 dark:bg-yellow-950 dark:text-yellow-50',
-        error: 'border-red-500/30 bg-red-50 text-red-900 dark:border-red-500/40 dark:bg-red-950 dark:text-red-50 ring-1 ring-red-500/20 dark:ring-red-500/30',
-        loading: 'border border-border animate-pulse bg-gray-800 text-gray-800 dark:border-gray-800 dark:bg-gray-700 dark:text-gray-50'
+        default: 'border-(--ui-border) shadow-sm',
+        info: 'border-blue-200 dark:border-blue-900/50 bg-blue-50/80 dark:bg-blue-950/30',
+        success: 'border-green-200 dark:border-green-900/50 bg-green-50/80 dark:bg-green-950/30',
+        warning: 'border-amber-200 dark:border-amber-900/50 bg-amber-50/80 dark:bg-amber-950/30',
+        error: 'border-red-200 dark:border-red-900/50 bg-red-50/80 dark:bg-red-950/30',
+        loading: 'border-(--ui-border) shadow-sm'
       }
     },
     defaultVariants: { variant: 'default' }
@@ -163,36 +192,80 @@ const toastVariants = cva(
 
 const toastClasses = (toast) => cn(toastVariants({ variant: toast.variant }))
 
-// Comprehensive icon mapping for all toast types
+// Icon mapping
 const iconMap = {
   default: 'bell',
   info: 'info',
   success: 'check-circle',
   warning: 'triangle-exclamation',
-  error: 'circle-exclamation',
-  loading: 'loader'
+  error: 'circle-xmark',
+  loading: 'loader-circle'
 }
 
-// Icon color mapping with proper error styling
+// Icon color classes with refined palette
 const iconColorMap = {
-  default: 'text-muted-foreground',
+  default: 'text-(--ui-text-muted)',
   info: 'text-blue-600 dark:text-blue-400',
   success: 'text-green-600 dark:text-green-400',
-  warning: 'text-yellow-600 dark:text-yellow-400',
+  warning: 'text-amber-600 dark:text-amber-400',
   error: 'text-red-600 dark:text-red-400',
-  loading: 'text-muted-foreground animate-spin'
+  loading: 'text-(--ui-text-muted)'
+}
+
+// Icon background classes for better visual hierarchy
+const iconBackgroundMap = {
+  default: 'bg-(--ui-surface-soft)',
+  info: 'bg-blue-100 dark:bg-blue-900/30',
+  success: 'bg-green-100 dark:bg-green-900/30',
+  warning: 'bg-amber-100 dark:bg-amber-900/30',
+  error: 'bg-red-100 dark:bg-red-900/30',
+  loading: 'bg-(--ui-surface-soft)'
+}
+
+// Progress bar colors
+const progressBarMap = {
+  default: 'bg-(--ui-border-strong)',
+  info: 'bg-blue-500',
+  success: 'bg-green-500',
+  warning: 'bg-amber-500',
+  error: 'bg-red-500',
+  loading: 'bg-(--ui-border-strong)'
+}
+
+// Action button colors
+const actionButtonMap = {
+  default: 'text-(--ui-primary) hover:text-(--ui-primary-strong)',
+  info: 'text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300',
+  success: 'text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300',
+  warning: 'text-amber-600 hover:text-amber-700 dark:text-amber-400 dark:hover:text-amber-300',
+  error: 'text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300',
+  loading: 'text-(--ui-primary) hover:text-(--ui-primary-strong)'
 }
 
 const getIconName = (toast) => toast.icon || iconMap[toast.variant] || iconMap.default
 const getIconClasses = (toast) => {
   const baseClasses = iconColorMap[toast.variant] || iconColorMap.default
-  // Add spinning animation for loading icon
   return toast.variant === 'loading' ? `${baseClasses} animate-spin` : baseClasses
 }
+const getIconBackgroundClasses = (toast) => iconBackgroundMap[toast.variant] || iconBackgroundMap.default
+const getProgressBarClasses = (toast) => progressBarMap[toast.variant] || progressBarMap.default
+const getActionButtonClasses = (toast) => actionButtonMap[toast.variant] || actionButtonMap.default
 
-// Always show icons for all variants to provide visual distinction
 const showIcon = (toast) => toast.icon !== false
-
-// Handle dismissible logic
 const isDismissible = (toast) => toast.dismissible !== false && (toast.closeButton || props.closeButton || toast.dismissible)
 </script>
+
+<style scoped>
+@keyframes toast-progress {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
+.animate-toast-progress {
+  animation: toast-progress linear forwards;
+}
+</style>

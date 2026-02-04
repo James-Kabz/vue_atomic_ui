@@ -11,14 +11,14 @@
         :placeholder="placeholder"
         :required="required"
         :aria-describedby="ariaDescribedby"
-        class="w-full px-3 py-2 pr-10 border border-slate-300 rounded-md bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer disabled:bg-slate-50 disabled:text-slate-500 disabled:cursor-not-allowed"
+        class="w-full px-3 py-2 pr-10 border border-(--ui-border) ui-glossy-border rounded-md bg-(--ui-surface) ui-glossy-input text-(--ui-text) placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:border-(--ui-primary) cursor-pointer disabled:bg-(--ui-surface-muted) disabled:text-(--ui-text-soft) disabled:cursor-not-allowed"
         @click="toggleCalendar"
       >
       
       <!-- Calendar Icon -->
       <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
         <svg
-          class="w-5 h-5 text-slate-400"
+          class="w-5 h-5 text-(--ui-text-soft)"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -36,12 +36,12 @@
       <button
         v-if="clearable && displayValue && !disabled"
         type="button"
-        class="absolute right-9 top-1/2 -translate-y-1/2 p-1 hover:bg-slate-100 rounded"
+        class="absolute right-9 top-1/2 -translate-y-1/2 p-1 hover:bg-(--ui-surface-muted) rounded"
         aria-label="Clear date"
         @click.stop="clearDate"
       >
         <svg
-          class="w-4 h-4 text-slate-500"
+          class="w-4 h-4 text-(--ui-text-soft)"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -67,14 +67,14 @@
     >
       <div
         v-if="isOpen"
-        :class="['absolute z-[99999] mt-2 bg-white border border-slate-200 rounded-lg shadow-lg p-4', calendarPosition]"
+        :class="['absolute z-[99999] mt-2 ui-glossy-popover ui-glossy-border rounded-lg shadow-lg p-4', calendarPosition]"
         @click.stop
       >
         <!-- Header -->
         <div class="flex items-center justify-between mb-3">
           <button
             type="button"
-            class="p-1 hover:bg-gray-100 rounded"
+            class="p-1 hover:bg-(--ui-surface-muted) rounded"
             aria-label="Previous Month"
             @click="prevMonth"
           >
@@ -99,7 +99,7 @@
 
           <button
             type="button"
-            class="p-1 hover:bg-gray-100 rounded"
+            class="p-1 hover:bg-(--ui-surface-muted) rounded"
             aria-label="Next Month"
             @click="nextMonth"
           >
@@ -124,7 +124,7 @@
           <div
             v-for="day in weekdays"
             :key="day"
-            class="text-center text-xs font-medium text-slate-600 py-1"
+            class="text-center text-xs font-medium text-(--ui-text-muted) py-1"
           >
             {{ day }}
           </div>
@@ -136,7 +136,7 @@
           <div
             v-for="(day, index) in leadingDays"
             :key="'prev-' + index"
-            class="text-center text-sm text-slate-300 py-2"
+            class="text-center text-sm text-(--ui-text-soft) py-2"
           >
             {{ day }}
           </div>
@@ -149,8 +149,8 @@
             :disabled="isDateDisabled(day)"
             :class="[
               'w-8 h-8 text-sm rounded flex items-center justify-center',
-              isSelected(day) ? 'bg-blue-500 text-white' : 'hover:bg-gray-100',
-              isDateDisabled(day) ? 'text-gray-300 cursor-not-allowed' : ''
+              isSelected(day) ? 'bg-(--ui-primary) text-(--ui-text-inverse)' : 'hover:bg-(--ui-surface-muted)',
+              isDateDisabled(day) ? 'text-(--ui-text-soft) cursor-not-allowed' : ''
             ]"
             @click="selectDate(day)"
           >
@@ -161,7 +161,7 @@
           <div
             v-for="(day, index) in trailingDays"
             :key="'next-' + index"
-            class="text-center text-sm text-slate-300 py-2"
+            class="text-center text-sm text-(--ui-text-soft) py-2"
           >
             {{ day }}
           </div>
@@ -170,11 +170,11 @@
         <!-- Footer with Today button -->
         <div
           v-if="showToday"
-          class="mt-4 pt-3 border-t border-slate-200"
+          class="mt-4 pt-3 border-t border-(--ui-border)"
         >
           <button
             type="button"
-            class="w-full px-3 py-2 text-sm font-medium text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+            class="w-full px-3 py-2 text-sm font-medium text-(--ui-primary) hover:bg-(--ui-primary-soft) rounded-lg transition-colors"
             @click="selectToday"
           >
             Today

@@ -141,7 +141,9 @@ const pipelineChart = {
             placeholder="Search activity"
             class="w-64"
           />
-          <Button variant="primary">Create Report</Button>
+          <Button variant="primary">
+            Create Report
+          </Button>
         </div>
       </div>
 
@@ -195,21 +197,39 @@ const pipelineChart = {
             { id: 'grid', label: 'Show Grid', default: true }
           ]"
         />
-        <Card title="Decision Log" padding="lg" variant="outlined">
+        <Card
+          title="Decision Log"
+          padding="lg"
+          variant="outlined"
+        >
           <div class="space-y-3">
             <div class="rounded-lg border border-slate-200 p-3">
-              <p class="text-sm font-semibold text-slate-900">Vendor renewal approved</p>
-              <p class="text-xs text-slate-500">Signed off by Finance · 2 hours ago</p>
+              <p class="text-sm font-semibold text-slate-900">
+                Vendor renewal approved
+              </p>
+              <p class="text-xs text-slate-500">
+                Signed off by Finance · 2 hours ago
+              </p>
             </div>
             <div class="rounded-lg border border-slate-200 p-3">
-              <p class="text-sm font-semibold text-slate-900">Risk score recalibration</p>
-              <p class="text-xs text-slate-500">Scheduled for Feb 10 · 1 day ago</p>
+              <p class="text-sm font-semibold text-slate-900">
+                Risk score recalibration
+              </p>
+              <p class="text-xs text-slate-500">
+                Scheduled for Feb 10 · 1 day ago
+              </p>
             </div>
             <div class="rounded-lg border border-slate-200 p-3">
-              <p class="text-sm font-semibold text-slate-900">New policy rollout</p>
-              <p class="text-xs text-slate-500">HR compliance · 3 days ago</p>
+              <p class="text-sm font-semibold text-slate-900">
+                New policy rollout
+              </p>
+              <p class="text-xs text-slate-500">
+                HR compliance · 3 days ago
+              </p>
             </div>
-            <Button variant="secondary" size="sm">Open Timeline</Button>
+            <Button size="sm">
+              Open Timeline
+            </Button>
           </div>
         </Card>
       </div>
@@ -228,7 +248,10 @@ const pipelineChart = {
           striped
         >
           <template #cell-status="{ value }">
-            <Badge :variant="statusVariant(value)" size="sm">
+            <Badge
+              :variant="statusVariant(value)"
+              size="sm"
+            >
               {{ value.replace('_', ' ') }}
             </Badge>
           </template>

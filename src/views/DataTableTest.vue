@@ -1,14 +1,14 @@
 <template>
   <div
     id="app"
-    class="min-h-screen bg-slate-50"
+    class="min-h-screen bg-(--ui-surface-muted)"
   >
     <div class="container mx-auto py-8">
-      <h1 class="text-3xl font-bold text-slate-900 mb-8">
+      <h1 class="text-3xl font-bold text-(--ui-text) mb-8">
         Vue DataTable with Filters
       </h1>
       <!-- DataTable with Filters -->
-      <div class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+      <div class="bg-(--ui-surface) rounded-lg shadow-sm border border-(--ui-border) overflow-hidden">
         <!-- Filters Component -->
         <DataTableFilters
           v-model:search-query="searchQuery"
@@ -30,7 +30,7 @@
             <!-- Custom filters -->
             <select
               v-model="departmentFilter"
-              class="px-3 py-2 border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="px-3 py-2 border border-(--ui-border) rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-(--ui-primary)"
             >
               <option value="">
                 All Departments
@@ -72,7 +72,7 @@
             <!-- Additional toolbar actions -->
             <button
               :disabled="selectedUsers.length === 0"
-              class="px-3 py-2 text-sm text-slate-600 hover:text-slate-800 border border-slate-300 rounded-md hover:bg-slate-50 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              class="px-3 py-2 text-sm text-(--ui-text-muted) hover:text-(--ui-text) border border-(--ui-border) rounded-md hover:bg-(--ui-surface-muted) flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               @click="handleBulkExport"
             >
               <font-awesome-icon icon="download" />
@@ -110,10 +110,10 @@
                 @error="handleImageError"
               >
               <div>
-                <div class="font-medium text-slate-900">
+                <div class="font-medium text-(--ui-text)">
                   {{ item.name }}
                 </div>
-                <div class="text-xs text-slate-500">
+                <div class="text-xs text-(--ui-text-soft)">
                   ID: {{ item.id }}
                 </div>
               </div>
@@ -127,7 +127,7 @@
                 <span
                   :class="[
                     'w-2 h-2 rounded-full',
-                    value === 'active' ? 'bg-green-500' : 'bg-red-500'
+                    value === 'active' ? 'bg-(--ui-success)' : 'bg-(--ui-danger)'
                   ]"
                 />
                 {{ value }}
@@ -137,14 +137,14 @@
 
           <!-- Custom cell for salary -->
           <template #cell-salary="{ value }">
-            <span class="font-mono text-green-600">
+            <span class="font-mono text-(--ui-success)">
               {{ formatCurrency(value) }}
             </span>
           </template>
 
           <!-- Custom cell for last login -->
           <template #cell-lastLogin="{ value }">
-            <span class="text-sm text-slate-600">
+            <span class="text-sm text-(--ui-text-muted)">
               {{ formatDate(value) }}
             </span>
           </template>
@@ -470,8 +470,8 @@ const filteredUsers = computed(() => {
 const showStatusMessage = (message, type = 'success') => {
   statusMessage.value = message
   statusMessageClass.value = type === 'success'
-    ? 'bg-green-100 text-green-800 border border-green-200'
-    : 'bg-red-100 text-red-800 border border-red-200'
+    ? 'bg-(--ui-success-soft) text-(--ui-success) border border-(--ui-success-soft)'
+    : 'bg-(--ui-danger-soft) text-(--ui-danger) border border-(--ui-danger-soft)'
 
   setTimeout(() => {
     statusMessage.value = ''
@@ -483,11 +483,11 @@ const getStatusBadgeClasses = (status) => {
 
   switch (status) {
     case 'active':
-      return `${baseClasses} bg-green-100 text-green-800`
+      return `${baseClasses} bg-(--ui-success-soft) text-(--ui-success)`
     case 'inactive':
-      return `${baseClasses} bg-red-100 text-red-800`
+      return `${baseClasses} bg-(--ui-danger-soft) text-(--ui-danger)`
     default:
-      return `${baseClasses} bg-slate-100 text-slate-800`
+      return `${baseClasses} bg-(--ui-surface-muted) text-(--ui-text)`
   }
 }
 

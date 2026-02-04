@@ -143,11 +143,11 @@ defineProps({
   },
   color: {
     type: String,
-    default: '#3b82f6'
+    default: 'var(--ui-primary)'
   },
   backgroundColor: {
     type: String,
-    default: 'rgba(255, 255, 255, 0.9)'
+    default: 'color-mix(in oklab, var(--ui-surface), transparent 8%)'
   },
   text: {
     type: String,
@@ -216,7 +216,7 @@ defineProps({
 
 .loader__text {
   font-size: 14px;
-  color: #6b7280;
+  color: var(--ui-text-muted);
   font-weight: 500;
   text-align: center;
 }
@@ -242,7 +242,7 @@ defineProps({
 
 /* Spin Loader */
 .loader__spin {
-  border: 4px solid #e5e7eb;
+  border: 4px solid var(--ui-border);
   border-top: 4px solid var(--loader-color);
   border-radius: 50%;
   animation: spin 1s linear infinite;

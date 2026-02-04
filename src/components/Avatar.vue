@@ -59,7 +59,7 @@ const avatarVariants = cva(
       },
       variant: {
         default: 'bg-muted',
-        outline: 'border-2 border-border bg-background'
+        outline: 'border-2 border-(--ui-border) ui-glossy-border bg-(--ui-surface) ui-glossy-surface'
       }
     }
   }

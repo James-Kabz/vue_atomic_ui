@@ -190,7 +190,7 @@ const props = defineProps({
   },
   axisLabelClasses: {
     type: String,
-    default: 'fill-slate-600 text-xs font-medium'
+    default: 'fill-(--ui-text-muted) text-xs font-medium'
   },
   tooltipBackground: {
     type: String,
@@ -202,7 +202,7 @@ const props = defineProps({
   },
   tooltipTextClasses: {
     type: String,
-    default: 'fill-white text-xs font-medium'
+    default: 'fill-(--ui-surface) text-xs font-medium'
   },
   maxValue: {
     type: Number,

@@ -14,10 +14,10 @@
           :is="item.href ? 'a' : 'span'"
           :href="item.href"
           :class="[
-            'text-sm font-medium transition-colors hover:text-foreground',
+            'text-sm font-medium transition-colors hover:text-(--ui-text)',
             index === items.length - 1 
-              ? 'text-foreground' 
-              : 'text-muted-foreground hover:text-foreground'
+              ? 'text-(--ui-text)' 
+              : 'text-(--ui-text-muted) hover:text-(--ui-text)'
           ]"
           :aria-current="index === items.length - 1 ? 'page' : undefined"
         >

@@ -69,19 +69,19 @@ const props = defineProps({
     },
     valueLabelClasses: {
         type: String,
-        default: 'fill-white text-sm font-bold drop-shadow-md'
+        default: 'fill-(--ui-surface) text-sm font-bold drop-shadow-md'
     },
     centerTextClasses: {
         type: String,
-        default: 'fill-slate-900 text-2xl font-bold'
+        default: 'fill-(--ui-text-muted) text-2xl font-bold'
     },
     centerLabelClasses: {
         type: String,
-        default: 'fill-slate-600 text-sm'
+        default: 'fill-(--ui-text-muted) text-sm'
     },
     legendTextClasses: {
         type: String,
-        default: 'fill-slate-700 text-xs font-medium'
+        default: 'fill-(--ui-text-muted) text-xs font-medium'
     }
 })
 
@@ -265,7 +265,7 @@ const handleSliceClick = (slice, index) => {
       class="w-full h-full flex items-center justify-center"
     >
       <div class="text-center">
-        <div class="text-slate-300 mb-2">
+        <div class="text-(--ui-text-soft) mb-2">
           <svg
             class="w-16 h-16 mx-auto"
             fill="none"
@@ -286,7 +286,7 @@ const handleSliceClick = (slice, index) => {
             />
           </svg>
         </div>
-        <p class="text-sm text-slate-500">
+        <p class="text-sm text-(--ui-text-soft)">
           No data available
         </p>
       </div>
@@ -399,7 +399,7 @@ const handleSliceClick = (slice, index) => {
       }"
       class="animate-in fade-in duration-200"
     >
-      <div class="bg-slate-900 text-white px-4 py-3 rounded-lg shadow-2xl border border-slate-700 min-w-[180px]">
+      <div class="bg-(--ui-surface-strong) text-(--ui-text-inverse) px-4 py-3 rounded-lg shadow-2xl border border-(--ui-border-strong) min-w-[180px]">
         <div class="flex items-center gap-2 mb-1.5">
           <div
             :style="{ backgroundColor: tooltip.color }"
@@ -411,14 +411,14 @@ const handleSliceClick = (slice, index) => {
         </div>
         <div class="flex items-baseline gap-2 ml-5">
           <span class="text-2xl font-bold">{{ tooltip.value }}</span>
-          <span class="text-xs text-slate-400">tasks</span>
+          <span class="text-xs text-(--ui-text-soft)">tasks</span>
         </div>
         <div class="mt-1 ml-5">
-          <span class="text-xs text-slate-300">{{ tooltip.percentage }}% of total</span>
+          <span class="text-xs text-(--ui-text-soft)">{{ tooltip.percentage }}% of total</span>
         </div>
         <!-- Tooltip arrow -->
         <div
-          class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 rotate-45 w-2 h-2 bg-slate-900 border-r border-b border-slate-700"
+          class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 rotate-45 w-2 h-2 bg-(--ui-surface-strong) border-r border-b border-(--ui-border-strong)"
         />
       </div>
     </div>

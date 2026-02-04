@@ -60,7 +60,7 @@ const spinnerVariants = cva(
     variants: {
       variant: {
         default: 'text-muted-foreground',
-        primary: 'text-primary',
+        primary: 'text-(--ui-primary)',
         secondary: 'text-secondary-foreground'
       }
     }

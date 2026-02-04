@@ -49,7 +49,7 @@ const emit = defineEmits(['update:modelValue'])
 const isSelected = computed(() => props.modelValue === props.value)
 
 const radioVariants = cva(
-  'aspect-square rounded-full border border-primary text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+  'aspect-square rounded-full border border-(--ui-primary) text-(--ui-primary) ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-(--ui-primary) focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
   {
     variants: {
       size: {

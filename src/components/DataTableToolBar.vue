@@ -6,7 +6,7 @@
         v-if="selectedCount > 0"
         class="flex items-center gap-3"
       >
-        <span class="text-sm text-slate-600">
+        <span class="text-sm text-(--ui-text-muted)">
           {{ selectedCount }} selected
         </span>
 
@@ -240,12 +240,12 @@ const densityOptions = [
 
 
 // CVA Variants
-const toolbarVariants = cva('flex items-center justify-between border-b border-slate-200', {
+const toolbarVariants = cva('flex items-center justify-between border-b ui-glossy-border', {
   variants: {
     variant: {
-      default: 'bg-white',
-      minimal: 'bg-transparent border-slate-100',
-      bordered: 'bg-slate-50 border-slate-300'
+      default: 'ui-glossy-surface',
+      minimal: 'bg-transparent border-(--ui-border)',
+      bordered: 'ui-glossy-surface border-(--ui-border)'
     },
     padding: {
       compact: 'p-2',
@@ -259,12 +259,12 @@ const toolbarVariants = cva('flex items-center justify-between border-b border-s
   }
 })
 
-const bulkActionVariants = cva('px-3 py-1.5 text-sm font-medium rounded-md flex items-center gap-1 transition-colors', {
+const bulkActionVariants = cva('px-3 py-1.5 text-sm font-medium rounded-md flex items-center gap-1 transition-colors ui-glossy-overlay', {
   variants: {
     variant: {
-      danger: 'text-red-700 bg-red-500 hover:bg-red-400 border border-red-200',
-      primary: 'text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200',
-      secondary: 'text-slate-700 bg-slate-500 hover:bg-slate-400 border border-slate-200'
+      danger: 'text-(--ui-danger) bg-(--ui-danger) hover:bg-(--ui-danger-soft) border border-(--ui-danger-soft)',
+      primary: 'text-(--ui-primary) bg-(--ui-primary-soft) hover:bg-(--ui-primary-soft) border border-(--ui-primary-soft)',
+      secondary: 'text-(--ui-text-muted) bg-(--ui-surface-soft) hover:bg-(--ui-surface-soft) border border-(--ui-border)'
     }
   },
   defaultVariants: {
@@ -272,11 +272,11 @@ const bulkActionVariants = cva('px-3 py-1.5 text-sm font-medium rounded-md flex 
   }
 });
 
-const densityButtonVariants = cva('p-2 border border-slate-300 transition-colors', {
+const densityButtonVariants = cva('p-2 border ui-glossy-border transition-colors ui-glossy-button', {
   variants: {
     active: {
-      true: 'bg-blue-50 text-blue-600 border-blue-300',
-      false: 'bg-white text-slate-600 hover:bg-slate-50'
+      true: 'bg-(--ui-primary-soft) text-(--ui-primary) border-(--ui-primary-soft)',
+      false: 'bg-(--ui-surface) text-(--ui-text-muted) hover:bg-(--ui-surface-muted)'
     },
     position: {
       first: 'rounded-l-md border-r-0',
@@ -290,11 +290,11 @@ const densityButtonVariants = cva('p-2 border border-slate-300 transition-colors
   }
 })
 
-const refreshButtonVariants = cva('px-3 py-2 text-sm border border-slate-300 rounded-md flex items-center gap-2 transition-colors', {
+const refreshButtonVariants = cva('px-3 py-2 text-sm border ui-glossy-border rounded-md flex items-center gap-2 transition-colors ui-glossy-button', {
   variants: {
     state: {
-      normal: 'text-slate-600 hover:text-slate-800 hover:bg-slate-50',
-      refreshing: 'text-slate-600 opacity-75 cursor-not-allowed'
+      normal: 'text-(--ui-text-muted) hover:text-(--ui-text) hover:bg-(--ui-surface-muted)',
+      refreshing: 'text-(--ui-text-muted) opacity-75 cursor-not-allowed'
     }
   },
   defaultVariants: {
@@ -310,31 +310,31 @@ const toolbarClasses = computed(() =>
   }))
 )
 
-const itemCountClasses = computed(() => 'text-sm text-slate-600')
+const itemCountClasses = computed(() => 'text-sm text-(--ui-text-muted)')
 const densityToggleClasses = computed(() => 'flex items-center')
 
 const columnToggleButtonClasses = computed(() => 
-  'flex items-center gap-2 px-3 py-2 text-sm text-slate-600 hover:text-slate-800 border border-slate-300 rounded-md hover:bg-slate-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1'
+  'flex items-center gap-2 px-3 py-2 text-sm text-(--ui-text-muted) hover:text-(--ui-text) border ui-glossy-border rounded-md ui-glossy-button hover:brightness-105 transition-colors focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:ring-offset-1'
 )
 
 const columnMenuClasses = computed(() => 
-  'absolute right-0 top-full mt-1 w-56 bg-white border border-slate-200 rounded-lg shadow-lg z-50 max-h-64 overflow-y-auto'
+  'absolute right-0 top-full mt-1 w-56 ui-glossy-popover ui-glossy-border rounded-lg shadow-lg z-50 max-h-64 overflow-y-auto'
 )
 
 const columnMenuHeaderClasses = computed(() => 
-  'text-xs font-medium text-slate-500 uppercase tracking-wider mb-2 border-b border-slate-100 pb-2'
+  'text-xs font-medium text-(--ui-text-soft) uppercase tracking-wider mb-2 border-b border-(--ui-border) pb-2'
 )
 
 const columnMenuItemClasses = computed(() => 
-  'py-1 hover:bg-slate-50 rounded transition-colors'
+  'py-1 hover:bg-(--ui-surface-muted) rounded transition-colors'
 )
 
 const checkboxClasses = computed(() => 
-  'w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 focus:ring-2 focus:ring-offset-1'
+  'w-4 h-4 rounded border-(--ui-border) text-(--ui-primary) focus:ring-(--ui-primary) focus:ring-2 focus:ring-offset-1'
 )
 
 const labelClasses = computed(() => 
-  'text-sm text-slate-700 flex-1 select-none'
+  'text-sm text-(--ui-text-muted) flex-1 select-none'
 )
 
 // Click outside handler

@@ -4,6 +4,8 @@ import { cva } from 'class-variance-authority'
 import { cn } from '../utils/cn.js'
 import Checkbox from './Checkbox.vue'
 import DataTableHeader from './DataTableHeader.vue'
+import DataTableRow from './DataTableRow.vue'
+import DataTableToolBar from './DataTableToolBar.vue'
 import DataTablePagination from './DataTablePagination.vue'
 import Icon from './Icon.vue'
 import Loader from './Loader.vue'
@@ -185,24 +187,42 @@ const props = defineProps({
   skeletonRows: {
     type: Number,
     default: 5
+  },
+  // Toolbar
+  showToolbar: {
+    type: Boolean,
+    default: false
+  },
+  showDensityToggle: {
+    type: Boolean,
+    default: true
+  },
+  showColumnToggle: {
+    type: Boolean,
+    default: true
+  },
+  showRefresh: {
+    type: Boolean,
+    default: true
   }
 })
 
-const emit = defineEmits(['selection-change', 'sort-change', 'row-click', 'page-change', 'page-size-change', 'refresh', 'action'])
+const emit = defineEmits(['selection-change', 'sort-change', 'row-click', 'page-change', 'page-size-change', 'refresh', 'action', 'update:density', 'toggle-column'])
 
 const currentPage = ref(1)
 const pageSize = ref(props.pageSize)
+const visibleColumnKeys = ref(props.columns.map(col => col.key))
 const sortColumn = ref(props.sortBy)
 const sortDirection = ref(props.sortOrder)
 const showModal = ref(false)
 const modalContent = ref('')
 
 // CVA variants
-const tableContainerVariants = cva('bg-white border border-slate-200 rounded-lg overflow-hidden', {
+const tableContainerVariants = cva('ui-glossy-surface border ui-glossy-border rounded-lg overflow-hidden', {
   variants: {
     variant: {
       default: 'shadow-sm',
-      bordered: 'border-2 border-slate-300',
+      bordered: 'border-2 ui-glossy-border',
       minimal: 'border-none shadow-none bg-transparent'
     }
   },
@@ -214,9 +234,9 @@ const tableContainerVariants = cva('bg-white border border-slate-200 rounded-lg 
 const tableVariants = cva('min-w-full', {
   variants: {
     variant: {
-      default: 'divide-y divide-slate-200',
-      bordered: 'border-collapse [&_td]:border [&_th]:border',
-      minimal: 'divide-y divide-slate-100'
+      default: 'divide-y divide-(--ui-stronger)',
+      bordered: 'border-collapse [&_td]:border [&_th]:border [&_td]:border-(--ui-stronger) [&_th]:border-(--ui-stronger)',
+      minimal: 'divide-y divide-(--ui-stronger)'
     }
   },
   defaultVariants: {
@@ -227,9 +247,9 @@ const tableVariants = cva('min-w-full', {
 const headVariants = cva('', {
   variants: {
     variant: {
-      default: 'bg-slate-50',
-      bordered: 'bg-slate-100 border-b-2 border-slate-300',
-      minimal: 'bg-transparent border-b border-slate-200'
+      default: 'ui-glossy-surface border-b border-(--ui-stronger)',
+      bordered: 'ui-glossy-surface border-b-2 border-(--ui-stronger)',
+      minimal: 'bg-transparent border-b border-(--ui-stronger)'
     }
   },
   defaultVariants: {
@@ -240,9 +260,9 @@ const headVariants = cva('', {
 const bodyVariants = cva('divide-y', {
   variants: {
     variant: {
-      default: 'bg-white divide-slate-200',
-      bordered: 'bg-white divide-slate-300',
-      minimal: 'bg-transparent divide-slate-100'
+      default: 'ui-glossy-surface divide-(--ui-stronger)',
+      bordered: 'ui-glossy-surface divide-(--ui-stronger)',
+      minimal: 'bg-transparent divide-(--ui-stronger)'
     }
   },
   defaultVariants: {
@@ -284,34 +304,53 @@ const paginatedData = computed(() => {
   return filteredData.value.slice(start, end)
 })
 
+const displayedColumns = computed(() =>
+  props.columns.filter(col => visibleColumnKeys.value.includes(col.key))
+)
+
+const toggleableColumns = computed(() =>
+  props.columns.filter(col => col.toggleable !== false)
+)
+
+const handleToggleColumn = (key, visible) => {
+  if (visible) {
+    if (!visibleColumnKeys.value.includes(key)) {
+      visibleColumnKeys.value.push(key)
+    }
+  } else {
+    visibleColumnKeys.value = visibleColumnKeys.value.filter(k => k !== key)
+  }
+  emit('toggle-column', { key, visible })
+}
+
 // Check if actions column should be displayed based on permissions
 const shouldShowActionsColumn = computed(() => {
   if (!props.showActionsColumn) return false
-  
+
   // If using custom actions slot, always show
   if (props.$slots?.actions) return true
-  
+
   // If no actions defined, don't show
   if (!props.actions || props.actions.length === 0) return false
-  
+
   // Check if user has any actionable permissions
   const hasActionablePermission = props.actions.some(action => {
     if (action.permission === undefined) return true
-    
+
     // If permission is boolean, check it directly
     if (typeof action.permission === 'boolean') {
       return action.permission === true
     }
-    
+
     // If permission is a function, we assume it might grant access
     // This will be filtered per-row by getVisibleActions
     if (typeof action.permission === 'function') {
       return true
     }
-    
+
     return false
   })
-  
+
   return hasActionablePermission
 })
 
@@ -332,18 +371,18 @@ const getVisibleActions = (item) => {
         if (!action.permission(item)) {
           return false
         }
-      } 
+      }
       // If permission is a boolean value
       else if (!action.permission) {
         return false
       }
     }
-    
+
     // Check visibility function
     if (action.visible && typeof action.visible === 'function') {
       return action.visible(item)
     }
-    
+
     return true
   })
 }
@@ -514,9 +553,9 @@ const getHeaderCellClasses = (column) => {
 
   return cn(
     densityPadding[props.density],
-    'text-left text-xs font-medium text-slate-500 uppercase tracking-wider',
+    'text-left text-xs font-medium text-(--ui-text-soft) uppercase tracking-wider',
     {
-      'cursor-pointer hover:bg-slate-100 transition-colors': column.sortable && !props.loading && !props.sortLoading,
+      'cursor-pointer hover:bg-(--ui-surface-muted) transition-colors': column.sortable && !props.loading && !props.sortLoading,
       'cursor-not-allowed opacity-50': props.loading || (props.sortLoading && sortColumn.value === column.key)
     }
   )
@@ -531,41 +570,8 @@ const getDataCellClasses = () => {
 
   return cn(
     densityPadding[props.density],
-    'whitespace-nowrap text-sm text-slate-900'
+    'whitespace-nowrap text-sm text-(--ui-text)'
   )
-}
-
-const getRowClasses = (item, index) => {
-  const baseClasses = []
-
-  // Striped rows
-  if (props.striped && index % 2 === 1) {
-    baseClasses.push('bg-slate-50/50')
-  }
-
-  // Hoverable rows
-  if (props.hoverable && !props.clickableRows) {
-    baseClasses.push('hover:bg-slate-50')
-  }
-
-  // Clickable rows
-  if (props.clickableRows) {
-    baseClasses.push('cursor-pointer hover:bg-slate-100')
-  }
-
-  // Selected rows
-  if (props.selectable && isRowSelected(item)) {
-    baseClasses.push('bg-blue-50 border-blue-200')
-  }
-
-  // Variant-specific classes
-  if (props.variant === 'bordered') {
-    baseClasses.push('border-b border-slate-200')
-  } else if (props.variant === 'minimal') {
-    baseClasses.push('border-b border-slate-100')
-  }
-
-  return cn('transition-colors', ...baseClasses)
 }
 
 const formatCellValue = (item, column) => {
@@ -620,7 +626,7 @@ const checkboxCellClasses = computed(() => {
 
   return cn(
     densityPadding[props.density],
-    'whitespace-nowrap text-sm text-slate-900 w-12'
+    'whitespace-nowrap text-sm text-(--ui-text) w-12'
   )
 })
 
@@ -652,8 +658,8 @@ const emptyCellClasses = computed(() => {
 
 const getSortIconClasses = (column, direction) => cn(
   {
-    'text-blue-600': sortColumn.value === column.key && sortDirection.value === direction,
-    'text-slate-300': sortColumn.value !== column.key || sortDirection.value !== direction
+    'text-(--ui-primary)': sortColumn.value === column.key && sortDirection.value === direction,
+    'text-(--ui-text-soft)': sortColumn.value !== column.key || sortDirection.value !== direction
   }
 )
 
@@ -666,6 +672,10 @@ watch(() => props.selectedItems, () => {
 watch(() => props.pageSize, (newPageSize) => {
   pageSize.value = newPageSize
 })
+
+watch(() => props.columns, (newColumns) => {
+  visibleColumnKeys.value = newColumns.map(col => col.key)
+}, { deep: true })
 
 // Expose methods for parent components
 defineExpose({
@@ -705,6 +715,26 @@ defineExpose({
         <slot name="filters" />
       </template>
     </DataTableHeader>
+
+    <!-- Toolbar Component -->
+    <DataTableToolBar
+      v-if="showToolbar"
+      :selected-items="selectedItems"
+      :total-items="filteredData.length"
+      :show-density-toggle="showDensityToggle"
+      :show-column-toggle="showColumnToggle"
+      :show-refresh="showRefresh"
+      :density="density"
+      :toggleable-columns="toggleableColumns"
+      :visible-columns="visibleColumnKeys"
+      @update:density="(value) => emit('update:density', value)"
+      @toggle-column="handleToggleColumn"
+      @refresh="$emit('refresh')"
+    >
+      <template #actions>
+        <slot name="toolbar-actions" />
+      </template>
+    </DataTableToolBar>
 
     <!-- Loading Overlay for entire table -->
     <div class="relative">
@@ -756,7 +786,7 @@ defineExpose({
 
               <!-- Data Column Headers -->
               <th
-                v-for="column in columns"
+                v-for="column in displayedColumns"
                 :key="column.key"
                 :class="getHeaderCellClasses(column)"
                 @click="handleSort(column)"
@@ -834,16 +864,16 @@ defineExpose({
                   v-if="selectable"
                   :class="checkboxCellClasses"
                 >
-                  <div class="w-4 h-4 bg-slate-200 rounded" />
+                  <div class="w-4 h-4 bg-(--ui-surface-soft) rounded" />
                 </td>
 
                 <!-- Data columns skeleton -->
                 <td
-                  v-for="column in columns"
+                  v-for="column in displayedColumns"
                   :key="column.key"
                   :class="getDataCellClasses()"
                 >
-                  <div class="h-4 bg-slate-200 rounded w-3/4" />
+                  <div class="h-4 bg-(--ui-surface-soft) rounded w-3/4" />
                 </td>
 
                 <!-- Actions column skeleton -->
@@ -852,8 +882,8 @@ defineExpose({
                   :class="actionsCellClasses"
                 >
                   <div class="flex gap-2 justify-center">
-                    <div class="w-6 h-6 bg-slate-200 rounded" />
-                    <div class="w-6 h-6 bg-slate-200 rounded" />
+                    <div class="w-6 h-6 bg-(--ui-surface-soft) rounded" />
+                    <div class="w-6 h-6 bg-(--ui-surface-soft) rounded" />
                   </div>
                 </td>
               </tr>
@@ -861,79 +891,68 @@ defineExpose({
 
             <!-- Data Rows - Show when not loading and has data -->
             <template v-else-if="paginatedData.length > 0">
-              <tr
+              <DataTableRow
                 v-for="(item, index) in paginatedData"
                 :key="getRowKey(item, index)"
-                :class="getRowClasses(item, index)"
-                @click="handleRowClick({ item, index })"
+                :item="item"
+                :columns="displayedColumns"
+                :index="index"
+                :selectable="selectable"
+                :is-selected="isRowSelected(item)"
+                :striped="striped"
+                :hoverable="hoverable"
+                :clickable-rows="clickableRows"
+                :density="density"
+                :variant="variant"
+                @toggle-selection="toggleRowSelection"
+                @row-click="handleRowClick"
               >
-                <!-- Selection Column -->
-                <td
-                  v-if="selectable"
-                  :class="checkboxCellClasses"
-                >
-                  <Checkbox
-                    :model-value="isRowSelected(item)"
-                    @update:model-value="toggleRowSelection(item)"
-                  />
-                </td>
-
-                <!-- Data Columns -->
-                <td
-                  v-for="column in columns"
+                <template
+                  v-for="column in displayedColumns"
                   :key="column.key"
-                  :class="getDataCellClasses()"
+                  #[`cell-${column.key}`]="slotProps"
                 >
                   <slot
                     :name="`cell-${column.key}`"
-                    :item="item"
-                    :value="getCellValue(item, column)"
-                    :column="column"
-                    :index="index"
+                    v-bind="slotProps"
                   >
                     <span
-                      v-if="formatCellValue(item, column).toString().split(' ').length > 10"
-                      class="cursor-pointer text-blue-600 hover:text-blue-800"
-                      @click.stop="openModal(formatCellValue(item, column))"
+                      v-if="formatCellValue(slotProps.item, slotProps.column).toString().split(' ').length > 10"
+                      class="cursor-pointer text-(--ui-primary) hover:text-(--ui-primary)"
+                      @click.stop="openModal(formatCellValue(slotProps.item, slotProps.column))"
                     >
-                      {{ truncateText(formatCellValue(item, column)) }}
+                      {{ truncateText(formatCellValue(slotProps.item, slotProps.column)) }}
                     </span>
                     <span v-else>
-                      {{ formatCellValue(item, column) }}
+                      {{ formatCellValue(slotProps.item, slotProps.column) }}
                     </span>
                   </slot>
-                </td>
+                </template>
 
-                <!-- Actions Column -->
-                <td
-                  v-if="shouldShowActionsColumn"
-                  :class="actionsCellClasses"
-                >
-                  <!-- Use slot if provided -->
+                <template #actions="{ item: actionItem, index: actionIndex }">
                   <slot
                     v-if="$slots.actions"
                     name="actions"
-                    :item="item"
-                    :index="index"
+                    :item="actionItem"
+                    :index="actionIndex"
                   />
 
-                  <!-- Otherwise render actions from prop -->
                   <div
                     v-else-if="actions.length > 0"
                     class="flex items-center gap-1 justify-center"
                   >
                     <Tooltip
-                      v-for="action in getVisibleActions(item)"
+                      v-for="action in getVisibleActions(actionItem)"
                       :key="action.key"
-                      :content="typeof action.tooltip === 'function' ? action.tooltip(item) : (action.tooltip || action.label || action.key)"
+                      :content="typeof action.tooltip === 'function' ? action.tooltip(actionItem) : (action.tooltip || action.label || action.key)"
                       placement="top"
                     >
                       <Button
                         :variant="getButtonVariant(action.variant)"
                         size="xs"
-                        :disabled="isActionDisabled(action, item) || !hasPermission(action, item)"
-                        :class="['h-8 w-8', typeof action.class === 'function' ? action.class(item) : action.class]"
-                        @click.stop="handleActionClick(action, item)"
+                        :disabled="isActionDisabled(action, actionItem) || !hasPermission(action, actionItem)"
+                        :class="['h-8 w-8', typeof action.class === 'function' ? action.class(actionItem) : action.class]"
+                        @click.stop="handleActionClick(action, actionItem)"
                       >
                         <Icon
                           v-if="action.icon"
@@ -947,8 +966,8 @@ defineExpose({
                       </Button>
                     </Tooltip>
                   </div>
-                </td>
-              </tr>
+                </template>
+              </DataTableRow>
             </template>
 
             <!-- Empty State Row - Show when not loading and no data -->
@@ -959,16 +978,16 @@ defineExpose({
               >
                 <slot name="empty">
                   <div class="flex flex-col items-center justify-center py-12">
-                    <div class="text-slate-400 mb-4 flex justify-center">
+                    <div class="text-(--ui-text-soft) mb-4 flex justify-center">
                       <Icon
                         icon="search"
                         class="w-16 h-16"
                       />
                     </div>
-                    <p class="text-slate-600 text-lg font-medium mb-2">
+                    <p class="text-(--ui-text-muted) text-lg font-medium mb-2">
                       {{ emptyText }}
                     </p>
-                    <p class="text-slate-500 text-sm">
+                    <p class="text-(--ui-text-soft) text-sm">
                       {{ emptySubtitle }}
                     </p>
                   </div>
@@ -1012,7 +1031,7 @@ defineExpose({
         <h3 class="text-md font-semibold mb-4">
           Full Text
         </h3>
-        <div class="text-xl font-bold text-gray-700 whitespace-pre-wrap break-words">
+        <div class="text-xl font-bold text-(--ui-text-muted) whitespace-pre-wrap wrap-break-word">
           {{ modalContent }}
         </div>
       </div>

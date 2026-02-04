@@ -29,8 +29,8 @@ const dropzoneVariants = cva(
   {
     variants: {
       variant: {
-        default: 'border-gray-300 hover:border-gray-400 hover:bg-gray-50 focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-opacity-50',
-        dashed: 'border-blue-300 hover:border-blue-400 hover:bg-blue-50 focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-opacity-50'
+        default: 'border-(--ui-border) ui-glossy-border hover:border-(--ui-border-strong) hover:bg-(--ui-surface-muted) focus-within:ring-2 focus-within:ring-(--ui-primary)',
+        dashed: 'border-(--ui-primary-soft) hover:border-(--ui-primary-soft) hover:bg-(--ui-primary-soft) focus-within:ring-2 focus-within:ring-(--ui-primary)'
       }
     }
   }
@@ -40,9 +40,9 @@ const dropzoneClasses = computed(() =>
   cn(
     dropzoneVariants({ variant: props.variant }),
     {
-      'border-green-500 bg-green-50 shadow-md': files.value.length > 0 && !isDragOver.value,
-      'border-blue-500 bg-blue-50 ring-4 ring-blue-200 ring-opacity-50 shadow-lg': isDragOver.value,
-      'border-green-600 bg-green-100 ring-4 ring-green-200 ring-opacity-50 shadow-lg': files.value.length > 0 && isDragOver.value
+      'border-(--ui-success) bg-(--ui-success-soft) shadow-md': files.value.length > 0 && !isDragOver.value,
+      'border-(--ui-primary) bg-(--ui-primary-soft) ring-4 ring-(--ui-primary) shadow-lg': isDragOver.value,
+      'border-(--ui-success) bg-(--ui-success-soft) ring-4 ring-(--ui-success) shadow-lg': files.value.length > 0 && isDragOver.value
     }
   )
 )
@@ -177,17 +177,17 @@ const formatFileSize = (bytes) => {
       >
       
       <div class="flex items-center justify-center px-4 py-3">
-        <div class="bg-gray-100 rounded-full p-2 mr-3">
+        <div class="bg-(--ui-surface-muted) rounded-full p-2 mr-3">
           <Icon
             icon="upload"
-            class="h-6 w-6 text-gray-600"
+            class="h-6 w-6 text-(--ui-text-muted)"
           />
         </div>
         <div class="flex flex-col">
-          <p class="text-sm font-medium text-gray-700">
-            <span class="text-blue-600 font-semibold">Click to upload</span> or drag and drop
+          <p class="text-sm font-medium text-(--ui-text-muted)">
+            <span class="text-(--ui-primary) font-semibold">Click to upload</span> or drag and drop
           </p>
-          <p class="text-xs text-gray-500">
+          <p class="text-xs text-(--ui-text-soft)">
             {{ maxSize ? `Up to ${formatFileSize(maxSize)}` : 'No size limit' }}
             <span
               v-if="accept"
@@ -206,7 +206,7 @@ const formatFileSize = (bytes) => {
       <div
         v-for="(fileItem, index) in uploadingFiles"
         :key="`uploading-${index}`"
-        class="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg shadow-sm"
+        class="flex items-center justify-between p-3 bg-(--ui-surface) ui-glossy-surface border border-(--ui-border) ui-glossy-border rounded-lg shadow-sm"
       >
         <div class="flex items-center space-x-3">
           <CircularProgress
@@ -218,8 +218,8 @@ const formatFileSize = (bytes) => {
             class="shrink-0"
           />
           <div class="flex flex-col">
-            <span class="text-sm font-medium text-gray-900">{{ fileItem.file.name }}</span>
-            <span class="text-xs text-gray-500">Uploading... {{ Math.round(fileItem.progress) }}%</span>
+            <span class="text-sm font-medium text-(--ui-text)">{{ fileItem.file.name }}</span>
+            <span class="text-xs text-(--ui-text-soft)">Uploading... {{ Math.round(fileItem.progress) }}%</span>
           </div>
         </div>
       </div>
@@ -228,22 +228,22 @@ const formatFileSize = (bytes) => {
       <div
         v-for="(file, index) in files"
         :key="`uploaded-${index}`"
-        class="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow"
+        class="flex items-center justify-between p-3 bg-(--ui-surface) ui-glossy-surface border border-(--ui-border) ui-glossy-border rounded-lg shadow-sm hover:shadow-md transition-shadow"
       >
         <div class="flex items-center space-x-3">
-          <div class="bg-green-100 rounded-md p-2">
+          <div class="bg-(--ui-success-soft) rounded-md p-2">
             <Icon
               icon="file"
-              class="h-5 w-5 text-green-600"
+              class="h-5 w-5 text-(--ui-success)"
             />
           </div>
           <div class="flex flex-col">
-            <span class="text-sm font-medium text-gray-900">{{ file.name }}</span>
-            <span class="text-xs text-gray-500">{{ formatFileSize(file.size) }}</span>
+            <span class="text-sm font-medium text-(--ui-text)">{{ file.name }}</span>
+            <span class="text-xs text-(--ui-text-soft)">{{ formatFileSize(file.size) }}</span>
           </div>
         </div>
         <button
-          class="text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full p-1 transition-colors"
+          class="text-(--ui-text-soft) hover:text-(--ui-danger) hover:bg-(--ui-danger-soft) rounded-full p-1 transition-colors"
           @click="removeFile(index)"
         >
           <Icon

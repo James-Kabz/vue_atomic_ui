@@ -124,41 +124,41 @@ const strokeDashoffset = computed(() => {
 const progressColor = computed(() => {
   if (props.dynamicColor) {
     const percentage = clampedValue.value
-    if (percentage >= 80) return '#ef4444' // danger - red
-    if (percentage >= 60) return '#f59e0b' // warning - orange
-    if (percentage >= 40) return '#eab308' // yellow
-    if (percentage >= 20) return '#22c55e' // success - green
-    return '#6b7280' // gray for very low
+    if (percentage >= 80) return 'var(--ui-danger)'
+    if (percentage >= 60) return 'var(--ui-warning)'
+    if (percentage >= 40) return 'var(--ui-warning)'
+    if (percentage >= 20) return 'var(--ui-success)'
+    return 'var(--ui-text-muted)'
   }
 
   const colors = {
-    default: '#3b82f6',
-    success: '#10b981',
-    warning: '#f59e0b',
-    danger: '#ef4444'
+    default: 'var(--ui-primary)',
+    success: 'var(--ui-success)',
+    warning: 'var(--ui-warning)',
+    danger: 'var(--ui-danger)'
   }
   return colors[props.variant] || colors.default
 })
 
 const backgroundColor = computed(() => {
-  return '#e5e7eb' // gray-200
+  return 'var(--ui-border)'
 })
 
 const textColor = computed(() => {
   if (props.dynamicColor) {
     const percentage = clampedValue.value
-    if (percentage >= 80) return 'text-red-600'
-    if (percentage >= 60) return 'text-orange-600'
-    if (percentage >= 40) return 'text-yellow-600'
-    if (percentage >= 20) return 'text-green-600'
-    return 'text-gray-600'
+    if (percentage >= 80) return 'text-(--ui-danger)'
+    if (percentage >= 60) return 'text-(--ui-warning)'
+    if (percentage >= 40) return 'text-(--ui-warning)'
+    if (percentage >= 20) return 'text-(--ui-success)'
+    return 'text-(--ui-text-muted)'
   }
 
   const colors = {
-    default: 'text-blue-600',
-    success: 'text-green-600',
-    warning: 'text-yellow-600',
-    danger: 'text-red-600'
+    default: 'text-(--ui-primary)',
+    success: 'text-(--ui-success)',
+    warning: 'text-(--ui-warning)',
+    danger: 'text-(--ui-danger)'
   }
   return colors[props.variant] || colors.default
 })

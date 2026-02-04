@@ -59,7 +59,7 @@ const tooltipStyle = ref({})
 let timeoutId = null
 
 const tooltipVariants = cva(
-  'fixed z-[9999] px-3 py-1.5 text-sm text-white bg-gray-900 rounded-md shadow-lg pointer-events-none whitespace-nowrap',
+  'fixed z-[9999] px-3 py-1.5 text-sm text-(--ui-text-inverse) bg-(--ui-surface-strong) rounded-md shadow-lg pointer-events-none whitespace-nowrap ui-glossy-overlay ui-glossy-border',
   {
     variants: {
       placement: {

@@ -4,6 +4,7 @@
     :id="`panel-${index}`"
     role="tabpanel"
     :aria-labelledby="`tab-${index}`"
+    class="text-(--ui-text)"
   >
     <div
       v-if="loading"

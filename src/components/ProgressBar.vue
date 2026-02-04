@@ -69,8 +69,8 @@ const progressVariants = cva(
     variants: {
       variant: {
         default: 'bg-primary',
-        success: 'bg-green-500',
-        warning: 'bg-yellow-500',
+        success: 'bg-(--ui-success)',
+        warning: 'bg-(--ui-warning)',
         danger: 'bg-danger'
       }
     }
@@ -86,6 +86,6 @@ const progressClasses = computed(() =>
 )
 
 const labelClasses = computed(() => 
-  'absolute inset-0 flex items-center justify-center text-xs font-medium text-primary-foreground'
+  'absolute inset-0 flex items-center justify-center text-xs font-medium text-(--ui-text-inverse)'
 )
 </script>

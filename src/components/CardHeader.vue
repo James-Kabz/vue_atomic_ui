@@ -2,16 +2,23 @@
   <header
     :class="cn(
       cardHeaderVariants({ size }),
+      'text-(--ui-text)',
       $attrs.class
     )"
   >
     <div :class="cn(contentVariants({ alignment }), 'flex flex-col')">
-      <h2 v-if="title || $slots.title">
+      <h2
+        v-if="title || $slots.title"
+        class="text-(--ui-text)"
+      >
         <slot name="title">
           {{ title }}
         </slot>
       </h2>
-      <p v-if="subtitle || $slots.description">
+      <p
+        v-if="subtitle || $slots.description"
+        class="text-(--ui-text-muted)"
+      >
         <slot name="description">
           {{ subtitle }}
         </slot>

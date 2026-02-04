@@ -89,10 +89,16 @@ const handleToggleColumn = ({ column, visible }) => {
     <div class="space-y-6">
       <div class="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 class="text-2xl font-semibold text-slate-900">User Directory</h1>
-          <p class="text-slate-600 mt-1">Track active users, permissions, and last activity.</p>
+          <h1 class="text-2xl font-semibold text-slate-900">
+            User Directory
+          </h1>
+          <p class="text-slate-600 mt-1">
+            Track active users, permissions, and last activity.
+          </p>
         </div>
-        <Button variant="primary">Invite Team</Button>
+        <Button variant="primary">
+          Invite Team
+        </Button>
       </div>
 
       <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
@@ -100,8 +106,8 @@ const handleToggleColumn = ({ column, visible }) => {
           v-model:search-query="searchQuery"
           v-model:date-from="dateFrom"
           v-model:date-to="dateTo"
-          :status-options="statusOptions"
           v-model:selected-status="selectedStatus"
+          :status-options="statusOptions"
           :show-file-upload="false"
           :show-date-filter="false"
           :show-export="true"
@@ -138,7 +144,12 @@ const handleToggleColumn = ({ column, visible }) => {
           @selection-change="(items) => (selectedUsers = items)"
         >
           <template #cell-status="{ value }">
-            <Badge :variant="statusVariant(value)" size="sm">{{ value }}</Badge>
+            <Badge
+              :variant="statusVariant(value)"
+              size="sm"
+            >
+              {{ value }}
+            </Badge>
           </template>
         </DataTable>
       </div>

@@ -31,7 +31,7 @@
         <!-- Clear -->
         <button
           v-if="!loading && clearable"
-          class="text-slate-400 hover:text-slate-600 transition-colors p-1 rounded-full hover:bg-slate-100"
+          class="text-(--ui-text-soft) hover:text-(--ui-text-muted) transition-colors p-1 rounded-full hover:bg-(--ui-surface-muted)"
           :aria-label="clearLabel"
           @click="handleClear"
         >
@@ -43,7 +43,7 @@
           v-else-if="loading"
           class="animate-spin"
         >
-          <LoadingIcon class="w-4 h-4 text-slate-400" />
+          <LoadingIcon class="w-4 h-4 text-(--ui-text-soft)" />
         </div>
       </div>
     </div>
@@ -81,13 +81,13 @@
 
             <div class="flex-1 text-left">
               <div
-                class="font-medium text-slate-900"
+                class="font-medium text-(--ui-text)"
               >
                 {{ highlightMatch(result.title) }}
               </div>
               <div
                 v-if="result.description"
-                class="text-sm text-slate-500 truncate"
+                class="text-sm text-(--ui-text-soft) truncate"
               >
                 {{ highlightMatch(result.description) }}
               </div>
@@ -95,7 +95,7 @@
 
             <div
               v-if="result.category"
-              class="text-xs text-slate-400 ml-3"
+              class="text-xs text-(--ui-text-soft) ml-3"
             >
               {{ result.category }}
             </div>
@@ -105,7 +105,7 @@
         <!-- No Results -->
         <div
           v-else-if="showNoResults"
-          class="px-4 py-3 text-sm text-slate-500 text-center"
+          class="px-4 py-3 text-sm text-(--ui-text-soft) text-center"
         >
           {{ noResultsText }}
         </div>
@@ -113,7 +113,7 @@
         <!-- Footer Slot -->
         <div
           v-if="$slots.footer"
-          class="border-t border-slate-200 p-2"
+          class="border-t border-(--ui-border) ui-glossy-border p-2"
         >
           <slot name="footer" />
         </div>
@@ -290,7 +290,7 @@ const highlightMatch = (text) => {
 
 // Variants
 const inputVariants = cva(
-  'block w-full rounded-lg border bg-white transition-colors duration-200 placeholder:text-slate-400 disabled:bg-slate-50 disabled:text-slate-500 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500',
+  'block w-full rounded-lg border bg-(--ui-surface) ui-glossy-surface transition-colors duration-200 placeholder:text-(--ui-text-soft) disabled:bg-(--ui-surface-muted) disabled:text-(--ui-text-soft) disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:border-(--ui-primary)',
   {
     variants: {
       size: {
@@ -303,7 +303,7 @@ const inputVariants = cva(
   }
 )
 
-const iconVariants = cva('text-slate-400', {
+const iconVariants = cva('text-(--ui-text-soft)', {
   variants: {
     size: {
       sm: 'w-4 h-4',
@@ -317,12 +317,12 @@ const iconVariants = cva('text-slate-400', {
 const inputClasses = computed(() => cn(inputVariants({ size: props.size })))
 const iconClasses = computed(() => cn(iconVariants({ size: props.size })))
 const resultsClasses = computed(() =>
-  cn('absolute z-50 w-full mt-1 bg-white rounded-lg shadow-lg border border-slate-200 max-h-96 overflow-hidden')
+  cn('absolute z-50 w-full mt-1 bg-(--ui-surface) ui-glossy-surface rounded-lg shadow-lg border border-(--ui-border) ui-glossy-border max-h-96 overflow-hidden')
 )
 const getResultClasses = (i) =>
   cn(
-    'flex items-center w-full px-4 py-3 text-left transition-colors duration-150 hover:bg-slate-50 focus:bg-slate-50 focus:outline-none',
-    { 'bg-slate-50': focusedIndex.value === i }
+    'flex items-center w-full px-4 py-3 text-left transition-colors duration-150 hover:bg-(--ui-surface-muted) focus:bg-(--ui-surface-muted) focus:outline-none',
+    { 'bg-(--ui-surface-muted)': focusedIndex.value === i }
   )
 
 // Outside click

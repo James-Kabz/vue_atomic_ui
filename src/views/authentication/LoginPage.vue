@@ -80,7 +80,7 @@ const onSubmit = async () => {
           placeholder="Enter your email"
           type="email"
           :disabled="isLoading"
-          :class="hasError ? 'border-red-500' : 'border-slate-300'"
+          :class="hasError ? 'border-(--ui-danger)' : 'border-(--ui-border)'"
           :aria-describedby="ariaDescribedBy"
         />
       </template>
@@ -101,7 +101,7 @@ const onSubmit = async () => {
           :type="showPassword ? 'text' : 'password'"
           :disabled="isLoading"
           :class="[
-            hasError ? 'border-red-500' : 'border-slate-300',
+            hasError ? 'border-(--ui-danger)' : 'border-(--ui-border)',
             'pr-10' // Add padding to accommodate the toggle button
           ]"
           :aria-describedby="ariaDescribedBy"
@@ -123,7 +123,7 @@ const onSubmit = async () => {
           placeholder="Enter your company code"
           type="text"
           :disabled="isLoading"
-          :class="hasError ? 'border-red-500' : 'border-slate-300'"
+          :class="hasError ? 'border-(--ui-danger)' : 'border-(--ui-border)'"
           :aria-describedby="ariaDescribedBy"
         />
       </template>
@@ -153,7 +153,7 @@ const onSubmit = async () => {
     <!-- Submit -->
     <Button
       type="submit"
-      class="w-full rounded-md bg-blue-600 py-2 text-white font-medium hover:bg-blue-700 transition flex items-center justify-center"
+      class="w-full rounded-md bg-(--ui-primary) py-2 text-(--ui-text-inverse) font-medium hover:bg-(--ui-primary-strong) transition flex items-center justify-center"
       :disabled="isLoading"
       :loading="isLoading"
     >

@@ -126,10 +126,10 @@ const pipelineChart = {
     <div class="space-y-6">
       <div class="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 class="text-2xl font-semibold text-slate-900">
+          <h1 class="text-2xl font-semibold text-(--ui-text)">
             Executive Overview
           </h1>
-          <p class="text-slate-600 mt-1">
+          <p class="text-(--ui-text-muted) mt-1">
             Snapshot of platform health and recent operational activity.
           </p>
         </div>
@@ -139,7 +139,9 @@ const pipelineChart = {
             placeholder="Search activity"
             class="w-64"
           />
-          <Button variant="primary">Create Report</Button>
+          <Button variant="primary">
+            Create Report
+          </Button>
         </div>
       </div>
 
@@ -153,10 +155,10 @@ const pipelineChart = {
         >
           <div class="flex items-end justify-between">
             <div>
-              <div class="text-2xl font-semibold text-slate-900">
+              <div class="text-2xl font-semibold text-(--ui-text)">
                 {{ stat.value }}
               </div>
-              <p class="text-sm text-slate-500 mt-1">
+              <p class="text-sm text-(--ui-text-soft) mt-1">
                 {{ stat.helper }}
               </p>
             </div>
@@ -193,21 +195,39 @@ const pipelineChart = {
             { id: 'grid', label: 'Show Grid', default: true }
           ]"
         />
-        <Card title="Decision Log" padding="lg" variant="outlined">
+        <Card
+          title="Decision Log"
+          padding="lg"
+          variant="outlined"
+        >
           <div class="space-y-3">
-            <div class="rounded-lg border border-slate-200 p-3">
-              <p class="text-sm font-semibold text-slate-900">Vendor renewal approved</p>
-              <p class="text-xs text-slate-500">Signed off by Finance · 2 hours ago</p>
+            <div class="rounded-lg border border-(--ui-border) p-3">
+              <p class="text-sm font-semibold text-(--ui-text)">
+                Vendor renewal approved
+              </p>
+              <p class="text-xs text-(--ui-text-soft)">
+                Signed off by Finance · 2 hours ago
+              </p>
             </div>
-            <div class="rounded-lg border border-slate-200 p-3">
-              <p class="text-sm font-semibold text-slate-900">Risk score recalibration</p>
-              <p class="text-xs text-slate-500">Scheduled for Feb 10 · 1 day ago</p>
+            <div class="rounded-lg border border-(--ui-border) p-3">
+              <p class="text-sm font-semibold text-(--ui-text)">
+                Risk score recalibration
+              </p>
+              <p class="text-xs text-(--ui-text-soft)">
+                Scheduled for Feb 10 · 1 day ago
+              </p>
             </div>
-            <div class="rounded-lg border border-slate-200 p-3">
-              <p class="text-sm font-semibold text-slate-900">New policy rollout</p>
-              <p class="text-xs text-slate-500">HR compliance · 3 days ago</p>
+            <div class="rounded-lg border border-(--ui-border) p-3">
+              <p class="text-sm font-semibold text-(--ui-text)">
+                New policy rollout
+              </p>
+              <p class="text-xs text-(--ui-text-soft)">
+                HR compliance · 3 days ago
+              </p>
             </div>
-            <Button variant="secondary" size="sm">Open Timeline</Button>
+            <Button size="sm">
+              Open Timeline
+            </Button>
           </div>
         </Card>
       </div>
@@ -226,7 +246,10 @@ const pipelineChart = {
           striped
         >
           <template #cell-status="{ value }">
-            <Badge :variant="statusVariant(value)" size="sm">
+            <Badge
+              :variant="statusVariant(value)"
+              size="sm"
+            >
               {{ value.replace('_', ' ') }}
             </Badge>
           </template>

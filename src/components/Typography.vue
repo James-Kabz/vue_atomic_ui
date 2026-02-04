@@ -158,7 +158,7 @@ const variantClasses = computed(() => {
     'display-lg': 'text-6xl font-bold leading-tight tracking-tight',
     'display-xl': 'text-7xl font-bold leading-tight tracking-tighter',
     'display-2xl': 'text-8xl font-bold leading-tight tracking-tighter',
-    caption: 'text-xs leading-normal text-slate-600',
+    caption: 'text-xs leading-normal text-(--ui-text-muted)',
     overline: 'text-xs font-medium uppercase tracking-wider leading-normal',
     label: 'text-sm font-medium leading-normal'
   }
@@ -167,22 +167,22 @@ const variantClasses = computed(() => {
 
 const colorClasses = computed(() => {
   if (props.gradient) {
-    return 'bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent'
+    return 'bg-linear-to-r from-(--ui-primary) to-(--ui-accent) bg-clip-text text-transparent'
   }
   
   const colors = {
-    default: 'text-slate-900',
-    primary: 'text-blue-600',
-    secondary: 'text-slate-600',
-    accent: 'text-purple-600',
-    success: 'text-green-600',
-    warning: 'text-yellow-600',
-    danger: 'text-red-600',
-    info: 'text-cyan-600',
-    muted: 'text-slate-500',
-    disabled: 'text-slate-400',
-    white: 'text-white',
-    black: 'text-black'
+    default: 'text-(--ui-text)',
+    primary: 'text-(--ui-primary)',
+    secondary: 'text-(--ui-text-muted)',
+    accent: 'text-(--ui-accent)',
+    success: 'text-(--ui-success)',
+    warning: 'text-(--ui-warning)',
+    danger: 'text-(--ui-danger)',
+    info: 'text-(--ui-primary)',
+    muted: 'text-(--ui-text-soft)',
+    disabled: 'text-(--ui-text-soft)',
+    white: 'text-(--ui-text-inverse)',
+    black: 'text-(--ui-text)'
   }
   return colors[props.color]
 })
@@ -322,7 +322,7 @@ const typographyClasses = computed(() => [
     <slot />
     <span
       v-if="required"
-      class="text-red-600 ml-1"
+      class="text-(--ui-danger) ml-1"
       aria-hidden="true"
     >*</span>
   </component>
