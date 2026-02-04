@@ -1031,7 +1031,7 @@ defineExpose({
         <h3 class="text-md font-semibold mb-4">
           Full Text
         </h3>
-        <div class="text-xl font-bold text-(--ui-text-muted) whitespace-pre-wrap break-words">
+        <div class="text-xl font-bold text-(--ui-text-muted) whitespace-pre-wrap wrap-break-word">
           {{ modalContent }}
         </div>
       </div>
