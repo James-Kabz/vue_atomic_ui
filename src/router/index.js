@@ -6,6 +6,30 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/',
+      redirect: '/templates/overview'
+    },
+    {
+      path: '/components',
+      name: 'components',
+      component: () => import('../views/ComponentShowcase.vue')
+    },
+    {
+      path: '/templates/overview',
+      name: 'templates/overview',
+      component: () => import('../views/templates/DashboardOverview.vue')
+    },
+    {
+      path: '/templates/analytics',
+      name: 'templates/analytics',
+      component: () => import('../views/templates/DashboardAnalytics.vue')
+    },
+    {
+      path: '/templates/users',
+      name: 'templates/users',
+      component: () => import('../views/templates/DashboardUsers.vue')
+    },
+    {
       path: '/dashboard',
       name: 'dashboard',
       component: () => import('../views/DashboardPage.vue')
