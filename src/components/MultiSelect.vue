@@ -160,8 +160,8 @@ watch(isOpen, (open) => {
       type="button"
       :disabled="disabled"
       :class="[
-        'w-full px-3 py-2.5 text-left border rounded-md focus:outline-none focus:ring-2 focus:ring-(--ui-primary) bg-(--ui-surface) min-h-[42px]',
-        hasError ? 'border-(--ui-danger)' : 'border-(--ui-border)',
+        'w-full px-3 py-2.5 text-left border rounded-md focus:outline-none focus:ring-2 focus:ring-(--ui-primary) bg-(--ui-surface) ui-glossy-surface min-h-[42px]',
+        hasError ? 'border-(--ui-danger)' : 'border-(--ui-border) ui-glossy-border',
         disabled ? 'bg-(--ui-surface-muted) cursor-not-allowed opacity-50' : 'hover:border-(--ui-border-strong)'
       ]"
       @click="toggleDropdown"
@@ -213,16 +213,16 @@ watch(isOpen, (open) => {
           v-if="isOpen"
           :style="dropdownStyle"
           data-multiselect-dropdown
-          class="bg-(--ui-surface) shadow-lg max-h-72 rounded-md text-base ring-1 ring-(--ui-surface-strong) ring-opacity-5 overflow-hidden focus:outline-none"
+          class="ui-glossy-popover ui-glossy-border shadow-lg max-h-72 rounded-md text-base ring-1 ring-(--ui-surface-strong) ring-opacity-5 overflow-hidden focus:outline-none"
         >
           <!-- Search input -->
-          <div class="px-3 py-2.5 border-b border-(--ui-border) bg-(--ui-surface-muted)">
+          <div class="px-3 py-2.5 border-b border-(--ui-border) ui-glossy-border bg-(--ui-surface-muted)">
             <input
               ref="searchInput"
               v-model="searchQuery"
               type="text"
               placeholder="Search options..."
-              class="w-full px-3 py-2 text-sm border border-(--ui-border) rounded-md focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:border-transparent bg-(--ui-surface)"
+              class="w-full px-3 py-2 text-sm border border-(--ui-border) ui-glossy-border rounded-md focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:border-transparent bg-(--ui-surface) ui-glossy-surface"
               @input="filterOptions"
               @keydown.stop
             >
@@ -245,7 +245,7 @@ watch(isOpen, (open) => {
                 <input
                   type="checkbox"
                   :checked="modelValue.includes(option.value)"
-                  class="h-4 w-4 text-(--ui-primary) focus:ring-(--ui-primary) border-(--ui-border) rounded cursor-pointer pointer-events-none"
+                  class="h-4 w-4 text-(--ui-primary) focus:ring-(--ui-primary) border-(--ui-border) ui-glossy-border rounded cursor-pointer pointer-events-none"
                   readonly
                   tabindex="-1"
                 >

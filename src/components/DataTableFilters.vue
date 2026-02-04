@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-(--ui-surface) border-b border-(--ui-border)">
+  <div class="ui-glossy-surface border-b ui-glossy-border">
     <!-- Main Filters Bar -->
     <div :class="filtersClasses">
       <!-- Search Input -->
@@ -434,7 +434,7 @@
     class="fixed inset-0 bg-(--ui-surface-strong)/60 z-50 flex items-center justify-center p-4"
     @click.self="closeFileUploadModal"
   >
-    <div class="bg-(--ui-surface) rounded-xl shadow-2xl max-w-2xl w-full p-6">
+    <div class="ui-glossy-popover ui-glossy-border rounded-xl shadow-2xl max-w-2xl w-full p-6">
       <div class="flex items-center justify-between mb-4">
         <h3 class="text-lg font-semibold text-(--ui-text)">
           Upload Files
@@ -750,9 +750,9 @@ const handleAddButtonClick = () => {
 const filtersVariants = cva('flex flex-wrap items-center gap-4', {
   variants: {
     variant: {
-      default: 'bg-(--ui-surface)',
+      default: 'ui-glossy-surface',
       minimal: 'bg-transparent',
-      bordered: 'bg-(--ui-surface-muted)'
+      bordered: 'ui-glossy-surface'
     },
     padding: {
       compact: 'px-4 py-3',
@@ -766,7 +766,7 @@ const filtersVariants = cva('flex flex-wrap items-center gap-4', {
   }
 })
 
-const inputVariants = cva('border border-(--ui-border) rounded-lg focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:border-transparent transition-all text-sm', {
+const inputVariants = cva('border border-(--ui-border) ui-glossy-border rounded-lg focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:border-transparent transition-all text-sm bg-(--ui-surface) ui-glossy-input', {
   variants: {
     size: {
       sm: 'px-2 py-1.5',
@@ -782,9 +782,9 @@ const inputVariants = cva('border border-(--ui-border) rounded-lg focus:outline-
 const buttonVariants = cva('rounded-lg flex items-center font-medium transition-all', {
   variants: {
     variant: {
-      default: 'text-(--ui-text-muted) hover:text-(--ui-text) border border-(--ui-border) hover:bg-(--ui-surface-muted) hover:border-(--ui-border) bg-(--ui-surface)',
-      primary: 'text-(--ui-text-inverse) bg-(--ui-primary) hover:bg-(--ui-primary-strong) border border-(--ui-primary) shadow-sm',
-      success: 'text-(--ui-text-inverse) bg-(--ui-success) hover:bg-(--ui-success-strong) border border-(--ui-success) shadow-sm',
+      default: 'text-(--ui-text-muted) hover:text-(--ui-text) border ui-glossy-border ui-glossy-button hover:brightness-105',
+      primary: 'text-(--ui-text-inverse) bg-(--ui-primary) hover:bg-(--ui-primary-strong) border border-(--ui-primary) shadow-sm ui-glossy-button-strong',
+      success: 'text-(--ui-text-inverse) bg-(--ui-success) hover:bg-(--ui-success-strong) border border-(--ui-success) shadow-sm ui-glossy-button-strong',
       ghost: 'text-(--ui-text-muted) hover:text-(--ui-text) hover:bg-(--ui-surface-muted)'
     },
     size: {

@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { cva } from 'class-variance-authority'
 import { cn } from '../utils/cn.js'
 import Checkbox from './Checkbox.vue'
+import DataTableCell from './DataTableCell.vue'
 
 const props = defineProps({
   item: {
@@ -56,25 +57,25 @@ const emit = defineEmits(['toggle-selection', 'row-click'])
 const rowVariants = cva('transition-colors', {
   variants: {
     striped: {
-      true: 'odd:bg-[color:color-mix(in oklab, var(--ui-surface-muted), transparent 50%)]',
+      true: 'odd:bg-[color:color-mix(in oklab, var(--ui-primary-soft), transparent 75%)]',
       false: ''
     },
     hoverable: {
-      true: 'hover:bg-(--ui-surface-muted)',
+      true: 'hover:bg-[color:color-mix(in oklab, var(--ui-primary-soft), transparent 65%)]',
       false: ''
     },
     clickable: {
-      true: 'cursor-pointer hover:bg-(--ui-surface-muted)',
+      true: 'cursor-pointer hover:bg-[color:color-mix(in oklab, var(--ui-primary-soft), transparent 65%)]',
       false: ''
     },
     selected: {
-      true: 'bg-(--ui-primary-soft) border-(--ui-primary-soft)',
+      true: 'bg-(--ui-primary-soft) border-l-2 border-(--ui-primary)',
       false: ''
     },
     variant: {
-      default: '',
-      bordered: 'border-b border-(--ui-border)',
-      minimal: 'border-b border-(--ui-border)'
+      default: 'border-b border-(--ui-ring) ui-glossy-border',
+      bordered: 'border-b border-(--ui-ring) ui-glossy-border',
+      minimal: 'border-b border-(--ui-ring) ui-glossy-border'
     }
   },
   compoundVariants: [
@@ -194,6 +195,15 @@ const getCellClasses = (column) => {
   )
 }
 
+const getCellTextSize = () => {
+  const sizes = {
+    compact: 'xs',
+    normal: 'sm',
+    comfortable: 'base'
+  }
+  return sizes[props.density] || 'sm'
+}
+
 const checkboxCellClasses = computed(() => 
   cn(
     cellVariants({ density: props.density }),
@@ -229,10 +239,16 @@ const actionsCellClasses = computed(() =>
     </td>
 
     <!-- Data Columns -->
-    <td
+    <DataTableCell
       v-for="column in columns"
       :key="getColumnKey(column)"
-      :class="getCellClasses(column)"
+      :item="item"
+      :column="column"
+      :value="getCellValue(item, column)"
+      :align="getAlignmentClass(column)"
+      :padding="density"
+      :text-size="getCellTextSize()"
+      :text-color="column.textColor"
     >
       <slot
         :name="`cell-${getColumnKey(column)}`"
@@ -243,7 +259,7 @@ const actionsCellClasses = computed(() =>
       >
         {{ formatCellValue(item, column) }}
       </slot>
-    </td>
+    </DataTableCell>
 
     <!-- Actions Column -->
     <td

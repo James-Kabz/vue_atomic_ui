@@ -240,12 +240,12 @@ const densityOptions = [
 
 
 // CVA Variants
-const toolbarVariants = cva('flex items-center justify-between border-b border-(--ui-border)', {
+const toolbarVariants = cva('flex items-center justify-between border-b ui-glossy-border', {
   variants: {
     variant: {
-      default: 'bg-(--ui-surface)',
+      default: 'ui-glossy-surface',
       minimal: 'bg-transparent border-(--ui-border)',
-      bordered: 'bg-(--ui-surface-muted) border-(--ui-border)'
+      bordered: 'ui-glossy-surface border-(--ui-border)'
     },
     padding: {
       compact: 'p-2',
@@ -259,7 +259,7 @@ const toolbarVariants = cva('flex items-center justify-between border-b border-(
   }
 })
 
-const bulkActionVariants = cva('px-3 py-1.5 text-sm font-medium rounded-md flex items-center gap-1 transition-colors', {
+const bulkActionVariants = cva('px-3 py-1.5 text-sm font-medium rounded-md flex items-center gap-1 transition-colors ui-glossy-overlay', {
   variants: {
     variant: {
       danger: 'text-(--ui-danger) bg-(--ui-danger) hover:bg-(--ui-danger-soft) border border-(--ui-danger-soft)',
@@ -272,7 +272,7 @@ const bulkActionVariants = cva('px-3 py-1.5 text-sm font-medium rounded-md flex 
   }
 });
 
-const densityButtonVariants = cva('p-2 border border-(--ui-border) transition-colors', {
+const densityButtonVariants = cva('p-2 border ui-glossy-border transition-colors ui-glossy-button', {
   variants: {
     active: {
       true: 'bg-(--ui-primary-soft) text-(--ui-primary) border-(--ui-primary-soft)',
@@ -290,7 +290,7 @@ const densityButtonVariants = cva('p-2 border border-(--ui-border) transition-co
   }
 })
 
-const refreshButtonVariants = cva('px-3 py-2 text-sm border border-(--ui-border) rounded-md flex items-center gap-2 transition-colors', {
+const refreshButtonVariants = cva('px-3 py-2 text-sm border ui-glossy-border rounded-md flex items-center gap-2 transition-colors ui-glossy-button', {
   variants: {
     state: {
       normal: 'text-(--ui-text-muted) hover:text-(--ui-text) hover:bg-(--ui-surface-muted)',
@@ -314,11 +314,11 @@ const itemCountClasses = computed(() => 'text-sm text-(--ui-text-muted)')
 const densityToggleClasses = computed(() => 'flex items-center')
 
 const columnToggleButtonClasses = computed(() => 
-  'flex items-center gap-2 px-3 py-2 text-sm text-(--ui-text-muted) hover:text-(--ui-text) border border-(--ui-border) rounded-md hover:bg-(--ui-surface-muted) transition-colors focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:ring-offset-1'
+  'flex items-center gap-2 px-3 py-2 text-sm text-(--ui-text-muted) hover:text-(--ui-text) border ui-glossy-border rounded-md ui-glossy-button hover:brightness-105 transition-colors focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:ring-offset-1'
 )
 
 const columnMenuClasses = computed(() => 
-  'absolute right-0 top-full mt-1 w-56 bg-(--ui-surface) border border-(--ui-border) rounded-lg shadow-lg z-50 max-h-64 overflow-y-auto'
+  'absolute right-0 top-full mt-1 w-56 ui-glossy-popover ui-glossy-border rounded-lg shadow-lg z-50 max-h-64 overflow-y-auto'
 )
 
 const columnMenuHeaderClasses = computed(() => 

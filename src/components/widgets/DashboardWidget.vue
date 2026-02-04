@@ -244,7 +244,8 @@ onUnmounted(() => {
     tabindex="0"
     :style="containerStyles"
     :class="cn(
-      'bg-(--ui-surface) rounded-xl shadow-sm border border-(--ui-border) overflow-hidden transition-all select-none flex flex-col relative',
+      'ui-glossy-surface rounded-xl border ui-glossy-border overflow-hidden transition-all select-none flex flex-col relative',
+      'shadow-sm',
       isDragging ? 'opacity-50 scale-95' : 'hover:shadow-lg cursor-move',
       isFocused ? 'ring-2 ring-(--ui-primary) ring-offset-2' : ''
     )"

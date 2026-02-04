@@ -161,9 +161,9 @@ const accordionVariants = cva('w-full', {
 const itemVariants = cva('transition-all duration-200', {
   variants: {
     variant: {
-      default: 'bg-(--ui-surface) border border-(--ui-border) rounded-lg overflow-hidden shadow-sm hover:shadow-md',
-      bordered: 'border-2 border-(--ui-border) rounded-xl overflow-hidden hover:border-(--ui-primary-soft)',
-      filled: 'bg-linear-to-br from-(--ui-surface-muted) to-(--ui-surface) border border-(--ui-border) rounded-xl overflow-hidden shadow-sm',
+      default: 'ui-glossy-surface border ui-glossy-border rounded-lg overflow-hidden shadow-sm hover:shadow-md',
+      bordered: 'ui-glossy-surface border-2 ui-glossy-border rounded-xl overflow-hidden hover:border-(--ui-primary-soft)',
+      filled: 'ui-glossy-surface border ui-glossy-border rounded-xl overflow-hidden shadow-sm',
       flush: ''
     }
   }

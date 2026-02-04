@@ -4,7 +4,7 @@
   >
     <span
       v-if="label && orientation === 'horizontal'"
-      class="px-3 text-sm text-(--ui-text-soft) bg-(--ui-surface) dark:bg-(--ui-surface-strong) dark:text-(--ui-text-soft) relative z-10"
+      class="px-3 text-sm text-(--ui-text-soft) bg-(--ui-surface) ui-glossy-surface dark:bg-(--ui-surface-strong) dark:text-(--ui-text-soft) relative z-10"
     >
       {{ label }}
     </span>

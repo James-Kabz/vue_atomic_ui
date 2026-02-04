@@ -45,7 +45,7 @@ const props = defineProps({
   },
   textColor: {
     type: String,
-    default: 'slate-900'
+    default: null
   }
 })
 
@@ -67,7 +67,7 @@ const getCellValue = () => {
   return props.column.key.split('.').reduce((obj, key) => obj?.[key], props.item)
 }
 
-const cellVariants = cva('whitespace-nowrap', {
+const cellVariants = cva('whitespace-nowrap text-(--ui-text)', {
   variants: {
     align: {
       left: 'text-left',
@@ -95,7 +95,7 @@ const cellVariants = cva('whitespace-nowrap', {
 
 const cellClasses = computed(() => {
   const align = props.align || props.column.align || 'left'
-  const textColorClass = `text-${props.textColor}`
+  const textColorClass = props.textColor ? `text-${props.textColor}` : 'text-(--ui-text)'
   const widthClass = props.width ? `w-${props.width}` : ''
   
   return cn(

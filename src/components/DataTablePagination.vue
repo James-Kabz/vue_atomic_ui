@@ -225,12 +225,12 @@ const props = defineProps({
 defineEmits(['update:currentPage', 'update:pageSize'])
 
 // CVA variants
-const footerVariants = cva('border-t border-(--ui-border)', {
+const footerVariants = cva('border-t border-(--ui-border) ui-glossy-border', {
   variants: {
     variant: {
       default: 'bg-(--ui-surface-muted)',
-      minimal: 'bg-transparent border-(--ui-border)',
-      bordered: 'bg-(--ui-surface-muted) border-t-2 border-(--ui-border)'
+      minimal: 'bg-transparent border-(--ui-border) ui-glossy-border',
+      bordered: 'bg-(--ui-surface-muted) border-t-2 border-(--ui-border) ui-glossy-border'
     },
     padding: {
       compact: 'px-4 py-2',
@@ -248,8 +248,8 @@ const pageButtonVariants = cva('text-sm font-medium border rounded-md transition
   variants: {
     state: {
       active: 'bg-(--ui-primary) text-(--ui-text-inverse) border-(--ui-primary)',
-      inactive: 'bg-(--ui-surface) text-(--ui-text-muted) border-(--ui-border) hover:bg-(--ui-surface-muted)',
-      disabled: 'bg-(--ui-surface-muted) text-(--ui-text-soft) border-(--ui-border) cursor-not-allowed'
+      inactive: 'bg-(--ui-surface) ui-glossy-surface text-(--ui-text-muted) border-(--ui-border) ui-glossy-border hover:bg-(--ui-surface-muted)',
+      disabled: 'bg-(--ui-surface-muted) text-(--ui-text-soft) border-(--ui-border) ui-glossy-border cursor-not-allowed'
     },
     size: {
       sm: 'px-2 py-1',
@@ -276,7 +276,7 @@ const labelVariants = cva('text-(--ui-text-muted)', {
   }
 })
 
-const selectVariants = cva('border border-(--ui-border) rounded-md focus:outline-none focus:ring-2 focus:ring-(--ui-primary) text-sm min-w-[60px] focus:border-transparent', {
+const selectVariants = cva('border border-(--ui-border) ui-glossy-border rounded-md focus:outline-none focus:ring-2 focus:ring-(--ui-primary) text-sm min-w-[60px] focus:border-transparent', {
   variants: {
     size: {
       sm: 'px-2 py-1',

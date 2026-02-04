@@ -220,17 +220,16 @@ const iconComponent = computed(() => {
 
 /* ===== Variants with CVA ===== */
 const alertVariants = cva(
-  'relative w-full rounded-lg border p-4 flex items-start gap-3',
+  'relative w-full rounded-lg border p-4 flex items-start gap-3 ui-glossy-overlay ui-glossy-border',
   {
     variants: {
       variant: {
-        default: 'bg-background text-foreground',
-        danger:
-          'border-danger/50 text-danger dark:border-danger',
-        info: 'bg-(--ui-primary-soft) border-(--ui-primary-soft) text-(--ui-primary)',
-        success: 'bg-(--ui-success-soft) border-(--ui-success-soft) text-(--ui-success)',
-        warning: 'bg-(--ui-warning-soft) border-(--ui-warning-soft) text-(--ui-warning)',
-        error: 'bg-(--ui-danger-soft) border-(--ui-danger-soft) text-(--ui-danger)'
+        default: 'bg-(--ui-surface) text-(--ui-text) ui-glossy-surface',
+        danger: 'bg-(--ui-danger-soft) text-(--ui-danger)',
+        info: 'bg-(--ui-primary-soft) text-(--ui-primary)',
+        success: 'bg-(--ui-success-soft) text-(--ui-success)',
+        warning: 'bg-(--ui-warning-soft) text-(--ui-warning)',
+        error: 'bg-(--ui-danger-soft) text-(--ui-danger)'
       }
     },
     defaultVariants: { variant: 'default' }
@@ -243,8 +242,8 @@ const iconClasses = computed(() => {
     success: 'text-(--ui-success)',
     warning: 'text-(--ui-warning)',
     error: 'text-(--ui-danger)',
-    default: 'text-foreground',
-    danger: 'text-danger'
+    default: 'text-(--ui-text)',
+    danger: 'text-(--ui-danger)'
   }
   return ['w-5 h-5', colors[props.variant]]
 })
@@ -255,9 +254,9 @@ const dismissButtonClasses = computed(() => {
     success: 'text-(--ui-success) hover:text-(--ui-success) hover:bg-(--ui-success-soft)',
     warning: 'text-(--ui-warning) hover:text-(--ui-warning) hover:bg-(--ui-warning-soft)',
     error: 'text-(--ui-danger) hover:text-(--ui-danger) hover:bg-(--ui-danger-soft)',
-    default: 'text-foreground hover:text-foreground/80 hover:bg-muted',
+    default: 'text-(--ui-text) hover:text-(--ui-text) hover:bg-(--ui-surface-muted)',
     danger:
-      'text-danger hover:text-danger/80 hover:bg-danger/10'
+      'text-(--ui-danger) hover:text-(--ui-danger) hover:bg-(--ui-danger-soft)'
   }
   return ['shrink-0 p-1 rounded-md transition-colors duration-200', colors[props.variant]]
 })

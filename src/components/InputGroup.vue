@@ -33,7 +33,7 @@ const groupVariants = cva('flex w-full', {
   variants: {
     variant: {
       default: '[&>input]:rounded-none [&>input:first-child]:rounded-l-md [&>input:last-child]:rounded-r-md',
-      outline: 'border border-input rounded-md [&>input]:border-0 [&>input]:rounded-none'
+      outline: 'border border-(--ui-border) ui-glossy-border rounded-md [&>input]:border-0 [&>input]:rounded-none'
     }
   }
 })

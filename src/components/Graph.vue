@@ -23,10 +23,10 @@ const graphContainerVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-(--ui-surface) border border-(--ui-border)',
-        outlined: 'bg-(--ui-surface) border-2 border-(--ui-border)',
-        elevated: 'bg-(--ui-surface) shadow-lg border border-(--ui-border)',
-        filled: 'bg-(--ui-surface-muted) border border-(--ui-border)'
+        default: 'ui-glossy-surface border ui-glossy-border',
+        outlined: 'ui-glossy-surface border-2 ui-glossy-border',
+        elevated: 'ui-glossy-surface shadow-lg border ui-glossy-border',
+        filled: 'ui-glossy-surface border ui-glossy-border'
       },
       padding: {
         none: '',

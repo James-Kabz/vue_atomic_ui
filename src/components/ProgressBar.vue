@@ -86,6 +86,6 @@ const progressClasses = computed(() =>
 )
 
 const labelClasses = computed(() => 
-  'absolute inset-0 flex items-center justify-center text-xs font-medium text-primary-foreground'
+  'absolute inset-0 flex items-center justify-center text-xs font-medium text-(--ui-text-inverse)'
 )
 </script>

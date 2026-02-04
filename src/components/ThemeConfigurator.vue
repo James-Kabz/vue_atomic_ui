@@ -30,7 +30,7 @@ const applyMode = () => {
 <template>
   <div class="fixed bottom-5 right-5 z-50">
     <button
-      class="rounded-full border border-(--ui-border) bg-[color:color-mix(in oklab, var(--ui-surface), transparent 10%)] px-4 py-2 text-sm font-semibold shadow-sm backdrop-blur hover:bg-(--ui-surface-muted)"
+      class="rounded-full border ui-glossy-border ui-glossy-button px-4 py-2 text-sm font-semibold shadow-sm hover:brightness-105"
       @click="open = !open"
     >
       Theme
@@ -38,7 +38,7 @@ const applyMode = () => {
 
     <div
       v-if="open"
-      class="mt-3 w-72 rounded-2xl border border-(--ui-border) bg-[color:color-mix(in oklab, var(--ui-surface), transparent 5%)] p-4 shadow-xl backdrop-blur"
+      class="mt-3 w-72 rounded-2xl border ui-glossy-border ui-glossy-popover p-4 shadow-xl"
     >
       <div class="text-sm font-semibold text-(--ui-text)">
         Appearance

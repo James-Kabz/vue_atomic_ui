@@ -29,7 +29,7 @@ const dropzoneVariants = cva(
   {
     variants: {
       variant: {
-        default: 'border-(--ui-border) hover:border-(--ui-border-strong) hover:bg-(--ui-surface-muted) focus-within:ring-2 focus-within:ring-(--ui-primary)',
+        default: 'border-(--ui-border) ui-glossy-border hover:border-(--ui-border-strong) hover:bg-(--ui-surface-muted) focus-within:ring-2 focus-within:ring-(--ui-primary)',
         dashed: 'border-(--ui-primary-soft) hover:border-(--ui-primary-soft) hover:bg-(--ui-primary-soft) focus-within:ring-2 focus-within:ring-(--ui-primary)'
       }
     }
@@ -206,7 +206,7 @@ const formatFileSize = (bytes) => {
       <div
         v-for="(fileItem, index) in uploadingFiles"
         :key="`uploading-${index}`"
-        class="flex items-center justify-between p-3 bg-(--ui-surface) border border-(--ui-border) rounded-lg shadow-sm"
+        class="flex items-center justify-between p-3 bg-(--ui-surface) ui-glossy-surface border border-(--ui-border) ui-glossy-border rounded-lg shadow-sm"
       >
         <div class="flex items-center space-x-3">
           <CircularProgress
@@ -228,7 +228,7 @@ const formatFileSize = (bytes) => {
       <div
         v-for="(file, index) in files"
         :key="`uploaded-${index}`"
-        class="flex items-center justify-between p-3 bg-(--ui-surface) border border-(--ui-border) rounded-lg shadow-sm hover:shadow-md transition-shadow"
+        class="flex items-center justify-between p-3 bg-(--ui-surface) ui-glossy-surface border border-(--ui-border) ui-glossy-border rounded-lg shadow-sm hover:shadow-md transition-shadow"
       >
         <div class="flex items-center space-x-3">
           <div class="bg-(--ui-success-soft) rounded-md p-2">

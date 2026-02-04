@@ -75,7 +75,7 @@ const ariaDescribedBy = computed(() =>
 
 // variants with cva
 const textareaVariants = cva(
-  'block w-full rounded-lg border transition-colors duration-200 placeholder:text-(--ui-text-soft) focus:outline-none focus:ring-2 focus:ring-offset-0 disabled:bg-(--ui-surface-muted) disabled:text-(--ui-text-soft) disabled:cursor-not-allowed',
+  'block w-full rounded-lg border bg-(--ui-surface) ui-glossy-input ui-glossy-border transition-colors duration-200 placeholder:text-(--ui-text-soft) focus:outline-none focus:ring-2 focus:ring-offset-0 disabled:bg-(--ui-surface-muted) disabled:text-(--ui-text-soft) disabled:cursor-not-allowed',
   {
     variants: {
       size: {

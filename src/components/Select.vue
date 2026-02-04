@@ -58,7 +58,7 @@ const selectedOption = computed(() => {
 })
 
 const selectVariants = cva(
-  'border border-(--ui-border) rounded-md focus:outline-none focus:ring-2 focus:ring-(--ui-primary) text-sm min-w-[60px] focus:border-transparent',
+  'border border-(--ui-border) ui-glossy-border rounded-md focus:outline-none focus:ring-2 focus:ring-(--ui-primary) text-sm min-w-[60px] focus:border-transparent ui-glossy-input',
   {
     variants: {
       disabled: {
@@ -215,7 +215,7 @@ watch(isOpen, (open) => {
       type="button"
       :disabled="disabled"
       :class="[
-        'w-full px-3 py-2 text-left border rounded-md focus:outline-none focus:ring-2 focus:ring-(--ui-primary) bg-(--ui-surface)',
+        'w-full px-3 py-2 text-left border rounded-md focus:outline-none focus:ring-2 focus:ring-(--ui-primary) bg-(--ui-surface) ui-glossy-input ui-glossy-border',
         hasError ? 'border-(--ui-danger)' : 'border-(--ui-border)',
         disabled ? 'bg-(--ui-surface-muted) cursor-not-allowed opacity-50' : 'hover:border-(--ui-border-strong)'
       ]"
@@ -253,7 +253,7 @@ watch(isOpen, (open) => {
         ref="dropdownRef"
         :style="dropdownStyle"
         data-select-dropdown
-        class="bg-(--ui-surface) shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-(--ui-surface-strong) ring-opacity-5 overflow-auto focus:outline-none"
+        class="ui-glossy-popover ui-glossy-border shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-(--ui-surface-strong) ring-opacity-5 overflow-auto focus:outline-none"
       >
         <!-- Search input -->
         <div class="px-3 py-2 border-b border-(--ui-border)">
@@ -262,7 +262,7 @@ watch(isOpen, (open) => {
             v-model="searchQuery"
             type="text"
             placeholder="Search options..."
-            class="w-full px-2 py-1 text-sm border border-(--ui-border) rounded focus:outline-none focus:ring-1 focus:ring-(--ui-primary)"
+            class="w-full px-2 py-1 text-sm border border-(--ui-border) ui-glossy-border rounded focus:outline-none focus:ring-1 focus:ring-(--ui-primary) bg-(--ui-surface) ui-glossy-input"
             @input="filterOptions"
             @keydown="handleKeydown"
             @keydown.enter.prevent="handleKeydown"

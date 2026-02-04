@@ -136,11 +136,11 @@ const saveRecipients = () => {
       <div
         v-for="model in models"
         :key="model.id"
-        class="bg-(--ui-surface) rounded-2xl shadow-lg border border-(--ui-border) overflow-hidden hover:shadow-xl transition-all duration-300"
+        class="bg-(--ui-surface) ui-glossy-surface rounded-2xl shadow-lg border border-(--ui-border) ui-glossy-border overflow-hidden hover:shadow-xl transition-all duration-300"
       >
         <!-- Model Header -->
         <div
-          class="p-6 cursor-pointer hover:bg-linear-to-r hover:from-(--ui-primary-soft) hover:to-(--ui-accent-soft) transition-all duration-300 border-b border-(--ui-border)"
+          class="p-6 cursor-pointer hover:bg-linear-to-r hover:from-(--ui-primary-soft) hover:to-(--ui-accent-soft) transition-all duration-300 border-b border-(--ui-border) ui-glossy-border"
           @click="toggleModel(model.id)"
         >
           <div class="flex items-center justify-between">
@@ -228,7 +228,7 @@ const saveRecipients = () => {
               <div
                 v-for="reminder in model.reminders"
                 :key="reminder.id"
-                class="bg-(--ui-surface) rounded-xl border border-(--ui-border) p-6 hover:shadow-md transition-all duration-300"
+                class="bg-(--ui-surface) ui-glossy-surface rounded-xl border border-(--ui-border) ui-glossy-border p-6 hover:shadow-md transition-all duration-300"
               >
                 <div class="flex items-start gap-4">
                   <div class="flex-1 space-y-5">
@@ -242,7 +242,7 @@ const saveRecipients = () => {
                           type="number"
                           min="0"
                           :value="reminder.days"
-                          class="w-full px-4 py-3 border-2 border-(--ui-border) rounded-lg focus:outline-none focus:border-(--ui-primary) focus:ring-4 focus:ring-(--ui-primary) transition-all duration-300 font-semibold text-(--ui-text) text-lg"
+                          class="w-full px-4 py-3 border-2 border-(--ui-border) ui-glossy-border rounded-lg focus:outline-none focus:border-(--ui-primary) focus:ring-4 focus:ring-(--ui-primary) transition-all duration-300 font-semibold text-(--ui-text) text-lg"
                           placeholder="0"
                           @input="updateReminderDays(model.id, reminder.id, $event.target.value)"
                         >
@@ -253,12 +253,12 @@ const saveRecipients = () => {
                     </div>
 
                     <!-- Daily Reminder Toggle -->
-                    <div class="flex items-center gap-3 p-4 bg-(--ui-surface-muted) rounded-lg border border-(--ui-border)">
+                    <div class="flex items-center gap-3 p-4 bg-(--ui-surface-muted) rounded-lg border border-(--ui-border) ui-glossy-border">
                       <input
                         :id="`daily-${reminder.id}`"
                         type="checkbox"
                         :checked="reminder.isDaily"
-                        class="w-5 h-5 text-(--ui-primary) rounded border-2 border-(--ui-border) focus:ring-4 focus:ring-(--ui-primary) transition-all cursor-pointer"
+                        class="w-5 h-5 text-(--ui-primary) rounded border-2 border-(--ui-border) ui-glossy-border focus:ring-4 focus:ring-(--ui-primary) transition-all cursor-pointer"
                         @change="toggleIsDaily(model.id, reminder.id)"
                       >
                       <label
@@ -287,7 +287,7 @@ const saveRecipients = () => {
                             'relative px-4 py-3.5 rounded-lg font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2 border-2',
                             (reminder.sendTypes || []).includes(option.value)
                               ? 'bg-linear-to-r from-(--ui-primary) to-(--ui-accent) text-(--ui-text-inverse) border-transparent shadow-md'
-                              : 'bg-(--ui-surface) text-(--ui-text-muted) border-(--ui-border) hover:border-(--ui-primary-soft) hover:bg-(--ui-primary-soft)'
+                              : 'bg-(--ui-surface) ui-glossy-surface text-(--ui-text-muted) border-(--ui-border) ui-glossy-border hover:border-(--ui-primary-soft) hover:bg-(--ui-primary-soft)'
                           ]"
                           @click="toggleSendType(model.id, reminder.id, option.value)"
                         >
@@ -311,7 +311,7 @@ const saveRecipients = () => {
                         Recipients
                       </label>
                       <button
-                        class="w-full px-4 py-3.5 bg-(--ui-surface) border-2 border-(--ui-border) rounded-lg hover:border-(--ui-primary-soft) hover:bg-(--ui-primary-soft) transition-all duration-300 flex items-center justify-between group"
+                        class="w-full px-4 py-3.5 bg-(--ui-surface) ui-glossy-surface border-2 border-(--ui-border) ui-glossy-border rounded-lg hover:border-(--ui-primary-soft) hover:bg-(--ui-primary-soft) transition-all duration-300 flex items-center justify-between group"
                         @click="openRecipientModal(model.id, reminder.id)"
                       >
                         <div class="flex items-center gap-3">
@@ -343,13 +343,13 @@ const saveRecipients = () => {
                       <!-- Selected Recipients -->
                       <div
                         v-if="(reminder.recipients || []).length > 0"
-                        class="mt-3 p-4 bg-(--ui-surface-muted) rounded-lg border border-(--ui-border)"
+                        class="mt-3 p-4 bg-(--ui-surface-muted) rounded-lg border border-(--ui-border) ui-glossy-border"
                       >
                         <div class="flex flex-wrap gap-2">
                           <span
                             v-for="recipient in reminder.recipients"
                             :key="recipient"
-                            class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-(--ui-surface) border border-(--ui-primary-soft) text-(--ui-primary) text-xs font-semibold rounded-lg shadow-sm"
+                            class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-(--ui-surface) ui-glossy-surface border border-(--ui-primary-soft) text-(--ui-primary) text-xs font-semibold rounded-lg shadow-sm"
                           >
                             <Icon
                               icon="user"
@@ -443,14 +443,14 @@ const saveRecipients = () => {
               'flex items-center gap-3 p-4 rounded-lg cursor-pointer transition-all duration-300 border-2',
               currentReminder?.recipients.includes(recipient)
                 ? 'bg-linear-to-r from-(--ui-primary-soft) to-(--ui-accent-soft) border-(--ui-primary-soft) shadow-sm'
-                : 'bg-(--ui-surface) border-(--ui-border) hover:border-(--ui-primary-soft) hover:bg-(--ui-surface-muted)'
+                : 'bg-(--ui-surface) ui-glossy-surface border-(--ui-border) ui-glossy-border hover:border-(--ui-primary-soft) hover:bg-(--ui-surface-muted)'
             ]"
           >
             <div class="relative shrink-0">
               <input
                 type="checkbox"
                 :checked="currentReminder?.recipients.includes(recipient)"
-                class="w-5 h-5 text-(--ui-primary) rounded border-2 border-(--ui-border) focus:ring-4 focus:ring-(--ui-primary) transition-all cursor-pointer"
+                class="w-5 h-5 text-(--ui-primary) rounded border-2 border-(--ui-border) ui-glossy-border focus:ring-4 focus:ring-(--ui-primary) transition-all cursor-pointer"
                 @change="toggleRecipient(recipient)"
               >
             </div>
@@ -474,9 +474,9 @@ const saveRecipients = () => {
       </div>
 
       <!-- Modal Footer -->
-      <div class="p-6 bg-(--ui-surface-muted) border-t border-(--ui-border) flex gap-3">
+      <div class="p-6 bg-(--ui-surface-muted) border-t border-(--ui-border) ui-glossy-border flex gap-3">
         <button
-          class="flex-1 px-6 py-3 bg-(--ui-surface) border-2 border-(--ui-border) text-(--ui-text-muted) rounded-lg font-semibold hover:bg-(--ui-surface-muted) transition-all duration-300"
+          class="flex-1 px-6 py-3 bg-(--ui-surface) ui-glossy-surface border-2 border-(--ui-border) ui-glossy-border text-(--ui-text-muted) rounded-lg font-semibold hover:bg-(--ui-surface-muted) transition-all duration-300"
           @click="showRecipientModal = false"
         >
           Cancel

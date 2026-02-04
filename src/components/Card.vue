@@ -203,10 +203,10 @@ const cardVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-(--ui-surface)',
-        outlined: 'bg-(--ui-surface)',
-        elevated: 'bg-(--ui-surface) shadow-md',
-        filled: 'bg-(--ui-surface-muted)',
+        default: 'ui-glossy-surface',
+        outlined: 'ui-glossy-surface',
+        elevated: 'ui-glossy-surface ui-glossy-shadow',
+        filled: 'ui-glossy-surface',
         ghost: 'bg-transparent'
       },
       padding: {
@@ -234,22 +234,22 @@ const cardVariants = cva(
       {
         variant: 'default',
         bordered: true,
-        class: 'border border-(--ui-border)'
+        class: 'border ui-glossy-border'
       },
       {
         variant: 'outlined',
         bordered: true,
-        class: 'border-2 border-(--ui-border)'
+        class: 'border-2 ui-glossy-border'
       },
       {
         variant: 'elevated',
         bordered: true,
-        class: 'border border-(--ui-border)'
+        class: 'border ui-glossy-border'
       },
       {
         variant: 'filled',
         bordered: true,
-        class: 'border border-(--ui-border)'
+        class: 'border ui-glossy-border'
       },
       {
         clickable: true,

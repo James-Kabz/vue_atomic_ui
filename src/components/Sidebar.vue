@@ -311,7 +311,7 @@ defineExpose({
       :class="cn(
         'fixed left-0 z-40 border-r overflow-hidden flex flex-col',
         'transition-all duration-300 ease-in-out',
-        'bg-(--ui-surface) border-(--ui-border)',
+        'ui-glossy-panel ui-glossy-border',
         isMobile
           ? cn('transform h-screen', isMobileOpen ? 'translate-x-0' : '-translate-x-full')
           : 'translate-x-0 h-[calc(100vh-4rem)]'
@@ -525,14 +525,14 @@ defineExpose({
         v-if="submenuOpen"
         :class="
           cn(
-            'fixed z-40 bg-(--ui-surface) border-r border-(--ui-border) overflow-y-auto shadow-lg',
+            'fixed z-40 ui-glossy-popover ui-glossy-border border-r overflow-y-auto shadow-lg',
             isMobile ? 'left-0 w-52 top-20 h-screen' : 'w-56 top-16 h-[calc(100vh-4rem)]',
           )
         "
         :style="submenuStyle"
       >
         <!-- Submenu Header -->
-        <div class="sticky top-0 bg-(--ui-surface) border-b border-(--ui-border) z-10">
+        <div class="sticky top-0 ui-glossy-surface border-b ui-glossy-border z-10">
           <div class="flex items-center justify-between p-4">
             <button
               class="p-2 -ml-2 rounded-lg text-(--ui-text-soft) hover:text-(--ui-text-muted) hover:bg-(--ui-surface-muted) transition-colors"
@@ -568,7 +568,7 @@ defineExpose({
                 v-model="searchQuery"
                 type="text"
                 :placeholder="searchPlaceholder"
-                class="w-full px-3 py-2 pl-9 pr-9 text-sm border border-(--ui-border) rounded-lg focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:border-transparent transition-all"
+                class="w-full px-3 py-2 pl-9 pr-9 text-sm border border-(--ui-border) ui-glossy-border rounded-lg focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:border-transparent transition-all bg-(--ui-surface) ui-glossy-input"
                 @input="handleSearch(searchQuery)"
               >
               <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-(--ui-text-soft)">
@@ -692,14 +692,14 @@ defineExpose({
         v-if="managementSettingsOpen"
         :class="
           cn(
-            'fixed z-40 bg-(--ui-surface) border-r border-(--ui-border) overflow-y-auto shadow-lg',
+            'fixed z-40 ui-glossy-popover ui-glossy-border border-r overflow-y-auto shadow-lg',
             isMobile ? 'left-0 w-52 top-20 h-full' : 'w-58 h-[calc(100vh-4rem)]',
           )
         "
         :style="{ ...managementStyle, top: isMobile ? '55px' : '4rem' }"
       >
         <!-- Management Settings Header -->
-        <div class="sticky top-0 z-10 bg-(--ui-surface) border-b border-(--ui-border)">
+        <div class="sticky top-0 z-10 ui-glossy-surface border-b ui-glossy-border">
           <div class="flex items-center justify-between p-4">
             <button
               class="p-2 -ml-2 rounded-lg text-(--ui-text-soft) hover:text-(--ui-text-muted) hover:bg-(--ui-surface-muted) transition-colors"

@@ -43,7 +43,7 @@ const clampedValue = computed(() => {
 })
 
 const containerVariants = cva(
-  'relative w-full overflow-hidden rounded-full bg-secondary',
+  'relative w-full overflow-hidden rounded-full bg-(--ui-surface-muted) ui-glossy-border border',
   {
     variants: {
       size: {
@@ -64,7 +64,7 @@ const progressVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-primary',
+        default: 'bg-(--ui-primary)',
         success: 'bg-(--ui-success)',
         warning: 'bg-(--ui-warning)',
         danger: 'bg-(--ui-danger)'

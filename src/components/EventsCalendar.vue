@@ -225,14 +225,14 @@ export default {
 </script>
 
 <template>
-  <div class="flex gap-0 h-full bg-(--ui-surface) rounded-lg shadow-sm border border-(--ui-border)">
+  <div class="flex gap-0 h-full bg-(--ui-surface) ui-glossy-surface rounded-lg shadow-sm border border-(--ui-border) ui-glossy-border">
     <!-- Calendar Container -->
     <div class="flex-1 flex flex-col">
       <!-- Toolbar -->
-      <div class="flex items-center justify-between px-6 py-4 border-b border-(--ui-border)">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-(--ui-border) ui-glossy-border">
         <div class="flex items-center gap-3">
           <button
-            class="px-4 py-2 text-sm font-medium text-(--ui-text-muted) bg-(--ui-surface) border border-(--ui-border) rounded hover:bg-(--ui-surface-muted) transition-colors"
+            class="px-4 py-2 text-sm font-medium text-(--ui-text-muted) bg-(--ui-surface) ui-glossy-surface border border-(--ui-border) ui-glossy-border rounded hover:bg-(--ui-surface-muted) transition-colors"
             @click="goToToday"
           >
             Today
@@ -325,7 +325,7 @@ export default {
             <div
               v-for="month in yearViewMonths"
               :key="month.index"
-              class="bg-(--ui-surface) rounded-lg border border-(--ui-border) overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+              class="bg-(--ui-surface) ui-glossy-surface rounded-lg border border-(--ui-border) ui-glossy-border overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
               @click="selectMonthFromYear(month.index)"
             >
               <!-- Month Header -->
@@ -391,7 +391,7 @@ export default {
           class="flex-1 flex flex-col"
         >
           <!-- Weekday Headers -->
-          <div class="grid grid-cols-7 border-b border-(--ui-border)">
+          <div class="grid grid-cols-7 border-b border-(--ui-border) ui-glossy-border">
             <div
               v-for="day in weekDays"
               :key="day"
@@ -402,13 +402,13 @@ export default {
           </div>
 
           <!-- Days Grid -->
-          <div class="grid grid-cols-7 flex-1 border-l border-t border-(--ui-border)">
+          <div class="grid grid-cols-7 flex-1 border-l border-t border-(--ui-border) ui-glossy-border">
             <div
               v-for="(day, index) in calendarDays"
               :key="index"
-              class="border-r border-b border-(--ui-border) p-1 min-h-[120px] relative cursor-pointer hover:bg-(--ui-surface-muted) transition-colors"
+              class="border-r border-b border-(--ui-border) ui-glossy-border p-1 min-h-[120px] relative cursor-pointer hover:bg-(--ui-surface-muted) transition-colors"
               :class="[
-                !day.isCurrentMonth ? 'bg-(--ui-surface-muted)' : 'bg-(--ui-surface)',
+                !day.isCurrentMonth ? 'bg-(--ui-surface-muted)' : 'bg-(--ui-surface) ui-glossy-surface',
                 day.isToday ? 'bg-(--ui-primary-soft)' : '',
                 selectedDate === day.date ? 'ring-2 ring-(--ui-primary) ring-inset' : ''
               ]"
@@ -456,12 +456,12 @@ export default {
           class="flex-1 flex flex-col overflow-hidden"
         >
           <!-- Day Headers -->
-          <div class="grid grid-cols-8 border-b border-(--ui-border) bg-(--ui-surface-muted)">
-            <div class="border-r border-(--ui-border) p-2" />
+          <div class="grid grid-cols-8 border-b border-(--ui-border) ui-glossy-border bg-(--ui-surface-muted)">
+            <div class="border-r border-(--ui-border) ui-glossy-border p-2" />
             <div
               v-for="day in weekViewDays"
               :key="day.date"
-              class="text-center p-2 border-r border-(--ui-border)"
+              class="text-center p-2 border-r border-(--ui-border) ui-glossy-border"
               :class="day.isToday ? 'bg-(--ui-primary-soft)' : ''"
             >
               <div class="text-xs font-semibold text-(--ui-text-muted) uppercase">
@@ -479,16 +479,16 @@ export default {
           </div>
 
           <!-- All-Day Events Row -->
-          <div class="grid grid-cols-8 border-b border-(--ui-border) bg-(--ui-surface-muted) min-h-[60px]">
+          <div class="grid grid-cols-8 border-b border-(--ui-border) ui-glossy-border bg-(--ui-surface-muted) min-h-[60px]">
             <div
-              class="border-r border-(--ui-border) px-2 py-1 text-xs text-(--ui-text-muted) text-right flex items-center justify-end"
+              class="border-r border-(--ui-border) ui-glossy-border px-2 py-1 text-xs text-(--ui-text-muted) text-right flex items-center justify-end"
             >
               All Day
             </div>
             <div
               v-for="day in weekViewDays"
               :key="'allday-' + day.date"
-              class="border-r border-(--ui-border) p-1 space-y-1"
+              class="border-r border-(--ui-border) ui-glossy-border p-1 space-y-1"
               :class="day.isToday ? 'bg-(--ui-primary-soft)' : ''"
             >
               <div
@@ -509,11 +509,11 @@ export default {
           <div class="flex-1 overflow-y-auto">
             <div class="grid grid-cols-8">
               <!-- Time Column -->
-              <div class="border-r border-(--ui-border) bg-(--ui-surface-muted)">
+              <div class="border-r border-(--ui-border) ui-glossy-border bg-(--ui-surface-muted)">
                 <div
                   v-for="slot in timeSlots"
                   :key="slot.time"
-                  class="h-16 border-b border-(--ui-border) px-2 py-1 text-xs text-(--ui-text-muted) text-right"
+                  class="h-16 border-b border-(--ui-border) ui-glossy-border px-2 py-1 text-xs text-(--ui-text-muted) text-right"
                 >
                   {{ slot.display }}
                 </div>
@@ -523,12 +523,12 @@ export default {
               <div
                 v-for="day in weekViewDays"
                 :key="day.date"
-                class="border-r border-(--ui-border) relative"
+                class="border-r border-(--ui-border) ui-glossy-border relative"
               >
                 <div
                   v-for="slot in timeSlots"
                   :key="slot.time"
-                  class="h-16 border-b border-(--ui-border) hover:bg-(--ui-surface-muted) transition-colors cursor-pointer relative"
+                  class="h-16 border-b border-(--ui-border) ui-glossy-border hover:bg-(--ui-surface-muted) transition-colors cursor-pointer relative"
                   :class="day.isToday ? 'bg-(--ui-primary-soft)' : ''"
                 >
                   <!-- Events at this time -->
@@ -558,7 +558,7 @@ export default {
           class="flex-1 flex flex-col overflow-hidden"
         >
           <!-- Day Header -->
-          <div class="border-b border-(--ui-border) bg-(--ui-surface-muted) p-4">
+          <div class="border-b border-(--ui-border) ui-glossy-border bg-(--ui-surface-muted) p-4">
             <div class="text-center">
               <div class="text-sm font-semibold text-(--ui-text-muted) uppercase">
                 {{ dayViewDate.dayName }}
@@ -577,7 +577,7 @@ export default {
           <!-- All-Day Events Section -->
           <div
             v-if="getAllDayEvents(dayViewDate.events).length > 0"
-            class="border-b border-(--ui-border) bg-(--ui-surface-muted) p-4"
+            class="border-b border-(--ui-border) ui-glossy-border bg-(--ui-surface-muted) p-4"
           >
             <h4 class="text-xs font-semibold text-(--ui-text-muted) uppercase tracking-wide mb-2">
               All Day Events
@@ -607,11 +607,11 @@ export default {
           <div class="flex-1 overflow-y-auto">
             <div class="flex">
               <!-- Time Column -->
-              <div class="w-24 border-r border-(--ui-border) bg-(--ui-surface-muted) shrink-0">
+              <div class="w-24 border-r border-(--ui-border) ui-glossy-border bg-(--ui-surface-muted) shrink-0">
                 <div
                   v-for="slot in timeSlots"
                   :key="slot.time"
-                  class="h-16 border-b border-(--ui-border) px-2 py-1 text-xs text-(--ui-text-muted) text-right"
+                  class="h-16 border-b border-(--ui-border) ui-glossy-border px-2 py-1 text-xs text-(--ui-text-muted) text-right"
                 >
                   {{ slot.display }}
                 </div>
@@ -622,7 +622,7 @@ export default {
                 <div
                   v-for="slot in timeSlots"
                   :key="slot.time"
-                  class="h-16 border-b border-(--ui-border) hover:bg-(--ui-surface-muted) transition-colors cursor-pointer relative"
+                  class="h-16 border-b border-(--ui-border) ui-glossy-border hover:bg-(--ui-surface-muted) transition-colors cursor-pointer relative"
                   :class="dayViewDate.isToday ? 'bg-(--ui-primary-soft)' : ''"
                 >
                   <!-- Events at this time -->
@@ -668,10 +668,10 @@ export default {
       >
         <div
           v-if="selectedEvent"
-          class="w-80 border-l border-(--ui-border) bg-(--ui-surface) flex flex-col"
+          class="w-80 border-l border-(--ui-border) ui-glossy-border bg-(--ui-surface) ui-glossy-surface flex flex-col"
         >
           <!-- Sidebar Header -->
-          <div class="px-6 py-4 border-b border-(--ui-border) flex items-start justify-between">
+          <div class="px-6 py-4 border-b border-(--ui-border) ui-glossy-border flex items-start justify-between">
             <h3 class="text-lg font-semibold text-(--ui-text)">
               Event Details
             </h3>
@@ -792,7 +792,7 @@ export default {
             <!-- Description -->
             <div
               v-if="selectedEvent.description"
-              class="pt-4 border-t border-(--ui-border)"
+              class="pt-4 border-t border-(--ui-border) ui-glossy-border"
             >
               <h5 class="text-sm font-semibold text-(--ui-text) mb-2">
                 Description
@@ -805,7 +805,7 @@ export default {
             <!-- Additional Details from Compliance -->
             <div
               v-if="selectedEvent.compliance"
-              class="pt-4 border-t border-(--ui-border) space-y-3"
+              class="pt-4 border-t border-(--ui-border) ui-glossy-border space-y-3"
             >
               <h5 class="text-sm font-semibold text-(--ui-text) mb-2">
                 Compliance Details

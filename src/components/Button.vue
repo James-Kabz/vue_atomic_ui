@@ -62,37 +62,37 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          'bg-(--ui-primary) text-(--ui-text-inverse) hover:bg-(--ui-primary-strong)',
+          'ui-glossy-button-strong text-(--ui-text-inverse) hover:brightness-110',
         danger:
-          'bg-(--ui-danger) text-(--ui-text-inverse) hover:bg-(--ui-danger-strong)',
+          'ui-glossy-overlay text-(--ui-text-inverse) bg-(--ui-danger) hover:bg-(--ui-danger-strong)',
         outline:
-          'border border-(--ui-border) bg-(--ui-surface) text-(--ui-text) hover:bg-(--ui-surface-muted)',
+          'ui-glossy-button ui-glossy-border border text-(--ui-text) bg-(--ui-surface) hover:brightness-105',
         secondary:
-          'bg-(--ui-surface-soft) text-(--ui-text-inverse) hover:bg-(--ui-surface-soft)',
+          'ui-glossy-button ui-glossy-border border text-(--ui-text) bg-(--ui-surface) hover:brightness-105',
         ghost:
-          'bg-transparent text-(--ui-text-muted) hover:bg-(--ui-surface-muted)',
+          'bg-transparent text-(--ui-text-muted) hover:bg-[color:color-mix(in oklab, var(--ui-accent-soft), transparent 70%)] hover:backdrop-blur-sm',
         link:
           'text-(--ui-primary) hover:underline',
         success:
-          'bg-(--ui-success) text-(--ui-text-inverse) hover:bg-(--ui-success-strong)',
+          'ui-glossy-overlay text-(--ui-text-inverse) bg-(--ui-success) hover:bg-(--ui-success-strong)',
         warning:
-          'bg-(--ui-warning) text-(--ui-text) hover:bg-(--ui-warning)',
+          'ui-glossy-overlay text-(--ui-text) bg-(--ui-warning) hover:bg-(--ui-warning)',
         info:
-          'bg-(--ui-primary) text-(--ui-text-inverse) hover:bg-(--ui-primary-strong)',
+          'ui-glossy-button-strong text-(--ui-text-inverse) hover:brightness-110',
         subtle:
-          'bg-(--ui-surface-muted) text-(--ui-text) hover:bg-(--ui-surface-soft)',
+          'ui-glossy-button ui-glossy-border border text-(--ui-text) bg-(--ui-surface) hover:brightness-105',
         dark:
-          'bg-(--ui-surface-strong) text-(--ui-text-inverse) hover:bg-(--ui-surface-strong)',
+          'ui-glossy-button ui-glossy-border border text-(--ui-text-inverse) bg-(--ui-surface-strong) hover:brightness-105',
         light:
-          'bg-(--ui-surface-muted) text-(--ui-text) border border-(--ui-border) hover:bg-(--ui-surface-muted)',
+          'ui-glossy-button ui-glossy-border border text-(--ui-text) bg-(--ui-surface) hover:brightness-105',
         primaryOutline:
-          'border border-(--ui-primary) text-(--ui-primary) bg-transparent hover:bg-(--ui-primary-soft)',
+          'ui-glossy-button border border-(--ui-primary) text-(--ui-primary) hover:brightness-105',
         dangerOutline:
-          'border border-(--ui-danger) text-(--ui-danger) bg-transparent hover:bg-(--ui-danger-soft)',
+          'ui-glossy-button border border-(--ui-danger) text-(--ui-danger) hover:brightness-105',
         successOutline:
-          'border border-(--ui-success) text-(--ui-success) bg-transparent hover:bg-(--ui-success-soft)',
+          'ui-glossy-button border border-(--ui-success) text-(--ui-success) hover:brightness-105',
         gradient:
-          'bg-linear-to-r from-(--ui-primary) to-(--ui-accent) text-(--ui-text-inverse) hover:from-(--ui-primary) hover:to-(--ui-accent-strong)',
+          'ui-glossy-button-strong bg-linear-to-r from-(--ui-primary) to-(--ui-accent) text-(--ui-text-inverse) hover:from-(--ui-primary) hover:to-(--ui-accent-strong)',
       },
       size: {
         '2xs': 'h-6 px-2 py-1 text-xs rounded',

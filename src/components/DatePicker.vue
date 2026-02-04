@@ -356,7 +356,7 @@ onBeforeUnmount(() => {
         :required="required"
         :aria-describedby="ariaDescribedby"
         :class="[
-          'w-full px-3 py-2 pr-10 border rounded-md bg-(--ui-surface) text-(--ui-text) placeholder-slate-400 text-sm',
+          'w-full px-3 py-2 pr-10 border rounded-md bg-(--ui-surface) text-(--ui-text) placeholder-slate-400 text-sm ui-glossy-input ui-glossy-border',
           'focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:border-(--ui-primary) cursor-pointer transition-colors',
           'disabled:bg-(--ui-surface-muted) disabled:text-(--ui-text-soft) disabled:cursor-not-allowed',
           hasValidationError ? 'border-(--ui-danger) focus:ring-(--ui-danger) focus:border-(--ui-danger)' : 'border-(--ui-border)'
@@ -419,7 +419,7 @@ onBeforeUnmount(() => {
           v-if="isOpen"
           ref="calendarRef"
           :style="calendarStyle"
-          class="fixed z-[10000] bg-(--ui-surface) border border-(--ui-border) rounded-lg shadow-xl p-3 w-64"
+        class="fixed z-[10000] ui-glossy-popover ui-glossy-border rounded-lg shadow-xl p-3 w-64"
           @click.stop
         >
           <!-- Header -->

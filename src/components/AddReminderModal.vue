@@ -91,7 +91,7 @@ const cancel = () => {
           v-model="days"
           type="number"
           min="0"
-          class="w-full px-3 py-2.5 border rounded-md focus:ring-2 focus:ring-(--ui-primary) focus:outline-none"
+          class="w-full px-3 py-2.5 border rounded-md focus:ring-2 focus:ring-(--ui-primary) focus:outline-none bg-(--ui-surface) ui-glossy-input ui-glossy-border"
         >
       </div>
 
@@ -107,8 +107,8 @@ const cancel = () => {
             type="button"
             class="px-4 py-2 rounded-md text-sm font-medium transition"
             :class="sendType === option.value
-              ? 'bg-(--ui-primary) text-(--ui-text-inverse) shadow'
-              : 'bg-(--ui-surface-muted) text-(--ui-text-muted) hover:bg-(--ui-surface-soft)'"
+              ? 'ui-glossy-button-strong bg-(--ui-primary) text-(--ui-text-inverse) shadow'
+              : 'ui-glossy-button ui-glossy-border border bg-(--ui-surface) text-(--ui-text-muted) hover:brightness-105'"
             @click="sendType = option.value"
           >
             {{ option.label }}
@@ -130,10 +130,10 @@ const cancel = () => {
       </div>
 
       <!-- Actions -->
-      <div class="flex justify-end gap-3 pt-4 border-t">
+      <div class="flex justify-end gap-3 pt-4 border-t ui-glossy-border">
         <button
           type="button"
-          class="px-4 py-2 rounded-md bg-(--ui-surface-muted) text-(--ui-text-muted) hover:bg-(--ui-surface-soft)"
+          class="px-4 py-2 rounded-md ui-glossy-button ui-glossy-border border bg-(--ui-surface) text-(--ui-text-muted) hover:brightness-105"
           @click="cancel"
         >
           Cancel
@@ -141,7 +141,7 @@ const cancel = () => {
 
         <button
           type="button"
-          class="px-5 py-2 rounded-md bg-(--ui-primary) text-(--ui-text-inverse) hover:bg-(--ui-primary-strong) shadow"
+          class="px-5 py-2 rounded-md ui-glossy-button-strong bg-(--ui-primary) text-(--ui-text-inverse) hover:bg-(--ui-primary-strong) shadow"
           @click="save"
         >
           Add Reminder

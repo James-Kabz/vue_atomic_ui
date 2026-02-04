@@ -590,7 +590,7 @@ const handleCancel = () => {
               :placeholder="field.placeholder"
               :disabled="isLoading || field.disabled"
               :readonly="field.disabled"
-              :class="hasError ? 'border-(--ui-danger)' : 'border-(--ui-border)'"
+              :class="hasError ? 'border-(--ui-danger)' : 'border-(--ui-border) ui-glossy-border'"
               :aria-describedby="ariaDescribedBy"
             />
 
@@ -603,8 +603,8 @@ const handleCancel = () => {
               :disabled="isLoading || field.disabled"
               :rows="field.rows || 3"
               :class="[
-                'w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-(--ui-primary)',
-                hasError ? 'border-(--ui-danger)' : 'border-(--ui-border)',
+                'w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-(--ui-primary) bg-(--ui-surface) ui-glossy-surface ui-glossy-input ui-glossy-border border',
+                hasError ? 'border-(--ui-danger)' : 'border-(--ui-border) ui-glossy-border',
               ]"
               :aria-describedby="ariaDescribedBy"
             />
@@ -645,7 +645,7 @@ const handleCancel = () => {
                 v-model="formData[field.name]"
                 type="checkbox"
                 :disabled="isLoading || field.disabled"
-                class="h-4 w-4 text-(--ui-primary) focus:ring-(--ui-primary) border-(--ui-border) rounded"
+                class="h-4 w-4 text-(--ui-primary) focus:ring-(--ui-primary) border-(--ui-border) ui-glossy-border rounded"
                 :aria-describedby="ariaDescribedBy"
               />
               <Label
@@ -676,7 +676,7 @@ const handleCancel = () => {
               >
                 <span
                   :class="[
-                    'inline-block h-4 w-4 transform rounded-full bg-(--ui-surface) transition-transform',
+                    'inline-block h-4 w-4 transform rounded-full bg-(--ui-surface) ui-glossy-surface transition-transform',
                     formData[field.name] ? 'translate-x-6' : 'translate-x-1'
                   ]"
                 />
@@ -705,7 +705,7 @@ const handleCancel = () => {
                   type="radio"
                   :value="option.value"
                   :disabled="isLoading || field.disabled"
-                  class="h-4 w-4 text-(--ui-primary) focus:ring-(--ui-primary) border-(--ui-border)"
+                  class="h-4 w-4 text-(--ui-primary) focus:ring-(--ui-primary) border-(--ui-border) ui-glossy-border"
                   :aria-describedby="ariaDescribedBy"
                 />
                 <Label
@@ -729,7 +729,7 @@ const handleCancel = () => {
                 :disabled="isLoading || field.disabled"
                 :class="[
                   'w-full text-sm text-(--ui-text-soft) file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-(--ui-primary-soft) file:text-(--ui-primary) hover:file:bg-(--ui-primary-soft)',
-                  hasError ? 'border-(--ui-danger)' : 'border-(--ui-border)'
+                  hasError ? 'border-(--ui-danger)' : 'border-(--ui-border) ui-glossy-border'
                 ]"
                 :aria-describedby="ariaDescribedBy"
                 @change="handleFileChange(field, $event)"
@@ -755,7 +755,7 @@ const handleCancel = () => {
                     ? 'border-(--ui-primary) bg-(--ui-primary-soft) ring-2 ring-(--ui-primary)'
                     : hasError
                       ? 'border-(--ui-danger-soft) hover:border-(--ui-danger-soft) bg-[color:color-mix(in oklab, var(--ui-danger-soft), transparent 50%)]'
-                      : 'border-(--ui-border) hover:border-(--ui-border-strong) hover:bg-(--ui-surface-muted)',
+                      : 'border-(--ui-border) ui-glossy-border hover:border-(--ui-border-strong) hover:bg-(--ui-surface-muted)',
                   (isLoading || field.disabled) ? 'opacity-50 cursor-not-allowed' : ''
                 ]"
                 @drop="handleMultiFileDrop(field, $event)"
@@ -826,7 +826,7 @@ const handleCancel = () => {
                 <div
                   v-for="fileItem in uploadingFilesMap[field.name]"
                   :key="fileItem.id"
-                  class="flex items-center justify-between p-3 bg-(--ui-surface) border border-(--ui-border) rounded-lg"
+                  class="flex items-center justify-between p-3 bg-(--ui-surface) ui-glossy-surface border border-(--ui-border) ui-glossy-border rounded-lg"
                 >
                   <div class="flex items-center space-x-3 flex-1 min-w-0">
                     <div class="relative h-10 w-10 shrink-0">
@@ -894,7 +894,7 @@ const handleCancel = () => {
                 <div
                   v-for="(file, index) in formData[field.name]"
                   :key="`uploaded-${index}`"
-                  class="flex items-center justify-between p-3 bg-(--ui-surface) border border-(--ui-border) rounded-lg hover:shadow-sm transition-shadow"
+                  class="flex items-center justify-between p-3 bg-(--ui-surface) ui-glossy-surface border border-(--ui-border) ui-glossy-border rounded-lg hover:shadow-sm transition-shadow"
                 >
                   <div class="flex items-center space-x-3 flex-1 min-w-0">
                     <div
@@ -1022,7 +1022,7 @@ const handleCancel = () => {
               v-model="formData[field.name]"
               type="time"
               :disabled="isLoading || field.disabled"
-              :class="hasError ? 'border-(--ui-danger)' : 'border-(--ui-border)'"
+              :class="hasError ? 'border-(--ui-danger)' : 'border-(--ui-border) ui-glossy-border'"
               :aria-describedby="ariaDescribedBy"
             />
 
@@ -1033,7 +1033,7 @@ const handleCancel = () => {
               v-model="formData[field.name]"
               type="datetime-local"
               :disabled="isLoading || field.disabled"
-              :class="hasError ? 'border-(--ui-danger)' : 'border-(--ui-border)'"
+              :class="hasError ? 'border-(--ui-danger)' : 'border-(--ui-border) ui-glossy-border'"
               :aria-describedby="ariaDescribedBy"
             />
 
@@ -1044,7 +1044,7 @@ const handleCancel = () => {
               v-model="formData[field.name]"
               type="month"
               :disabled="isLoading || field.disabled"
-              :class="hasError ? 'border-(--ui-danger)' : 'border-(--ui-border)'"
+              :class="hasError ? 'border-(--ui-danger)' : 'border-(--ui-border) ui-glossy-border'"
               :aria-describedby="ariaDescribedBy"
             />
 
@@ -1055,7 +1055,7 @@ const handleCancel = () => {
               v-model="formData[field.name]"
               type="week"
               :disabled="isLoading || field.disabled"
-              :class="hasError ? 'border-(--ui-danger)' : 'border-(--ui-border)'"
+              :class="hasError ? 'border-(--ui-danger)' : 'border-(--ui-border) ui-glossy-border'"
               :aria-describedby="ariaDescribedBy"
             />
           </template>

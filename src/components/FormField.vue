@@ -156,7 +156,7 @@ const ariaDescribedBy = computed(() => {
 
 /* ------------------ CVA Variants ------------------ */
 
-const fieldVariants = cva("", {
+const fieldVariants = cva("text-(--ui-text)", {
   variants: {
     size: {
       sm: "space-y-1",

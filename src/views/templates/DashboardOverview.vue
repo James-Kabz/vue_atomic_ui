@@ -207,7 +207,7 @@ const pipelineChart = {
               <p class="text-sm font-semibold text-(--ui-text)">New policy rollout</p>
               <p class="text-xs text-(--ui-text-soft)">HR compliance · 3 days ago</p>
             </div>
-            <Button variant="secondary" size="sm">Open Timeline</Button>
+            <Button size="sm">Open Timeline</Button>
           </div>
         </Card>
       </div>

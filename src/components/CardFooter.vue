@@ -17,7 +17,7 @@ const props = defineProps({
   }
 })
 
-const footerVariants = cva('flex items-center p-6 pt-0', {
+const footerVariants = cva('flex items-center p-6 pt-0 text-(--ui-text)', {
   variants: {
     variant: {
       default: 'p-6 pt-0',

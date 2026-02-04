@@ -663,7 +663,7 @@ const handleMultiFileRemoved = (field, files) => {
                 :disabled="isLoading || field.disabled"
                 :rows="field.rows || 3"
                 :class="[
-                  'w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-(--ui-primary)',
+                  'w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-(--ui-primary) bg-(--ui-surface) ui-glossy-input ui-glossy-border border',
                   hasError ? 'border-(--ui-danger)' : 'border-(--ui-border)',
                 ]"
                 :aria-describedby="ariaDescribedBy"

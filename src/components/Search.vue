@@ -113,7 +113,7 @@
         <!-- Footer Slot -->
         <div
           v-if="$slots.footer"
-          class="border-t border-(--ui-border) p-2"
+          class="border-t border-(--ui-border) ui-glossy-border p-2"
         >
           <slot name="footer" />
         </div>
@@ -290,7 +290,7 @@ const highlightMatch = (text) => {
 
 // Variants
 const inputVariants = cva(
-  'block w-full rounded-lg border bg-(--ui-surface) transition-colors duration-200 placeholder:text-(--ui-text-soft) disabled:bg-(--ui-surface-muted) disabled:text-(--ui-text-soft) disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:border-(--ui-primary)',
+  'block w-full rounded-lg border bg-(--ui-surface) ui-glossy-surface transition-colors duration-200 placeholder:text-(--ui-text-soft) disabled:bg-(--ui-surface-muted) disabled:text-(--ui-text-soft) disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:border-(--ui-primary)',
   {
     variants: {
       size: {
@@ -317,7 +317,7 @@ const iconVariants = cva('text-(--ui-text-soft)', {
 const inputClasses = computed(() => cn(inputVariants({ size: props.size })))
 const iconClasses = computed(() => cn(iconVariants({ size: props.size })))
 const resultsClasses = computed(() =>
-  cn('absolute z-50 w-full mt-1 bg-(--ui-surface) rounded-lg shadow-lg border border-(--ui-border) max-h-96 overflow-hidden')
+  cn('absolute z-50 w-full mt-1 bg-(--ui-surface) ui-glossy-surface rounded-lg shadow-lg border border-(--ui-border) ui-glossy-border max-h-96 overflow-hidden')
 )
 const getResultClasses = (i) =>
   cn(

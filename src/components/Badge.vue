@@ -71,7 +71,7 @@ const handleDismiss = () => emit('dismiss')
 
 // cva-powered class variants
 const badgeVariants = cva(
-  'inline-flex items-center font-medium border transition-all duration-200',
+  'inline-flex items-center font-medium border transition-all duration-200 ui-glossy-overlay ui-glossy-border',
   {
     variants: {
       variant: {
@@ -83,7 +83,7 @@ const badgeVariants = cva(
           'border border-(--ui-danger-soft) bg-(--ui-danger-soft) text-(--ui-danger) hover:bg-(--ui-danger-soft) dark:border-(--ui-danger-soft) dark:bg-(--ui-danger-soft) dark:text-(--ui-danger)',
         primary:
           'border border-(--ui-primary-soft) bg-(--ui-primary-soft) text-(--ui-primary) hover:bg-(--ui-primary-soft) dark:border-(--ui-primary-soft) dark:bg-(--ui-primary-soft) dark:text-(--ui-primary)',
-        outline: 'text-foreground border',
+        outline: 'text-(--ui-text) border',
         success:
           'border border-(--ui-success-soft) bg-(--ui-success-soft) text-(--ui-success) dark:border-(--ui-success-soft) dark:bg-(--ui-success-soft) dark:text-(--ui-success)',
         warning:

@@ -89,14 +89,14 @@ const emit = defineEmits(['dismiss'])
 const visible = ref(true)
 
 const notificationVariants = cva(
-  'pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-background shadow-lg ring-1 ring-(--ui-surface-strong) ring-opacity-5',
+  'pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg shadow-lg ring-1 ring-(--ui-surface-strong) ring-opacity-5 ui-glossy-overlay ui-glossy-border bg-(--ui-surface)',
   {
     variants: {
       variant: {
-        default: 'border-l-4 border-primary',
+        default: 'border-l-4 border-(--ui-primary)',
         success: 'border-l-4 border-(--ui-success)',
         warning: 'border-l-4 border-(--ui-warning)',
-        danger: 'border-l-4 border-danger'
+        danger: 'border-l-4 border-(--ui-danger)'
       }
     }
   }
@@ -112,10 +112,10 @@ const iconVariants = {
 const iconColorVariants = cva('h-5 w-5', {
   variants: {
     variant: {
-      default: 'text-primary',
+      default: 'text-(--ui-primary)',
       success: 'text-(--ui-success)',
       warning: 'text-(--ui-warning)',
-      danger: 'text-danger'
+      danger: 'text-(--ui-danger)'
     }
   }
 })

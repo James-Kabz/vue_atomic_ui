@@ -121,7 +121,7 @@ export default {
             >
           </div>
 
-          <div class="bg-(--ui-surface) rounded-lg shadow-xl p-4 sm:p-6 lg:p-8 max-w-md mx-auto w-full">
+          <div class="ui-glossy-panel ui-glossy-border rounded-lg shadow-xl p-4 sm:p-6 lg:p-8 max-w-md mx-auto w-full">
             <!-- Card Header -->
             <div
               v-if="$slots['card-header'] || title"

@@ -25,7 +25,7 @@ const props = defineProps({
 })
 
 const labelVariants = cva(
-  'font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
+  'font-medium leading-none text-(--ui-text) peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
   {
     variants: {
       size: {

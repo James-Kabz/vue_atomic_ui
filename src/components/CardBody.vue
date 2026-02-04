@@ -17,7 +17,7 @@ const props = defineProps({
   }
 })
 
-const bodyVariants = cva('p-6', {
+const bodyVariants = cva('p-6 text-(--ui-text)', {
   variants: {
     variant: {
       default: 'p-6',

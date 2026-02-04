@@ -5,7 +5,7 @@
         'flex items-center justify-center w-8 h-8 rounded-full border-2',
         active ? 'bg-(--ui-primary) border-(--ui-primary) text-(--ui-text-inverse)' :
         completed ? 'bg-(--ui-success) border-(--ui-success) text-(--ui-text-inverse)' :
-        'border-(--ui-border) text-(--ui-text-soft)'
+        'border-(--ui-border) ui-glossy-border text-(--ui-text-soft)'
       ]"
     >
       <span>{{ step }}</span>

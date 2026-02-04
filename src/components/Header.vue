@@ -246,7 +246,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
 <template>
   <header
     :class="cn(
-      'fixed top-0 z-50 bg-(--ui-surface) border-b border-(--ui-border) transition-all duration-300 ease-in-out w-full'
+      'fixed top-0 z-50 ui-glossy-panel border-b ui-glossy-border transition-all duration-300 ease-in-out w-full'
     )"
     :style="{ left: '0' }"
   >
@@ -369,7 +369,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
           >
             <div
               v-if="showOrganisationDropdown"
-              class="absolute top-full left-0 right-0 sm:left-0 sm:right-auto mt-2 w-full sm:w-80 bg-(--ui-surface) rounded-xl shadow-xl border border-(--ui-border) z-50 max-h-96 overflow-hidden"
+              class="absolute top-full left-0 right-0 sm:left-0 sm:right-auto mt-2 w-full sm:w-80 ui-glossy-popover ui-glossy-border rounded-xl shadow-xl z-50 max-h-96 overflow-hidden"
             >
               <div class="p-3 sm:p-4 border-b border-(--ui-border) bg-linear-to-r from-(--ui-primary-soft) to-(--ui-accent-soft)">
                 <h3 class="text-sm font-bold text-(--ui-text) flex items-center gap-2">
@@ -467,7 +467,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
             v-model="searchQuery"
             type="text"
             :placeholder="searchPlaceholder"
-            class="pl-8 sm:pl-10 pr-8 sm:pr-4 py-1.5 sm:py-2 w-36 sm:w-48 md:w-64 text-xs sm:text-sm border border-(--ui-border) rounded-lg focus:ring-2 focus:ring-(--ui-primary) focus:border-(--ui-primary) outline-none transition-all"
+            class="pl-8 sm:pl-10 pr-8 sm:pr-4 py-1.5 sm:py-2 w-36 sm:w-48 md:w-64 text-xs sm:text-sm border border-(--ui-border) ui-glossy-border rounded-lg focus:ring-2 focus:ring-(--ui-primary) focus:border-(--ui-primary) outline-none transition-all bg-(--ui-surface) ui-glossy-input"
           >
           <button
             v-if="isMobile"
@@ -520,7 +520,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
         >
           <div
             v-if="showNotificationsDropdown"
-            class="absolute right-2 sm:right-4 md:right-6 top-14 sm:top-16 mt-2 w-[calc(100vw-1rem)] max-w-sm sm:w-80 md:w-96 bg-(--ui-surface) rounded-xl shadow-xl border border-(--ui-border) z-50"
+            class="absolute right-2 sm:right-4 md:right-6 top-14 sm:top-16 mt-2 w-[calc(100vw-1rem)] max-w-sm sm:w-80 md:w-96 ui-glossy-popover ui-glossy-border rounded-xl shadow-xl z-50"
           >
             <div class="p-3 sm:p-4 border-b border-(--ui-border) bg-linear-to-r from-(--ui-primary-soft) to-(--ui-accent-soft)">
               <h3 class="text-sm sm:text-base font-bold text-(--ui-text)">
@@ -721,7 +721,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
           >
             <div
               v-if="showProfile"
-              class="absolute right-0 mt-2 w-56 sm:w-58 bg-(--ui-surface) rounded-lg shadow-lg border border-(--ui-border) z-50"
+              class="absolute right-0 mt-2 w-56 sm:w-58 ui-glossy-popover ui-glossy-border rounded-lg shadow-lg z-50"
             >
               <div class="p-3 sm:p-4 border-b border-(--ui-border)">
                 <p class="text-sm font-medium text-(--ui-text) truncate">

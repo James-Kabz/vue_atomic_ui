@@ -187,7 +187,7 @@ const iconClasses = computed(() => {
 })
 
 const inputClasses = computed(() => [
-  'block rounded-lg border bg-(--ui-surface) transition-colors duration-200',
+  'block rounded-lg border bg-(--ui-surface) ui-glossy-input ui-glossy-border transition-colors duration-200',
   'focus:outline-none focus:ring-2 focus:ring-offset-0',
   'disabled:bg-(--ui-surface-muted) disabled:text-(--ui-text-soft) disabled:cursor-not-allowed',
   'placeholder:text-(--ui-text-soft)',

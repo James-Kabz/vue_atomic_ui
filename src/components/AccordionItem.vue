@@ -80,8 +80,8 @@ const itemVariants = cva('', {
   variants: {
     variant: {
       default: '',
-      bordered: 'border border-(--ui-border) rounded-lg overflow-hidden',
-      filled: 'bg-(--ui-surface-muted) border border-(--ui-border) rounded-lg overflow-hidden',
+      bordered: 'border border-(--ui-border) ui-glossy-border rounded-lg overflow-hidden',
+      filled: 'bg-(--ui-surface-muted) border border-(--ui-border) ui-glossy-border rounded-lg overflow-hidden',
       flush: ''
     }
   }
@@ -100,7 +100,7 @@ const headerVariants = cva(
   }
 )
 
-const contentVariants = cva('overflow-hidden text-(--ui-text-muted) border-t border-(--ui-border)', {
+const contentVariants = cva('overflow-hidden text-(--ui-text-muted) border-t border-(--ui-border) ui-glossy-border', {
   variants: {
     size: {
       sm: 'p-3 text-sm',

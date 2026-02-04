@@ -11,7 +11,7 @@
         :placeholder="placeholder"
         :required="required"
         :aria-describedby="ariaDescribedby"
-        class="w-full px-3 py-2 pr-10 border border-(--ui-border) rounded-md bg-(--ui-surface) text-(--ui-text) placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:border-(--ui-primary) cursor-pointer disabled:bg-(--ui-surface-muted) disabled:text-(--ui-text-soft) disabled:cursor-not-allowed"
+        class="w-full px-3 py-2 pr-10 border border-(--ui-border) ui-glossy-border rounded-md bg-(--ui-surface) ui-glossy-input text-(--ui-text) placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:border-(--ui-primary) cursor-pointer disabled:bg-(--ui-surface-muted) disabled:text-(--ui-text-soft) disabled:cursor-not-allowed"
         @click="toggleCalendar"
       >
       
@@ -67,7 +67,7 @@
     >
       <div
         v-if="isOpen"
-        :class="['absolute z-[99999] mt-2 bg-(--ui-surface) border border-(--ui-border) rounded-lg shadow-lg p-4', calendarPosition]"
+        :class="['absolute z-[99999] mt-2 ui-glossy-popover ui-glossy-border rounded-lg shadow-lg p-4', calendarPosition]"
         @click.stop
       >
         <!-- Header -->

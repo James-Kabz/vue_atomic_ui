@@ -146,7 +146,7 @@
               v-if="additionalInfoConfig"
               class="mt-8 max-w-md mx-auto"
             >
-              <div class="bg-(--ui-surface) rounded-lg border border-(--ui-border) shadow-sm p-6">
+              <div class="ui-glossy-panel ui-glossy-border rounded-lg shadow-sm p-6">
                 <h3 class="text-lg font-semibold text-(--ui-text) mb-4">
                   {{ additionalInfoConfig.title }}
                 </h3>

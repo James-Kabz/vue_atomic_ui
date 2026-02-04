@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-(--ui-surface) border-b border-(--ui-border)">
+  <div class="ui-glossy-surface border-b ui-glossy-border">
     <!-- Main Filters Bar -->
     <div :class="filtersClasses">
       <!-- Date Range Filter -->
@@ -235,9 +235,9 @@ const selectedDataSource = ref('')
 const filtersVariants = cva('flex flex-wrap items-center gap-4', {
     variants: {
         variant: {
-            default: 'bg-(--ui-surface)',
+            default: 'ui-glossy-surface',
             minimal: 'bg-transparent',
-            bordered: 'bg-(--ui-surface-muted)'
+            bordered: 'ui-glossy-surface'
         },
         padding: {
             compact: 'px-4 py-3',
@@ -301,23 +301,23 @@ const filtersClasses = computed(() =>
 )
 
 const dateInputClasses = computed(() =>
-    'w-full pl-10 pr-3 py-2 border border-(--ui-border) rounded-lg focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:border-transparent text-sm'
+    'w-full pl-10 pr-3 py-2 border border-(--ui-border) ui-glossy-border rounded-lg focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:border-transparent text-sm bg-(--ui-surface) ui-glossy-input'
 )
 
 const selectClasses = computed(() =>
-    'w-full pr-8 appearance-none border border-(--ui-border) rounded-lg focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:border-transparent text-sm py-2 pl-3'
+    'w-full pr-8 appearance-none border border-(--ui-border) ui-glossy-border rounded-lg focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:border-transparent text-sm py-2 pl-3 bg-(--ui-surface) ui-glossy-input'
 )
 
 const clearFiltersButtonClasses = computed(() =>
-    'text-(--ui-text-muted) hover:text-(--ui-text) border border-(--ui-border) hover:bg-(--ui-surface-muted) bg-(--ui-surface) px-3 py-2 rounded-lg text-sm font-medium transition-all'
+    'text-(--ui-text-muted) hover:text-(--ui-text) border ui-glossy-border ui-glossy-button hover:brightness-105 px-3 py-2 rounded-lg text-sm font-medium transition-all'
 )
 
 const exportButtonClasses = computed(() =>
-    'text-(--ui-text-inverse) bg-(--ui-primary) hover:bg-(--ui-primary-strong) border border-(--ui-primary) px-3 py-2 rounded-lg text-sm font-medium transition-all'
+    'text-(--ui-text-inverse) bg-(--ui-primary) hover:bg-(--ui-primary-strong) border border-(--ui-primary) ui-glossy-button-strong px-3 py-2 rounded-lg text-sm font-medium transition-all'
 )
 
 const refreshButtonClasses = computed(() =>
-    'text-(--ui-text-muted) hover:text-(--ui-text) border border-(--ui-border) hover:bg-(--ui-surface-muted) bg-(--ui-surface) px-3 py-2 rounded-lg text-sm font-medium transition-all'
+    'text-(--ui-text-muted) hover:text-(--ui-text) border ui-glossy-border ui-glossy-button hover:brightness-105 px-3 py-2 rounded-lg text-sm font-medium transition-all'
 )
 
 const activeFiltersContainerClasses = computed(() =>

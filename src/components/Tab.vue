@@ -2,7 +2,7 @@
   <div class="w-full">
     <!-- Tab headers -->
     <div
-      class="flex space-x-1 border-b border-(--ui-border)"
+      class="flex space-x-1 border-b border-(--ui-border) ui-glossy-border"
       role="tablist"
     >
       <button
