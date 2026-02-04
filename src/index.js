@@ -21,6 +21,7 @@ import Text from "./components/Text.vue"
 import Textarea from "./components/Textarea.vue"
 import Tooltip from "./components/Tooltip.vue"
 import Typography from "./components/Typography.vue"
+import ThemeConfigurator from "./components/ThemeConfigurator.vue"
 
 import Alert from "./components/Alert.vue"
 import Breadcrumb from "./components/Breadcrumb.vue"
@@ -123,6 +124,7 @@ const components = {
   Textarea,
   Tooltip,
   Typography,
+  ThemeConfigurator,
   Loader,
   Alert,
   Breadcrumb,
@@ -229,6 +231,7 @@ export {
   Textarea,
   Tooltip,
   Typography,
+  ThemeConfigurator,
   Loader,
   Alert,
   Breadcrumb,
