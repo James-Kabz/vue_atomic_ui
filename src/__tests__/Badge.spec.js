@@ -1,12 +1,21 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import Badge from '../components/Badge.vue'
+
+// Mock Icon to avoid fontawesome dependency in unit tests
+vi.mock('../components/Icon.vue', () => ({
+  default: {
+    name: 'Icon',
+    props: ['name', 'class'],
+    template: '<span :class="$attrs.class" data-testid="icon">{{ name }}</span>'
+  }
+}))
 
 describe('Badge', () => {
   it('renders with default props', () => {
     const wrapper = mount(Badge)
     expect(wrapper.classes()).toContain('inline-flex')
-    expect(wrapper.classes()).toContain('bg-blue-50')
+    expect(wrapper.classes()).toContain('bg-(--ui-primary-soft)')
   })
 
   it('displays slot content', () => {
@@ -22,35 +31,35 @@ describe('Badge', () => {
     const wrapper = mount(Badge, {
       props: { variant: 'danger' }
     })
-    expect(wrapper.classes()).toContain('bg-red-50')
+    expect(wrapper.classes()).toContain('bg-(--ui-danger-soft)')
   })
 
   it('applies primary variant classes', () => {
     const wrapper = mount(Badge, {
       props: { variant: 'primary' }
     })
-    expect(wrapper.classes()).toContain('bg-blue-50')
+    expect(wrapper.classes()).toContain('bg-(--ui-primary-soft)')
   })
 
   it('applies success variant classes', () => {
     const wrapper = mount(Badge, {
       props: { variant: 'success' }
     })
-    expect(wrapper.classes()).toContain('bg-green-50')
+    expect(wrapper.classes()).toContain('bg-(--ui-success-soft)')
   })
 
   it('applies warning variant classes', () => {
     const wrapper = mount(Badge, {
       props: { variant: 'warning' }
     })
-    expect(wrapper.classes()).toContain('bg-yellow-50')
+    expect(wrapper.classes()).toContain('bg-(--ui-warning-soft)')
   })
 
   it('applies info variant classes', () => {
     const wrapper = mount(Badge, {
       props: { variant: 'info' }
     })
-    expect(wrapper.classes()).toContain('bg-blue-50')
+    expect(wrapper.classes()).toContain('bg-(--ui-primary-soft)')
   })
 
   it('applies ghost variant classes', () => {
@@ -64,49 +73,49 @@ describe('Badge', () => {
     const wrapper = mount(Badge, {
       props: { variant: 'link' }
     })
-    expect(wrapper.classes()).toContain('text-blue-600')
+    expect(wrapper.classes()).toContain('text-(--ui-primary)')
   })
 
   it('applies subtle variant classes', () => {
     const wrapper = mount(Badge, {
       props: { variant: 'subtle' }
     })
-    expect(wrapper.classes()).toContain('bg-gray-100')
+    expect(wrapper.classes()).toContain('bg-(--ui-surface-muted)')
   })
 
   it('applies dark variant classes', () => {
     const wrapper = mount(Badge, {
       props: { variant: 'dark' }
     })
-    expect(wrapper.classes()).toContain('bg-gray-900')
+    expect(wrapper.classes()).toContain('bg-(--ui-surface-strong)')
   })
 
   it('applies light variant classes', () => {
     const wrapper = mount(Badge, {
       props: { variant: 'light' }
     })
-    expect(wrapper.classes()).toContain('bg-gray-50')
+    expect(wrapper.classes()).toContain('bg-(--ui-surface-muted)')
   })
 
   it('applies primaryOutline variant classes', () => {
     const wrapper = mount(Badge, {
       props: { variant: 'primaryOutline' }
     })
-    expect(wrapper.classes()).toContain('border-blue-500')
+    expect(wrapper.classes()).toContain('border-(--ui-primary)')
   })
 
   it('applies dangerOutline variant classes', () => {
     const wrapper = mount(Badge, {
       props: { variant: 'dangerOutline' }
     })
-    expect(wrapper.classes()).toContain('border-red-500')
+    expect(wrapper.classes()).toContain('border-(--ui-danger)')
   })
 
   it('applies successOutline variant classes', () => {
     const wrapper = mount(Badge, {
       props: { variant: 'successOutline' }
     })
-    expect(wrapper.classes()).toContain('border-green-500')
+    expect(wrapper.classes()).toContain('border-(--ui-success)')
   })
 
   it('applies gradient variant classes', () => {

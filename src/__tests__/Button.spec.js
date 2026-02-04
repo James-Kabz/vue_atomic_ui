@@ -5,14 +5,14 @@ import Button from '../components/Button.vue'
 describe('Button', () => {
   it('renders with default props', () => {
     const wrapper = mount(Button)
-    expect(wrapper.classes()).toContain('bg-blue-600') // default variant class
+    expect(wrapper.classes()).toContain('ui-glossy-button-strong') // default variant class
   })
 
   it('applies variant class', () => {
     const wrapper = mount(Button, {
       props: { variant: 'primaryOutline' }
     })
-    expect(wrapper.classes()).toContain('border-blue-600')
+    expect(wrapper.classes()).toContain('border-(--ui-primary)')
   })
 
   it('emits click event', async () => {

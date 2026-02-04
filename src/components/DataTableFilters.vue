@@ -24,7 +24,7 @@
             @click="$emit('update:searchQuery', '')"
           >
             <Icon
-              icon="xmark"
+              icon="circle-xmark"
               class="w-3 h-3"
             />
           </button>
@@ -261,7 +261,7 @@
               @click="clearDateFilter(dateFilter.key)"
             >
               <Icon
-                icon="xmark"
+                icon="circle-xmark"
                 class="w-4 h-4"
               />
             </button>
@@ -312,7 +312,7 @@
               @click="clearNumberFilter(numberFilter.key)"
             >
               <Icon
-                icon="xmark"
+                icon="circle-xmark"
                 class="w-4 h-4"
               />
             </button>
@@ -372,7 +372,7 @@
                 @click="removeMultiSelectOption(multiFilter.key, selectedValue)"
               >
                 <Icon
-                  icon="xmark"
+                  icon="circle-xmark"
                   class="w-3 h-3"
                 />
               </button>
@@ -404,7 +404,7 @@
             @click="removeFilter(filter.key)"
           >
             <Icon
-              icon="xmark"
+              icon="circle-xmark"
               class="w-3 h-3"
             />
           </button>
@@ -444,7 +444,7 @@
           @click="closeFileUploadModal"
         >
           <Icon
-            icon="xmark"
+            icon="circle-xmark"
             class="w-5 h-5"
           />
         </button>

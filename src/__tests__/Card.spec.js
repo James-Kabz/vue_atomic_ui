@@ -5,8 +5,8 @@ import Card from '../components/Card.vue'
 describe('Card', () => {
   it('renders with default props', () => {
     const wrapper = mount(Card)
-    expect(wrapper.classes()).toContain('bg-white')
-    expect(wrapper.classes()).toContain('border-slate-200')
+    expect(wrapper.classes()).toContain('ui-glossy-surface')
+    expect(wrapper.classes()).toContain('ui-glossy-border')
   })
 
   it('renders title and subtitle', () => {
@@ -34,7 +34,7 @@ describe('Card', () => {
     const wrapper = mount(Card, {
       props: { variant: 'elevated' }
     })
-    expect(wrapper.classes()).toContain('shadow-md')
+    expect(wrapper.classes()).toContain('ui-glossy-shadow')
   })
 
   it('applies padding classes', () => {

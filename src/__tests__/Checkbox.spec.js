@@ -72,7 +72,7 @@ describe('Checkbox', () => {
       props: { variant: 'error' }
     })
     const indicator = wrapper.find('div').find('div').find('div') // The custom indicator div
-    expect(indicator.classes()).toContain('border-red-300')
+    expect(indicator.classes()).toContain('border-(--ui-danger-soft)')
   })
 
   it('emits change event', async () => {

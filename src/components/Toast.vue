@@ -198,7 +198,7 @@ const iconMap = {
   info: 'info',
   success: 'check-circle',
   warning: 'triangle-exclamation',
-  error: 'circle-xmark',
+  error: 'circle-circle-xmark',
   loading: 'loader-circle'
 }
 

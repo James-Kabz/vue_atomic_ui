@@ -164,7 +164,7 @@
             @click="removeFilter(filter.key)"
           >
             <Icon
-              icon="xmark"
+              icon="circle-xmark"
               class="w-3 h-3"
             />
           </button>

@@ -47,7 +47,7 @@ describe('Input', () => {
       props: { variant: 'error' }
     })
     const input = wrapper.find('input')
-    expect(input.classes()).toContain('border-red-300')
+    expect(input.classes()).toContain('border-(--ui-danger-soft)')
   })
 
   it('shows clear button when clearable and has value', async () => {
@@ -85,6 +85,6 @@ describe('Input', () => {
       props: { variant: 'success' }
     })
     const input = wrapper.find('input')
-    expect(input.classes()).toContain('border-green-300')
+    expect(input.classes()).toContain('border-(--ui-success-soft)')
   })
 })
