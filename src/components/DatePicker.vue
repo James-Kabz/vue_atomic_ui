@@ -419,7 +419,7 @@ onBeforeUnmount(() => {
           v-if="isOpen"
           ref="calendarRef"
           :style="calendarStyle"
-        class="fixed z-[10000] ui-glossy-popover ui-glossy-border rounded-lg shadow-xl p-3 w-64"
+          class="fixed z-[10000] ui-glossy-popover ui-glossy-border rounded-lg shadow-xl p-3 w-64"
           @click.stop
         >
           <!-- Header -->

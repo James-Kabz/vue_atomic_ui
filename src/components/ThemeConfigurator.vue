@@ -51,7 +51,11 @@ const applyMode = () => {
             class="mt-1 w-full rounded-lg border border-(--ui-border) bg-(--ui-surface) px-3 py-2 text-sm"
             @change="applyMode"
           >
-            <option v-for="mode in modes" :key="mode" :value="mode">
+            <option
+              v-for="mode in modes"
+              :key="mode"
+              :value="mode"
+            >
               {{ mode }}
             </option>
           </select>
@@ -64,7 +68,11 @@ const applyMode = () => {
             class="mt-1 w-full rounded-lg border border-(--ui-border) bg-(--ui-surface) px-3 py-2 text-sm"
             @change="applyTheme"
           >
-            <option v-for="theme in themes" :key="theme" :value="theme">
+            <option
+              v-for="theme in themes"
+              :key="theme"
+              :value="theme"
+            >
               {{ theme }}
             </option>
           </select>

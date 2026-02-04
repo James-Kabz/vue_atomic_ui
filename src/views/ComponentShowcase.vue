@@ -42,6 +42,8 @@ const buttonLoading = ref(false);
 const inputValue = ref('');
 const modalOpen = ref(false);
 const selectValue = ref('');
+const datePickerValue = ref('');
+const calendarValue = ref('');
 const selectedDataSource = ref('')
 const dateFrom = ref('')
 const dateTo = ref('')
@@ -453,6 +455,22 @@ const currentPath = computed(() => `#${currentSection.value}`);
 
                 <div>
                   <h4 class="text-lg font-semibold mb-3">
+                    Date Picker
+                  </h4>
+                  <div class="space-y-3">
+                    <DatePicker
+                      v-model="datePickerValue"
+                      placeholder="Pick a date"
+                    />
+                    <Calendar
+                      v-model="calendarValue"
+                      placeholder="Calendar input"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <h4 class="text-lg font-semibold mb-3">
                     Checkbox Component
                   </h4>
                   <div class="space-y-2">
@@ -849,6 +867,83 @@ const currentPath = computed(() => `#${currentSection.value}`);
               </div>
             </div>
 
+            <div class="space-y-4">
+              <h3 class="text-xl font-semibold">
+                Card Subcomponents & Navigation
+              </h3>
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Card>
+                  <CardHeader>
+                    <template #title>
+                      <CardTitle>Account Overview</CardTitle>
+                    </template>
+                    <template #description>
+                      A composed card using header, body, content, and footer.
+                    </template>
+                  </CardHeader>
+                  <CardBody>
+                    <CardContent>
+                      <div class="flex items-center gap-3">
+                        <Avatar
+                          name="Jordan Blake"
+                          size="md"
+                        />
+                        <div class="space-y-1">
+                          <div class="font-medium text-(--ui-text)">
+                            Jordan Blake
+                          </div>
+                          <Badge variant="success">
+                            Active
+                          </Badge>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </CardBody>
+                  <CardFooter>
+                    <div class="flex items-center justify-between w-full">
+                      <Breadcrumb
+                        :items="[
+                          { label: 'Dashboard', href: '#' },
+                          { label: 'Users', href: '#' },
+                          { label: 'Profile', href: '#' }
+                        ]"
+                      />
+                      <ButtonGroup>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                        >
+                          Edit
+                        </Button>
+                        <Button size="sm">
+                          Save
+                        </Button>
+                      </ButtonGroup>
+                    </div>
+                  </CardFooter>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <template #title>
+                      <CardTitle>Events Calendar</CardTitle>
+                    </template>
+                    <template #description>
+                      Monthly view with sample events.
+                    </template>
+                  </CardHeader>
+                  <CardBody>
+                    <EventsCalendar
+                      size="sm"
+                      :events="[
+                        { id: 1, title: 'Design Review', date: new Date().toISOString().slice(0, 10), color: 'primary' }
+                      ]"
+                    />
+                  </CardBody>
+                </Card>
+              </div>
+            </div>
+
             <!-- Accordion -->
             <div class="space-y-4">
               <h3 class="text-xl font-semibold">
@@ -1075,7 +1170,6 @@ const currentPath = computed(() => `#${currentSection.value}`);
 
             <WidgetsTest />
           </section>
-
         </div>
       </div>
     </div>

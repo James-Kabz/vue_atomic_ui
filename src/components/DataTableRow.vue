@@ -183,17 +183,17 @@ const rowClasses = computed(() =>
   }))
 )
 
-const getCellClasses = (column) => {
-  const alignmentClass = getAlignmentClass(column)
+// const getCellClasses = (column) => {
+//   const alignmentClass = getAlignmentClass(column)
   
-  return cn(
-    cellVariants({
-      density: props.density,
-      align: alignmentClass
-    }),
-    column.cellClasses
-  )
-}
+//   return cn(
+//     cellVariants({
+//       density: props.density,
+//       align: alignmentClass
+//     }),
+//     column.cellClasses
+//   )
+// }
 
 const getCellTextSize = () => {
   const sizes = {

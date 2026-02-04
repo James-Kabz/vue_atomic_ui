@@ -212,15 +212,30 @@ const previewProfileMenu = ref([
     </div>
 
     <div class="mt-6 grid grid-cols-1 gap-6">
-      <Card id="gallery-basics" title="Basics" variant="outlined" padding="lg">
+      <Card
+        id="gallery-basics"
+        title="Basics"
+        variant="outlined"
+        padding="lg"
+      >
         <div class="space-y-4">
           <div class="flex items-center gap-4">
-            <Avatar initials="JB" size="md" />
-            <Badge variant="success">Active</Badge>
+            <Avatar
+              initials="JB"
+              size="md"
+            />
+            <Badge variant="success">
+              Active
+            </Badge>
             <Divider />
-            <Text as="span">Text component</Text>
+            <Text as="span">
+              Text component
+            </Text>
           </div>
-          <Typography variant="body-sm" color="muted">
+          <Typography
+            variant="body-sm"
+            color="muted"
+          >
             Typography for supporting copy.
           </Typography>
           <div class="flex items-center gap-4">
@@ -233,8 +248,16 @@ const previewProfileMenu = ref([
             />
           </div>
           <div class="flex items-center gap-4">
-            <Link href="https://vuejs.org" external>Link component</Link>
-            <Logo text="STL Horizon" size="sm" />
+            <Link
+              href="https://vuejs.org"
+              external
+            >
+              Link component
+            </Link>
+            <Logo
+              text="STL Horizon"
+              size="sm"
+            />
           </div>
           <Image
             src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400&h=240&fit=crop"
@@ -244,18 +267,40 @@ const previewProfileMenu = ref([
         </div>
       </Card>
 
-      <Card id="gallery-navigation" title="Navigation & Menus" variant="outlined" padding="lg">
+      <Card
+        id="gallery-navigation"
+        title="Navigation & Menus"
+        variant="outlined"
+        padding="lg"
+      >
         <div class="space-y-4">
           <Breadcrumb :items="breadcrumbItems" />
           <ButtonGroup>
-            <Button size="sm">Day</Button>
-            <Button size="sm" variant="outline">Week</Button>
-            <Button size="sm" variant="outline">Month</Button>
+            <Button size="sm">
+              Day
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+            >
+              Week
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+            >
+              Month
+            </Button>
           </ButtonGroup>
-          <Dropdown trigger-text="Options" variant="outline">
+          <Dropdown
+            trigger-text="Options"
+            variant="outline"
+          >
             <DropdownItem>Profile</DropdownItem>
             <DropdownItem>Settings</DropdownItem>
-            <DropdownItem variant="danger">Logout</DropdownItem>
+            <DropdownItem variant="danger">
+              Logout
+            </DropdownItem>
           </Dropdown>
           <AccordionItem>
             <template #header>
@@ -266,57 +311,113 @@ const previewProfileMenu = ref([
             </template>
           </AccordionItem>
           <ul class="space-y-2">
-            <ListItem title="List item" description="Supporting text" icon="check" />
-            <MenuItem icon="gear">Menu item</MenuItem>
+            <ListItem
+              title="List item"
+              description="Supporting text"
+              icon="check"
+            />
+            <MenuItem icon="gear">
+              Menu item
+            </MenuItem>
           </ul>
           <Tab>
             <TabPanel label="Summary">
-              <p class="text-sm text-(--ui-text-muted)">Tab panel content</p>
+              <p class="text-sm text-(--ui-text-muted)">
+                Tab panel content
+              </p>
             </TabPanel>
             <TabPanel label="Details">
-              <p class="text-sm text-(--ui-text-muted)">Second panel content</p>
+              <p class="text-sm text-(--ui-text-muted)">
+                Second panel content
+              </p>
             </TabPanel>
           </Tab>
         </div>
       </Card>
 
-      <Card id="gallery-forms" title="Forms & Inputs" variant="outlined" padding="lg">
+      <Card
+        id="gallery-forms"
+        title="Forms & Inputs"
+        variant="outlined"
+        padding="lg"
+      >
         <div class="space-y-4">
           <FormField label="FormField">
-            <Input v-model="formFieldValue" placeholder="FormField input" />
+            <Input
+              v-model="formFieldValue"
+              placeholder="FormField input"
+            />
           </FormField>
           <InputGroup>
             <template #prefix>
-              <Icon icon="search" class="w-4 h-4 text-(--ui-text-soft)" />
+              <Icon
+                icon="search"
+                class="w-4 h-4 text-(--ui-text-soft)"
+              />
             </template>
-            <Input v-model="inputGroupValue" placeholder="InputGroup" />
+            <Input
+              v-model="inputGroupValue"
+              placeholder="InputGroup"
+            />
             <template #suffix>
-              <Badge size="sm">New</Badge>
+              <Badge size="sm">
+                New
+              </Badge>
             </template>
           </InputGroup>
-          <Search v-model="searchValue" placeholder="Search component" />
+          <Search
+            v-model="searchValue"
+            placeholder="Search component"
+          />
           <div class="flex items-center gap-3">
             <Switch v-model="switchValue" />
             <span class="text-sm text-(--ui-text-muted)">Switch</span>
           </div>
-          <Slider v-model="sliderValue" :min="0" :max="100" />
+          <Slider
+            v-model="sliderValue"
+            :min="0"
+            :max="100"
+          />
           <DatePicker v-model="datePickerValue" />
           <Select v-model="dateFilterValue">
-            <Option value="" label="Select priority" />
-            <Option value="low" label="Low" />
-            <Option value="high" label="High" />
+            <Option
+              value=""
+              label="Select priority"
+            />
+            <Option
+              value="low"
+              label="Low"
+            />
+            <Option
+              value="high"
+              label="High"
+            />
           </Select>
         </div>
       </Card>
 
-      <Card id="gallery-data" title="Data Table Parts" variant="outlined" padding="lg">
+      <Card
+        id="gallery-data"
+        title="Data Table Parts"
+        variant="outlined"
+        padding="lg"
+      >
         <div class="space-y-4">
-          <DataTableHeader title="Mini Table" description="Header component demo" />
+          <DataTableHeader
+            title="Mini Table"
+            description="Header component demo"
+          />
           <table class="w-full border border-(--ui-border) rounded-md overflow-hidden">
             <tbody>
               <tr>
-                <DataTableCell :item="demoItem" :column="demoColumns[0]" />
-                <DataTableCell :item="demoItem" :column="demoColumns[1]" />
+                <DataTableCell
+                  :item="demoItem"
+                  :column="demoColumns[0]"
+                />
+                <DataTableCell
+                  :item="demoItem"
+                  :column="demoColumns[1]"
+                />
               </tr>
               <DataTableRow
                 :item="demoItem"
@@ -331,23 +432,45 @@ const previewProfileMenu = ref([
             :current-page="demoCurrentPage"
             :page-size="demoPageSize"
             :page-size-options="[5, 10, 20]"
-            @update:currentPage="(page) => (demoCurrentPage = page)"
-            @update:pageSize="(size) => (demoPageSize = size)"
+            @update:current-page="(page) => (demoCurrentPage = page)"
+            @update:page-size="(size) => (demoPageSize = size)"
           />
         </div>
       </Card>
 
-      <Card id="gallery-feedback" title="Feedback & Status" variant="outlined" padding="lg">
+      <Card
+        id="gallery-feedback"
+        title="Feedback & Status"
+        variant="outlined"
+        padding="lg"
+      >
         <div class="space-y-4">
           <Tooltip content="Helpful tooltip">
-            <Button size="sm" variant="outline">Hover me</Button>
+            <Button
+              size="sm"
+              variant="outline"
+            >
+              Hover me
+            </Button>
           </Tooltip>
-          <Notification title="Update complete" message="All checks passed." variant="success" />
-          <ProgressBar :value="progressBarValue" show-label />
+          <Notification
+            title="Update complete"
+            message="All checks passed."
+            variant="success"
+          />
+          <ProgressBar
+            :value="progressBarValue"
+            show-label
+          />
         </div>
       </Card>
 
-      <Card id="gallery-timeline" title="Timeline & Stepper" variant="outlined" padding="lg">
+      <Card
+        id="gallery-timeline"
+        title="Timeline & Stepper"
+        variant="outlined"
+        padding="lg"
+      >
         <div class="space-y-4">
           <Stepper>
             <StepperItem
@@ -373,7 +496,12 @@ const previewProfileMenu = ref([
         </div>
       </Card>
 
-      <Card id="gallery-charts" title="Charts & Calendars" variant="outlined" padding="lg">
+      <Card
+        id="gallery-charts"
+        title="Charts & Calendars"
+        variant="outlined"
+        padding="lg"
+      >
         <div class="space-y-4">
           <StackedBarChart
             :data="[12, 9, 14]"
@@ -386,22 +514,49 @@ const previewProfileMenu = ref([
         </div>
       </Card>
 
-      <Card id="gallery-modal" title="Modal Parts" variant="outlined" padding="lg">
+      <Card
+        id="gallery-modal"
+        title="Modal Parts"
+        variant="outlined"
+        padding="lg"
+      >
         <div class="space-y-3">
-          <Button size="sm" variant="outline" @click="modalHeaderOpen = true">Open Modal</Button>
-          <Modal v-model="modalHeaderOpen" size="sm">
+          <Button
+            size="sm"
+            variant="outline"
+            @click="modalHeaderOpen = true"
+          >
+            Open Modal
+          </Button>
+          <Modal
+            v-model="modalHeaderOpen"
+            size="sm"
+          >
             <ModalHeader>Modal Header</ModalHeader>
             <ModalBody>
-              <p class="text-sm text-(--ui-text-muted)">Modal body content.</p>
+              <p class="text-sm text-(--ui-text-muted)">
+                Modal body content.
+              </p>
             </ModalBody>
             <ModalFooter>
-              <Button size="sm" variant="outline" @click="modalHeaderOpen = false">Close</Button>
+              <Button
+                size="sm"
+                variant="outline"
+                @click="modalHeaderOpen = false"
+              >
+                Close
+              </Button>
             </ModalFooter>
           </Modal>
         </div>
       </Card>
 
-      <Card id="gallery-card" title="Card Sections" variant="outlined" padding="lg">
+      <Card
+        id="gallery-card"
+        title="Card Sections"
+        variant="outlined"
+        padding="lg"
+      >
         <Card>
           <template #header>
             <CardHeader>
@@ -417,10 +572,21 @@ const previewProfileMenu = ref([
         </Card>
       </Card>
 
-      <Card id="gallery-forms-advanced" title="Reusable Forms" variant="outlined" padding="lg">
+      <Card
+        id="gallery-forms-advanced"
+        title="Reusable Forms"
+        variant="outlined"
+        padding="lg"
+      >
         <div class="space-y-4">
           <ReusableForm :fields="reusableFormFields" />
-          <Button size="sm" variant="outline" @click="reusableModalOpen = true">Open Form Modal</Button>
+          <Button
+            size="sm"
+            variant="outline"
+            @click="reusableModalOpen = true"
+          >
+            Open Form Modal
+          </Button>
           <ReusableFormModal
             v-model="reusableModalOpen"
             modal-type="create"
@@ -430,14 +596,24 @@ const previewProfileMenu = ref([
         </div>
       </Card>
 
-      <Card id="gallery-reminders" title="Reminders" variant="outlined" padding="lg">
+      <Card
+        id="gallery-reminders"
+        title="Reminders"
+        variant="outlined"
+        padding="lg"
+      >
         <ReminderConfig
           v-model:models="reminderModels"
           :available-recipients="reminderRecipients"
         />
       </Card>
 
-      <Card id="gallery-layouts" title="Layouts & Shells" variant="outlined" padding="lg">
+      <Card
+        id="gallery-layouts"
+        title="Layouts & Shells"
+        variant="outlined"
+        padding="lg"
+      >
         <div class="space-y-6 layout-preview">
           <div class="rounded-md border border-(--ui-border) overflow-hidden">
             <Header
@@ -465,24 +641,40 @@ const previewProfileMenu = ref([
             />
           </div>
           <div class="rounded-md border border-(--ui-border) overflow-hidden auth-preview">
-            <AuthLayout title="Auth Layout" subtitle="Sign in to continue">
+            <AuthLayout
+              title="Auth Layout"
+              subtitle="Sign in to continue"
+            >
               <div class="p-6 bg-(--ui-surface) rounded-lg shadow-sm">
-                <p class="text-sm text-(--ui-text-muted)">Auth slot content</p>
+                <p class="text-sm text-(--ui-text-muted)">
+                  Auth slot content
+                </p>
               </div>
             </AuthLayout>
           </div>
           <div class="rounded-md border border-(--ui-border) overflow-hidden default-preview">
             <DefaultLayout>
               <template #header-actions>
-                <Button size="sm" variant="outline">Action</Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                >
+                  Action
+                </Button>
               </template>
-              <div class="p-4 text-sm text-(--ui-text-muted)">Default layout content</div>
+              <div class="p-4 text-sm text-(--ui-text-muted)">
+                Default layout content
+              </div>
             </DefaultLayout>
           </div>
           <div class="rounded-md border border-(--ui-border) overflow-hidden error-preview">
             <ErrorLayout>
-              <template #title>Something went wrong</template>
-              <template #message>We could not load this page.</template>
+              <template #title>
+                Something went wrong
+              </template>
+              <template #message>
+                We could not load this page.
+              </template>
             </ErrorLayout>
           </div>
           <Footer />

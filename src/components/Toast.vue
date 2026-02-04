@@ -74,7 +74,10 @@
               @click="toast.action.onClick"
             >
               {{ toast.action.label }}
-              <Icon icon="arrow-right" class="h-3 w-3" />
+              <Icon
+                icon="arrow-right"
+                class="h-3 w-3"
+              />
             </button>
           </div>
 
@@ -82,8 +85,8 @@
           <button
             v-if="isDismissible(toast)"
             class="absolute right-2 top-2 flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-(--ui-text-soft) opacity-0 transition-all hover:bg-black/5 dark:hover:bg-white/5 hover:text-(--ui-text) focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-(--ui-ring) focus:ring-offset-1 group-hover:opacity-100"
-            @click="dismiss(toast.id)"
             aria-label="Dismiss"
+            @click="dismiss(toast.id)"
           >
             <Icon
               icon="x"
