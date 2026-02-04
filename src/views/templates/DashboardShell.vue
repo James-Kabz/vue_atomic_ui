@@ -121,6 +121,20 @@ const handleMobileSidebarToggle = () => {
       :style="{ marginLeft: sidebarRef?.contentMarginLeft + 'px' }"
     >
       <div class="p-6">
+        <div class="mb-6 flex items-center gap-3">
+          <router-link
+            to="/templates/overview"
+            class="px-3 py-1.5 rounded-md text-sm font-medium border border-slate-200 hover:bg-slate-100"
+          >
+            Dashboard
+          </router-link>
+          <router-link
+            to="/components"
+            class="px-3 py-1.5 rounded-md text-sm font-medium border border-slate-200 hover:bg-slate-100"
+          >
+            Component Showcase
+          </router-link>
+        </div>
         <slot />
       </div>
     </main>

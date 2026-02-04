@@ -15,6 +15,11 @@ const router = createRouter({
       component: () => import('../views/ComponentShowcase.vue')
     },
     {
+      path: '/components/full-gallery',
+      name: 'components/full-gallery',
+      component: () => import('../views/ComponentGallery.vue')
+    },
+    {
       path: '/templates/overview',
       name: 'templates/overview',
       component: () => import('../views/templates/DashboardOverview.vue')

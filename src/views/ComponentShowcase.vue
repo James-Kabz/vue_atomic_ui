@@ -16,6 +16,18 @@ import CircularProgress from '../components/CircularProgress.vue';
 import Spinner from '../components/Spinner.vue';
 import Loader from '../components/Loader.vue';
 import Icon from '../components/Icon.vue';
+import Avatar from '../components/Avatar.vue';
+import Badge from '../components/Badge.vue';
+import Breadcrumb from '../components/Breadcrumb.vue';
+import ButtonGroup from '../components/ButtonGroup.vue';
+import CardHeader from '../components/CardHeader.vue';
+import CardBody from '../components/CardBody.vue';
+import CardFooter from '../components/CardFooter.vue';
+import CardContent from '../components/CardContent.vue';
+import CardTitle from '../components/CardTitle.vue';
+import Calendar from '../components/Calendar.vue';
+import EventsCalendar from '../components/EventsCalendar.vue';
+import DatePicker from '../components/DatePicker.vue';
 import { ref, computed } from 'vue';
 import { toast } from '../lib/toast.js';
 import Graph from '../components/Graph.vue'
@@ -206,6 +218,27 @@ const currentPath = computed(() => `#${currentSection.value}`);
 
     <!-- Main Content -->
     <div class="ml-52 min-h-screen">
+      <div class="sticky top-0 z-40 bg-white/90 backdrop-blur border-b border-gray-200 px-8 py-3 flex items-center gap-3">
+        <router-link
+          to="/templates/overview"
+          class="px-3 py-1.5 rounded-md text-sm font-medium border border-gray-200 hover:bg-gray-100"
+        >
+          Dashboard
+        </router-link>
+        <router-link
+          to="/components"
+          class="px-3 py-1.5 rounded-md text-sm font-medium border border-gray-200 hover:bg-gray-100"
+        >
+          Component Showcase
+        </router-link>
+        <router-link
+          to="/components/full-gallery"
+          class="px-3 py-1.5 rounded-md text-sm font-medium border border-gray-200 hover:bg-gray-100"
+        >
+          Full Gallery
+        </router-link>
+      </div>
+
       <div class="p-8">
         <div class="w-full space-y-12">
           <div class="text-center mb-12">
@@ -1042,6 +1075,7 @@ const currentPath = computed(() => `#${currentSection.value}`);
 
             <WidgetsTest />
           </section>
+
         </div>
       </div>
     </div>

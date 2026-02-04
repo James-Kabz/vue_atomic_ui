@@ -1,6 +1,7 @@
 <template>
   <font-awesome-icon
-    :icon="[prefix, icon]"
+    v-if="resolvedIcon"
+    :icon="[prefix, resolvedIcon]"
     :size="faSize"
     :class="iconClasses"
     :aria-hidden="!ariaLabel"
@@ -16,7 +17,11 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 const props = defineProps({
   icon: {
     type: String,
-    required: true
+    default: null
+  },
+  name: {
+    type: String,
+    default: null
   },
   prefix: {
     type: String,
@@ -29,6 +34,8 @@ const props = defineProps({
   color: String,
   ariaLabel: String
 })
+
+const resolvedIcon = computed(() => props.icon || props.name)
 
 const faSize = computed(() => {
   const sizes = {
