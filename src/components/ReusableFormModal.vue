@@ -601,10 +601,10 @@ const handleMultiFileRemoved = (field, files) => {
     @close="handleClose"
   >
     <div class="mb-6">
-      <h2 class="text-xl font-semibold text-gray-900">
+      <h2 class="text-xl font-semibold text-(--ui-text)">
         {{ modalType === 'create' ? `Add New ${entityName}` : `Edit ${entityName}` }}
       </h2>
-      <p class="text-sm text-gray-600 mt-1">
+      <p class="text-sm text-(--ui-text-muted) mt-1">
         {{
           modalType === 'create'
             ? `Fill in the details to create a new ${entityName.toLowerCase()}.`
@@ -649,7 +649,7 @@ const handleMultiFileRemoved = (field, files) => {
                 :placeholder="field.placeholder"
                 :disabled="isLoading || field.disabled"
                 :readonly="field.disabled"
-                :class="hasError ? 'border-red-500' : 'border-slate-300'"
+                :class="hasError ? 'border-(--ui-danger)' : 'border-(--ui-border)'"
                 :aria-describedby="ariaDescribedBy"
                 @update:model-value="setFieldValue(field.name, $event)"
               />
@@ -663,8 +663,8 @@ const handleMultiFileRemoved = (field, files) => {
                 :disabled="isLoading || field.disabled"
                 :rows="field.rows || 3"
                 :class="[
-                  'w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500',
-                  hasError ? 'border-red-500' : 'border-slate-300',
+                  'w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-(--ui-primary)',
+                  hasError ? 'border-(--ui-danger)' : 'border-(--ui-border)',
                 ]"
                 :aria-describedby="ariaDescribedBy"
                 @update:model-value="setFieldValue(field.name, $event)"
@@ -720,13 +720,13 @@ const handleMultiFileRemoved = (field, files) => {
                   :model-value="getFieldValue(field.name)"
                   type="checkbox"
                   :disabled="isLoading || field.disabled"
-                  class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  class="h-4 w-4 text-(--ui-primary) focus:ring-(--ui-primary) border-(--ui-border) rounded"
                   :aria-describedby="ariaDescribedBy"
                   @update:model-value="setFieldValue(field.name, $event)"
                 />
                 <Label
                   :for="fieldId"
-                  class="ml-2 text-sm text-gray-700"
+                  class="ml-2 text-sm text-(--ui-text-muted)"
                 >
                   {{ field.checkboxLabel || field.label }}
                 </Label>
@@ -744,22 +744,22 @@ const handleMultiFileRemoved = (field, files) => {
                   :aria-checked="getFieldValue(field.name)"
                   :disabled="isLoading || field.disabled"
                   :class="[
-                    'relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
-                    getFieldValue(field.name) ? 'bg-blue-600' : 'bg-gray-200',
+                    'relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:ring-offset-2',
+                    getFieldValue(field.name) ? 'bg-(--ui-primary)' : 'bg-(--ui-surface-soft)',
                     (isLoading || field.disabled) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
                   ]"
                   @click="setFieldValue(field.name, !getFieldValue(field.name))"
                 >
                   <span
                     :class="[
-                      'inline-block h-4 w-4 transform rounded-full bg-white transition-transform',
+                      'inline-block h-4 w-4 transform rounded-full bg-(--ui-surface) transition-transform',
                       getFieldValue(field.name) ? 'translate-x-6' : 'translate-x-1'
                     ]"
                   />
                 </button>
                 <Label
                   :for="fieldId"
-                  class="ml-3 text-sm text-gray-700"
+                  class="ml-3 text-sm text-(--ui-text-muted)"
                 >
                   {{ field.checkboxLabel || field.label }}
                 </Label>
@@ -781,13 +781,13 @@ const handleMultiFileRemoved = (field, files) => {
                     type="radio"
                     :value="option.value"
                     :disabled="isLoading || field.disabled"
-                    class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                    class="h-4 w-4 text-(--ui-primary) focus:ring-(--ui-primary) border-(--ui-border)"
                     :aria-describedby="ariaDescribedBy"
                     @update:model-value="setFieldValue(field.name, $event)"
                   />
                   <Label
                     :for="`${fieldId}-${option.value}`"
-                    class="ml-2 text-sm text-gray-700"
+                    class="ml-2 text-sm text-(--ui-text-muted)"
                   >
                     {{ option.label }}
                   </Label>
@@ -810,7 +810,7 @@ const handleMultiFileRemoved = (field, files) => {
                 <!-- Help text -->
                 <p
                   v-if="field.helpText"
-                  class="mt-2 text-xs text-gray-500"
+                  class="mt-2 text-xs text-(--ui-text-soft)"
                 >
                   {{ field.helpText }}
                 </p>
@@ -833,7 +833,7 @@ const handleMultiFileRemoved = (field, files) => {
                 <!-- Help text -->
                 <p
                   v-if="field.helpText"
-                  class="mt-2 text-xs text-gray-500"
+                  class="mt-2 text-xs text-(--ui-text-soft)"
                 >
                   {{ field.helpText }}
                 </p>
@@ -868,7 +868,7 @@ const handleMultiFileRemoved = (field, files) => {
                     :aria-describedby="ariaDescribedBy"
                     @update:model-value="setFieldValue(field.name, $event)"
                   />
-                  <span class="text-sm font-medium text-gray-700 min-w-[3rem] text-right">
+                  <span class="text-sm font-medium text-(--ui-text-muted) min-w-[3rem] text-right">
                     {{ getFieldValue(field.name) }}
                   </span>
                 </div>
@@ -899,7 +899,7 @@ const handleMultiFileRemoved = (field, files) => {
                 :model-value="getFieldValue(field.name)"
                 type="time"
                 :disabled="isLoading || field.disabled"
-                :class="hasError ? 'border-red-500' : 'border-slate-300'"
+                :class="hasError ? 'border-(--ui-danger)' : 'border-(--ui-border)'"
                 :aria-describedby="ariaDescribedBy"
                 @update:model-value="setFieldValue(field.name, $event)"
               />
@@ -911,7 +911,7 @@ const handleMultiFileRemoved = (field, files) => {
                 :model-value="getFieldValue(field.name)"
                 type="datetime-local"
                 :disabled="isLoading || field.disabled"
-                :class="hasError ? 'border-red-500' : 'border-slate-300'"
+                :class="hasError ? 'border-(--ui-danger)' : 'border-(--ui-border)'"
                 :aria-describedby="ariaDescribedBy"
                 @update:model-value="setFieldValue(field.name, $event)"
               />
@@ -923,7 +923,7 @@ const handleMultiFileRemoved = (field, files) => {
                 :model-value="getFieldValue(field.name)"
                 type="month"
                 :disabled="isLoading || field.disabled"
-                :class="hasError ? 'border-red-500' : 'border-slate-300'"
+                :class="hasError ? 'border-(--ui-danger)' : 'border-(--ui-border)'"
                 :aria-describedby="ariaDescribedBy"
                 @update:model-value="setFieldValue(field.name, $event)"
               />
@@ -935,7 +935,7 @@ const handleMultiFileRemoved = (field, files) => {
                 :model-value="getFieldValue(field.name)"
                 type="week"
                 :disabled="isLoading || field.disabled"
-                :class="hasError ? 'border-red-500' : 'border-slate-300'"
+                :class="hasError ? 'border-(--ui-danger)' : 'border-(--ui-border)'"
                 :aria-describedby="ariaDescribedBy"
                 @update:model-value="setFieldValue(field.name, $event)"
               />

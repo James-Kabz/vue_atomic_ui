@@ -147,18 +147,18 @@ const backgroundColor = computed(() => {
 const textColor = computed(() => {
   if (props.dynamicColor) {
     const percentage = clampedValue.value
-    if (percentage >= 80) return 'text-red-600'
-    if (percentage >= 60) return 'text-orange-600'
-    if (percentage >= 40) return 'text-yellow-600'
-    if (percentage >= 20) return 'text-green-600'
-    return 'text-gray-600'
+    if (percentage >= 80) return 'text-(--ui-danger)'
+    if (percentage >= 60) return 'text-(--ui-warning)'
+    if (percentage >= 40) return 'text-(--ui-warning)'
+    if (percentage >= 20) return 'text-(--ui-success)'
+    return 'text-(--ui-text-muted)'
   }
 
   const colors = {
-    default: 'text-blue-600',
-    success: 'text-green-600',
-    warning: 'text-yellow-600',
-    danger: 'text-red-600'
+    default: 'text-(--ui-primary)',
+    success: 'text-(--ui-success)',
+    warning: 'text-(--ui-warning)',
+    danger: 'text-(--ui-danger)'
   }
   return colors[props.variant] || colors.default
 })

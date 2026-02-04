@@ -81,11 +81,11 @@ const linkVariants = cva(
   {
     variants: {
       variant: {
-        primary: "text-blue-800 hover:text-blue-800 dark:text-blue-500 dark:hover:text-blue-400",
-        secondary: "text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-300",
-        muted: "text-gray-500 hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-400",
-        danger: "text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300",
-        success: "text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300",
+        primary: "text-(--ui-primary) hover:text-(--ui-primary) dark:text-(--ui-primary) dark:hover:text-(--ui-primary-soft)",
+        secondary: "text-(--ui-text-muted) hover:text-(--ui-text) dark:text-(--ui-text-soft) dark:hover:text-(--ui-text-soft)",
+        muted: "text-(--ui-text-soft) hover:text-(--ui-text-muted) dark:text-(--ui-text-soft) dark:hover:text-(--ui-text-soft)",
+        danger: "text-(--ui-danger) hover:text-(--ui-danger) dark:text-(--ui-danger-soft) dark:hover:text-(--ui-danger-soft)",
+        success: "text-(--ui-success) hover:text-(--ui-success) dark:text-(--ui-success-soft) dark:hover:text-(--ui-success-soft)",
       },
       size: {
         xs: "text-xs",

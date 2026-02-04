@@ -6,8 +6,8 @@
         :key="item.label"
         :href="item.href"
         :class="cn(
-          'text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium transition-colors',
-          item.active && 'text-blue-600 font-semibold'
+          'text-(--ui-text-muted) hover:text-(--ui-text) px-3 py-2 text-sm font-medium transition-colors',
+          item.active && 'text-(--ui-primary) font-semibold'
         )"
       >
         {{ item.label }}

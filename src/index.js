@@ -88,6 +88,7 @@ import ReminderConfig from "./components/ReminderConfig.vue"
 
 // Import toast function and composable (not a component!)
 import { toast, useToaster } from './lib/toast'
+import { initTheme, setTheme, setMode, getTheme, getMode } from './lib/theme'
 import { tooltip } from "./directives/tooltip.js"
 // Utils
 export { cn } from "./utils/cn.js"
@@ -286,6 +287,12 @@ export {
   ErrorLayout,
   DashboardWidget,
   ReminderConfig,
+  // Theme helpers
+  initTheme,
+  setTheme,
+  setMode,
+  getTheme,
+  getMode,
   // Export toast function and composable
   toast,
   useToaster,

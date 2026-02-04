@@ -43,7 +43,7 @@
         
         <button
           v-if="dismissible"
-          class="shrink-0 rounded-md p-1.5 hover:bg-black/5 focus:outline-none focus:ring-2 focus:ring-offset-2"
+          class="shrink-0 rounded-md p-1.5 hover:bg-[color:color-mix(in oklab, var(--ui-surface-strong), transparent 95%)] focus:outline-none focus:ring-2 focus:ring-offset-2"
           @click="dismiss"
         >
           <Icon
@@ -89,13 +89,13 @@ const emit = defineEmits(['dismiss'])
 const visible = ref(true)
 
 const notificationVariants = cva(
-  'pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-background shadow-lg ring-1 ring-black ring-opacity-5',
+  'pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-background shadow-lg ring-1 ring-(--ui-surface-strong) ring-opacity-5',
   {
     variants: {
       variant: {
         default: 'border-l-4 border-primary',
-        success: 'border-l-4 border-green-500',
-        warning: 'border-l-4 border-yellow-500',
+        success: 'border-l-4 border-(--ui-success)',
+        warning: 'border-l-4 border-(--ui-warning)',
         danger: 'border-l-4 border-danger'
       }
     }
@@ -113,8 +113,8 @@ const iconColorVariants = cva('h-5 w-5', {
   variants: {
     variant: {
       default: 'text-primary',
-      success: 'text-green-500',
-      warning: 'text-yellow-500',
+      success: 'text-(--ui-success)',
+      warning: 'text-(--ui-warning)',
       danger: 'text-danger'
     }
   }

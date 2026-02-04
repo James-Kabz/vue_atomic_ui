@@ -165,19 +165,19 @@ const checkMobile = () => {
 
 const getNotificationTypeClass = (notification) => {
   if (notification.title.includes('Overdue')) {
-    return 'bg-red-100 text-red-600'
+    return 'bg-(--ui-danger-soft) text-(--ui-danger)'
   }
 
   if (notification.title.includes('Due in 0')) {
-    return 'bg-orange-100 text-orange-600'
+    return 'bg-(--ui-warning-soft) text-(--ui-warning)'
   }
 
   const classes = {
-    'due_date_reminder': 'bg-amber-100 text-amber-600',
-    'info': 'bg-blue-100 text-blue-600',
-    'success': 'bg-green-100 text-green-600',
-    'warning': 'bg-yellow-100 text-yellow-600',
-    'error': 'bg-red-100 text-red-600'
+    'due_date_reminder': 'bg-(--ui-warning-soft) text-(--ui-warning)',
+    'info': 'bg-(--ui-primary-soft) text-(--ui-primary)',
+    'success': 'bg-(--ui-success-soft) text-(--ui-success)',
+    'warning': 'bg-(--ui-warning-soft) text-(--ui-warning)',
+    'error': 'bg-(--ui-danger-soft) text-(--ui-danger)'
   }
 
   return classes[notification.type] || classes.info
@@ -246,7 +246,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
 <template>
   <header
     :class="cn(
-      'fixed top-0 z-50 bg-white border-b border-gray-200 transition-all duration-300 ease-in-out w-full'
+      'fixed top-0 z-50 bg-(--ui-surface) border-b border-(--ui-border) transition-all duration-300 ease-in-out w-full'
     )"
     :style="{ left: '0' }"
   >
@@ -256,7 +256,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
         <!-- Mobile Sidebar Toggle - Moved to far left -->
         <button
           v-if="isMobile"
-          class="p-2 text-gray-600 hover:text-gray-900 rounded-lg hover:bg-gray-50 transition-colors shrink-0"
+          class="p-2 text-(--ui-text-muted) hover:text-(--ui-text) rounded-lg hover:bg-(--ui-surface-muted) transition-colors shrink-0"
           @click="emit('toggle-mobile-sidebar')"
         >
           <Icon
@@ -280,13 +280,13 @@ watch(searchQuery, (newValue) => emit('search', newValue))
         <!-- Divider -->
         <div
           v-if="companyLogo && showOrganisationInfo && currentOrganisation"
-          class="h-6 sm:h-8 w-px bg-gray-300 shrink-0 hidden sm:block"
+          class="h-6 sm:h-8 w-px bg-(--ui-surface-soft) shrink-0 hidden sm:block"
         />
 
         <!-- Organisation Info Card - Simplified for mobile -->
         <div
           v-if="showOrganisationInfo && currentOrganisation"
-          class="shrink-0 bg-linear-to-r from-blue-50 via-indigo-50 to-purple-50 px-2 py-1.5 rounded-lg border border-blue-200 shadow-sm flex items-center gap-2 relative hover:shadow-md transition-shadow max-w-[160px] sm:max-w-xs"
+          class="shrink-0 bg-linear-to-r from-(--ui-primary-soft) via-(--ui-accent-soft) to-(--ui-accent-soft) px-2 py-1.5 rounded-lg border border-(--ui-primary-soft) shadow-sm flex items-center gap-2 relative hover:shadow-md transition-shadow max-w-40 sm:max-w-xs"
         >
           <!-- Organisation Logo - Smaller on all screens -->
           <div
@@ -297,33 +297,33 @@ watch(searchQuery, (newValue) => emit('search', newValue))
               <img
                 :src="organisationLogo"
                 :alt="`${currentOrganisation.organisation_name} logo`"
-                class="w-6 h-6 sm:w-8 sm:h-8 object-contain rounded-md bg-white p-0.5 border border-blue-200 shadow-sm"
+                class="w-6 h-6 sm:w-8 sm:h-8 object-contain rounded-md bg-(--ui-surface) p-0.5 border border-(--ui-primary-soft) shadow-sm"
               >
               <!-- Online indicator - smaller -->
-              <div class="absolute -bottom-0.5 -right-0.5 w-2 h-2 bg-green-500 border border-white rounded-full" />
+              <div class="absolute -bottom-0.5 -right-0.5 w-2 h-2 bg-(--ui-success) border border-(--ui-surface) rounded-full" />
             </div>
           </div>
 
           <!-- Organisation Details with Switcher -->
           <button
             v-if="organisations.length > 1"
-            class="flex items-center gap-1.5 min-w-0 cursor-pointer hover:bg-white/50 rounded-md px-1.5 py-0.5 transition-all group flex-1"
+            class="flex items-center gap-1.5 min-w-0 cursor-pointer hover:bg-[color:color-mix(in oklab, var(--ui-surface), transparent 50%)] rounded-md px-1.5 py-0.5 transition-all group flex-1"
             @click="toggleOrganisationDropdown"
           >
             <div class="min-w-0 flex-1">
               <p
-                class="text-xs font-bold text-blue-900 truncate max-w-[100px] sm:max-w-40 group-hover:text-blue-700 leading-tight"
+                class="text-xs font-bold text-(--ui-primary) truncate max-w-[100px] sm:max-w-40 group-hover:text-(--ui-primary) leading-tight"
               >
                 {{ currentOrganisation.organisation_name }}
               </p>
               <div class="flex items-center gap-1 mt-0.5">
                 <Icon
                   icon="user"
-                  class="w-2.5 h-2.5 text-blue-600 shrink-0"
+                  class="w-2.5 h-2.5 text-(--ui-primary) shrink-0"
                 />
                 <p
                   v-if="formattedActiveRoles"
-                  class="text-[10px] sm:text-xs text-blue-700 truncate font-medium leading-tight"
+                  class="text-[10px] sm:text-xs text-(--ui-primary) truncate font-medium leading-tight"
                 >
                   {{ formattedActiveRoles }}
                 </p>
@@ -331,7 +331,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
             </div>
             <Icon
               icon="chevron-down"
-              class="w-3 h-3 text-blue-600 shrink-0 group-hover:text-blue-700 transition-transform"
+              class="w-3 h-3 text-(--ui-primary) shrink-0 group-hover:text-(--ui-primary) transition-transform"
               :class="{ 'rotate-180': showOrganisationDropdown }"
             />
           </button>
@@ -341,17 +341,17 @@ watch(searchQuery, (newValue) => emit('search', newValue))
             v-else
             class="min-w-0 flex-1"
           >
-            <p class="text-xs font-bold text-blue-900 truncate max-w-[100px] sm:max-w-40 leading-tight">
+            <p class="text-xs font-bold text-(--ui-primary) truncate max-w-[100px] sm:max-w-40 leading-tight">
               {{ currentOrganisation.organisation_name }}
             </p>
             <div class="flex items-center gap-1 mt-0.5">
               <Icon
                 icon="user"
-                class="w-2.5 h-2.5 text-blue-600 shrink-0"
+                class="w-2.5 h-2.5 text-(--ui-primary) shrink-0"
               />
               <p
                 v-if="formattedActiveRoles"
-                class="text-[10px] sm:text-xs text-blue-700 truncate font-medium leading-tight"
+                class="text-[10px] sm:text-xs text-(--ui-primary) truncate font-medium leading-tight"
               >
                 {{ formattedActiveRoles }}
               </p>
@@ -369,17 +369,17 @@ watch(searchQuery, (newValue) => emit('search', newValue))
           >
             <div
               v-if="showOrganisationDropdown"
-              class="absolute top-full left-0 right-0 sm:left-0 sm:right-auto mt-2 w-full sm:w-80 bg-white rounded-xl shadow-xl border border-gray-200 z-50 max-h-96 overflow-hidden"
+              class="absolute top-full left-0 right-0 sm:left-0 sm:right-auto mt-2 w-full sm:w-80 bg-(--ui-surface) rounded-xl shadow-xl border border-(--ui-border) z-50 max-h-96 overflow-hidden"
             >
-              <div class="p-3 sm:p-4 border-b border-gray-200 bg-linear-to-r from-blue-50 to-indigo-50">
-                <h3 class="text-sm font-bold text-gray-900 flex items-center gap-2">
+              <div class="p-3 sm:p-4 border-b border-(--ui-border) bg-linear-to-r from-(--ui-primary-soft) to-(--ui-accent-soft)">
+                <h3 class="text-sm font-bold text-(--ui-text) flex items-center gap-2">
                   <Icon
                     icon="list"
-                    class="w-4 h-4 text-blue-600"
+                    class="w-4 h-4 text-(--ui-primary)"
                   />
                   {{ organisationSwitcherTitle }}
                 </h3>
-                <p class="text-xs text-gray-600 mt-1">
+                <p class="text-xs text-(--ui-text-muted) mt-1">
                   {{ organisationSwitcherDescription }}
                 </p>
               </div>
@@ -390,8 +390,8 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                   :class="cn(
                     'flex items-center w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm transition-all group',
                     org.org_id === currentOrganisation?.org_id
-                      ? 'bg-linear-to-r from-blue-50 to-indigo-50 text-blue-700 border-l-4 border-blue-500'
-                      : 'text-gray-700 hover:bg-gray-50 border-l-4 border-transparent'
+                      ? 'bg-linear-to-r from-(--ui-primary-soft) to-(--ui-accent-soft) text-(--ui-primary) border-l-4 border-(--ui-primary)'
+                      : 'text-(--ui-text-muted) hover:bg-(--ui-surface-muted) border-l-4 border-transparent'
                   )"
                   @click="handleOrganisationChange(org)"
                 >
@@ -402,16 +402,16 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                     <img
                       :src="getOrgLogoUrl(org)"
                       :alt="`${org.organisation_name} logo`"
-                      class="w-7 h-7 sm:w-8 sm:h-8 object-contain rounded-lg bg-white p-0.5 sm:p-1 border border-gray-200 group-hover:border-blue-200 transition-colors"
+                      class="w-7 h-7 sm:w-8 sm:h-8 object-contain rounded-lg bg-(--ui-surface) p-0.5 sm:p-1 border border-(--ui-border) group-hover:border-(--ui-primary-soft) transition-colors"
                     >
                   </div>
                   <div
                     v-else
-                    class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-linear-to-br from-gray-200 to-gray-300 flex items-center justify-center mr-2 sm:mr-3 shrink-0"
+                    class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-linear-to-br from-(--ui-surface-soft) to-(--ui-surface-soft) flex items-center justify-center mr-2 sm:mr-3 shrink-0"
                   >
                     <Icon
                       icon="building"
-                      class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-500"
+                      class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-(--ui-text-soft)"
                     />
                   </div>
                   <div class="flex-1 text-left min-w-0">
@@ -420,7 +420,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                     </p>
                     <p
                       v-if="org.type"
-                      class="text-xs text-gray-500 truncate"
+                      class="text-xs text-(--ui-text-soft) truncate"
                     >
                       {{ org.type.name }}
                     </p>
@@ -428,7 +428,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                   <Icon
                     v-if="org.org_id === currentOrganisation?.org_id"
                     icon="check-circle"
-                    class="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 shrink-0 ml-2"
+                    class="w-4 h-4 sm:w-5 sm:h-5 text-(--ui-primary) shrink-0 ml-2"
                   />
                 </button>
               </div>
@@ -441,12 +441,12 @@ watch(searchQuery, (newValue) => emit('search', newValue))
           v-if="showBreadcrumb"
           class="hidden lg:flex items-center space-x-2 text-sm truncate"
         >
-          <span class="text-gray-500 truncate">{{ currentSection }}</span>
+          <span class="text-(--ui-text-soft) truncate">{{ currentSection }}</span>
           <Icon
             icon="chevron-right"
-            class="w-4 h-4 text-gray-400 shrink-0"
+            class="w-4 h-4 text-(--ui-text-soft) shrink-0"
           />
-          <span class="text-gray-900 font-semibold truncate">{{ currentPage }}</span>
+          <span class="text-(--ui-text) font-semibold truncate">{{ currentPage }}</span>
         </nav>
       </div>
 
@@ -460,18 +460,18 @@ watch(searchQuery, (newValue) => emit('search', newValue))
           <div class="absolute inset-y-0 left-0 pl-2 sm:pl-3 flex items-center pointer-events-none">
             <Icon
               icon="search"
-              class="w-4 h-4 text-gray-400"
+              class="w-4 h-4 text-(--ui-text-soft)"
             />
           </div>
           <input
             v-model="searchQuery"
             type="text"
             :placeholder="searchPlaceholder"
-            class="pl-8 sm:pl-10 pr-8 sm:pr-4 py-1.5 sm:py-2 w-36 sm:w-48 md:w-64 text-xs sm:text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+            class="pl-8 sm:pl-10 pr-8 sm:pr-4 py-1.5 sm:py-2 w-36 sm:w-48 md:w-64 text-xs sm:text-sm border border-(--ui-border) rounded-lg focus:ring-2 focus:ring-(--ui-primary) focus:border-(--ui-primary) outline-none transition-all"
           >
           <button
             v-if="isMobile"
-            class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1"
+            class="absolute right-2 top-1/2 -translate-y-1/2 text-(--ui-text-soft) hover:text-(--ui-text-muted) p-1"
             @click="showMobileSearch = false"
           >
             <Icon
@@ -482,7 +482,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
         </div>
         <button
           v-else-if="showSearch && isMobile"
-          class="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-50 transition-colors"
+          class="p-2 text-(--ui-text-soft) hover:text-(--ui-text-muted) rounded-lg hover:bg-(--ui-surface-muted) transition-colors"
           @click="showMobileSearch = true"
         >
           <Icon
@@ -494,7 +494,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
         <!-- Notifications -->
         <button
           v-if="showNotifications"
-          class="relative p-1.5 sm:p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-50 transition-colors"
+          class="relative p-1.5 sm:p-2 text-(--ui-text-soft) hover:text-(--ui-text-muted) rounded-lg hover:bg-(--ui-surface-muted) transition-colors"
           @click="toggleNotifications"
         >
           <Icon
@@ -503,7 +503,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
           />
           <span
             v-if="notificationCount > 0"
-            class="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 min-w-4 h-4 sm:min-w-[18px] sm:h-[18px] bg-red-500 text-white text-[10px] sm:text-xs rounded-full flex items-center justify-center font-semibold px-0.5 sm:px-1"
+            class="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 min-w-4 h-4 sm:min-w-[18px] sm:h-[18px] bg-(--ui-danger) text-(--ui-text-inverse) text-[10px] sm:text-xs rounded-full flex items-center justify-center font-semibold px-0.5 sm:px-1"
           >
             {{ notificationCount > 9 ? '9+' : notificationCount }}
           </span>
@@ -520,15 +520,15 @@ watch(searchQuery, (newValue) => emit('search', newValue))
         >
           <div
             v-if="showNotificationsDropdown"
-            class="absolute right-2 sm:right-4 md:right-6 top-14 sm:top-16 mt-2 w-[calc(100vw-1rem)] max-w-sm sm:w-80 md:w-96 bg-white rounded-xl shadow-xl border border-gray-200 z-50"
+            class="absolute right-2 sm:right-4 md:right-6 top-14 sm:top-16 mt-2 w-[calc(100vw-1rem)] max-w-sm sm:w-80 md:w-96 bg-(--ui-surface) rounded-xl shadow-xl border border-(--ui-border) z-50"
           >
-            <div class="p-3 sm:p-4 border-b border-gray-200 bg-linear-to-r from-blue-50 to-indigo-50">
-              <h3 class="text-sm sm:text-base font-bold text-gray-900">
+            <div class="p-3 sm:p-4 border-b border-(--ui-border) bg-linear-to-r from-(--ui-primary-soft) to-(--ui-accent-soft)">
+              <h3 class="text-sm sm:text-base font-bold text-(--ui-text)">
                 {{ notificationsTitle }}
               </h3>
               <p
                 v-if="notificationCount > 0"
-                class="text-xs text-gray-600 mt-1"
+                class="text-xs text-(--ui-text-muted) mt-1"
               >
                 You have {{ notificationCount }} unread notification{{ notificationCount > 1 ? 's' : '' }}
               </p>
@@ -541,9 +541,9 @@ watch(searchQuery, (newValue) => emit('search', newValue))
               >
                 <Icon
                   icon="bell"
-                  class="w-10 h-10 sm:w-12 sm:h-12 mx-auto text-gray-300 mb-2"
+                  class="w-10 h-10 sm:w-12 sm:h-12 mx-auto text-(--ui-text-soft) mb-2"
                 />
-                <p class="text-sm text-gray-500">
+                <p class="text-sm text-(--ui-text-soft)">
                   No notifications
                 </p>
               </div>
@@ -553,7 +553,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                 v-else
                 :key="notification.id"
                 :class="[
-                  'p-3 sm:p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors',
+                  'p-3 sm:p-4 border-b border-(--ui-border) hover:bg-(--ui-surface-muted) cursor-pointer transition-colors',
                   notification.read ? 'opacity-60' : ''
                 ]"
                 @click="handleNotificationClick(notification)"
@@ -586,13 +586,13 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                   <div class="flex-1 min-w-0">
                     <!-- Notification Title -->
                     <div class="flex items-start justify-between gap-2">
-                      <p class="text-xs sm:text-sm font-semibold text-gray-900 flex-1 leading-tight">
+                      <p class="text-xs sm:text-sm font-semibold text-(--ui-text) flex-1 leading-tight">
                         {{ notification.title }}
                       </p>
                       <!-- Unread indicator -->
                       <div
                         v-if="!notification.read"
-                        class="shrink-0 w-2 h-2 mt-1 bg-blue-500 rounded-full"
+                        class="shrink-0 w-2 h-2 mt-1 bg-(--ui-primary) rounded-full"
                       />
                     </div>
 
@@ -601,7 +601,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                       class="flex items-center gap-1 sm:gap-1.5 mt-1.5 flex-wrap"
                     >
                       <span
-                        class="inline-flex items-center px-1.5 sm:px-2 py-0.5 rounded text-[10px] sm:text-xs font-semibold bg-indigo-100 text-indigo-800 border border-indigo-200"
+                        class="inline-flex items-center px-1.5 sm:px-2 py-0.5 rounded text-[10px] sm:text-xs font-semibold bg-(--ui-accent-soft) text-(--ui-accent) border border-(--ui-accent-soft)"
                       >
                         <Icon
                           icon="tag"
@@ -611,10 +611,10 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                       </span>
                       <Icon
                         icon="chevron-right"
-                        class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gray-400 hidden xs:block"
+                        class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-(--ui-text-soft) hidden xs:block"
                       />
                       <span
-                        class="inline-flex items-center px-1.5 sm:px-2 py-0.5 rounded text-[10px] sm:text-xs font-medium bg-gray-100 text-gray-700 border border-gray-200"
+                        class="inline-flex items-center px-1.5 sm:px-2 py-0.5 rounded text-[10px] sm:text-xs font-medium bg-(--ui-surface-muted) text-(--ui-text-muted) border border-(--ui-border)"
                       >
                         {{ notification.source.code }}
                       </span>
@@ -624,7 +624,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                     <div class="flex items-center gap-1.5 sm:gap-2 mt-1.5 sm:mt-2 flex-wrap">
                       <span
                         v-if="notification.model"
-                        class="inline-flex items-center px-1.5 sm:px-2 py-0.5 rounded text-[10px] sm:text-xs font-medium bg-blue-100 text-blue-800"
+                        class="inline-flex items-center px-1.5 sm:px-2 py-0.5 rounded text-[10px] sm:text-xs font-medium bg-(--ui-primary-soft) text-(--ui-primary)"
                       >
                         <Icon
                           icon="file"
@@ -640,10 +640,10 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                         :class="[
                           'inline-flex items-center px-1.5 sm:px-2 py-0.5 rounded text-[10px] sm:text-xs font-medium whitespace-nowrap',
                           notification.title.includes('Overdue')
-                            ? 'bg-red-100 text-red-800 border border-red-200'
+                            ? 'bg-(--ui-danger-soft) text-(--ui-danger) border border-(--ui-danger-soft)'
                             : notification.title.includes('Due in 0')
-                              ? 'bg-orange-100 text-orange-800 border border-orange-200'
-                              : 'bg-amber-100 text-amber-800 border border-amber-200'
+                              ? 'bg-(--ui-warning-soft) text-(--ui-warning) border border-(--ui-warning-soft)'
+                              : 'bg-(--ui-warning-soft) text-(--ui-warning) border border-(--ui-warning-soft)'
                         ]"
                       >
                         <Icon
@@ -655,7 +655,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                     </div>
 
                     <!-- Time -->
-                    <p class="text-[10px] sm:text-xs text-gray-500 mt-1.5 sm:mt-2 flex items-center">
+                    <p class="text-[10px] sm:text-xs text-(--ui-text-soft) mt-1.5 sm:mt-2 flex items-center">
                       <Icon
                         icon="clock"
                         class="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-0.5 sm:mr-1"
@@ -669,10 +669,10 @@ watch(searchQuery, (newValue) => emit('search', newValue))
 
             <div
               v-if="notifications.length > 0"
-              class="p-2 sm:p-3 text-center border-t border-gray-200 bg-gray-50"
+              class="p-2 sm:p-3 text-center border-t border-(--ui-border) bg-(--ui-surface-muted)"
             >
               <button
-                class="text-xs sm:text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors"
+                class="text-xs sm:text-sm font-semibold text-(--ui-primary) hover:text-(--ui-primary) transition-colors"
                 @click="handleViewAllNotifications"
               >
                 View all notifications →
@@ -684,29 +684,29 @@ watch(searchQuery, (newValue) => emit('search', newValue))
         <!-- Profile Dropdown -->
         <div class="relative">
           <button
-            class="flex items-center space-x-1 sm:space-x-2 md:space-x-3 p-1 sm:p-2 rounded-lg hover:bg-gray-50 transition-colors"
+            class="flex items-center space-x-1 sm:space-x-2 md:space-x-3 p-1 sm:p-2 rounded-lg hover:bg-(--ui-surface-muted) transition-colors"
             @click="toggleProfile"
           >
             <div
-              class="w-7 h-7 sm:w-8 sm:h-8 bg-linear-to-br from-blue-100 to-indigo-100 rounded-full flex items-center justify-center transition-colors shadow-sm"
+              class="w-7 h-7 sm:w-8 sm:h-8 bg-linear-to-br from-(--ui-primary-soft) to-(--ui-accent-soft) rounded-full flex items-center justify-center transition-colors shadow-sm"
             >
-              <span class="text-blue-700 text-xs sm:text-sm font-medium">{{ userInitials }}</span>
+              <span class="text-(--ui-primary) text-xs sm:text-sm font-medium">{{ userInitials }}</span>
             </div>
             <!-- Hide details on mobile or when showUserDetails is false -->
             <div
               v-if="showUserDetails"
               class="hidden md:block text-left max-w-40 truncate"
             >
-              <p class="text-sm font-medium text-gray-900 truncate">
+              <p class="text-sm font-medium text-(--ui-text) truncate">
                 {{ user.name }}
               </p>
-              <p class="text-xs text-gray-500 truncate leading-tight">
+              <p class="text-xs text-(--ui-text-soft) truncate leading-tight">
                 {{ userRoleNames }}
               </p>
             </div>
             <Icon
               icon="chevron-down"
-              class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-400"
+              class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-(--ui-text-soft)"
             />
           </button>
 
@@ -721,13 +721,13 @@ watch(searchQuery, (newValue) => emit('search', newValue))
           >
             <div
               v-if="showProfile"
-              class="absolute right-0 mt-2 w-56 sm:w-58 bg-white rounded-lg shadow-lg border border-gray-200 z-50"
+              class="absolute right-0 mt-2 w-56 sm:w-58 bg-(--ui-surface) rounded-lg shadow-lg border border-(--ui-border) z-50"
             >
-              <div class="p-3 sm:p-4 border-b border-gray-200">
-                <p class="text-sm font-medium text-gray-900 truncate">
+              <div class="p-3 sm:p-4 border-b border-(--ui-border)">
+                <p class="text-sm font-medium text-(--ui-text) truncate">
                   {{ user.name }}
                 </p>
-                <p class="text-xs text-gray-500 truncate">
+                <p class="text-xs text-(--ui-text-soft) truncate">
                   {{ user.email }}
                 </p>
               </div>
@@ -742,22 +742,22 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                     :class="cn(
                       'flex items-center px-2.5 sm:px-3 py-2 sm:py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative',
                       isItemActive(item)
-                        ? 'bg-linear-to-br from-blue-50 to-blue-100 text-blue-700 shadow-sm border border-blue-200'
-                        : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 border border-transparent'
+                        ? 'bg-linear-to-br from-(--ui-primary-soft) to-(--ui-primary-soft) text-(--ui-primary) shadow-sm border border-(--ui-primary-soft)'
+                        : 'text-(--ui-text-muted) hover:bg-(--ui-surface-muted) hover:text-(--ui-text) border border-transparent'
                     )"
                     @click="handleNavigation(item)"
                   >
                     <!-- Active indicator bar -->
                     <div
                       v-if="isItemActive(item)"
-                      class="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-6 sm:h-8 bg-linear-to-b from-blue-500 to-blue-600 rounded-r-full"
+                      class="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-6 sm:h-8 bg-linear-to-b from-(--ui-primary) to-(--ui-primary) rounded-r-full"
                     />
                     <div
                       :class="cn(
                         'flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-lg mr-2 sm:mr-3 shrink-0 transition-colors ml-1 sm:ml-2',
                         isItemActive(item)
-                          ? 'bg-linear-to-br from-blue-500 to-blue-600 text-white shadow-md'
-                          : 'bg-gray-100 text-gray-600 group-hover:bg-gray-200'
+                          ? 'bg-linear-to-br from-(--ui-primary) to-(--ui-primary) text-(--ui-text-inverse) shadow-md'
+                          : 'bg-(--ui-surface-muted) text-(--ui-text-muted) group-hover:bg-(--ui-surface-soft)'
                       )"
                     >
                       <Icon
@@ -769,7 +769,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                     <span
                       :class="cn(
                         'flex-1 truncate font-semibold text-xs sm:text-sm',
-                        isItemActive(item) ? 'text-blue-700' : 'text-gray-700'
+                        isItemActive(item) ? 'text-(--ui-primary)' : 'text-(--ui-text-muted)'
                       )"
                     >
                       {{ item.label }}
@@ -777,11 +777,11 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                   </router-link>
                   <button
                     v-else
-                    class="flex items-center w-full px-2.5 sm:px-3 py-2 sm:py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative text-gray-700 hover:bg-gray-50 hover:text-gray-900 border border-transparent"
+                    class="flex items-center w-full px-2.5 sm:px-3 py-2 sm:py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative text-(--ui-text-muted) hover:bg-(--ui-surface-muted) hover:text-(--ui-text) border border-transparent"
                     @click="handleProfileAction(item)"
                   >
                     <div
-                      class="flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-lg mr-2 sm:mr-3 shrink-0 transition-colors ml-1 sm:ml-2 bg-gray-100 text-gray-600 group-hover:bg-gray-200"
+                      class="flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-lg mr-2 sm:mr-3 shrink-0 transition-colors ml-1 sm:ml-2 bg-(--ui-surface-muted) text-(--ui-text-muted) group-hover:bg-(--ui-surface-soft)"
                     >
                       <Icon
                         v-if="item.icon"
@@ -789,26 +789,26 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                         class="w-3.5 h-3.5 sm:w-4 sm:h-4"
                       />
                     </div>
-                    <span class="flex-1 truncate font-semibold text-gray-700 text-xs sm:text-sm">
+                    <span class="flex-1 truncate font-semibold text-(--ui-text-muted) text-xs sm:text-sm">
                       {{ item.label }}
                     </span>
                   </button>
                 </template>
               </div>
-              <div class="border-t border-gray-200 py-2">
+              <div class="border-t border-(--ui-border) py-2">
                 <button
-                  class="flex items-center w-full px-2.5 sm:px-3 py-2 sm:py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative text-red-600 hover:bg-red-50 border border-transparent"
+                  class="flex items-center w-full px-2.5 sm:px-3 py-2 sm:py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative text-(--ui-danger) hover:bg-(--ui-danger-soft) border border-transparent"
                   @click="handleLogout"
                 >
                   <div
-                    class="flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-lg mr-1 sm:mr-1 shrink-0 transition-colors ml-1 sm:ml-2 bg-red-100 text-red-600 group-hover:bg-red-200"
+                    class="flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-lg mr-1 sm:mr-1 shrink-0 transition-colors ml-1 sm:ml-2 bg-(--ui-danger-soft) text-(--ui-danger) group-hover:bg-(--ui-danger-soft)"
                   >
                     <Icon
                       icon="sign-out-alt"
                       class="w-3.5 h-3.5 sm:w-4 sm:h-4"
                     />
                   </div>
-                  <span class="truncate font-semibold text-red-600 text-xs sm:text-sm">
+                  <span class="truncate font-semibold text-(--ui-danger) text-xs sm:text-sm">
                     Sign out
                   </span>
                 </button>

@@ -4,7 +4,7 @@
   >
     <span
       v-if="label && orientation === 'horizontal'"
-      class="px-3 text-sm text-gray-500 bg-white dark:bg-gray-900 dark:text-gray-400 relative z-10"
+      class="px-3 text-sm text-(--ui-text-soft) bg-(--ui-surface) dark:bg-(--ui-surface-strong) dark:text-(--ui-text-soft) relative z-10"
     >
       {{ label }}
     </span>
@@ -58,9 +58,9 @@ const dividerVariants = cva('divider relative flex items-center', {
       lg: ''
     },
     color: {
-      gray: 'bg-gray-200 dark:bg-gray-700',
-      primary: 'bg-blue-500',
-      secondary: 'bg-gray-400'
+      gray: 'bg-(--ui-surface-soft) dark:bg-(--ui-surface-soft)',
+      primary: 'bg-(--ui-primary)',
+      secondary: 'bg-(--ui-surface-soft)'
     }
   },
   compoundVariants: [

@@ -89,7 +89,7 @@ export default {
     <div class="container mx-auto px-4 py-10 lg:py-0 relative z-10 w-full">
       <div class="grid lg:grid-cols-10 gap-6 lg:gap-8 items-center min-h-screen">
         <!-- Branding Section (Left Side) - Hidden on mobile -->
-        <div class="hidden lg:block lg:col-span-6 text-white text-center lg:text-left space-y-6">
+        <div class="hidden lg:block lg:col-span-6 text-(--ui-text-inverse) text-center lg:text-left space-y-6">
           <!-- Logo -->
           <div class="mb-6 flex justify-center lg:justify-start">
             <img
@@ -104,7 +104,7 @@ export default {
             v-if="quote"
             class="max-w-md mx-auto lg:mx-0"
           >
-            <p class="text-sm lg:text-base font-light text-white/70 italic leading-relaxed">
+            <p class="text-sm lg:text-base font-light text-[color:color-mix(in oklab, var(--ui-text-inverse), transparent 30%)] italic leading-relaxed">
               "{{ quote }}"
             </p>
           </div>
@@ -121,7 +121,7 @@ export default {
             >
           </div>
 
-          <div class="bg-white rounded-lg shadow-xl p-4 sm:p-6 lg:p-8 max-w-md mx-auto w-full">
+          <div class="bg-(--ui-surface) rounded-lg shadow-xl p-4 sm:p-6 lg:p-8 max-w-md mx-auto w-full">
             <!-- Card Header -->
             <div
               v-if="$slots['card-header'] || title"
@@ -129,12 +129,12 @@ export default {
             >
               <slot name="card-header">
                 <div class="text-center">
-                  <h1 class="text-xl sm:text-2xl font-bold text-gray-900">
+                  <h1 class="text-xl sm:text-2xl font-bold text-(--ui-text)">
                     {{ title }}
                   </h1>
                   <p
                     v-if="subtitle"
-                    class="text-sm sm:text-base text-gray-600 mt-2"
+                    class="text-sm sm:text-base text-(--ui-text-muted) mt-2"
                   >
                     {{ subtitle }}
                   </p>
@@ -177,7 +177,7 @@ export default {
         alt="Company Logo"
         class="hidden sm:block h-20 sm:h-32 lg:h-40 w-auto object-contain ml-auto mb-2"
       >
-      <div class="text-white/90 text-[10px] sm:text-xs bg-black/30 sm:bg-transparent px-2 py-1 sm:p-0 rounded">
+      <div class="text-[color:color-mix(in oklab, var(--ui-text-inverse), transparent 10%)] text-[10px] sm:text-xs bg-[color:color-mix(in oklab, var(--ui-surface-strong), transparent 70%)] sm:bg-transparent px-2 py-1 sm:p-0 rounded">
         <div class="font-medium">
           {{ appName }}
         </div>
@@ -199,10 +199,10 @@ export default {
         :class="[
           'w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded text-xs transition-colors',
           social.variant === 'primary'
-            ? 'bg-blue-600 hover:bg-blue-700 text-white'
+            ? 'bg-(--ui-primary) hover:bg-(--ui-primary-strong) text-(--ui-text-inverse)'
             : social.variant === 'info'
-              ? 'bg-cyan-500 hover:bg-cyan-600 text-white'
-              : 'bg-gray-600 hover:bg-gray-700 text-white'
+              ? 'bg-(--ui-primary) hover:bg-(--ui-primary) text-(--ui-text-inverse)'
+              : 'bg-(--ui-surface-soft) hover:bg-(--ui-surface-soft) text-(--ui-text-inverse)'
         ]"
       >
         <font-awesome-icon :icon="['fab', social.icon]" />

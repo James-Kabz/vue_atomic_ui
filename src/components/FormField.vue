@@ -9,7 +9,7 @@
       {{ label }}
       <span
         v-if="required"
-        class="text-red-500 ml-1"
+        class="text-(--ui-danger) ml-1"
         aria-label="required"
       >*</span>
     </label>
@@ -30,7 +30,7 @@
         :model-value="modelValue"
         :disabled="false"
         :required="required"
-        :class="hasError ? 'border-red-500' : ''"
+        :class="hasError ? 'border-(--ui-danger)' : ''"
         @update:model-value="emit('update:modelValue', $event)"
       />
       <slot
@@ -46,7 +46,7 @@
       <button
         v-if="type === 'password'"
         type="button"
-        class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 transition-colors"
+        class="absolute inset-y-0 right-0 pr-3 flex items-center text-(--ui-text-soft) hover:text-(--ui-text-muted) transition-colors"
         :aria-label="showPassword ? 'Hide password' : 'Show password'"
         @click="togglePasswordVisibility"
       >
@@ -167,7 +167,7 @@ const fieldVariants = cva("", {
   defaultVariants: { size: "md" },
 })
 
-const labelVariants = cva("block text-slate-900", {
+const labelVariants = cva("block text-(--ui-text)", {
   variants: {
     size: {
       sm: "text-xs font-medium",
@@ -178,7 +178,7 @@ const labelVariants = cva("block text-slate-900", {
   defaultVariants: { size: "md" },
 })
 
-const descriptionVariants = cva("text-slate-600", {
+const descriptionVariants = cva("text-(--ui-text-muted)", {
   variants: {
     size: {
       sm: "text-xs",
@@ -197,14 +197,14 @@ const messageVariants = cva("flex items-start gap-2", {
       lg: "text-sm",
     },
     intent: {
-      error: "text-red-600",
-      success: "text-green-600",
+      error: "text-(--ui-danger)",
+      success: "text-(--ui-success)",
     },
   },
   defaultVariants: { size: "md", intent: "error" },
 })
 
-const helpVariants = cva("text-slate-500", {
+const helpVariants = cva("text-(--ui-text-soft)", {
   variants: {
     size: {
       sm: "text-xs",

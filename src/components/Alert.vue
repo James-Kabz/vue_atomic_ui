@@ -227,10 +227,10 @@ const alertVariants = cva(
         default: 'bg-background text-foreground',
         danger:
           'border-danger/50 text-danger dark:border-danger',
-        info: 'bg-blue-50 border-blue-200 text-blue-800',
-        success: 'bg-green-50 border-green-200 text-green-800',
-        warning: 'bg-yellow-50 border-yellow-200 text-yellow-800',
-        error: 'bg-red-50 border-red-200 text-red-800'
+        info: 'bg-(--ui-primary-soft) border-(--ui-primary-soft) text-(--ui-primary)',
+        success: 'bg-(--ui-success-soft) border-(--ui-success-soft) text-(--ui-success)',
+        warning: 'bg-(--ui-warning-soft) border-(--ui-warning-soft) text-(--ui-warning)',
+        error: 'bg-(--ui-danger-soft) border-(--ui-danger-soft) text-(--ui-danger)'
       }
     },
     defaultVariants: { variant: 'default' }
@@ -239,10 +239,10 @@ const alertVariants = cva(
 
 const iconClasses = computed(() => {
   const colors = {
-    info: 'text-blue-500',
-    success: 'text-green-500',
-    warning: 'text-yellow-500',
-    error: 'text-red-500',
+    info: 'text-(--ui-primary)',
+    success: 'text-(--ui-success)',
+    warning: 'text-(--ui-warning)',
+    error: 'text-(--ui-danger)',
     default: 'text-foreground',
     danger: 'text-danger'
   }
@@ -251,10 +251,10 @@ const iconClasses = computed(() => {
 
 const dismissButtonClasses = computed(() => {
   const colors = {
-    info: 'text-blue-500 hover:text-blue-700 hover:bg-blue-100',
-    success: 'text-green-500 hover:text-green-700 hover:bg-green-100',
-    warning: 'text-yellow-500 hover:text-yellow-700 hover:bg-yellow-100',
-    error: 'text-red-500 hover:text-red-700 hover:bg-red-100',
+    info: 'text-(--ui-primary) hover:text-(--ui-primary) hover:bg-(--ui-primary-soft)',
+    success: 'text-(--ui-success) hover:text-(--ui-success) hover:bg-(--ui-success-soft)',
+    warning: 'text-(--ui-warning) hover:text-(--ui-warning) hover:bg-(--ui-warning-soft)',
+    error: 'text-(--ui-danger) hover:text-(--ui-danger) hover:bg-(--ui-danger-soft)',
     default: 'text-foreground hover:text-foreground/80 hover:bg-muted',
     danger:
       'text-danger hover:text-danger/80 hover:bg-danger/10'

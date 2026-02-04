@@ -80,15 +80,15 @@ const itemVariants = cva('', {
   variants: {
     variant: {
       default: '',
-      bordered: 'border border-slate-200 rounded-lg overflow-hidden',
-      filled: 'bg-slate-50 border border-slate-200 rounded-lg overflow-hidden',
+      bordered: 'border border-(--ui-border) rounded-lg overflow-hidden',
+      filled: 'bg-(--ui-surface-muted) border border-(--ui-border) rounded-lg overflow-hidden',
       flush: ''
     }
   }
 })
 
 const headerVariants = cva(
-  'flex items-center justify-between w-full text-left transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
+  'flex items-center justify-between w-full text-left transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:ring-offset-2',
   {
     variants: {
       size: {
@@ -100,7 +100,7 @@ const headerVariants = cva(
   }
 )
 
-const contentVariants = cva('overflow-hidden text-slate-600 border-t border-slate-200', {
+const contentVariants = cva('overflow-hidden text-(--ui-text-muted) border-t border-(--ui-border)', {
   variants: {
     size: {
       sm: 'p-3 text-sm',

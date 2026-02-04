@@ -87,13 +87,13 @@ const handleToggleColumn = ({ column, visible }) => {
     <div class="space-y-6">
       <div class="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 class="text-2xl font-semibold text-slate-900">User Directory</h1>
-          <p class="text-slate-600 mt-1">Track active users, permissions, and last activity.</p>
+          <h1 class="text-2xl font-semibold text-(--ui-text)">User Directory</h1>
+          <p class="text-(--ui-text-muted) mt-1">Track active users, permissions, and last activity.</p>
         </div>
         <Button variant="primary">Invite Team</Button>
       </div>
 
-      <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <div class="bg-(--ui-surface) rounded-xl shadow-sm border border-(--ui-border) overflow-hidden">
         <DataTableFilters
           v-model:search-query="searchQuery"
           v-model:date-from="dateFrom"

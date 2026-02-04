@@ -69,8 +69,8 @@ const progressVariants = cva(
     variants: {
       variant: {
         default: 'bg-primary',
-        success: 'bg-green-500',
-        warning: 'bg-yellow-500',
+        success: 'bg-(--ui-success)',
+        warning: 'bg-(--ui-warning)',
         danger: 'bg-danger'
       }
     }

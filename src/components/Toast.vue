@@ -149,12 +149,12 @@ const toastVariants = cva(
   {
     variants: {
       variant: {
-        default: 'border border-gray-300 bg-gray-50 text-gray-800 dark:border-gray-800 dark:bg-gray-500 dark:text-gray-50',
-        info: 'border-blue-500/20 bg-blue-50 text-blue-900 dark:border-blue-500/30 dark:bg-blue-950 dark:text-blue-50',
-        success: 'border border-green-200 bg-green-50 text-green-800 dark:border-green-200 dark:bg-green-50 dark:text-green-900',
-        warning: 'border-yellow-500/20 bg-yellow-50 text-yellow-900 dark:border-yellow-500/30 dark:bg-yellow-950 dark:text-yellow-50',
-        error: 'border-red-500/30 bg-red-50 text-red-900 dark:border-red-500/40 dark:bg-red-950 dark:text-red-50 ring-1 ring-red-500/20 dark:ring-red-500/30',
-        loading: 'border border-border animate-pulse bg-gray-800 text-gray-800 dark:border-gray-800 dark:bg-gray-700 dark:text-gray-50'
+        default: 'border border-(--ui-border) bg-(--ui-surface-muted) text-(--ui-text) dark:border-(--ui-border-strong) dark:bg-(--ui-surface-soft) dark:text-(--ui-text-soft)',
+        info: 'border-[color:color-mix(in oklab, var(--ui-primary), transparent 80%)] bg-(--ui-primary-soft) text-(--ui-primary) dark:border-[color:color-mix(in oklab, var(--ui-primary), transparent 70%)] dark:bg-(--ui-primary-strong) dark:text-(--ui-primary-soft)',
+        success: 'border border-(--ui-success-soft) bg-(--ui-success-soft) text-(--ui-success) dark:border-(--ui-success-soft) dark:bg-(--ui-success-soft) dark:text-(--ui-success)',
+        warning: 'border-[color:color-mix(in oklab, var(--ui-warning), transparent 80%)] bg-(--ui-warning-soft) text-(--ui-warning) dark:border-[color:color-mix(in oklab, var(--ui-warning), transparent 70%)] dark:bg-(--ui-warning-strong) dark:text-(--ui-warning-soft)',
+        error: 'border-[color:color-mix(in oklab, var(--ui-danger), transparent 70%)] bg-(--ui-danger-soft) text-(--ui-danger) dark:border-[color:color-mix(in oklab, var(--ui-danger), transparent 60%)] dark:bg-(--ui-danger-strong) dark:text-(--ui-danger-soft) ring-1 ring-[color:color-mix(in oklab, var(--ui-danger), transparent 80%)] dark:ring-[color:color-mix(in oklab, var(--ui-danger), transparent 70%)]',
+        loading: 'border border-border animate-pulse bg-(--ui-surface-strong) text-(--ui-text) dark:border-(--ui-border-strong) dark:bg-(--ui-surface-soft) dark:text-(--ui-text-soft)'
       }
     },
     defaultVariants: { variant: 'default' }
@@ -176,10 +176,10 @@ const iconMap = {
 // Icon color mapping with proper error styling
 const iconColorMap = {
   default: 'text-muted-foreground',
-  info: 'text-blue-600 dark:text-blue-400',
-  success: 'text-green-600 dark:text-green-400',
-  warning: 'text-yellow-600 dark:text-yellow-400',
-  error: 'text-red-600 dark:text-red-400',
+  info: 'text-(--ui-primary) dark:text-(--ui-primary-soft)',
+  success: 'text-(--ui-success) dark:text-(--ui-success-soft)',
+  warning: 'text-(--ui-warning) dark:text-(--ui-warning-soft)',
+  error: 'text-(--ui-danger) dark:text-(--ui-danger-soft)',
   loading: 'text-muted-foreground animate-spin'
 }
 

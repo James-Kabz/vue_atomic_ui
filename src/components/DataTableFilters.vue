@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white border-b border-gray-200">
+  <div class="bg-(--ui-surface) border-b border-(--ui-border)">
     <!-- Main Filters Bar -->
     <div :class="filtersClasses">
       <!-- Search Input -->
@@ -56,7 +56,7 @@
           </Select>
           <Icon
             icon="chevron-down"
-            class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
+            class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-(--ui-text-soft) pointer-events-none"
           />
         </div>
       </div>
@@ -85,7 +85,7 @@
           </Select>
           <Icon
             icon="chevron-down"
-            class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
+            class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-(--ui-text-soft) pointer-events-none"
           />
         </div>
       </div>
@@ -230,7 +230,7 @@
             <div class="relative flex-1">
               <Icon
                 icon="calendar"
-                class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
+                class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-(--ui-text-soft)"
               />
               <input
                 type="date"
@@ -244,7 +244,7 @@
             <div class="relative flex-1">
               <Icon
                 icon="calendar"
-                class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
+                class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-(--ui-text-soft)"
               />
               <input
                 type="date"
@@ -353,7 +353,7 @@
             </Select>
             <Icon
               icon="chevron-down"
-              class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
+              class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-(--ui-text-soft) pointer-events-none"
             />
           </div>
 
@@ -364,11 +364,11 @@
             <span
               v-for="selectedValue in multiFilter.selected"
               :key="selectedValue"
-              class="inline-flex items-center gap-1 bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full"
+              class="inline-flex items-center gap-1 bg-(--ui-primary-soft) text-(--ui-primary) text-xs px-2 py-1 rounded-full"
             >
               {{ getMultiSelectOptionLabel(multiFilter, selectedValue) }}
               <button
-                class="hover:bg-blue-200 rounded-full p-0.5"
+                class="hover:bg-(--ui-primary-soft) rounded-full p-0.5"
                 @click="removeMultiSelectOption(multiFilter.key, selectedValue)"
               >
                 <Icon
@@ -415,11 +415,11 @@
     <!-- Table Info Bar -->
     <div
       v-if="showTableInfo"
-      class="px-6 py-3 bg-gray-50 border-t border-gray-200"
+      class="px-6 py-3 bg-(--ui-surface-muted) border-t border-(--ui-border)"
     >
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-4">
-          <span class="text-sm text-gray-600">
+          <span class="text-sm text-(--ui-text-muted)">
             <span class="font-medium">{{ totalItems || 0 }}</span>
             {{ itemLabel || 'items' }} found
           </span>
@@ -431,16 +431,16 @@
   <!-- File Upload Modal -->
   <div
     v-if="showFileUpload && isFileUploadModalOpen"
-    class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+    class="fixed inset-0 bg-(--ui-surface-strong)/60 z-50 flex items-center justify-center p-4"
     @click.self="closeFileUploadModal"
   >
-    <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full p-6">
+    <div class="bg-(--ui-surface) rounded-xl shadow-2xl max-w-2xl w-full p-6">
       <div class="flex items-center justify-between mb-4">
-        <h3 class="text-lg font-semibold text-gray-900">
+        <h3 class="text-lg font-semibold text-(--ui-text)">
           Upload Files
         </h3>
         <button
-          class="text-gray-400 hover:text-gray-600 p-2 hover:bg-gray-100 rounded-full transition-all"
+          class="text-(--ui-text-soft) hover:text-(--ui-text-muted) p-2 hover:bg-(--ui-surface-muted) rounded-full transition-all"
           @click="closeFileUploadModal"
         >
           <Icon
@@ -750,9 +750,9 @@ const handleAddButtonClick = () => {
 const filtersVariants = cva('flex flex-wrap items-center gap-4', {
   variants: {
     variant: {
-      default: 'bg-white',
+      default: 'bg-(--ui-surface)',
       minimal: 'bg-transparent',
-      bordered: 'bg-gray-50'
+      bordered: 'bg-(--ui-surface-muted)'
     },
     padding: {
       compact: 'px-4 py-3',
@@ -766,7 +766,7 @@ const filtersVariants = cva('flex flex-wrap items-center gap-4', {
   }
 })
 
-const inputVariants = cva('border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm', {
+const inputVariants = cva('border border-(--ui-border) rounded-lg focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:border-transparent transition-all text-sm', {
   variants: {
     size: {
       sm: 'px-2 py-1.5',
@@ -782,10 +782,10 @@ const inputVariants = cva('border border-gray-200 rounded-lg focus:outline-none 
 const buttonVariants = cva('rounded-lg flex items-center font-medium transition-all', {
   variants: {
     variant: {
-      default: 'text-gray-700 hover:text-gray-900 border border-gray-200 hover:bg-gray-50 hover:border-gray-300 bg-white',
-      primary: 'text-white bg-blue-600 hover:bg-blue-700 border border-blue-600 shadow-sm',
-      success: 'text-white bg-green-600 hover:bg-green-700 border border-green-600 shadow-sm',
-      ghost: 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
+      default: 'text-(--ui-text-muted) hover:text-(--ui-text) border border-(--ui-border) hover:bg-(--ui-surface-muted) hover:border-(--ui-border) bg-(--ui-surface)',
+      primary: 'text-(--ui-text-inverse) bg-(--ui-primary) hover:bg-(--ui-primary-strong) border border-(--ui-primary) shadow-sm',
+      success: 'text-(--ui-text-inverse) bg-(--ui-success) hover:bg-(--ui-success-strong) border border-(--ui-success) shadow-sm',
+      ghost: 'text-(--ui-text-muted) hover:text-(--ui-text) hover:bg-(--ui-surface-muted)'
     },
     size: {
       sm: 'px-2 py-1.5 text-xs',
@@ -821,7 +821,7 @@ const clearDateFilter = (key) => {
 
 const getDateFilterStatusClasses = (dateFilter) => {
   const hasValues = hasDateFilterValues(dateFilter)
-  return `text-xs px-2 py-1 rounded ${hasValues ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'
+  return `text-xs px-2 py-1 rounded ${hasValues ? 'bg-(--ui-primary-soft) text-(--ui-primary)' : 'bg-(--ui-surface-muted) text-(--ui-text-muted)'
     }`
 }
 
@@ -846,7 +846,7 @@ const clearNumberFilter = (key) => {
 
 const getNumberFilterStatusClasses = (numberFilter) => {
   const hasValues = hasNumberFilterValues(numberFilter)
-  return `text-xs px-2 py-1 rounded ${hasValues ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'
+  return `text-xs px-2 py-1 rounded ${hasValues ? 'bg-(--ui-primary-soft) text-(--ui-primary)' : 'bg-(--ui-surface-muted) text-(--ui-text-muted)'
     }`
 }
 
@@ -864,7 +864,7 @@ const hasMultiSelectFilterValues = (multiFilter) => {
 
 const getMultiSelectFilterStatusClasses = (multiFilter) => {
   const hasValues = hasMultiSelectFilterValues(multiFilter)
-  return `text-xs px-2 py-1 rounded ${hasValues ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'
+  return `text-xs px-2 py-1 rounded ${hasValues ? 'bg-(--ui-primary-soft) text-(--ui-primary)' : 'bg-(--ui-surface-muted) text-(--ui-text-muted)'
     }`
 }
 
@@ -1072,24 +1072,24 @@ const filtersClasses = computed(() =>
 )
 
 const searchIconClasses = computed(() =>
-  'absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 group-hover:text-gray-600 transition-colors'
+  'absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-(--ui-text-soft) group-hover:text-(--ui-text-muted) transition-colors'
 )
 
 const searchInputClasses = computed(() =>
   cn(
     inputVariants({ size: 'md' }),
-    'w-full pl-10 pr-10 hover:border-gray-300'
+    'w-full pl-10 pr-10 hover:border-(--ui-border)'
   )
 )
 
 const clearSearchButtonClasses = computed(() =>
-  'absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1 hover:bg-gray-100 rounded-full transition-all'
+  'absolute right-3 top-1/2 transform -translate-y-1/2 text-(--ui-text-soft) hover:text-(--ui-text-muted) p-1 hover:bg-(--ui-surface-muted) rounded-full transition-all'
 )
 
 const selectClasses = computed(() =>
   cn(
     inputVariants({ size: 'md' }),
-    'w-full pr-8 appearance-none hover:border-gray-300'
+    'w-full pr-8 appearance-none hover:border-(--ui-border)'
   )
 )
 
@@ -1105,11 +1105,11 @@ const advancedFiltersToggleClasses = computed(() => {
 })
 
 const filterCountBadgeClasses = computed(() =>
-  'bg-white text-blue-600 text-xs px-1.5 py-0.5 rounded-full min-w-[20px] text-center font-semibold'
+  'bg-(--ui-surface) text-(--ui-primary) text-xs px-1.5 py-0.5 rounded-full min-w-[20px] text-center font-semibold'
 )
 
 const advancedFiltersContainerClasses = computed(() =>
-  'px-6 py-4 border-t border-gray-100 bg-gray-50'
+  'px-6 py-4 border-t border-(--ui-border) bg-(--ui-surface-muted)'
 )
 
 const dateInputClasses = computed(() =>
@@ -1117,15 +1117,15 @@ const dateInputClasses = computed(() =>
 )
 
 const dateFilterLabelClasses = computed(() =>
-  'text-sm font-semibold text-gray-700'
+  'text-sm font-semibold text-(--ui-text-muted)'
 )
 
 const dateRangeSeparatorClasses = computed(() =>
-  'text-gray-500 text-sm font-medium'
+  'text-(--ui-text-soft) text-sm font-medium'
 )
 
 const clearDateFilterButtonClasses = computed(() =>
-  'text-gray-400 hover:text-gray-600 p-1.5 hover:bg-gray-200 rounded-full transition-all'
+  'text-(--ui-text-soft) hover:text-(--ui-text-muted) p-1.5 hover:bg-(--ui-surface-soft) rounded-full transition-all'
 )
 
 const clearFiltersButtonClasses = computed(() =>
@@ -1137,19 +1137,19 @@ const exportButtonClasses = computed(() =>
 )
 
 const activeFiltersContainerClasses = computed(() =>
-  'px-6 py-3 bg-blue-50 border-t border-blue-100'
+  'px-6 py-3 bg-(--ui-primary-soft) border-t border-(--ui-primary-soft)'
 )
 
 const activeFiltersLabelClasses = computed(() =>
-  'text-sm font-semibold text-blue-800'
+  'text-sm font-semibold text-(--ui-primary)'
 )
 
 const activeFilterTagClasses = computed(() =>
-  'flex items-center gap-1.5 bg-white border border-blue-200 text-blue-800 px-3 py-1.5 rounded-full text-sm font-medium'
+  'flex items-center gap-1.5 bg-(--ui-surface) border border-(--ui-primary-soft) text-(--ui-primary) px-3 py-1.5 rounded-full text-sm font-medium'
 )
 
 const activeFilterRemoveButtonClasses = computed(() =>
-  'text-blue-600 hover:text-blue-800 ml-1 hover:bg-blue-100 rounded-full p-0.5 transition-all'
+  'text-(--ui-primary) hover:text-(--ui-primary) ml-1 hover:bg-(--ui-primary-soft) rounded-full p-0.5 transition-all'
 )
 
 // Clear all filters

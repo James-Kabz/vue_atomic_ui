@@ -204,29 +204,29 @@ const indicatorClasses = computed(() => [
   'cursor-pointer select-none',
   sizeClasses.value,
   {
-    'bg-blue-600 border-blue-600 text-white': isChecked.value && !props.disabled && props.variant === 'default',
-    'bg-red-600 border-red-600 text-white': isChecked.value && !props.disabled && props.variant === 'error',
-    'bg-slate-200 border-slate-300 text-slate-400': isChecked.value && props.disabled,
-    'bg-white border-slate-300 hover:border-slate-400': !isChecked.value && !props.disabled && props.variant === 'default',
-    'bg-white border-red-300 hover:border-red-400': !isChecked.value && !props.disabled && props.variant === 'error',
-    'bg-slate-50 border-slate-200': !isChecked.value && props.disabled,
+    'bg-(--ui-primary) border-(--ui-primary) text-(--ui-text-inverse)': isChecked.value && !props.disabled && props.variant === 'default',
+    'bg-(--ui-danger) border-(--ui-danger) text-(--ui-text-inverse)': isChecked.value && !props.disabled && props.variant === 'error',
+    'bg-(--ui-surface-soft) border-(--ui-border) text-(--ui-text-soft)': isChecked.value && props.disabled,
+    'bg-(--ui-surface) border-(--ui-border) hover:border-(--ui-border-strong)': !isChecked.value && !props.disabled && props.variant === 'default',
+    'bg-(--ui-surface) border-(--ui-danger-soft) hover:border-(--ui-danger-soft)': !isChecked.value && !props.disabled && props.variant === 'error',
+    'bg-(--ui-surface-muted) border-(--ui-border)': !isChecked.value && props.disabled,
     'cursor-not-allowed': props.disabled,
     'focus-within:ring-2 focus-within:ring-offset-2': !props.disabled,
-    'focus-within:ring-blue-500': !props.disabled && props.variant === 'default',
-    'focus-within:ring-red-500': !props.disabled && props.variant === 'error'
+    'focus-within:ring-(--ui-primary)': !props.disabled && props.variant === 'default',
+    'focus-within:ring-(--ui-danger)': !props.disabled && props.variant === 'error'
   }
 ])
 
 const labelClasses = computed(() => [
   'text-sm font-medium cursor-pointer select-none',
   {
-    'text-slate-900': !props.disabled,
-    'text-slate-500': props.disabled
+    'text-(--ui-text)': !props.disabled,
+    'text-(--ui-text-soft)': props.disabled
   }
 ])
 
 const descriptionClasses = computed(() => [
-  'text-xs text-slate-500 mt-1'
+  'text-xs text-(--ui-text-soft) mt-1'
 ])
 
 // Handle indeterminate state

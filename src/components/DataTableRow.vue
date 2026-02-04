@@ -56,32 +56,32 @@ const emit = defineEmits(['toggle-selection', 'row-click'])
 const rowVariants = cva('transition-colors', {
   variants: {
     striped: {
-      true: 'odd:bg-slate-50/50',
+      true: 'odd:bg-[color:color-mix(in oklab, var(--ui-surface-muted), transparent 50%)]',
       false: ''
     },
     hoverable: {
-      true: 'hover:bg-slate-50',
+      true: 'hover:bg-(--ui-surface-muted)',
       false: ''
     },
     clickable: {
-      true: 'cursor-pointer hover:bg-slate-100',
+      true: 'cursor-pointer hover:bg-(--ui-surface-muted)',
       false: ''
     },
     selected: {
-      true: 'bg-blue-50 border-blue-200',
+      true: 'bg-(--ui-primary-soft) border-(--ui-primary-soft)',
       false: ''
     },
     variant: {
       default: '',
-      bordered: 'border-b border-slate-200',
-      minimal: 'border-b border-slate-100'
+      bordered: 'border-b border-(--ui-border)',
+      minimal: 'border-b border-(--ui-border)'
     }
   },
   compoundVariants: [
     {
       hoverable: true,
       clickable: true,
-      class: 'hover:bg-slate-100'
+      class: 'hover:bg-(--ui-surface-muted)'
     }
   ],
   defaultVariants: {
@@ -93,7 +93,7 @@ const rowVariants = cva('transition-colors', {
   }
 })
 
-const cellVariants = cva('whitespace-nowrap text-sm text-slate-900', {
+const cellVariants = cva('whitespace-nowrap text-sm text-(--ui-text)', {
   variants: {
     density: {
       compact: 'px-4 py-2',

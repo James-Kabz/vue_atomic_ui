@@ -32,9 +32,9 @@ const doughnutChartData = {
 </script>
 
 <template>
-  <div class="widgets-test-page p-6 bg-slate-50 min-h-screen">
+  <div class="widgets-test-page p-6 bg-(--ui-surface-muted) min-h-screen">
     <div class="max-w-7xl mx-auto">
-      <h1 class="text-3xl font-bold text-slate-900 mb-8">
+      <h1 class="text-3xl font-bold text-(--ui-text) mb-8">
         Widgets Test Page
       </h1>
 

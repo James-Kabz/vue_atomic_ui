@@ -35,7 +35,7 @@
     >
       <button
         v-if="clearable && modelValue && !disabled"
-        class="text-slate-400 hover:text-slate-600 transition-colors"
+        class="text-(--ui-text-soft) hover:text-(--ui-text-muted) transition-colors"
         type="button"
         :aria-label="clearLabel"
         @click="handleClear"
@@ -170,9 +170,9 @@ const sizeClasses = computed(() => {
 
 const variantClasses = computed(() => {
   const variants = {
-    default: 'border-slate-300 focus:border-blue-500 focus:ring-blue-500',
-    error: 'border-red-300 focus:border-red-500 focus:ring-red-500',
-    success: 'border-green-300 focus:border-green-500 focus:ring-green-500'
+    default: 'border-(--ui-border) focus:border-(--ui-primary) focus:ring-(--ui-primary)',
+    error: 'border-(--ui-danger-soft) focus:border-(--ui-danger) focus:ring-(--ui-danger)',
+    success: 'border-(--ui-success-soft) focus:border-(--ui-success) focus:ring-(--ui-success)'
   }
   return variants[props.variant]
 })
@@ -183,14 +183,14 @@ const iconClasses = computed(() => {
     md: 'w-4 h-4',
     lg: 'w-5 h-5'
   }
-  return ['text-slate-400', iconSizes[props.size]]
+  return ['text-(--ui-text-soft)', iconSizes[props.size]]
 })
 
 const inputClasses = computed(() => [
-  'block rounded-lg border bg-white transition-colors duration-200',
+  'block rounded-lg border bg-(--ui-surface) transition-colors duration-200',
   'focus:outline-none focus:ring-2 focus:ring-offset-0',
-  'disabled:bg-slate-50 disabled:text-slate-500 disabled:cursor-not-allowed',
-  'placeholder:text-slate-400',
+  'disabled:bg-(--ui-surface-muted) disabled:text-(--ui-text-soft) disabled:cursor-not-allowed',
+  'placeholder:text-(--ui-text-soft)',
   props.type === 'color' ? 'w-20 h-12 cursor-pointer' : 'w-full',
   sizeClasses.value,
   variantClasses.value,

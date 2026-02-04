@@ -7,13 +7,13 @@
       <!-- Selection Info -->
       <div
         v-if="selectable && selectedCount > 0"
-        class="text-sm text-slate-600"
+        class="text-sm text-(--ui-text-muted)"
       >
         {{ selectedCount }} of {{ total }} selected
       </div>
       <div
         v-else
-        class="text-sm text-slate-600"
+        class="text-sm text-(--ui-text-muted)"
       >
         Showing {{ startItem }} to {{ endItem }} of {{ total }} entries
       </div>
@@ -157,7 +157,7 @@
         </div>
 
         <!-- Page Info -->
-        <div class="text-sm text-slate-600 ml-4">
+        <div class="text-sm text-(--ui-text-muted) ml-4">
           Page {{ currentPage }} of {{ totalPages }}
         </div>
       </div>
@@ -225,12 +225,12 @@ const props = defineProps({
 defineEmits(['update:currentPage', 'update:pageSize'])
 
 // CVA variants
-const footerVariants = cva('border-t border-slate-200', {
+const footerVariants = cva('border-t border-(--ui-border)', {
   variants: {
     variant: {
-      default: 'bg-slate-50',
-      minimal: 'bg-transparent border-slate-100',
-      bordered: 'bg-slate-100 border-t-2 border-slate-300'
+      default: 'bg-(--ui-surface-muted)',
+      minimal: 'bg-transparent border-(--ui-border)',
+      bordered: 'bg-(--ui-surface-muted) border-t-2 border-(--ui-border)'
     },
     padding: {
       compact: 'px-4 py-2',
@@ -247,9 +247,9 @@ const footerVariants = cva('border-t border-slate-200', {
 const pageButtonVariants = cva('text-sm font-medium border rounded-md transition-colors duration-200', {
   variants: {
     state: {
-      active: 'bg-blue-600 text-white border-blue-600',
-      inactive: 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50',
-      disabled: 'bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed'
+      active: 'bg-(--ui-primary) text-(--ui-text-inverse) border-(--ui-primary)',
+      inactive: 'bg-(--ui-surface) text-(--ui-text-muted) border-(--ui-border) hover:bg-(--ui-surface-muted)',
+      disabled: 'bg-(--ui-surface-muted) text-(--ui-text-soft) border-(--ui-border) cursor-not-allowed'
     },
     size: {
       sm: 'px-2 py-1',
@@ -263,7 +263,7 @@ const pageButtonVariants = cva('text-sm font-medium border rounded-md transition
   }
 })
 
-const labelVariants = cva('text-slate-700', {
+const labelVariants = cva('text-(--ui-text-muted)', {
   variants: {
     size: {
       sm: 'text-sm',
@@ -276,7 +276,7 @@ const labelVariants = cva('text-slate-700', {
   }
 })
 
-const selectVariants = cva('border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm min-w-[60px] focus:border-transparent', {
+const selectVariants = cva('border border-(--ui-border) rounded-md focus:outline-none focus:ring-2 focus:ring-(--ui-primary) text-sm min-w-[60px] focus:border-transparent', {
   variants: {
     size: {
       sm: 'px-2 py-1',

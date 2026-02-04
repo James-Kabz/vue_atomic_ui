@@ -1,12 +1,12 @@
 <template>
-  <footer :class="cn('bg-gray-50 border-t border-gray-200', className)">
+  <footer :class="cn('bg-(--ui-surface-muted) border-t border-(--ui-border)', className)">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
         <!-- Brand -->
         <div class="col-span-1 md:col-span-2">
           <slot name="brand">
             <Logo class="mb-4" />
-            <Text class="text-gray-600 max-w-md">
+            <Text class="text-(--ui-text-muted) max-w-md">
               Building beautiful applications with modern Vue.js components.
             </Text>
           </slot>
@@ -24,19 +24,19 @@
             <div class="space-y-2">
               <Link
                 href="#"
-                class="block text-gray-600 hover:text-gray-900"
+                class="block text-(--ui-text-muted) hover:text-(--ui-text)"
               >
                 About
               </Link>
               <Link
                 href="#"
-                class="block text-gray-600 hover:text-gray-900"
+                class="block text-(--ui-text-muted) hover:text-(--ui-text)"
               >
                 Services
               </Link>
               <Link
                 href="#"
-                class="block text-gray-600 hover:text-gray-900"
+                class="block text-(--ui-text-muted) hover:text-(--ui-text)"
               >
                 Contact
               </Link>
@@ -56,7 +56,7 @@
             <div class="flex space-x-4">
               <Link
                 href="#"
-                class="text-gray-600 hover:text-gray-900"
+                class="text-(--ui-text-muted) hover:text-(--ui-text)"
               >
                 <Icon
                   name="twitter"
@@ -65,7 +65,7 @@
               </Link>
               <Link
                 href="#"
-                class="text-gray-600 hover:text-gray-900"
+                class="text-(--ui-text-muted) hover:text-(--ui-text)"
               >
                 <Icon
                   name="github"
@@ -81,7 +81,7 @@
 
       <div class="flex flex-col md:flex-row justify-between items-center">
         <slot name="copyright">
-          <Text class="text-gray-600">
+          <Text class="text-(--ui-text-muted)">
             © {{ new Date().getFullYear() }} Your Company. All rights reserved.
           </Text>
         </slot>
@@ -89,13 +89,13 @@
           <div class="flex space-x-6 mt-4 md:mt-0">
             <Link
               href="#"
-              class="text-gray-600 hover:text-gray-900"
+              class="text-(--ui-text-muted) hover:text-(--ui-text)"
             >
               Privacy
             </Link>
             <Link
               href="#"
-              class="text-gray-600 hover:text-gray-900"
+              class="text-(--ui-text-muted) hover:text-(--ui-text)"
             >
               Terms
             </Link>

@@ -160,16 +160,16 @@ watch(isOpen, (open) => {
       type="button"
       :disabled="disabled"
       :class="[
-        'w-full px-3 py-2.5 text-left border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white min-h-[42px]',
-        hasError ? 'border-red-500' : 'border-slate-300',
-        disabled ? 'bg-gray-100 cursor-not-allowed opacity-50' : 'hover:border-slate-400'
+        'w-full px-3 py-2.5 text-left border rounded-md focus:outline-none focus:ring-2 focus:ring-(--ui-primary) bg-(--ui-surface) min-h-[42px]',
+        hasError ? 'border-(--ui-danger)' : 'border-(--ui-border)',
+        disabled ? 'bg-(--ui-surface-muted) cursor-not-allowed opacity-50' : 'hover:border-(--ui-border-strong)'
       ]"
       @click="toggleDropdown"
       @keydown="handleKeydown"
     >
       <div
         v-if="selectedLabels.length === 0"
-        class="text-gray-500"
+        class="text-(--ui-text-soft)"
       >
         {{ placeholder || 'Select options' }}
       </div>
@@ -187,7 +187,7 @@ watch(isOpen, (open) => {
         </Badge>
       </div>
       <svg
-        class="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none transition-transform duration-200"
+        class="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-(--ui-text-soft) pointer-events-none transition-transform duration-200"
         :class="{ 'rotate-180': isOpen }"
         fill="currentColor"
         viewBox="0 0 20 20"
@@ -213,16 +213,16 @@ watch(isOpen, (open) => {
           v-if="isOpen"
           :style="dropdownStyle"
           data-multiselect-dropdown
-          class="bg-white shadow-lg max-h-72 rounded-md text-base ring-1 ring-black ring-opacity-5 overflow-hidden focus:outline-none"
+          class="bg-(--ui-surface) shadow-lg max-h-72 rounded-md text-base ring-1 ring-(--ui-surface-strong) ring-opacity-5 overflow-hidden focus:outline-none"
         >
           <!-- Search input -->
-          <div class="px-3 py-2.5 border-b border-gray-200 bg-gray-50">
+          <div class="px-3 py-2.5 border-b border-(--ui-border) bg-(--ui-surface-muted)">
             <input
               ref="searchInput"
               v-model="searchQuery"
               type="text"
               placeholder="Search options..."
-              class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+              class="w-full px-3 py-2 text-sm border border-(--ui-border) rounded-md focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:border-transparent bg-(--ui-surface)"
               @input="filterOptions"
               @keydown.stop
             >
@@ -237,21 +237,21 @@ watch(isOpen, (open) => {
               v-for="option in filteredOptions"
               :key="option.value"
               type="button"
-              class="cursor-pointer select-none relative py-2.5 pl-3 pr-9 w-full text-left hover:bg-blue-50 focus:bg-blue-50 focus:outline-none transition-colors duration-150"
-              :class="{ 'bg-blue-50': modelValue.includes(option.value) }"
+              class="cursor-pointer select-none relative py-2.5 pl-3 pr-9 w-full text-left hover:bg-(--ui-primary-soft) focus:bg-(--ui-primary-soft) focus:outline-none transition-colors duration-150"
+              :class="{ 'bg-(--ui-primary-soft)': modelValue.includes(option.value) }"
               @click="toggleOption(option.value)"
             >
               <div class="flex items-center gap-3">
                 <input
                   type="checkbox"
                   :checked="modelValue.includes(option.value)"
-                  class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded cursor-pointer pointer-events-none"
+                  class="h-4 w-4 text-(--ui-primary) focus:ring-(--ui-primary) border-(--ui-border) rounded cursor-pointer pointer-events-none"
                   readonly
                   tabindex="-1"
                 >
                 <span
                   class="block font-normal truncate"
-                  :class="{ 'text-blue-900 font-medium': modelValue.includes(option.value) }"
+                  :class="{ 'text-(--ui-primary) font-medium': modelValue.includes(option.value) }"
                 >
                   {{ option.label }}
                 </span>
@@ -262,7 +262,7 @@ watch(isOpen, (open) => {
           <!-- No results -->
           <div
             v-else
-            class="px-4 py-6 text-sm text-gray-500 text-center"
+            class="px-4 py-6 text-sm text-(--ui-text-soft) text-center"
           >
             No options found
           </div>

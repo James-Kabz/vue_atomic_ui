@@ -13,7 +13,7 @@
     <!-- Dismiss button -->
     <button
       v-if="dismissible"
-      class="ml-1 hover:bg-black/10 rounded-full p-0.5 transition-colors"
+      class="ml-1 hover:bg-[color:color-mix(in oklab, var(--ui-surface-strong), transparent 90%)] rounded-full p-0.5 transition-colors"
       :aria-label="dismissLabel"
       @click="handleDismiss"
     >
@@ -76,38 +76,38 @@ const badgeVariants = cva(
     variants: {
       variant: {
         default:
-          'border border-blue-200 bg-blue-50 text-blue-800 hover:bg-blue-100 dark:border-blue-200 dark:bg-blue-50 dark:text-blue-900',
+          'border border-(--ui-primary-soft) bg-(--ui-primary-soft) text-(--ui-primary) hover:bg-(--ui-primary-soft) dark:border-(--ui-primary-soft) dark:bg-(--ui-primary-soft) dark:text-(--ui-primary)',
         secondary:
-          'border border-gray-200 bg-gray-50 text-gray-800 hover:bg-gray-100 dark:border-gray-200 dark:bg-gray-50 dark:text-gray-900',
+          'border border-(--ui-border) bg-(--ui-surface-muted) text-(--ui-text) hover:bg-(--ui-surface-muted) dark:border-(--ui-border) dark:bg-(--ui-surface-muted) dark:text-(--ui-text)',
         danger:
-          'border border-red-200 bg-red-50 text-red-800 hover:bg-red-100 dark:border-red-200 dark:bg-red-50 dark:text-red-900',
+          'border border-(--ui-danger-soft) bg-(--ui-danger-soft) text-(--ui-danger) hover:bg-(--ui-danger-soft) dark:border-(--ui-danger-soft) dark:bg-(--ui-danger-soft) dark:text-(--ui-danger)',
         primary:
-          'border border-blue-200 bg-blue-50 text-blue-800 hover:bg-blue-100 dark:border-blue-200 dark:bg-blue-50 dark:text-blue-900',
+          'border border-(--ui-primary-soft) bg-(--ui-primary-soft) text-(--ui-primary) hover:bg-(--ui-primary-soft) dark:border-(--ui-primary-soft) dark:bg-(--ui-primary-soft) dark:text-(--ui-primary)',
         outline: 'text-foreground border',
         success:
-          'border border-green-200 bg-green-50 text-green-800 dark:border-green-200 dark:bg-green-50 dark:text-green-900',
+          'border border-(--ui-success-soft) bg-(--ui-success-soft) text-(--ui-success) dark:border-(--ui-success-soft) dark:bg-(--ui-success-soft) dark:text-(--ui-success)',
         warning:
-          'border border-yellow-200 bg-yellow-50 text-yellow-800 hover:bg-yellow-100 dark:border-yellow-200 dark:bg-yellow-50 dark:text-yellow-900',
+          'border border-(--ui-warning-soft) bg-(--ui-warning-soft) text-(--ui-warning) hover:bg-(--ui-warning-soft) dark:border-(--ui-warning-soft) dark:bg-(--ui-warning-soft) dark:text-(--ui-warning)',
         info:
-          'border border-blue-200 bg-blue-50 text-blue-800 hover:bg-blue-100 dark:border-blue-200 dark:bg-blue-50 dark:text-blue-900',
+          'border border-(--ui-primary-soft) bg-(--ui-primary-soft) text-(--ui-primary) hover:bg-(--ui-primary-soft) dark:border-(--ui-primary-soft) dark:bg-(--ui-primary-soft) dark:text-(--ui-primary)',
         ghost:
-          'bg-transparent text-gray-700 hover:bg-gray-100',
+          'bg-transparent text-(--ui-text-muted) hover:bg-(--ui-surface-muted)',
         link:
-          'text-blue-600 hover:underline',
+          'text-(--ui-primary) hover:underline',
         subtle:
-          'bg-gray-100 text-gray-800 hover:bg-gray-200',
+          'bg-(--ui-surface-muted) text-(--ui-text) hover:bg-(--ui-surface-soft)',
         dark:
-          'bg-gray-900 text-white hover:bg-black',
+          'bg-(--ui-surface-strong) text-(--ui-text-inverse) hover:bg-(--ui-surface-strong)',
         light:
-          'bg-gray-50 text-gray-800 border border-gray-200 hover:bg-gray-100',
+          'bg-(--ui-surface-muted) text-(--ui-text) border border-(--ui-border) hover:bg-(--ui-surface-muted)',
         primaryOutline:
-          'border border-blue-500 text-blue-500 bg-transparent hover:bg-blue-50',
+          'border border-(--ui-primary) text-(--ui-primary) bg-transparent hover:bg-(--ui-primary-soft)',
         dangerOutline:
-          'border border-red-500 text-red-500 bg-transparent hover:bg-red-50',
+          'border border-(--ui-danger) text-(--ui-danger) bg-transparent hover:bg-(--ui-danger-soft)',
         successOutline:
-          'border border-green-500 text-green-500 bg-transparent hover:bg-green-50',
+          'border border-(--ui-success) text-(--ui-success) bg-transparent hover:bg-(--ui-success-soft)',
         gradient:
-          'bg-linear-to-r from-blue-400 to-purple-500 text-white hover:from-blue-500 hover:to-purple-600',
+          'bg-linear-to-r from-(--ui-primary-soft) to-(--ui-accent) text-(--ui-text-inverse) hover:from-(--ui-primary) hover:to-(--ui-accent)',
       },
       size: {
         sm: 'px-2 py-0.5 text-xs',

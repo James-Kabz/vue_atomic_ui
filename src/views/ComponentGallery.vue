@@ -48,6 +48,7 @@ import ReminderConfig from '../components/ReminderConfig.vue'
 import ReusableForm from '../components/ReusableForm.vue'
 import ReusableFormModal from '../components/ReusableFormModal.vue'
 import Search from '../components/Search.vue'
+import Select from '../components/Select.vue'
 import Sidebar from '../components/Sidebar.vue'
 import Slider from '../components/Slider.vue'
 import StackedBarChart from '../components/charts/StackedBarChart.vue'
@@ -179,30 +180,30 @@ const previewProfileMenu = ref([
     <div class="mb-4 flex items-center gap-3">
       <router-link
         to="/templates/overview"
-        class="px-3 py-1.5 rounded-md text-sm font-medium border border-slate-200 hover:bg-slate-100"
+        class="px-3 py-1.5 rounded-md text-sm font-medium border border-(--ui-border) hover:bg-(--ui-surface-muted)"
       >
         Dashboard
       </router-link>
       <router-link
         to="/components"
-        class="px-3 py-1.5 rounded-md text-sm font-medium border border-slate-200 hover:bg-slate-100"
+        class="px-3 py-1.5 rounded-md text-sm font-medium border border-(--ui-border) hover:bg-(--ui-surface-muted)"
       >
         Component Showcase
       </router-link>
       <router-link
         to="/components/full-gallery"
-        class="px-3 py-1.5 rounded-md text-sm font-medium border border-slate-200 hover:bg-slate-100"
+        class="px-3 py-1.5 rounded-md text-sm font-medium border border-(--ui-border) hover:bg-(--ui-surface-muted)"
       >
         Full Gallery
       </router-link>
     </div>
 
-    <div class="sticky top-0 z-40 bg-white/95 backdrop-blur border border-slate-200 rounded-lg p-3">
+    <div class="sticky top-0 z-40 bg-[color:color-mix(in oklab, var(--ui-surface), transparent 5%)] backdrop-blur border border-(--ui-border) rounded-lg p-3">
       <div class="flex flex-wrap items-center gap-2">
         <button
           v-for="section in jumpSections"
           :key="section.id"
-          class="px-3 py-1.5 text-xs font-medium rounded-full border border-slate-200 hover:bg-slate-100"
+          class="px-3 py-1.5 text-xs font-medium rounded-full border border-(--ui-border) hover:bg-(--ui-surface-muted)"
           @click="scrollToSection(section.id)"
         >
           {{ section.label }}
@@ -270,10 +271,10 @@ const previewProfileMenu = ref([
           </ul>
           <Tab>
             <TabPanel label="Summary">
-              <p class="text-sm text-slate-600">Tab panel content</p>
+              <p class="text-sm text-(--ui-text-muted)">Tab panel content</p>
             </TabPanel>
             <TabPanel label="Details">
-              <p class="text-sm text-slate-600">Second panel content</p>
+              <p class="text-sm text-(--ui-text-muted)">Second panel content</p>
             </TabPanel>
           </Tab>
         </div>
@@ -286,7 +287,7 @@ const previewProfileMenu = ref([
           </FormField>
           <InputGroup>
             <template #prefix>
-              <Icon icon="search" class="w-4 h-4 text-gray-500" />
+              <Icon icon="search" class="w-4 h-4 text-(--ui-text-soft)" />
             </template>
             <Input v-model="inputGroupValue" placeholder="InputGroup" />
             <template #suffix>
@@ -296,7 +297,7 @@ const previewProfileMenu = ref([
           <Search v-model="searchValue" placeholder="Search component" />
           <div class="flex items-center gap-3">
             <Switch v-model="switchValue" />
-            <span class="text-sm text-slate-600">Switch</span>
+            <span class="text-sm text-(--ui-text-muted)">Switch</span>
           </div>
           <Slider v-model="sliderValue" :min="0" :max="100" />
           <DatePicker v-model="datePickerValue" />
@@ -311,7 +312,7 @@ const previewProfileMenu = ref([
       <Card id="gallery-data" title="Data Table Parts" variant="outlined" padding="lg">
         <div class="space-y-4">
           <DataTableHeader title="Mini Table" description="Header component demo" />
-          <table class="w-full border border-slate-200 rounded-md overflow-hidden">
+          <table class="w-full border border-(--ui-border) rounded-md overflow-hidden">
             <tbody>
               <tr>
                 <DataTableCell :item="demoItem" :column="demoColumns[0]" />
@@ -391,7 +392,7 @@ const previewProfileMenu = ref([
           <Modal v-model="modalHeaderOpen" size="sm">
             <ModalHeader>Modal Header</ModalHeader>
             <ModalBody>
-              <p class="text-sm text-slate-600">Modal body content.</p>
+              <p class="text-sm text-(--ui-text-muted)">Modal body content.</p>
             </ModalBody>
             <ModalFooter>
               <Button size="sm" variant="outline" @click="modalHeaderOpen = false">Close</Button>
@@ -438,7 +439,7 @@ const previewProfileMenu = ref([
 
       <Card id="gallery-layouts" title="Layouts & Shells" variant="outlined" padding="lg">
         <div class="space-y-6 layout-preview">
-          <div class="rounded-md border border-slate-200 overflow-hidden">
+          <div class="rounded-md border border-(--ui-border) overflow-hidden">
             <Header
               :sidebar-width="130"
               current-section="Preview"
@@ -452,7 +453,7 @@ const previewProfileMenu = ref([
               :organisations="previewUser.organisations"
             />
           </div>
-          <div class="rounded-md border border-slate-200 overflow-hidden">
+          <div class="rounded-md border border-(--ui-border) overflow-hidden">
             <Sidebar
               :sidebar-width="130"
               :header="{ title: 'Preview' }"
@@ -463,22 +464,22 @@ const previewProfileMenu = ref([
               :current-path="'/templates/overview'"
             />
           </div>
-          <div class="rounded-md border border-slate-200 overflow-hidden auth-preview">
+          <div class="rounded-md border border-(--ui-border) overflow-hidden auth-preview">
             <AuthLayout title="Auth Layout" subtitle="Sign in to continue">
-              <div class="p-6 bg-white rounded-lg shadow-sm">
-                <p class="text-sm text-slate-600">Auth slot content</p>
+              <div class="p-6 bg-(--ui-surface) rounded-lg shadow-sm">
+                <p class="text-sm text-(--ui-text-muted)">Auth slot content</p>
               </div>
             </AuthLayout>
           </div>
-          <div class="rounded-md border border-slate-200 overflow-hidden default-preview">
+          <div class="rounded-md border border-(--ui-border) overflow-hidden default-preview">
             <DefaultLayout>
               <template #header-actions>
                 <Button size="sm" variant="outline">Action</Button>
               </template>
-              <div class="p-4 text-sm text-slate-600">Default layout content</div>
+              <div class="p-4 text-sm text-(--ui-text-muted)">Default layout content</div>
             </DefaultLayout>
           </div>
-          <div class="rounded-md border border-slate-200 overflow-hidden error-preview">
+          <div class="rounded-md border border-(--ui-border) overflow-hidden error-preview">
             <ErrorLayout>
               <template #title>Something went wrong</template>
               <template #message>We could not load this page.</template>

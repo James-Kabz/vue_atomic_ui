@@ -4,6 +4,7 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 import '../src/styles/base.css'
+import { initTheme } from './lib/theme'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { far } from '@fortawesome/free-regular-svg-icons'
@@ -13,6 +14,8 @@ import { tooltip } from './directives/tooltip'
 
 
 const app = createApp(App)
+
+initTheme()
 
 library.add(
     fas,

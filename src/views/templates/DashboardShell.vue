@@ -83,7 +83,7 @@ const handleMobileSidebarToggle = () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-slate-50">
+  <div class="min-h-screen bg-(--ui-surface-muted)">
     <Sidebar
       ref="sidebarRef"
       :sidebar-width="sidebarWidth"
@@ -124,13 +124,13 @@ const handleMobileSidebarToggle = () => {
         <div class="mb-6 flex items-center gap-3">
           <router-link
             to="/templates/overview"
-            class="px-3 py-1.5 rounded-md text-sm font-medium border border-slate-200 hover:bg-slate-100"
+            class="px-3 py-1.5 rounded-md text-sm font-medium border border-(--ui-border) hover:bg-(--ui-surface-muted)"
           >
             Dashboard
           </router-link>
           <router-link
             to="/components"
-            class="px-3 py-1.5 rounded-md text-sm font-medium border border-slate-200 hover:bg-slate-100"
+            class="px-3 py-1.5 rounded-md text-sm font-medium border border-(--ui-border) hover:bg-(--ui-surface-muted)"
           >
             Component Showcase
           </router-link>

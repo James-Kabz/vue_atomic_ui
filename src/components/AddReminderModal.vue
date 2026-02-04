@@ -74,30 +74,30 @@ const cancel = () => {
     <div class="p-6 space-y-6">
       <!-- Header -->
       <div>
-        <h3 class="text-xl font-semibold text-gray-900">
+        <h3 class="text-xl font-semibold text-(--ui-text)">
           Add Reminder
         </h3>
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-(--ui-text-soft)">
           Configure reminder rules for <span class="font-medium">{{ modelName }}</span>
         </p>
       </div>
 
       <!-- Days Before -->
       <div class="space-y-1.5">
-        <label class="text-sm font-medium text-gray-700">
+        <label class="text-sm font-medium text-(--ui-text-muted)">
           Days Before Due Date
         </label>
         <input
           v-model="days"
           type="number"
           min="0"
-          class="w-full px-3 py-2.5 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          class="w-full px-3 py-2.5 border rounded-md focus:ring-2 focus:ring-(--ui-primary) focus:outline-none"
         >
       </div>
 
       <!-- Send Type -->
       <div class="space-y-2">
-        <label class="text-sm font-medium text-gray-700">
+        <label class="text-sm font-medium text-(--ui-text-muted)">
           Notification Channel
         </label>
         <div class="flex flex-wrap gap-2">
@@ -107,8 +107,8 @@ const cancel = () => {
             type="button"
             class="px-4 py-2 rounded-md text-sm font-medium transition"
             :class="sendType === option.value
-              ? 'bg-blue-600 text-white shadow'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+              ? 'bg-(--ui-primary) text-(--ui-text-inverse) shadow'
+              : 'bg-(--ui-surface-muted) text-(--ui-text-muted) hover:bg-(--ui-surface-soft)'"
             @click="sendType = option.value"
           >
             {{ option.label }}
@@ -118,7 +118,7 @@ const cancel = () => {
 
       <!-- Recipients -->
       <div class="space-y-2">
-        <label class="text-sm font-medium text-gray-700">
+        <label class="text-sm font-medium text-(--ui-text-muted)">
           Recipients
         </label>
 
@@ -133,7 +133,7 @@ const cancel = () => {
       <div class="flex justify-end gap-3 pt-4 border-t">
         <button
           type="button"
-          class="px-4 py-2 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200"
+          class="px-4 py-2 rounded-md bg-(--ui-surface-muted) text-(--ui-text-muted) hover:bg-(--ui-surface-soft)"
           @click="cancel"
         >
           Cancel
@@ -141,7 +141,7 @@ const cancel = () => {
 
         <button
           type="button"
-          class="px-5 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 shadow"
+          class="px-5 py-2 rounded-md bg-(--ui-primary) text-(--ui-text-inverse) hover:bg-(--ui-primary-strong) shadow"
           @click="save"
         >
           Add Reminder

@@ -198,11 +198,11 @@ const showModal = ref(false)
 const modalContent = ref('')
 
 // CVA variants
-const tableContainerVariants = cva('bg-white border border-slate-200 rounded-lg overflow-hidden', {
+const tableContainerVariants = cva('bg-(--ui-surface) border border-(--ui-border) rounded-lg overflow-hidden', {
   variants: {
     variant: {
       default: 'shadow-sm',
-      bordered: 'border-2 border-slate-300',
+      bordered: 'border-2 border-(--ui-border)',
       minimal: 'border-none shadow-none bg-transparent'
     }
   },
@@ -227,9 +227,9 @@ const tableVariants = cva('min-w-full', {
 const headVariants = cva('', {
   variants: {
     variant: {
-      default: 'bg-slate-50',
-      bordered: 'bg-slate-100 border-b-2 border-slate-300',
-      minimal: 'bg-transparent border-b border-slate-200'
+      default: 'bg-(--ui-surface-muted)',
+      bordered: 'bg-(--ui-surface-muted) border-b-2 border-(--ui-border)',
+      minimal: 'bg-transparent border-b border-(--ui-border)'
     }
   },
   defaultVariants: {
@@ -240,8 +240,8 @@ const headVariants = cva('', {
 const bodyVariants = cva('divide-y', {
   variants: {
     variant: {
-      default: 'bg-white divide-slate-200',
-      bordered: 'bg-white divide-slate-300',
+      default: 'bg-(--ui-surface) divide-slate-200',
+      bordered: 'bg-(--ui-surface) divide-slate-300',
       minimal: 'bg-transparent divide-slate-100'
     }
   },
@@ -514,9 +514,9 @@ const getHeaderCellClasses = (column) => {
 
   return cn(
     densityPadding[props.density],
-    'text-left text-xs font-medium text-slate-500 uppercase tracking-wider',
+    'text-left text-xs font-medium text-(--ui-text-soft) uppercase tracking-wider',
     {
-      'cursor-pointer hover:bg-slate-100 transition-colors': column.sortable && !props.loading && !props.sortLoading,
+      'cursor-pointer hover:bg-(--ui-surface-muted) transition-colors': column.sortable && !props.loading && !props.sortLoading,
       'cursor-not-allowed opacity-50': props.loading || (props.sortLoading && sortColumn.value === column.key)
     }
   )
@@ -531,7 +531,7 @@ const getDataCellClasses = () => {
 
   return cn(
     densityPadding[props.density],
-    'whitespace-nowrap text-sm text-slate-900'
+    'whitespace-nowrap text-sm text-(--ui-text)'
   )
 }
 
@@ -540,29 +540,29 @@ const getRowClasses = (item, index) => {
 
   // Striped rows
   if (props.striped && index % 2 === 1) {
-    baseClasses.push('bg-slate-50/50')
+    baseClasses.push('bg-[color:color-mix(in oklab, var(--ui-surface-muted), transparent 50%)]')
   }
 
   // Hoverable rows
   if (props.hoverable && !props.clickableRows) {
-    baseClasses.push('hover:bg-slate-50')
+    baseClasses.push('hover:bg-(--ui-surface-muted)')
   }
 
   // Clickable rows
   if (props.clickableRows) {
-    baseClasses.push('cursor-pointer hover:bg-slate-100')
+    baseClasses.push('cursor-pointer hover:bg-(--ui-surface-muted)')
   }
 
   // Selected rows
   if (props.selectable && isRowSelected(item)) {
-    baseClasses.push('bg-blue-50 border-blue-200')
+    baseClasses.push('bg-(--ui-primary-soft) border-(--ui-primary-soft)')
   }
 
   // Variant-specific classes
   if (props.variant === 'bordered') {
-    baseClasses.push('border-b border-slate-200')
+    baseClasses.push('border-b border-(--ui-border)')
   } else if (props.variant === 'minimal') {
-    baseClasses.push('border-b border-slate-100')
+    baseClasses.push('border-b border-(--ui-border)')
   }
 
   return cn('transition-colors', ...baseClasses)
@@ -620,7 +620,7 @@ const checkboxCellClasses = computed(() => {
 
   return cn(
     densityPadding[props.density],
-    'whitespace-nowrap text-sm text-slate-900 w-12'
+    'whitespace-nowrap text-sm text-(--ui-text) w-12'
   )
 })
 
@@ -652,8 +652,8 @@ const emptyCellClasses = computed(() => {
 
 const getSortIconClasses = (column, direction) => cn(
   {
-    'text-blue-600': sortColumn.value === column.key && sortDirection.value === direction,
-    'text-slate-300': sortColumn.value !== column.key || sortDirection.value !== direction
+    'text-(--ui-primary)': sortColumn.value === column.key && sortDirection.value === direction,
+    'text-(--ui-text-soft)': sortColumn.value !== column.key || sortDirection.value !== direction
   }
 )
 
@@ -834,7 +834,7 @@ defineExpose({
                   v-if="selectable"
                   :class="checkboxCellClasses"
                 >
-                  <div class="w-4 h-4 bg-slate-200 rounded" />
+                  <div class="w-4 h-4 bg-(--ui-surface-soft) rounded" />
                 </td>
 
                 <!-- Data columns skeleton -->
@@ -843,7 +843,7 @@ defineExpose({
                   :key="column.key"
                   :class="getDataCellClasses()"
                 >
-                  <div class="h-4 bg-slate-200 rounded w-3/4" />
+                  <div class="h-4 bg-(--ui-surface-soft) rounded w-3/4" />
                 </td>
 
                 <!-- Actions column skeleton -->
@@ -852,8 +852,8 @@ defineExpose({
                   :class="actionsCellClasses"
                 >
                   <div class="flex gap-2 justify-center">
-                    <div class="w-6 h-6 bg-slate-200 rounded" />
-                    <div class="w-6 h-6 bg-slate-200 rounded" />
+                    <div class="w-6 h-6 bg-(--ui-surface-soft) rounded" />
+                    <div class="w-6 h-6 bg-(--ui-surface-soft) rounded" />
                   </div>
                 </td>
               </tr>
@@ -893,7 +893,7 @@ defineExpose({
                   >
                     <span
                       v-if="formatCellValue(item, column).toString().split(' ').length > 10"
-                      class="cursor-pointer text-blue-600 hover:text-blue-800"
+                      class="cursor-pointer text-(--ui-primary) hover:text-(--ui-primary)"
                       @click.stop="openModal(formatCellValue(item, column))"
                     >
                       {{ truncateText(formatCellValue(item, column)) }}
@@ -959,16 +959,16 @@ defineExpose({
               >
                 <slot name="empty">
                   <div class="flex flex-col items-center justify-center py-12">
-                    <div class="text-slate-400 mb-4 flex justify-center">
+                    <div class="text-(--ui-text-soft) mb-4 flex justify-center">
                       <Icon
                         icon="search"
                         class="w-16 h-16"
                       />
                     </div>
-                    <p class="text-slate-600 text-lg font-medium mb-2">
+                    <p class="text-(--ui-text-muted) text-lg font-medium mb-2">
                       {{ emptyText }}
                     </p>
-                    <p class="text-slate-500 text-sm">
+                    <p class="text-(--ui-text-soft) text-sm">
                       {{ emptySubtitle }}
                     </p>
                   </div>
@@ -1012,7 +1012,7 @@ defineExpose({
         <h3 class="text-md font-semibold mb-4">
           Full Text
         </h3>
-        <div class="text-xl font-bold text-gray-700 whitespace-pre-wrap break-words">
+        <div class="text-xl font-bold text-(--ui-text-muted) whitespace-pre-wrap break-words">
           {{ modalContent }}
         </div>
       </div>
