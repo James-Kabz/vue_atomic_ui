@@ -11,14 +11,14 @@
         :placeholder="placeholder"
         :required="required"
         :aria-describedby="ariaDescribedby"
-        class="w-full px-3 py-2 pr-10 border border-(--ui-border) ui-glossy-border rounded-md bg-(--ui-surface) ui-glossy-input text-(--ui-text) placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:border-(--ui-primary) cursor-pointer disabled:bg-(--ui-surface-muted) disabled:text-(--ui-text-soft) disabled:cursor-not-allowed"
+        class="w-full px-3 py-2 pr-10 border border-(--ui-border) ui-glossy-border rounded-md bg-(--ui-surface) ui-glossy-input text-(--ui-text) placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:border-(--ui-primary) cursor-pointer disabled:bg-(--ui-surface-muted) disabled:text-(--ui-text) disabled:cursor-not-allowed"
         @click="toggleCalendar"
       >
       
       <!-- Calendar Icon -->
       <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
         <svg
-          class="w-5 h-5 text-(--ui-text-soft)"
+          class="w-5 h-5 text-(--ui-text)"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -41,7 +41,7 @@
         @click.stop="clearDate"
       >
         <svg
-          class="w-4 h-4 text-(--ui-text-soft)"
+          class="w-4 h-4 text-(--ui-text)"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -124,7 +124,7 @@
           <div
             v-for="day in weekdays"
             :key="day"
-            class="text-center text-xs font-medium text-(--ui-text-muted) py-1"
+            class="text-center text-xs font-medium text-(--ui-text) py-1"
           >
             {{ day }}
           </div>
@@ -136,7 +136,7 @@
           <div
             v-for="(day, index) in leadingDays"
             :key="'prev-' + index"
-            class="text-center text-sm text-(--ui-text-soft) py-2"
+            class="text-center text-sm text-(--ui-text) py-2"
           >
             {{ day }}
           </div>
@@ -150,7 +150,7 @@
             :class="[
               'w-8 h-8 text-sm rounded flex items-center justify-center',
               isSelected(day) ? 'bg-(--ui-primary) text-(--ui-text-inverse)' : 'hover:bg-(--ui-surface-muted)',
-              isDateDisabled(day) ? 'text-(--ui-text-soft) cursor-not-allowed' : ''
+              isDateDisabled(day) ? 'text-(--ui-text) cursor-not-allowed' : ''
             ]"
             @click="selectDate(day)"
           >
@@ -161,7 +161,7 @@
           <div
             v-for="(day, index) in trailingDays"
             :key="'next-' + index"
-            class="text-center text-sm text-(--ui-text-soft) py-2"
+            class="text-center text-sm text-(--ui-text) py-2"
           >
             {{ day }}
           </div>

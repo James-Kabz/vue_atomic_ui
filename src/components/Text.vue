@@ -53,7 +53,7 @@ const textVariants = cva(
       },
       variant: {
         default: 'text-(--ui-text)',
-        muted: 'text-(--ui-text-muted)',
+        muted: 'text-(--ui-text)',
         danger: 'text-(--ui-danger)'
       },
       weight: {

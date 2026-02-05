@@ -134,7 +134,7 @@ export default {
                   </h1>
                   <p
                     v-if="subtitle"
-                    class="text-sm sm:text-base text-(--ui-text-muted) mt-2"
+                    class="text-sm sm:text-base text-(--ui-text) mt-2"
                   >
                     {{ subtitle }}
                   </p>

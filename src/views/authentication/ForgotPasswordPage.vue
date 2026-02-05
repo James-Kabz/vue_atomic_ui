@@ -75,7 +75,7 @@ const handleTryAgain = () => {
       </Typography>
       <Typography
         variant="body-sm"
-        class="text-(--ui-text-muted)"
+        class="text-(--ui-text)"
       >
         Enter your email and company code to receive a password reset link.
       </Typography>
@@ -111,7 +111,7 @@ const handleTryAgain = () => {
         </Typography>
         <Typography
           variant="body-sm"
-          class="text-(--ui-text-muted)"
+          class="text-(--ui-text)"
         >
           We've sent a password reset link to {{ email }}. Please check your email and follow the instructions.
         </Typography>
@@ -120,7 +120,7 @@ const handleTryAgain = () => {
       <div class="pt-4 space-y-3">
         <Typography
           variant="body-sm"
-          class="text-(--ui-text-muted)"
+          class="text-(--ui-text)"
         >
           Didn't receive the email? Check your spam folder or try again.
         </Typography>
@@ -198,7 +198,7 @@ const handleTryAgain = () => {
     <div class="text-center">
       <Typography
         variant="body-sm"
-        class="text-(--ui-text-muted)"
+        class="text-(--ui-text)"
       >
         Remember your password?
         <Link

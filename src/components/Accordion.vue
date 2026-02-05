@@ -188,7 +188,7 @@ const headerVariants = cva(
   }
 )
 
-const chevronVariants = cva('ml-4 shrink-0 text-(--ui-text-soft) transition-all duration-200', {
+const chevronVariants = cva('ml-4 shrink-0 text-(--ui-text) transition-all duration-200', {
   variants: {
     expanded: {
       true: 'rotate-180 text-(--ui-primary)',
@@ -197,7 +197,7 @@ const chevronVariants = cva('ml-4 shrink-0 text-(--ui-text-soft) transition-all 
   }
 })
 
-const contentVariants = cva('overflow-hidden text-(--ui-text-muted) bg-(--ui-surface)', {
+const contentVariants = cva('overflow-hidden text-(--ui-text) bg-(--ui-surface)', {
   variants: {
     size: {
       sm: 'px-4 py-3 text-sm',

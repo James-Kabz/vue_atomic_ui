@@ -91,7 +91,7 @@ const badgeVariants = cva(
         info:
           'border border-(--ui-primary-soft) bg-(--ui-primary-soft) text-(--ui-primary) hover:bg-(--ui-primary-soft) dark:border-(--ui-primary-soft) dark:bg-(--ui-primary-soft) dark:text-(--ui-primary)',
         ghost:
-          'bg-transparent text-(--ui-text-muted) hover:bg-(--ui-surface-muted)',
+          'bg-transparent text-(--ui-text) hover:bg-(--ui-surface-muted)',
         link:
           'text-(--ui-primary) hover:underline',
         subtle:

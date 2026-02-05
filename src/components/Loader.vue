@@ -216,7 +216,7 @@ defineProps({
 
 .loader__text {
   font-size: 14px;
-  color: var(--ui-text-muted);
+  color: var(--ui-text);
   font-weight: 500;
   text-align: center;
 }

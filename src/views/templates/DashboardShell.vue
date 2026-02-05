@@ -83,7 +83,7 @@ const handleMobileSidebarToggle = () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-(--ui-surface-muted)">
+  <div class="min-h-screen  bg-(--ui-bg) overflow-hidden">
     <Sidebar
       ref="sidebarRef"
       :sidebar-width="sidebarWidth"
@@ -117,7 +117,7 @@ const handleMobileSidebarToggle = () => {
     />
 
     <main
-      class="transition-all duration-300 ease-in-out pt-16 min-h-screen"
+      class="transition-all ui-glossy-surface duration-300 ease-in-out pt-16 min-h-screen"
       :style="{ marginLeft: sidebarRef?.contentMarginLeft + 'px' }"
     >
       <div class="p-6">

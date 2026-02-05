@@ -180,14 +180,14 @@ const formatFileSize = (bytes) => {
         <div class="bg-(--ui-surface-muted) rounded-full p-2 mr-3">
           <Icon
             icon="upload"
-            class="h-6 w-6 text-(--ui-text-muted)"
+            class="h-6 w-6 text-(--ui-text)"
           />
         </div>
         <div class="flex flex-col">
-          <p class="text-sm font-medium text-(--ui-text-muted)">
+          <p class="text-sm font-medium text-(--ui-text)">
             <span class="text-(--ui-primary) font-semibold">Click to upload</span> or drag and drop
           </p>
-          <p class="text-xs text-(--ui-text-soft)">
+          <p class="text-xs text-(--ui-text)">
             {{ maxSize ? `Up to ${formatFileSize(maxSize)}` : 'No size limit' }}
             <span
               v-if="accept"
@@ -219,7 +219,7 @@ const formatFileSize = (bytes) => {
           />
           <div class="flex flex-col">
             <span class="text-sm font-medium text-(--ui-text)">{{ fileItem.file.name }}</span>
-            <span class="text-xs text-(--ui-text-soft)">Uploading... {{ Math.round(fileItem.progress) }}%</span>
+            <span class="text-xs text-(--ui-text)">Uploading... {{ Math.round(fileItem.progress) }}%</span>
           </div>
         </div>
       </div>
@@ -239,11 +239,11 @@ const formatFileSize = (bytes) => {
           </div>
           <div class="flex flex-col">
             <span class="text-sm font-medium text-(--ui-text)">{{ file.name }}</span>
-            <span class="text-xs text-(--ui-text-soft)">{{ formatFileSize(file.size) }}</span>
+            <span class="text-xs text-(--ui-text)">{{ formatFileSize(file.size) }}</span>
           </div>
         </div>
         <button
-          class="text-(--ui-text-soft) hover:text-(--ui-danger) hover:bg-(--ui-danger-soft) rounded-full p-1 transition-colors"
+          class="text-(--ui-text) hover:text-(--ui-danger) hover:bg-(--ui-danger-soft) rounded-full p-1 transition-colors"
           @click="removeFile(index)"
         >
           <Icon

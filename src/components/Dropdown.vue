@@ -71,7 +71,7 @@ const triggerVariants = cva(
       variant: {
         default: 'ui-glossy-button-strong text-(--ui-text-inverse) bg-(--ui-primary) hover:bg-(--ui-primary-strong)',
         outline: 'ui-glossy-button ui-glossy-border border text-(--ui-text) bg-(--ui-surface) hover:brightness-105',
-        ghost: 'text-(--ui-text-muted) hover:bg-(--ui-surface-muted) hover:text-(--ui-text)'
+        ghost: 'text-(--ui-text) hover:bg-(--ui-surface-muted) hover:text-(--ui-text)'
       }
     }
   }

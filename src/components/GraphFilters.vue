@@ -10,7 +10,7 @@
         <div class="relative flex-1">
           <Icon
             icon="calendar"
-            class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-(--ui-text-soft)"
+            class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-(--ui-text)"
           />
           <input
             v-model="dateFrom"
@@ -19,11 +19,11 @@
             placeholder="From date"
           >
         </div>
-        <span class="text-(--ui-text-soft) text-sm">to</span>
+        <span class="text-(--ui-text) text-sm">to</span>
         <div class="relative flex-1">
           <Icon
             icon="calendar"
-            class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-(--ui-text-soft)"
+            class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-(--ui-text)"
           />
           <input
             v-model="dateTo"
@@ -57,7 +57,7 @@
           </Select>
           <Icon
             icon="chart-bar"
-            class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-(--ui-text-soft) pointer-events-none"
+            class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-(--ui-text) pointer-events-none"
           />
         </div>
       </div>
@@ -86,7 +86,7 @@
           </Select>
           <Icon
             icon="database"
-            class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-(--ui-text-soft) pointer-events-none"
+            class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-(--ui-text) pointer-events-none"
           />
         </div>
       </div>
@@ -309,7 +309,7 @@ const selectClasses = computed(() =>
 )
 
 const clearFiltersButtonClasses = computed(() =>
-    'text-(--ui-text-muted) hover:text-(--ui-text) border ui-glossy-border ui-glossy-button hover:brightness-105 px-3 py-2 rounded-lg text-sm font-medium transition-all'
+    'text-(--ui-text) hover:text-(--ui-text) border ui-glossy-border ui-glossy-button hover:brightness-105 px-3 py-2 rounded-lg text-sm font-medium transition-all'
 )
 
 const exportButtonClasses = computed(() =>
@@ -317,7 +317,7 @@ const exportButtonClasses = computed(() =>
 )
 
 const refreshButtonClasses = computed(() =>
-    'text-(--ui-text-muted) hover:text-(--ui-text) border ui-glossy-border ui-glossy-button hover:brightness-105 px-3 py-2 rounded-lg text-sm font-medium transition-all'
+    'text-(--ui-text) hover:text-(--ui-text) border ui-glossy-border ui-glossy-button hover:brightness-105 px-3 py-2 rounded-lg text-sm font-medium transition-all'
 )
 
 const activeFiltersContainerClasses = computed(() =>

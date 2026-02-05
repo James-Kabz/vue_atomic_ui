@@ -25,7 +25,6 @@ const statusOptions = [
 const addButtonConfig = {
   label: 'Add User',
   icon: 'plus',
-  variant: 'success',
   size: 'md',
   tooltip: 'Create a new user'
 }
@@ -89,10 +88,10 @@ const handleToggleColumn = ({ column, visible }) => {
     <div class="space-y-6">
       <div class="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 class="text-2xl font-semibold text-slate-900">
+          <h1 class="text-2xl font-semibold text-(--ui-text)">
             User Directory
           </h1>
-          <p class="text-slate-600 mt-1">
+          <p class="text-(--ui-text) mt-1">
             Track active users, permissions, and last activity.
           </p>
         </div>
@@ -101,7 +100,7 @@ const handleToggleColumn = ({ column, visible }) => {
         </Button>
       </div>
 
-      <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <div class="bg-(--ui-surface) ui-glossy-surface rounded-xl shadow-sm border border-(--ui-border) ui-glossy-border overflow-hidden">
         <DataTableFilters
           v-model:search-query="searchQuery"
           v-model:date-from="dateFrom"
@@ -126,7 +125,7 @@ const handleToggleColumn = ({ column, visible }) => {
           :toggleable-columns="columns"
           :visible-columns="visibleColumnKeys"
           :show-density-toggle="true"
-          :show-column-toggle="false"
+          :show-column-toggle="true"
           :show-refresh="false"
           @update:density="(value) => (density = value)"
           @toggle-column="handleToggleColumn"

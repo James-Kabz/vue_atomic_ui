@@ -1,139 +1,142 @@
 <template>
-  <div :class="toolbarClasses">
-    <!-- Left side - Selection actions -->
-    <div class="flex items-center gap-3">
-      <div
-        v-if="selectedCount > 0"
-        class="flex items-center gap-3"
-      >
-        <span class="text-sm text-(--ui-text-muted)">
-          {{ selectedCount }} selected
-        </span>
+  <div class="flex flex-col">
+    <div :class="toolbarClasses">
+      <!-- Left side - Selection actions -->
+      <div class="flex items-center gap-3">
+        <div
+          v-if="selectedCount > 0"
+          class="flex items-center gap-3"
+        >
+          <span class="text-sm text-(--ui-text)">
+            {{ selectedCount }} selected
+          </span>
 
-        <!-- Bulk actions -->
-        <div class="flex items-center gap-2">
-          <Button
-            v-for="action in bulkActions"
-            :key="action.key"
-            :class="getBulkActionClasses(action)"
-            @click="$emit('bulk-action', { action: action.key, items: selectedItems })"
-          >
-            <font-awesome-icon
-              v-if="action.icon"
-              :icon="action.icon"
-              class="w-4 h-4"
-            />
-            {{ action.label }}
-          </Button>
+          <!-- Bulk actions -->
+          <div class="flex items-center gap-2">
+            <Button
+              v-for="action in bulkActions"
+              :key="action.key"
+              :class="getBulkActionClasses(action)"
+              @click="$emit('bulk-action', { action: action.key, items: selectedItems })"
+            >
+              <font-awesome-icon
+                v-if="action.icon"
+                :icon="action.icon"
+                class="w-4 h-4"
+              />
+              {{ action.label }}
+            </Button>
+          </div>
         </div>
-      </div>
 
-      <!-- Default info when no selection -->
+        <!-- Default info when no selection -->
       <div
         v-else-if="totalItems > 0"
         :class="itemCountClasses"
       >
-        {{ totalItems }} {{ totalItems === 1 ? 'item' : 'items' }}
+        {{ totalItems }} {{ itemLabel }}
       </div>
-    </div>
-
-    <!-- Right side - View controls and actions -->
-    <div class="flex items-center gap-3">
-      <!-- View density toggle -->
-      <div
-        v-if="showDensityToggle"
-        :class="densityToggleClasses"
-      >
-        <button
-          v-for="option in densityOptions"
-          :key="option.value"
-          :class="getDensityButtonClasses(option.value)"
-          :title="option.label"
-          type="button"
-          @click="$emit('update:density', option.value)"
-        >
-          <font-awesome-icon
-            :icon="option.icon"
-            class="w-4 h-4"
-          />
-        </button>
       </div>
 
-      <!-- Column visibility toggle -->
-      <div
-        v-if="showColumnToggle"
-        class="relative"
-      >
-        <button
-          ref="columnToggleButton"
-          :class="columnToggleButtonClasses"
-          type="button"
-          @click.stop="toggleColumnMenu"
-        >
-          <font-awesome-icon
-            icon="columns"
-            class="w-4 h-4"
-          />
-          <span>Columns</span>
-        </button>
-
-        <!-- Column menu -->
+      <!-- Right side - View controls and actions -->
+      <div class="flex items-center gap-3">
+        <!-- View density toggle -->
         <div
-          v-show="showColumnMenu"
-          ref="columnMenu"
-          :class="columnMenuClasses"
-          @click.stop
+          v-if="showDensityToggle"
+          :class="densityToggleClasses"
         >
-          <div class="p-3">
-            <div :class="columnMenuHeaderClasses">
-              Show Columns
-            </div>
-            <div class="space-y-1">
-              <div
-                v-for="column in toggleableColumns"
-                :key="column.key"
-                :class="columnMenuItemClasses"
-              >
-                <label class="flex items-center gap-2 cursor-pointer w-full">
-                  <input
-                    type="checkbox"
-                    :checked="isColumnVisible(column.key)"
-                    :class="checkboxClasses"
-                    @change="toggleColumn(column.key, $event.target.checked)"
-                  >
-                  <span :class="labelClasses">
-                    {{ column.label }}
-                  </span>
-                </label>
+          <button
+            v-for="option in densityOptions"
+            :key="option.value"
+            :class="getDensityButtonClasses(option.value)"
+            :title="option.label"
+            type="button"
+            @click="$emit('update:density', option.value)"
+          >
+            <font-awesome-icon
+              :icon="option.icon"
+              class="w-4 h-4"
+            />
+          </button>
+        </div>
+
+        <!-- Column visibility toggle -->
+        <div
+          v-if="showColumnToggle"
+          class="relative"
+        >
+          <button
+            ref="columnToggleButton"
+            :class="columnToggleButtonClasses"
+            type="button"
+            @click.stop="toggleColumnMenu"
+          >
+            <font-awesome-icon
+              icon="columns"
+              class="w-4 h-4"
+            />
+            <span>Columns</span>
+          </button>
+
+          <!-- Column menu -->
+          <div
+            v-show="showColumnMenu"
+            ref="columnMenu"
+            :class="columnMenuClasses"
+            @click.stop
+          >
+            <div class="p-3">
+              <div :class="columnMenuHeaderClasses">
+                Show Columns
+              </div>
+              <div class="space-y-1">
+                <div
+                  v-for="column in toggleableColumns"
+                  :key="column.key"
+                  :class="columnMenuItemClasses"
+                >
+                  <label class="flex items-center gap-2 cursor-pointer w-full">
+                    <input
+                      type="checkbox"
+                      :checked="isColumnVisible(column.key)"
+                      :class="checkboxClasses"
+                      @change="toggleColumn(column.key, $event.target.checked)"
+                    >
+                    <span :class="labelClasses">
+                      {{ column.label }}
+                    </span>
+                  </label>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Refresh button -->
-      <button
-        v-if="showRefresh"
-        :disabled="isRefreshing"
-        :class="getRefreshButtonClasses()"
-        type="button"
-        @click="$emit('refresh')"
-      >
-        <font-awesome-icon
-          icon="sync"
-          :class="getRefreshIconClasses()"
-        />
-        <span>Refresh</span>
-      </button>
+        <!-- Refresh button -->
+        <button
+          v-if="showRefresh"
+          :disabled="isRefreshing"
+          :class="getRefreshButtonClasses()"
+          type="button"
+          @click="$emit('refresh')"
+        >
+          <font-awesome-icon
+            icon="sync"
+            :class="getRefreshIconClasses()"
+          />
+          <span>Refresh</span>
+        </button>
 
-      <!-- Custom actions -->
-      <div
-        v-if="$slots.actions"
-        class="flex items-center gap-2"
-      >
-        <slot name="actions" />
+        <!-- Custom actions -->
+        <div
+          v-if="$slots.actions"
+          class="flex items-center gap-2"
+        >
+          <slot name="actions" />
+        </div>
       </div>
     </div>
+
   </div>
 </template>
 
@@ -199,6 +202,8 @@ import { cn } from '../utils/cn.js'
 const props = defineProps({
   selectedItems: { type: Array, default: () => [] },
   totalItems: { type: Number, default: 0 },
+  itemLabel: { type: String, default: 'items' },
+  showTableInfo: { type: Boolean, default: false },
   bulkActions: { type: Array, default: () => defaultBulkActions },
   showDensityToggle: { type: Boolean, default: true },
   showColumnToggle: { type: Boolean, default: true },
@@ -264,7 +269,7 @@ const bulkActionVariants = cva('px-3 py-1.5 text-sm font-medium rounded-md flex 
     variant: {
       danger: 'text-(--ui-danger) bg-(--ui-danger) hover:bg-(--ui-danger-soft) border border-(--ui-danger-soft)',
       primary: 'text-(--ui-primary) bg-(--ui-primary-soft) hover:bg-(--ui-primary-soft) border border-(--ui-primary-soft)',
-      secondary: 'text-(--ui-text-muted) bg-(--ui-surface-soft) hover:bg-(--ui-surface-soft) border border-(--ui-border)'
+      secondary: 'text-(--ui-text) bg-(--ui-surface-soft) hover:bg-(--ui-surface-soft) border border-(--ui-border)'
     }
   },
   defaultVariants: {
@@ -276,7 +281,7 @@ const densityButtonVariants = cva('p-2 border ui-glossy-border transition-colors
   variants: {
     active: {
       true: 'bg-(--ui-primary-soft) text-(--ui-primary) border-(--ui-primary-soft)',
-      false: 'bg-(--ui-surface) text-(--ui-text-muted) hover:bg-(--ui-surface-muted)'
+      false: 'bg-(--ui-surface) text-(--ui-text) hover:bg-(--ui-surface-muted)'
     },
     position: {
       first: 'rounded-l-md border-r-0',
@@ -293,8 +298,8 @@ const densityButtonVariants = cva('p-2 border ui-glossy-border transition-colors
 const refreshButtonVariants = cva('px-3 py-2 text-sm border ui-glossy-border rounded-md flex items-center gap-2 transition-colors ui-glossy-button', {
   variants: {
     state: {
-      normal: 'text-(--ui-text-muted) hover:text-(--ui-text) hover:bg-(--ui-surface-muted)',
-      refreshing: 'text-(--ui-text-muted) opacity-75 cursor-not-allowed'
+      normal: 'text-(--ui-text) hover:text-(--ui-text) hover:bg-(--ui-surface-muted)',
+      refreshing: 'text-(--ui-text) opacity-75 cursor-not-allowed'
     }
   },
   defaultVariants: {
@@ -310,11 +315,11 @@ const toolbarClasses = computed(() =>
   }))
 )
 
-const itemCountClasses = computed(() => 'text-sm text-(--ui-text-muted)')
+const itemCountClasses = computed(() => 'text-md text-(--ui-text)')
 const densityToggleClasses = computed(() => 'flex items-center')
 
 const columnToggleButtonClasses = computed(() => 
-  'flex items-center gap-2 px-3 py-2 text-sm text-(--ui-text-muted) hover:text-(--ui-text) border ui-glossy-border rounded-md ui-glossy-button hover:brightness-105 transition-colors focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:ring-offset-1'
+  'flex items-center gap-2 px-3 py-2 text-sm text-(--ui-text) hover:text-(--ui-text) border ui-glossy-border rounded-md ui-glossy-button hover:brightness-105 transition-colors focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:ring-offset-1'
 )
 
 const columnMenuClasses = computed(() => 
@@ -322,7 +327,7 @@ const columnMenuClasses = computed(() =>
 )
 
 const columnMenuHeaderClasses = computed(() => 
-  'text-xs font-medium text-(--ui-text-soft) uppercase tracking-wider mb-2 border-b border-(--ui-border) pb-2'
+  'text-xs font-medium text-(--ui-text) uppercase tracking-wider mb-2 border-b border-(--ui-border) pb-2'
 )
 
 const columnMenuItemClasses = computed(() => 
@@ -334,7 +339,7 @@ const checkboxClasses = computed(() =>
 )
 
 const labelClasses = computed(() => 
-  'text-sm text-(--ui-text-muted) flex-1 select-none'
+  'text-sm text-(--ui-text) flex-1 select-none'
 )
 
 // Click outside handler

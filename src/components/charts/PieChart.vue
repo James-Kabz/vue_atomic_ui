@@ -73,15 +73,15 @@ const props = defineProps({
     },
     centerTextClasses: {
         type: String,
-        default: 'fill-(--ui-text-muted) text-2xl font-bold'
+        default: 'fill-(--ui-text) text-2xl font-bold'
     },
     centerLabelClasses: {
         type: String,
-        default: 'fill-(--ui-text-muted) text-sm'
+        default: 'fill-(--ui-text) text-sm'
     },
     legendTextClasses: {
         type: String,
-        default: 'fill-(--ui-text-muted) text-xs font-medium'
+        default: 'fill-(--ui-text) text-xs font-medium'
     }
 })
 
@@ -265,7 +265,7 @@ const handleSliceClick = (slice, index) => {
       class="w-full h-full flex items-center justify-center"
     >
       <div class="text-center">
-        <div class="text-(--ui-text-soft) mb-2">
+        <div class="text-(--ui-text) mb-2">
           <svg
             class="w-16 h-16 mx-auto"
             fill="none"
@@ -286,7 +286,7 @@ const handleSliceClick = (slice, index) => {
             />
           </svg>
         </div>
-        <p class="text-sm text-(--ui-text-soft)">
+        <p class="text-sm text-(--ui-text)">
           No data available
         </p>
       </div>
@@ -411,10 +411,10 @@ const handleSliceClick = (slice, index) => {
         </div>
         <div class="flex items-baseline gap-2 ml-5">
           <span class="text-2xl font-bold">{{ tooltip.value }}</span>
-          <span class="text-xs text-(--ui-text-soft)">tasks</span>
+          <span class="text-xs text-(--ui-text)">tasks</span>
         </div>
         <div class="mt-1 ml-5">
-          <span class="text-xs text-(--ui-text-soft)">{{ tooltip.percentage }}% of total</span>
+          <span class="text-xs text-(--ui-text)">{{ tooltip.percentage }}% of total</span>
         </div>
         <!-- Tooltip arrow -->
         <div

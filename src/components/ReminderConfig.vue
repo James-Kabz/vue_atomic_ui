@@ -179,7 +179,7 @@ const saveRecipients = () => {
               </button>
               <Icon
                 :icon="model.expanded ? 'chevron-up' : 'chevron-down'"
-                class="w-6 h-6 text-(--ui-text-soft) transition-transform duration-300"
+                class="w-6 h-6 text-(--ui-text) transition-transform duration-300"
                 :class="{ 'rotate-180': model.expanded }"
               />
             </div>
@@ -209,13 +209,13 @@ const saveRecipients = () => {
               >
                 <Icon
                   icon="bell"
-                  class="w-10 h-10 text-(--ui-text-soft)"
+                  class="w-10 h-10 text-(--ui-text)"
                 />
               </div>
-              <h3 class="text-lg font-semibold text-(--ui-text-muted) mb-2">
+              <h3 class="text-lg font-semibold text-(--ui-text) mb-2">
                 No reminders configured
               </h3>
-              <p class="text-(--ui-text-soft) text-sm mb-4">
+              <p class="text-(--ui-text) text-sm mb-4">
                 Click "Add Reminder" to create your first reminder
               </p>
             </div>
@@ -234,7 +234,7 @@ const saveRecipients = () => {
                   <div class="flex-1 space-y-5">
                     <!-- Days Input -->
                     <div>
-                      <label class="block text-xs font-bold text-(--ui-text-muted) mb-2 uppercase tracking-wider">
+                      <label class="block text-xs font-bold text-(--ui-text) mb-2 uppercase tracking-wider">
                         Days Before Event
                       </label>
                       <div class="relative">
@@ -246,7 +246,7 @@ const saveRecipients = () => {
                           placeholder="0"
                           @input="updateReminderDays(model.id, reminder.id, $event.target.value)"
                         >
-                        <div class="absolute right-4 top-1/2 -translate-y-1/2 text-(--ui-text-soft) text-sm font-medium">
+                        <div class="absolute right-4 top-1/2 -translate-y-1/2 text-(--ui-text) text-sm font-medium">
                           days
                         </div>
                       </div>
@@ -265,10 +265,10 @@ const saveRecipients = () => {
                         :for="`daily-${reminder.id}`"
                         class="flex-1 cursor-pointer"
                       >
-                        <span class="text-sm font-semibold text-(--ui-text-muted) block">
+                        <span class="text-sm font-semibold text-(--ui-text) block">
                           Send Daily Reminder
                         </span>
-                        <span class="text-xs text-(--ui-text-soft)">
+                        <span class="text-xs text-(--ui-text)">
                           Repeat this reminder every day
                         </span>
                       </label>
@@ -276,7 +276,7 @@ const saveRecipients = () => {
 
                     <!-- Send Type (Multi-select) -->
                     <div>
-                      <label class="block text-xs font-bold text-(--ui-text-muted) mb-3 uppercase tracking-wider">
+                      <label class="block text-xs font-bold text-(--ui-text) mb-3 uppercase tracking-wider">
                         Notification Methods
                       </label>
                       <div class="grid grid-cols-2 gap-3">
@@ -287,7 +287,7 @@ const saveRecipients = () => {
                             'relative px-4 py-3.5 rounded-lg font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2 border-2',
                             (reminder.sendTypes || []).includes(option.value)
                               ? 'bg-linear-to-r from-(--ui-primary) to-(--ui-accent) text-(--ui-text-inverse) border-transparent shadow-md'
-                              : 'bg-(--ui-surface) ui-glossy-surface text-(--ui-text-muted) border-(--ui-border) ui-glossy-border hover:border-(--ui-primary-soft) hover:bg-(--ui-primary-soft)'
+                              : 'bg-(--ui-surface) ui-glossy-surface text-(--ui-text) border-(--ui-border) ui-glossy-border hover:border-(--ui-primary-soft) hover:bg-(--ui-primary-soft)'
                           ]"
                           @click="toggleSendType(model.id, reminder.id, option.value)"
                         >
@@ -307,7 +307,7 @@ const saveRecipients = () => {
 
                     <!-- Recipients -->
                     <div>
-                      <label class="block text-xs font-bold text-(--ui-text-muted) mb-3 uppercase tracking-wider">
+                      <label class="block text-xs font-bold text-(--ui-text) mb-3 uppercase tracking-wider">
                         Recipients
                       </label>
                       <button
@@ -329,14 +329,14 @@ const saveRecipients = () => {
                                 `${(reminder.recipients || []).length} recipient${(reminder.recipients || []).length !== 1
                                   ? 's' : ''} selected` }}
                             </span>
-                            <span class="text-xs text-(--ui-text-soft)">
+                            <span class="text-xs text-(--ui-text)">
                               Click to manage
                             </span>
                           </div>
                         </div>
                         <Icon
                           icon="chevron-right"
-                          class="w-5 h-5 text-(--ui-text-soft) group-hover:text-(--ui-primary) group-hover:translate-x-1 transition-all"
+                          class="w-5 h-5 text-(--ui-text) group-hover:text-(--ui-primary) group-hover:translate-x-1 transition-all"
                         />
                       </button>
 
@@ -426,9 +426,9 @@ const saveRecipients = () => {
         >
           <Icon
             icon="users"
-            class="w-12 h-12 text-(--ui-text-soft) mx-auto mb-3"
+            class="w-12 h-12 text-(--ui-text) mx-auto mb-3"
           />
-          <p class="text-(--ui-text-soft) text-sm">
+          <p class="text-(--ui-text) text-sm">
             No recipients available
           </p>
         </div>
@@ -458,7 +458,7 @@ const saveRecipients = () => {
               <span
                 :class="[
                   'text-sm font-semibold block truncate',
-                  currentReminder?.recipients.includes(recipient) ? 'text-(--ui-primary)' : 'text-(--ui-text-muted)'
+                  currentReminder?.recipients.includes(recipient) ? 'text-(--ui-primary)' : 'text-(--ui-text)'
                 ]"
               >
                 {{ recipient }}
@@ -476,7 +476,7 @@ const saveRecipients = () => {
       <!-- Modal Footer -->
       <div class="p-6 bg-(--ui-surface-muted) border-t border-(--ui-border) ui-glossy-border flex gap-3">
         <button
-          class="flex-1 px-6 py-3 bg-(--ui-surface) ui-glossy-surface border-2 border-(--ui-border) ui-glossy-border text-(--ui-text-muted) rounded-lg font-semibold hover:bg-(--ui-surface-muted) transition-all duration-300"
+          class="flex-1 px-6 py-3 bg-(--ui-surface) ui-glossy-surface border-2 border-(--ui-border) ui-glossy-border text-(--ui-text) rounded-lg font-semibold hover:bg-(--ui-surface-muted) transition-all duration-300"
           @click="showRecipientModal = false"
         >
           Cancel

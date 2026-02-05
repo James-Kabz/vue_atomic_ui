@@ -48,7 +48,7 @@ const props = defineProps({
   },
   axisLabelClasses: {
     type: String,
-    default: 'fill-(--ui-text-muted) text-xs font-medium'
+    default: 'fill-(--ui-text) text-xs font-medium'
   },
   maxValue: {
     type: Number,
@@ -254,7 +254,7 @@ const handleBarClick = (value, index) => {
         <text
           :x="padding.left + chartWidth / 2"
           :y="height - 10"
-          class="fill-(--ui-text-muted) text-sm font-semibold"
+          class="fill-(--ui-text) text-sm font-semibold"
           text-anchor="middle"
         >
           {{ xAxisLabel }}
@@ -280,7 +280,7 @@ const handleBarClick = (value, index) => {
         <text
           :x="-(padding.top + chartHeight / 2)"
           :y="15"
-          class="fill-(--ui-text-muted) text-sm font-semibold"
+          class="fill-(--ui-text) text-sm font-semibold"
           text-anchor="middle"
           transform="rotate(-90)"
         >

@@ -7,13 +7,13 @@
       <!-- Selection Info -->
       <div
         v-if="selectable && selectedCount > 0"
-        class="text-sm text-(--ui-text-muted)"
+        class="text-sm text-(--ui-text)"
       >
         {{ selectedCount }} of {{ total }} selected
       </div>
       <div
         v-else
-        class="text-sm text-(--ui-text-muted)"
+        class="text-sm text-(--ui-text)"
       >
         Showing {{ startItem }} to {{ endItem }} of {{ total }} entries
       </div>
@@ -157,7 +157,7 @@
         </div>
 
         <!-- Page Info -->
-        <div class="text-sm text-(--ui-text-muted) ml-4">
+        <div class="text-sm text-(--ui-text) ml-4">
           Page {{ currentPage }} of {{ totalPages }}
         </div>
       </div>
@@ -228,9 +228,9 @@ defineEmits(['update:currentPage', 'update:pageSize'])
 const footerVariants = cva('border-t border-(--ui-border) ui-glossy-border', {
   variants: {
     variant: {
-      default: 'bg-(--ui-surface-muted)',
+      default: 'bg-(--ui-bg) ui-glossy-panel',
       minimal: 'bg-transparent border-(--ui-border) ui-glossy-border',
-      bordered: 'bg-(--ui-surface-muted) border-t-2 border-(--ui-border) ui-glossy-border'
+      bordered: 'bg-(--ui-bg) ui-glossy-panel border-t-2 border-(--ui-border) ui-glossy-border'
     },
     padding: {
       compact: 'px-4 py-2',
@@ -247,9 +247,9 @@ const footerVariants = cva('border-t border-(--ui-border) ui-glossy-border', {
 const pageButtonVariants = cva('text-sm font-medium border rounded-md transition-colors duration-200', {
   variants: {
     state: {
-      active: 'bg-(--ui-primary) text-(--ui-text-inverse) border-(--ui-primary)',
-      inactive: 'bg-(--ui-surface) ui-glossy-surface text-(--ui-text-muted) border-(--ui-border) ui-glossy-border hover:bg-(--ui-surface-muted)',
-      disabled: 'bg-(--ui-surface-muted) text-(--ui-text-soft) border-(--ui-border) ui-glossy-border cursor-not-allowed'
+      active: 'ui-glossy-button-strong text-(--ui-text-inverse) border-(--ui-primary)',
+      inactive: 'bg-(--ui-bg) ui-glossy-button text-(--ui-text) border-(--ui-border) ui-glossy-border hover:text-(--ui-text)',
+      disabled: 'bg-(--ui-bg) ui-glossy-button text-(--ui-text) border-(--ui-border) ui-glossy-border cursor-not-allowed'
     },
     size: {
       sm: 'px-2 py-1',
@@ -263,7 +263,7 @@ const pageButtonVariants = cva('text-sm font-medium border rounded-md transition
   }
 })
 
-const labelVariants = cva('text-(--ui-text-muted)', {
+const labelVariants = cva('text-(--ui-text)', {
   variants: {
     size: {
       sm: 'text-sm',

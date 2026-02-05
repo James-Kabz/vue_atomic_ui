@@ -158,7 +158,7 @@ const variantClasses = computed(() => {
     'display-lg': 'text-6xl font-bold leading-tight tracking-tight',
     'display-xl': 'text-7xl font-bold leading-tight tracking-tighter',
     'display-2xl': 'text-8xl font-bold leading-tight tracking-tighter',
-    caption: 'text-xs leading-normal text-(--ui-text-muted)',
+    caption: 'text-xs leading-normal text-(--ui-text)',
     overline: 'text-xs font-medium uppercase tracking-wider leading-normal',
     label: 'text-sm font-medium leading-normal'
   }
@@ -173,14 +173,14 @@ const colorClasses = computed(() => {
   const colors = {
     default: 'text-(--ui-text)',
     primary: 'text-(--ui-primary)',
-    secondary: 'text-(--ui-text-muted)',
+    secondary: 'text-(--ui-text)',
     accent: 'text-(--ui-accent)',
     success: 'text-(--ui-success)',
     warning: 'text-(--ui-warning)',
     danger: 'text-(--ui-danger)',
     info: 'text-(--ui-primary)',
-    muted: 'text-(--ui-text-soft)',
-    disabled: 'text-(--ui-text-soft)',
+    muted: 'text-(--ui-text)',
+    disabled: 'text-(--ui-text)',
     white: 'text-(--ui-text-inverse)',
     black: 'text-(--ui-text)'
   }

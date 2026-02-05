@@ -14,7 +14,7 @@
           tabVariants({ size: props.size, variant: props.variant }),
           activeIndex === index
             ? 'border-(--ui-primary) text-(--ui-primary) bg-(--ui-primary-soft)'
-            : 'border-transparent text-(--ui-text-soft) hover:text-(--ui-text-muted) hover:border-(--ui-border)',
+            : 'border-transparent text-(--ui-text) hover:text-(--ui-text) hover:border-(--ui-border)',
           props.loading && 'cursor-not-allowed opacity-50'
         )"
         :aria-selected="activeIndex === index"

@@ -130,7 +130,7 @@ const getStatusColor = (status) => {
         <h1 class="text-2xl font-bold text-(--ui-text)">
           Dashboard Demo
         </h1>
-        <p class="text-(--ui-text-muted) mt-1">
+        <p class="text-(--ui-text) mt-1">
           Welcome to the Vue UI Dashboard demo page
         </p>
       </div>
@@ -142,7 +142,7 @@ const getStatusColor = (status) => {
           {{ sidebarCollapsed ? 'Expand' : 'Collapse' }} Sidebar
         </button>
         <button
-          class="px-4 py-2 bg-(--ui-surface-muted) text-(--ui-text-muted) rounded-lg hover:bg-(--ui-surface-soft) transition-colors"
+          class="px-4 py-2 bg-(--ui-surface-muted) text-(--ui-text) rounded-lg hover:bg-(--ui-surface-soft) transition-colors"
           @click="refreshData"
         >
           Refresh Data
@@ -159,7 +159,7 @@ const getStatusColor = (status) => {
       >
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-sm font-medium text-(--ui-text-muted)">
+            <p class="text-sm font-medium text-(--ui-text)">
               {{ stat.label }}
             </p>
             <p class="text-2xl font-bold text-(--ui-text) mt-1">
@@ -177,7 +177,7 @@ const getStatusColor = (status) => {
           <span :class="`text-sm font-medium ${stat.trend === 'up' ? 'text-(--ui-success)' : 'text-(--ui-danger)'}`">
             {{ stat.trend === 'up' ? '+' : '-' }}{{ stat.change }}%
           </span>
-          <span class="text-sm text-(--ui-text-soft) ml-2">from last month</span>
+          <span class="text-sm text-(--ui-text) ml-2">from last month</span>
         </div>
       </div>
     </div>
@@ -213,7 +213,7 @@ const getStatusColor = (status) => {
                 />
               </svg>
             </div>
-            <p class="text-(--ui-text-muted)">
+            <p class="text-(--ui-text)">
               Chart component would go here
             </p>
           </div>
@@ -228,7 +228,7 @@ const getStatusColor = (status) => {
           </h3>
           <div class="flex items-center space-x-2">
             <span class="inline-flex items-center w-3 h-3 bg-(--ui-primary) rounded-full" />
-            <span class="text-sm text-(--ui-text-muted)">Active Users</span>
+            <span class="text-sm text-(--ui-text)">Active Users</span>
           </div>
         </div>
         <div class="h-64 bg-(--ui-surface-muted) rounded-lg flex items-center justify-center">
@@ -248,7 +248,7 @@ const getStatusColor = (status) => {
                 />
               </svg>
             </div>
-            <p class="text-(--ui-text-muted)">
+            <p class="text-(--ui-text)">
               Activity chart would go here
             </p>
           </div>
@@ -272,16 +272,16 @@ const getStatusColor = (status) => {
         <table class="w-full">
           <thead class="bg-(--ui-surface-muted)">
             <tr>
-              <th class="px-6 py-3 text-left text-xs font-medium text-(--ui-text-soft) uppercase tracking-wider">
+              <th class="px-6 py-3 text-left text-xs font-medium text-(--ui-text) uppercase tracking-wider">
                 User
               </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-(--ui-text-soft) uppercase tracking-wider">
+              <th class="px-6 py-3 text-left text-xs font-medium text-(--ui-text) uppercase tracking-wider">
                 Action
               </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-(--ui-text-soft) uppercase tracking-wider">
+              <th class="px-6 py-3 text-left text-xs font-medium text-(--ui-text) uppercase tracking-wider">
                 Status
               </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-(--ui-text-soft) uppercase tracking-wider">
+              <th class="px-6 py-3 text-left text-xs font-medium text-(--ui-text) uppercase tracking-wider">
                 Time
               </th>
             </tr>
@@ -295,13 +295,13 @@ const getStatusColor = (status) => {
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex items-center">
                   <div class="w-8 h-8 bg-(--ui-surface-soft) rounded-full flex items-center justify-center">
-                    <span class="text-xs font-medium text-(--ui-text-muted)">{{ activity.user.initials }}</span>
+                    <span class="text-xs font-medium text-(--ui-text)">{{ activity.user.initials }}</span>
                   </div>
                   <div class="ml-3">
                     <div class="text-sm font-medium text-(--ui-text)">
                       {{ activity.user.name }}
                     </div>
-                    <div class="text-sm text-(--ui-text-soft)">
+                    <div class="text-sm text-(--ui-text)">
                       {{ activity.user.email }}
                     </div>
                   </div>
@@ -317,7 +317,7 @@ const getStatusColor = (status) => {
                   {{ activity.status }}
                 </span>
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-(--ui-text-soft)">
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-(--ui-text)">
                 {{ activity.time }}
               </td>
             </tr>

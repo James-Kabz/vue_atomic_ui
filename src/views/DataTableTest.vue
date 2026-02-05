@@ -72,7 +72,7 @@
             <!-- Additional toolbar actions -->
             <button
               :disabled="selectedUsers.length === 0"
-              class="px-3 py-2 text-sm text-(--ui-text-muted) hover:text-(--ui-text) border border-(--ui-border) rounded-md hover:bg-(--ui-surface-muted) flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              class="px-3 py-2 text-sm text-(--ui-text) hover:text-(--ui-text) border border-(--ui-border) rounded-md hover:bg-(--ui-surface-muted) flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               @click="handleBulkExport"
             >
               <font-awesome-icon icon="download" />
@@ -113,7 +113,7 @@
                 <div class="font-medium text-(--ui-text)">
                   {{ item.name }}
                 </div>
-                <div class="text-xs text-(--ui-text-soft)">
+                <div class="text-xs text-(--ui-text)">
                   ID: {{ item.id }}
                 </div>
               </div>
@@ -144,7 +144,7 @@
 
           <!-- Custom cell for last login -->
           <template #cell-lastLogin="{ value }">
-            <span class="text-sm text-(--ui-text-muted)">
+            <span class="text-sm text-(--ui-text)">
               {{ formatDate(value) }}
             </span>
           </template>
@@ -193,7 +193,6 @@ const hasPermission = (permission) => {
 const addButtonConfig = computed(() => ({
   label: 'Add User',
   icon: 'plus',
-  variant: 'success',
   size: 'lg',
   tooltip: 'Create new user',
   permission: () => hasPermission('users.create'),

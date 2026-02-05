@@ -192,13 +192,13 @@ export default {
     },
     getEventColorClass(color) {
       const colorMap = {
-        blue: 'bg-(--ui-primary) border-(--ui-primary)',
-        red: 'bg-(--ui-danger) border-(--ui-danger)',
-        green: 'bg-(--ui-success) border-(--ui-success)',
-        purple: 'bg-(--ui-accent) border-(--ui-accent)',
-        orange: 'bg-(--ui-warning) border-(--ui-warning)',
+        blue: 'bg-(--ui-primary) border-(--ui-primary) text-(--ui-text-inverse)',
+        red: 'bg-(--ui-danger) border-(--ui-danger) text-(--ui-text-inverse)',
+        green: 'bg-(--ui-success) border-(--ui-success) text-(--ui-text-inverse)',
+        purple: 'bg-(--ui-accent) border-(--ui-accent) text-(--ui-text-inverse)',
+        orange: 'bg-(--ui-warning) border-(--ui-warning) text-(--ui-text-inverse)',
       }
-      return colorMap[color] || 'bg-(--ui-surface-soft) border-(--ui-border-strong)'
+      return colorMap[color] || 'bg-(--ui-surface-soft) border-(--ui-border-strong) text-(--ui-text)'
     },
     getEventsAtTime(events, timeSlot) {
       const eventsWithTime = events.filter(event => {
@@ -232,7 +232,7 @@ export default {
       <div class="flex items-center justify-between px-6 py-4 border-b border-(--ui-border) ui-glossy-border">
         <div class="flex items-center gap-3">
           <button
-            class="px-4 py-2 text-sm font-medium text-(--ui-text-muted) bg-(--ui-surface) ui-glossy-surface border border-(--ui-border) ui-glossy-border rounded hover:bg-(--ui-surface-muted) transition-colors"
+            class="px-4 py-2 text-sm font-medium text-(--ui-text) bg-(--ui-surface) ui-glossy-surface border border-(--ui-border) ui-glossy-border rounded hover:bg-(--ui-surface-muted) transition-colors"
             @click="goToToday"
           >
             Today
@@ -240,7 +240,7 @@ export default {
 
           <div class="flex items-center gap-1">
             <button
-              class="p-2 text-(--ui-text-muted) hover:bg-(--ui-surface-muted) rounded transition-colors"
+              class="p-2 text-(--ui-text) hover:bg-(--ui-surface-muted) rounded transition-colors"
               @click="previousPeriod"
             >
               <svg
@@ -258,7 +258,7 @@ export default {
               </svg>
             </button>
             <button
-              class="p-2 text-(--ui-text-muted) hover:bg-(--ui-surface-muted) rounded transition-colors"
+              class="p-2 text-(--ui-text) hover:bg-(--ui-surface-muted) rounded transition-colors"
               @click="nextPeriod"
             >
               <svg
@@ -285,28 +285,28 @@ export default {
         <div class="flex items-center gap-2">
           <button
             class="px-3 py-2 text-sm font-medium rounded transition-colors"
-            :class="viewMode === 'year' ? 'bg-(--ui-primary-soft) text-(--ui-primary)' : 'text-(--ui-text-muted) hover:bg-(--ui-surface-muted)'"
+            :class="viewMode === 'year' ? 'bg-(--ui-primary-soft) text-(--ui-primary)' : 'text-(--ui-text) hover:bg-(--ui-surface-muted)'"
             @click="viewMode = 'year'"
           >
             Year
           </button>
           <button
             class="px-3 py-2 text-sm font-medium rounded transition-colors"
-            :class="viewMode === 'month' ? 'bg-(--ui-primary-soft) text-(--ui-primary)' : 'text-(--ui-text-muted) hover:bg-(--ui-surface-muted)'"
+            :class="viewMode === 'month' ? 'bg-(--ui-primary-soft) text-(--ui-primary)' : 'text-(--ui-text) hover:bg-(--ui-surface-muted)'"
             @click="viewMode = 'month'"
           >
             Month
           </button>
           <button
             class="px-3 py-2 text-sm font-medium rounded transition-colors"
-            :class="viewMode === 'week' ? 'bg-(--ui-primary-soft) text-(--ui-primary)' : 'text-(--ui-text-muted) hover:bg-(--ui-surface-muted)'"
+            :class="viewMode === 'week' ? 'bg-(--ui-primary-soft) text-(--ui-primary)' : 'text-(--ui-text) hover:bg-(--ui-surface-muted)'"
             @click="viewMode = 'week'"
           >
             Week
           </button>
           <button
             class="px-3 py-2 text-sm font-medium rounded transition-colors"
-            :class="viewMode === 'day' ? 'bg-(--ui-primary-soft) text-(--ui-primary)' : 'text-(--ui-text-muted) hover:bg-(--ui-surface-muted)'"
+            :class="viewMode === 'day' ? 'bg-(--ui-primary-soft) text-(--ui-primary)' : 'text-(--ui-text) hover:bg-(--ui-surface-muted)'"
             @click="viewMode = 'day'"
           >
             Day
@@ -342,7 +342,7 @@ export default {
                   <div
                     v-for="day in weekDaysShort"
                     :key="day"
-                    class="text-center text-[10px] font-bold text-(--ui-text-muted)"
+                    class="text-center text-[10px] font-bold text-(--ui-text)"
                   >
                     {{ day }}
                   </div>
@@ -356,7 +356,7 @@ export default {
                     class="aspect-square flex items-center justify-center text-xs rounded-md relative transition-all hover:scale-110"
                     :class="[
                       // Base styles
-                      !day.isCurrentMonth ? 'text-(--ui-text-soft)' : 'text-(--ui-text)',
+                      !day.isCurrentMonth ? 'text-(--ui-text)' : 'text-(--ui-text)',
 
                       // Today styling
                       day.isToday ? 'bg-(--ui-primary) text-(--ui-text-inverse) font-extrabold shadow-md ring-2 ring-(--ui-primary)' : '',
@@ -395,7 +395,7 @@ export default {
             <div
               v-for="day in weekDays"
               :key="day"
-              class="text-center text-xs font-semibold text-(--ui-text-muted) py-3 uppercase tracking-wider"
+              class="text-center text-xs font-semibold text-(--ui-text) py-3 uppercase tracking-wider"
             >
               {{ day }}
             </div>
@@ -417,9 +417,9 @@ export default {
               <!-- Date Number -->
               <div class="flex items-center justify-between mb-1 px-1">
                 <span
-                  class="text-sm font-medium"
+                  class="text-xl font-medium"
                   :class="[
-                    day.isCurrentMonth ? 'text-(--ui-text)' : 'text-(--ui-text-soft)',
+                    day.isCurrentMonth ? 'text-(--ui-text)' : 'text-(--ui-text)',
                     day.isToday ? 'bg-(--ui-primary) text-(--ui-text-inverse) w-6 h-6 flex items-center justify-center rounded-full text-xs' : ''
                   ]"
                 >
@@ -432,7 +432,7 @@ export default {
                 <div
                   v-for="(event, eventIndex) in day.events.slice(0, 3)"
                   :key="eventIndex"
-                  class="text-xs px-2 py-1 rounded cursor-pointer truncate border-l-2 text-(--ui-text-inverse) font-medium hover:opacity-90 transition-opacity"
+                  class="text-xs px-2 py-1 rounded cursor-pointer truncate border-l-2 text-(--ui-text) font-medium hover:opacity-190 transition-opacity"
                   :class="getEventColorClass(event.color)"
                   @click.stop="selectEvent(event, day)"
                 >
@@ -441,7 +441,7 @@ export default {
 
                 <div
                   v-if="day.events.length > 3"
-                  class="text-xs px-2 py-1 text-(--ui-text-muted) font-medium cursor-pointer hover:text-(--ui-text)"
+                  class="text-xs px-2 py-1 text-(--ui-text) font-medium cursor-pointer hover:text-(--ui-text)"
                 >
                   +{{ day.events.length - 3 }} more
                 </div>
@@ -464,7 +464,7 @@ export default {
               class="text-center p-2 border-r border-(--ui-border) ui-glossy-border"
               :class="day.isToday ? 'bg-(--ui-primary-soft)' : ''"
             >
-              <div class="text-xs font-semibold text-(--ui-text-muted) uppercase">
+              <div class="text-xs font-semibold text-(--ui-text) uppercase">
                 {{ day.dayName }}
               </div>
               <div
@@ -481,7 +481,7 @@ export default {
           <!-- All-Day Events Row -->
           <div class="grid grid-cols-8 border-b border-(--ui-border) ui-glossy-border bg-(--ui-surface-muted) min-h-[60px]">
             <div
-              class="border-r border-(--ui-border) ui-glossy-border px-2 py-1 text-xs text-(--ui-text-muted) text-right flex items-center justify-end"
+              class="border-r border-(--ui-border) ui-glossy-border px-2 py-1 text-xs text-(--ui-text) text-right flex items-center justify-end"
             >
               All Day
             </div>
@@ -494,7 +494,7 @@ export default {
               <div
                 v-for="event in getAllDayEvents(day.events)"
                 :key="event.id"
-                class="rounded border-l-2 p-1 text-xs font-medium text-(--ui-text-inverse) cursor-pointer hover:opacity-90 transition-opacity"
+                class="rounded border-l-2 p-1 text-xs font-medium text-(--ui-text) cursor-pointer hover:opacity-90 transition-opacity"
                 :class="getEventColorClass(event.color)"
                 @click="selectEvent(event, day)"
               >
@@ -513,7 +513,7 @@ export default {
                 <div
                   v-for="slot in timeSlots"
                   :key="slot.time"
-                  class="h-16 border-b border-(--ui-border) ui-glossy-border px-2 py-1 text-xs text-(--ui-text-muted) text-right"
+                  class="h-16 border-b border-(--ui-border) ui-glossy-border px-2 py-1 text-xs text-(--ui-text) text-right"
                 >
                   {{ slot.display }}
                 </div>
@@ -535,7 +535,7 @@ export default {
                   <div
                     v-for="event in getEventsAtTime(day.events, slot)"
                     :key="event.id"
-                    class="absolute inset-x-1 top-1 bottom-1 rounded border-l-2 p-1 text-xs font-medium text-(--ui-text-inverse) cursor-pointer hover:opacity-90 transition-opacity overflow-hidden"
+                    class="absolute inset-x-1 top-1 bottom-1 rounded border-l-2 p-1 text-xs font-medium text-(--ui-text) cursor-pointer hover:opacity-90 transition-opacity overflow-hidden"
                     :class="getEventColorClass(event.color)"
                     @click="selectEvent(event, day)"
                   >
@@ -560,7 +560,7 @@ export default {
           <!-- Day Header -->
           <div class="border-b border-(--ui-border) ui-glossy-border bg-(--ui-surface-muted) p-4">
             <div class="text-center">
-              <div class="text-sm font-semibold text-(--ui-text-muted) uppercase">
+              <div class="text-sm font-semibold text-(--ui-text) uppercase">
                 {{ dayViewDate.dayName }}
               </div>
               <div
@@ -579,18 +579,18 @@ export default {
             v-if="getAllDayEvents(dayViewDate.events).length > 0"
             class="border-b border-(--ui-border) ui-glossy-border bg-(--ui-surface-muted) p-4"
           >
-            <h4 class="text-xs font-semibold text-(--ui-text-muted) uppercase tracking-wide mb-2">
+            <h4 class="text-xs font-semibold text-(--ui-text) uppercase tracking-wide mb-2">
               All Day Events
             </h4>
             <div class="space-y-2">
               <div
                 v-for="event in getAllDayEvents(dayViewDate.events)"
                 :key="event.id"
-                class="rounded border-l-4 p-3 text-sm font-medium text-(--ui-text-inverse) cursor-pointer hover:opacity-90 transition-opacity shadow-sm"
+                class="rounded border-l-4 p-3 text-sm font-medium text-(--ui-text) cursor-pointer hover:opacity-90 transition-opacity shadow-sm"
                 :class="getEventColorClass(event.color)"
                 @click="selectEvent(event, dayViewDate)"
               >
-                <div class="font-semibold">
+                <div class="font-extrabold">
                   {{ event.title }}
                 </div>
                 <div
@@ -611,7 +611,7 @@ export default {
                 <div
                   v-for="slot in timeSlots"
                   :key="slot.time"
-                  class="h-16 border-b border-(--ui-border) ui-glossy-border px-2 py-1 text-xs text-(--ui-text-muted) text-right"
+                  class="h-16 border-b border-(--ui-border) ui-glossy-border px-2 py-1 text-xs text-(--ui-text) text-right"
                 >
                   {{ slot.display }}
                 </div>
@@ -629,7 +629,7 @@ export default {
                   <div
                     v-for="event in getEventsAtTime(dayViewDate.events, slot)"
                     :key="event.id"
-                    class="absolute inset-x-2 top-1 bottom-1 rounded border-l-4 p-2 text-sm font-medium text-(--ui-text-inverse) cursor-pointer hover:opacity-90 transition-opacity shadow-sm"
+                    class="absolute inset-x-2 top-1 bottom-1 rounded border-l-4 p-2 text-sm font-medium text-(--ui-text) cursor-pointer hover:opacity-90 transition-opacity shadow-sm"
                     :class="getEventColorClass(event.color)"
                     @click="selectEvent(event, dayViewDate)"
                   >
@@ -676,7 +676,7 @@ export default {
               Event Details
             </h3>
             <button
-              class="text-(--ui-text-soft) hover:text-(--ui-text-muted) transition-colors"
+              class="text-(--ui-text) hover:text-(--ui-text) transition-colors"
               @click="selectedEvent = null"
             >
               <svg
@@ -750,7 +750,7 @@ export default {
             <div class="space-y-3 pt-2">
               <div class="flex items-start gap-3">
                 <svg
-                  class="w-5 h-5 text-(--ui-text-soft) mt-0.5"
+                  class="w-5 h-5 text-(--ui-text) mt-0.5"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -771,7 +771,7 @@ export default {
 
               <div class="flex items-start gap-3">
                 <svg
-                  class="w-5 h-5 text-(--ui-text-soft) mt-0.5"
+                  class="w-5 h-5 text-(--ui-text) mt-0.5"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -783,7 +783,7 @@ export default {
                     d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                <p class="text-sm text-(--ui-text-muted)">
+                <p class="text-sm text-(--ui-text)">
                   {{ selectedEvent.time }}
                 </p>
               </div>
@@ -797,7 +797,7 @@ export default {
               <h5 class="text-sm font-semibold text-(--ui-text) mb-2">
                 Description
               </h5>
-              <p class="text-sm text-(--ui-text-muted) leading-relaxed">
+              <p class="text-sm text-(--ui-text) leading-relaxed">
                 {{ selectedEvent.description }}
               </p>
             </div>
@@ -815,8 +815,8 @@ export default {
                 v-if="selectedEvent.compliance.remarks"
                 class="text-sm"
               >
-                <span class="font-medium text-(--ui-text-muted)">Remarks:</span>
-                <p class="text-(--ui-text-muted) mt-1">
+                <span class="font-medium text-(--ui-text)">Remarks:</span>
+                <p class="text-(--ui-text) mt-1">
                   {{ selectedEvent.compliance.remarks }}
                 </p>
               </div>
@@ -825,8 +825,8 @@ export default {
                 v-if="selectedEvent.compliance.compliance_documents?.length"
                 class="text-sm"
               >
-                <span class="font-medium text-(--ui-text-muted)">Documents:</span>
-                <p class="text-(--ui-text-muted) mt-1">
+                <span class="font-medium text-(--ui-text)">Documents:</span>
+                <p class="text-(--ui-text) mt-1">
                   {{ selectedEvent.compliance.compliance_documents.length }} document(s) attached
                 </p>
               </div>

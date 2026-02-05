@@ -90,7 +90,7 @@ const titleVariants = cva('font-semibold text-(--ui-text)', {
   }
 })
 
-const descriptionVariants = cva('text-(--ui-text-muted) mt-1', {
+const descriptionVariants = cva('text-(--ui-text) mt-1', {
   variants: {
     size: {
       sm: 'text-xs',

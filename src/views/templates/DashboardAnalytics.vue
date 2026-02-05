@@ -43,7 +43,7 @@ const trendSummary = computed(() => {
           <h1 class="text-2xl font-semibold text-(--ui-text)">
             Analytics
           </h1>
-          <p class="text-(--ui-text-muted) mt-1">
+          <p class="text-(--ui-text) mt-1">
             Monitor risk scoring, review throughput, and regional trends.
           </p>
         </div>
@@ -72,7 +72,7 @@ const trendSummary = computed(() => {
               <p class="text-3xl font-semibold text-(--ui-text)">
                 {{ weeklyScore[weeklyScore.length - 1] }}
               </p>
-              <p class="text-sm text-(--ui-text-soft)">
+              <p class="text-sm text-(--ui-text)">
                 Rolling average
               </p>
             </div>
@@ -89,7 +89,7 @@ const trendSummary = computed(() => {
           variant="outlined"
           padding="lg"
         >
-          <div class="space-y-2 text-sm text-(--ui-text-muted)">
+          <div class="space-y-2 text-sm text-(--ui-text)">
             <p>Date range: {{ dateFrom || 'Any' }} - {{ dateTo || 'Any' }}</p>
             <p>Source: {{ dataSource || 'All sources' }}</p>
             <p>Segments: 4 active cohorts</p>
@@ -105,7 +105,7 @@ const trendSummary = computed(() => {
               <p class="text-sm font-semibold text-(--ui-text)">
                 Vendor renewal cycle
               </p>
-              <p class="text-xs text-(--ui-text-soft)">
+              <p class="text-xs text-(--ui-text)">
                 Due in 5 days
               </p>
             </div>
@@ -113,7 +113,7 @@ const trendSummary = computed(() => {
               <p class="text-sm font-semibold text-(--ui-text)">
                 Quarterly policy review
               </p>
-              <p class="text-xs text-(--ui-text-soft)">
+              <p class="text-xs text-(--ui-text)">
                 Due in 2 weeks
               </p>
             </div>

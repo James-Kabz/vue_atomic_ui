@@ -117,7 +117,7 @@ const footerVariants = cva(
 
 /* --- Static classes --- */
 const titleClasses = 'text-lg font-semibold text-(--ui-text) truncate'
-const subtitleClasses = 'text-sm text-(--ui-text-muted) mt-1'
+const subtitleClasses = 'text-sm text-(--ui-text) mt-1'
 </script>
 
 <template>

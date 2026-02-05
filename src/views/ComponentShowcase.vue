@@ -183,7 +183,7 @@ const currentPath = computed(() => `#${currentSection.value}`);
               'w-full flex flex-col items-center justify-center rounded-xl transition-all duration-200 group relative py-4 px-3',
               currentPath === item.route
                 ? 'bg-linear-to-br from-(--ui-primary-soft) to-(--ui-primary-soft) border border-(--ui-primary-soft) shadow-sm'
-                : 'text-(--ui-text-soft) hover:bg-(--ui-surface-muted) hover:text-(--ui-text) border border-transparent'
+                : 'text-(--ui-text) hover:bg-(--ui-surface-muted) hover:text-(--ui-text) border border-transparent'
             ]"
             @click="handleSidebarNavigate(item)"
           >
@@ -193,7 +193,7 @@ const currentPath = computed(() => `#${currentSection.value}`);
                 'flex items-center justify-center rounded-lg transition-colors mb-2 w-12 h-12',
                 currentPath === item.route
                   ? 'bg-linear-to-br from-(--ui-primary) to-(--ui-primary) text-(--ui-text-inverse) shadow-md'
-                  : 'text-(--ui-text-soft) group-hover:text-(--ui-text) bg-(--ui-surface-muted) group-hover:bg-(--ui-surface-soft)'
+                  : 'text-(--ui-text) group-hover:text-(--ui-text) bg-(--ui-surface-muted) group-hover:bg-(--ui-surface-soft)'
               ]"
             >
               <Icon
@@ -208,7 +208,7 @@ const currentPath = computed(() => `#${currentSection.value}`);
                 'text-xs font-medium text-center',
                 currentPath === item.route
                   ? 'text-(--ui-primary) font-semibold'
-                  : 'text-(--ui-text-soft) group-hover:text-(--ui-text)'
+                  : 'text-(--ui-text) group-hover:text-(--ui-text)'
               ]"
             >
               {{ item.label }}
@@ -247,7 +247,7 @@ const currentPath = computed(() => `#${currentSection.value}`);
             <h1 class="text-4xl font-bold mb-4">
               Component Showcase
             </h1>
-            <p class="text-lg text-(--ui-text-muted)">
+            <p class="text-lg text-(--ui-text)">
               Explore our comprehensive component library with interactive examples
             </p>
           </div>
@@ -448,7 +448,7 @@ const currentPath = computed(() => `#${currentSection.value}`);
                       Option 3
                     </option>
                   </Select>
-                  <p class="text-sm text-(--ui-text-muted) mt-2">
+                  <p class="text-sm text-(--ui-text) mt-2">
                     Selected: {{ selectValue }}
                   </p>
                 </div>
@@ -499,7 +499,7 @@ const currentPath = computed(() => `#${currentSection.value}`);
                       label="Large checkbox"
                     />
                   </div>
-                  <p class="text-sm text-(--ui-text-muted) mt-2">
+                  <p class="text-sm text-(--ui-text) mt-2">
                     Value: {{ checkboxValue }}
                   </p>
                 </div>
@@ -531,7 +531,7 @@ const currentPath = computed(() => `#${currentSection.value}`);
                       disabled
                     />
                   </div>
-                  <p class="text-sm text-(--ui-text-muted) mt-2">
+                  <p class="text-sm text-(--ui-text) mt-2">
                     Selected: {{ radioValue }}
                   </p>
                 </div>
@@ -697,7 +697,7 @@ const currentPath = computed(() => `#${currentSection.value}`);
                     Start Progress
                   </Button>
                   <Progress :value="progressValue" />
-                  <p class="text-sm text-(--ui-text-muted) mt-2">
+                  <p class="text-sm text-(--ui-text) mt-2">
                     {{ progressValue }}% complete
                   </p>
                 </div>
@@ -857,7 +857,7 @@ const currentPath = computed(() => `#${currentSection.value}`);
                   <p>Main content of the card.</p>
                   <template #footer>
                     <div class="flex justify-between items-center">
-                      <span class="text-sm text-(--ui-text-soft)">Footer content</span>
+                      <span class="text-sm text-(--ui-text)">Footer content</span>
                       <Button size="sm">
                         Footer Action
                       </Button>
@@ -1007,7 +1007,7 @@ const currentPath = computed(() => `#${currentSection.value}`);
                     <Button @click="toggleLoading">
                       Toggle Loading
                     </Button>
-                    <span class="text-sm text-(--ui-text-muted)">Status: {{ loading ? 'Loading' : 'Not Loading' }}</span>
+                    <span class="text-sm text-(--ui-text)">Status: {{ loading ? 'Loading' : 'Not Loading' }}</span>
                   </div>
 
                   <div class="grid grid-cols-2 md:grid-cols-4 gap-4">

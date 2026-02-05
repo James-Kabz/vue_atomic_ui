@@ -35,7 +35,7 @@
     >
       <button
         v-if="clearable && modelValue && !disabled"
-        class="text-(--ui-text-soft) hover:text-(--ui-text-muted) transition-colors"
+        class="text-(--ui-text) hover:text-(--ui-text) transition-colors"
         type="button"
         :aria-label="clearLabel"
         @click="handleClear"
@@ -183,14 +183,14 @@ const iconClasses = computed(() => {
     md: 'w-4 h-4',
     lg: 'w-5 h-5'
   }
-  return ['text-(--ui-text-soft)', iconSizes[props.size]]
+  return ['text-(--ui-text)', iconSizes[props.size]]
 })
 
 const inputClasses = computed(() => [
   'block rounded-lg border bg-(--ui-surface) ui-glossy-input ui-glossy-border transition-colors duration-200',
   'focus:outline-none focus:ring-2 focus:ring-offset-0',
-  'disabled:bg-(--ui-surface-muted) disabled:text-(--ui-text-soft) disabled:cursor-not-allowed',
-  'placeholder:text-(--ui-text-soft)',
+  'disabled:bg-(--ui-surface-muted) disabled:text-(--ui-text) disabled:cursor-not-allowed',
+  'placeholder:text-(--ui-text)',
   props.type === 'color' ? 'w-20 h-12 cursor-pointer' : 'w-full',
   sizeClasses.value,
   variantClasses.value,

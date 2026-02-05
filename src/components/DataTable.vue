@@ -553,7 +553,7 @@ const getHeaderCellClasses = (column) => {
 
   return cn(
     densityPadding[props.density],
-    'text-left text-xs font-medium text-(--ui-text-soft) uppercase tracking-wider',
+    'text-left text-sm font-extrabold text-(--ui-text) uppercase tracking-wider',
     {
       'cursor-pointer hover:bg-(--ui-surface-muted) transition-colors': column.sortable && !props.loading && !props.sortLoading,
       'cursor-not-allowed opacity-50': props.loading || (props.sortLoading && sortColumn.value === column.key)
@@ -639,7 +639,7 @@ const actionsCellClasses = computed(() => {
 
   return cn(
     densityPadding[props.density],
-    'whitespace-nowrap text-sm font-medium text-center'
+    'whitespace-nowrap text-md font-extrabold text-center'
   )
 })
 
@@ -659,7 +659,7 @@ const emptyCellClasses = computed(() => {
 const getSortIconClasses = (column, direction) => cn(
   {
     'text-(--ui-primary)': sortColumn.value === column.key && sortDirection.value === direction,
-    'text-(--ui-text-soft)': sortColumn.value !== column.key || sortDirection.value !== direction
+    'text-(--ui-text)': sortColumn.value !== column.key || sortDirection.value !== direction
   }
 )
 
@@ -978,16 +978,16 @@ defineExpose({
               >
                 <slot name="empty">
                   <div class="flex flex-col items-center justify-center py-12">
-                    <div class="text-(--ui-text-soft) mb-4 flex justify-center">
+                    <div class="text-(--ui-text) mb-4 flex justify-center">
                       <Icon
                         icon="search"
                         class="w-16 h-16"
                       />
                     </div>
-                    <p class="text-(--ui-text-muted) text-lg font-medium mb-2">
+                    <p class="text-(--ui-text) text-lg font-medium mb-2">
                       {{ emptyText }}
                     </p>
-                    <p class="text-(--ui-text-soft) text-sm">
+                    <p class="text-(--ui-text) text-sm">
                       {{ emptySubtitle }}
                     </p>
                   </div>
@@ -1031,7 +1031,7 @@ defineExpose({
         <h3 class="text-md font-semibold mb-4">
           Full Text
         </h3>
-        <div class="text-xl font-bold text-(--ui-text-muted) whitespace-pre-wrap wrap-break-word">
+        <div class="text-xl font-bold text-(--ui-text) whitespace-pre-wrap wrap-break-word">
           {{ modalContent }}
         </div>
       </div>

@@ -77,14 +77,14 @@ const cancel = () => {
         <h3 class="text-xl font-semibold text-(--ui-text)">
           Add Reminder
         </h3>
-        <p class="text-sm text-(--ui-text-soft)">
+        <p class="text-sm text-(--ui-text)">
           Configure reminder rules for <span class="font-medium">{{ modelName }}</span>
         </p>
       </div>
 
       <!-- Days Before -->
       <div class="space-y-1.5">
-        <label class="text-sm font-medium text-(--ui-text-muted)">
+        <label class="text-sm font-medium text-(--ui-text)">
           Days Before Due Date
         </label>
         <input
@@ -97,7 +97,7 @@ const cancel = () => {
 
       <!-- Send Type -->
       <div class="space-y-2">
-        <label class="text-sm font-medium text-(--ui-text-muted)">
+        <label class="text-sm font-medium text-(--ui-text)">
           Notification Channel
         </label>
         <div class="flex flex-wrap gap-2">
@@ -108,7 +108,7 @@ const cancel = () => {
             class="px-4 py-2 rounded-md text-sm font-medium transition"
             :class="sendType === option.value
               ? 'ui-glossy-button-strong bg-(--ui-primary) text-(--ui-text-inverse) shadow'
-              : 'ui-glossy-button ui-glossy-border border bg-(--ui-surface) text-(--ui-text-muted) hover:brightness-105'"
+              : 'ui-glossy-button ui-glossy-border border bg-(--ui-surface) text-(--ui-text) hover:brightness-105'"
             @click="sendType = option.value"
           >
             {{ option.label }}
@@ -118,7 +118,7 @@ const cancel = () => {
 
       <!-- Recipients -->
       <div class="space-y-2">
-        <label class="text-sm font-medium text-(--ui-text-muted)">
+        <label class="text-sm font-medium text-(--ui-text)">
           Recipients
         </label>
 
@@ -133,7 +133,7 @@ const cancel = () => {
       <div class="flex justify-end gap-3 pt-4 border-t ui-glossy-border">
         <button
           type="button"
-          class="px-4 py-2 rounded-md ui-glossy-button ui-glossy-border border bg-(--ui-surface) text-(--ui-text-muted) hover:brightness-105"
+          class="px-4 py-2 rounded-md ui-glossy-button ui-glossy-border border bg-(--ui-surface) text-(--ui-text) hover:brightness-105"
           @click="cancel"
         >
           Cancel

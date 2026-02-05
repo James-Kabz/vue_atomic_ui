@@ -56,7 +56,7 @@
           </Select>
           <Icon
             icon="chevron-down"
-            class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-(--ui-text-soft) pointer-events-none"
+            class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-(--ui-text) pointer-events-none"
           />
         </div>
       </div>
@@ -85,7 +85,7 @@
           </Select>
           <Icon
             icon="chevron-down"
-            class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-(--ui-text-soft) pointer-events-none"
+            class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-(--ui-text) pointer-events-none"
           />
         </div>
       </div>
@@ -230,7 +230,7 @@
             <div class="relative flex-1">
               <Icon
                 icon="calendar"
-                class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-(--ui-text-soft)"
+                class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-(--ui-text)"
               />
               <input
                 type="date"
@@ -244,7 +244,7 @@
             <div class="relative flex-1">
               <Icon
                 icon="calendar"
-                class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-(--ui-text-soft)"
+                class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-(--ui-text)"
               />
               <input
                 type="date"
@@ -353,7 +353,7 @@
             </Select>
             <Icon
               icon="chevron-down"
-              class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-(--ui-text-soft) pointer-events-none"
+              class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-(--ui-text) pointer-events-none"
             />
           </div>
 
@@ -413,19 +413,6 @@
     </div>
 
     <!-- Table Info Bar -->
-    <div
-      v-if="showTableInfo"
-      class="px-6 py-3 bg-(--ui-surface-muted) border-t border-(--ui-border)"
-    >
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-4">
-          <span class="text-sm text-(--ui-text-muted)">
-            <span class="font-medium">{{ totalItems || 0 }}</span>
-            {{ itemLabel || 'items' }} found
-          </span>
-        </div>
-      </div>
-    </div>
   </div>
 
   <!-- File Upload Modal -->
@@ -440,7 +427,7 @@
           Upload Files
         </h3>
         <button
-          class="text-(--ui-text-soft) hover:text-(--ui-text-muted) p-2 hover:bg-(--ui-surface-muted) rounded-full transition-all"
+          class="text-(--ui-text) hover:text-(--ui-text) p-2 hover:bg-(--ui-surface-muted) rounded-full transition-all"
           @click="closeFileUploadModal"
         >
           <Icon
@@ -782,10 +769,10 @@ const inputVariants = cva('border border-(--ui-border) ui-glossy-border rounded-
 const buttonVariants = cva('rounded-lg flex items-center font-medium transition-all', {
   variants: {
     variant: {
-      default: 'text-(--ui-text-muted) hover:text-(--ui-text) border ui-glossy-border ui-glossy-button hover:brightness-105',
+      default: 'text-(--ui-text) hover:text-(--ui-text) border ui-glossy-border ui-glossy-button hover:brightness-105',
       primary: 'text-(--ui-text-inverse) bg-(--ui-primary) hover:bg-(--ui-primary-strong) border border-(--ui-primary) shadow-sm ui-glossy-button-strong',
       success: 'text-(--ui-text-inverse) bg-(--ui-success) hover:bg-(--ui-success-strong) border border-(--ui-success) shadow-sm ui-glossy-button-strong',
-      ghost: 'text-(--ui-text-muted) hover:text-(--ui-text) hover:bg-(--ui-surface-muted)'
+      ghost: 'text-(--ui-text) hover:text-(--ui-text) hover:bg-(--ui-surface-muted)'
     },
     size: {
       sm: 'px-2 py-1.5 text-xs',
@@ -821,7 +808,7 @@ const clearDateFilter = (key) => {
 
 const getDateFilterStatusClasses = (dateFilter) => {
   const hasValues = hasDateFilterValues(dateFilter)
-  return `text-xs px-2 py-1 rounded ${hasValues ? 'bg-(--ui-primary-soft) text-(--ui-primary)' : 'bg-(--ui-surface-muted) text-(--ui-text-muted)'
+  return `text-xs px-2 py-1 rounded ${hasValues ? 'bg-(--ui-primary-soft) text-(--ui-primary)' : 'bg-(--ui-surface-muted) text-(--ui-text)'
     }`
 }
 
@@ -846,7 +833,7 @@ const clearNumberFilter = (key) => {
 
 const getNumberFilterStatusClasses = (numberFilter) => {
   const hasValues = hasNumberFilterValues(numberFilter)
-  return `text-xs px-2 py-1 rounded ${hasValues ? 'bg-(--ui-primary-soft) text-(--ui-primary)' : 'bg-(--ui-surface-muted) text-(--ui-text-muted)'
+  return `text-xs px-2 py-1 rounded ${hasValues ? 'bg-(--ui-primary-soft) text-(--ui-primary)' : 'bg-(--ui-surface-muted) text-(--ui-text)'
     }`
 }
 
@@ -864,7 +851,7 @@ const hasMultiSelectFilterValues = (multiFilter) => {
 
 const getMultiSelectFilterStatusClasses = (multiFilter) => {
   const hasValues = hasMultiSelectFilterValues(multiFilter)
-  return `text-xs px-2 py-1 rounded ${hasValues ? 'bg-(--ui-primary-soft) text-(--ui-primary)' : 'bg-(--ui-surface-muted) text-(--ui-text-muted)'
+  return `text-xs px-2 py-1 rounded ${hasValues ? 'bg-(--ui-primary-soft) text-(--ui-primary)' : 'bg-(--ui-surface-muted) text-(--ui-text)'
     }`
 }
 
@@ -1072,7 +1059,7 @@ const filtersClasses = computed(() =>
 )
 
 const searchIconClasses = computed(() =>
-  'absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-(--ui-text-soft) group-hover:text-(--ui-text-muted) transition-colors'
+  'absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-(--ui-text) group-hover:text-(--ui-text) transition-colors'
 )
 
 const searchInputClasses = computed(() =>
@@ -1083,7 +1070,7 @@ const searchInputClasses = computed(() =>
 )
 
 const clearSearchButtonClasses = computed(() =>
-  'absolute right-3 top-1/2 transform -translate-y-1/2 text-(--ui-text-soft) hover:text-(--ui-text-muted) p-1 hover:bg-(--ui-surface-muted) rounded-full transition-all'
+  'absolute right-3 top-1/2 transform -translate-y-1/2 text-(--ui-text) hover:text-(--ui-text) p-1 hover:bg-(--ui-surface-muted) rounded-full transition-all'
 )
 
 const selectClasses = computed(() =>
@@ -1117,15 +1104,15 @@ const dateInputClasses = computed(() =>
 )
 
 const dateFilterLabelClasses = computed(() =>
-  'text-sm font-semibold text-(--ui-text-muted)'
+  'text-sm font-semibold text-(--ui-text)'
 )
 
 const dateRangeSeparatorClasses = computed(() =>
-  'text-(--ui-text-soft) text-sm font-medium'
+  'text-(--ui-text) text-sm font-medium'
 )
 
 const clearDateFilterButtonClasses = computed(() =>
-  'text-(--ui-text-soft) hover:text-(--ui-text-muted) p-1.5 hover:bg-(--ui-surface-soft) rounded-full transition-all'
+  'text-(--ui-text) hover:text-(--ui-text) p-1.5 hover:bg-(--ui-surface-soft) rounded-full transition-all'
 )
 
 const clearFiltersButtonClasses = computed(() =>

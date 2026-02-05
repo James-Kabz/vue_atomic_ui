@@ -3,13 +3,16 @@
     :value="value"
     :disabled="disabled"
     :selected="selected"
+    :class="optionClasses"
   >
     <slot>{{ label }}</slot>
   </option>
 </template>
 
 <script setup>
-defineProps({
+import { computed } from 'vue'
+
+const props = defineProps({
   value: {
     type: [String, Number, Boolean],
     required: true
@@ -27,4 +30,12 @@ defineProps({
     default: false
   }
 })
+
+const optionClasses = computed(() =>
+  [
+    'bg-(--ui-bg) ui-glossy-panel',
+    'text-(--ui-text)',
+    props.disabled ? 'text-(--ui-text-soft)' : 'text-(--ui-text)'
+  ]
+)
 </script>

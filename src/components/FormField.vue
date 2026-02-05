@@ -46,7 +46,7 @@
       <button
         v-if="type === 'password'"
         type="button"
-        class="absolute inset-y-0 right-0 pr-3 flex items-center text-(--ui-text-soft) hover:text-(--ui-text-muted) transition-colors"
+        class="absolute inset-y-0 right-0 pr-3 flex items-center text-(--ui-text) hover:text-(--ui-text) transition-colors"
         :aria-label="showPassword ? 'Hide password' : 'Show password'"
         @click="togglePasswordVisibility"
       >
@@ -178,7 +178,7 @@ const labelVariants = cva("block text-(--ui-text)", {
   defaultVariants: { size: "md" },
 })
 
-const descriptionVariants = cva("text-(--ui-text-muted)", {
+const descriptionVariants = cva("text-(--ui-text)", {
   variants: {
     size: {
       sm: "text-xs",
@@ -204,7 +204,7 @@ const messageVariants = cva("flex items-start gap-2", {
   defaultVariants: { size: "md", intent: "error" },
 })
 
-const helpVariants = cva("text-(--ui-text-soft)", {
+const helpVariants = cva("text-(--ui-text)", {
   variants: {
     size: {
       sm: "text-xs",

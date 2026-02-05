@@ -358,7 +358,7 @@ onBeforeUnmount(() => {
         :class="[
           'w-full px-3 py-2 pr-10 border rounded-md bg-(--ui-surface) text-(--ui-text) placeholder-slate-400 text-sm ui-glossy-input ui-glossy-border',
           'focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:border-(--ui-primary) cursor-pointer transition-colors',
-          'disabled:bg-(--ui-surface-muted) disabled:text-(--ui-text-soft) disabled:cursor-not-allowed',
+          'disabled:bg-(--ui-surface-muted) disabled:text-(--ui-text) disabled:cursor-not-allowed',
           hasValidationError ? 'border-(--ui-danger) focus:ring-(--ui-danger) focus:border-(--ui-danger)' : 'border-(--ui-border)'
         ]"
         @click="toggleCalendar"
@@ -367,7 +367,7 @@ onBeforeUnmount(() => {
       <!-- Calendar Icon -->
       <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
         <svg
-          class="w-4 h-4 text-(--ui-text-soft)"
+          class="w-4 h-4 text-(--ui-text)"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -390,7 +390,7 @@ onBeforeUnmount(() => {
         @click.stop="clearDate"
       >
         <svg
-          class="w-3.5 h-3.5 text-(--ui-text-soft)"
+          class="w-3.5 h-3.5 text-(--ui-text)"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -431,7 +431,7 @@ onBeforeUnmount(() => {
               @click="prevMonth"
             >
               <svg
-                class="w-4 h-4 text-(--ui-text-muted)"
+                class="w-4 h-4 text-(--ui-text)"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -456,7 +456,7 @@ onBeforeUnmount(() => {
               @click="nextMonth"
             >
               <svg
-                class="w-4 h-4 text-(--ui-text-muted)"
+                class="w-4 h-4 text-(--ui-text)"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -476,7 +476,7 @@ onBeforeUnmount(() => {
             <div
               v-for="day in weekdays"
               :key="day"
-              class="text-center text-xs font-medium text-(--ui-text-soft) py-1"
+              class="text-center text-xs font-medium text-(--ui-text) py-1"
             >
               {{ day }}
             </div>
@@ -488,7 +488,7 @@ onBeforeUnmount(() => {
             <div
               v-for="(day, index) in leadingDays"
               :key="'prev-' + index"
-              class="text-center text-xs text-(--ui-text-soft) py-1.5"
+              class="text-center text-xs text-(--ui-text) py-1.5"
             >
               {{ day }}
             </div>
@@ -502,8 +502,8 @@ onBeforeUnmount(() => {
               :class="[
                 'w-8 h-8 rounded text-xs font-medium transition-colors',
                 isToday(day) && !isSelected(day) ? 'bg-(--ui-primary-soft) text-(--ui-primary) ring-1 ring-(--ui-primary)' : '',
-                isSelected(day) ? 'bg-(--ui-primary) text-(--ui-text-inverse) hover:bg-(--ui-primary)' : 'text-(--ui-text-muted) hover:bg-(--ui-surface-muted)',
-                isDateDisabled(day) ? 'text-(--ui-text-soft) cursor-not-allowed hover:bg-transparent line-through' : 'cursor-pointer'
+                isSelected(day) ? 'bg-(--ui-primary) text-(--ui-text-inverse) hover:bg-(--ui-primary)' : 'text-(--ui-text) hover:bg-(--ui-surface-muted)',
+                isDateDisabled(day) ? 'text-(--ui-text) cursor-not-allowed hover:bg-transparent line-through' : 'cursor-pointer'
               ]"
               @click="selectDate(day)"
             >
@@ -514,7 +514,7 @@ onBeforeUnmount(() => {
             <div
               v-for="(day, index) in trailingDays"
               :key="'next-' + index"
-              class="text-center text-xs text-(--ui-text-soft) py-1.5"
+              class="text-center text-xs text-(--ui-text) py-1.5"
             >
               {{ day }}
             </div>

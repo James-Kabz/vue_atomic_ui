@@ -128,7 +128,7 @@ const progressColor = computed(() => {
     if (percentage >= 60) return 'var(--ui-warning)'
     if (percentage >= 40) return 'var(--ui-warning)'
     if (percentage >= 20) return 'var(--ui-success)'
-    return 'var(--ui-text-muted)'
+    return 'var(--ui-text)'
   }
 
   const colors = {
@@ -151,7 +151,7 @@ const textColor = computed(() => {
     if (percentage >= 60) return 'text-(--ui-warning)'
     if (percentage >= 40) return 'text-(--ui-warning)'
     if (percentage >= 20) return 'text-(--ui-success)'
-    return 'text-(--ui-text-muted)'
+    return 'text-(--ui-text)'
   }
 
   const colors = {

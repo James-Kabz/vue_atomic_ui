@@ -256,13 +256,13 @@ onUnmounted(() => {
   >
     <div
       v-if="showHeader"
-      class="flex items-center justify-between px-6 py-4 border-b border-(--ui-border) bg-linear-to-r from-(--ui-surface-muted) to-(--ui-surface-muted) shrink-0"
+      class="flex bg-(--ui-bg) ui-glossy-panel items-center justify-between px-6 py-4 border-b border-(--ui-border) shrink-0"
     >
       <div class="flex items-center gap-3">
         <Icon
           v-if="icon"
           :icon="icon"
-          class="w-5 h-5 text-(--ui-text-muted)"
+          class="w-5 h-5 text-(--ui-text)"
         />
         <h3 class="font-semibold text-lg text-(--ui-text)">
           {{ title }}
@@ -278,7 +278,7 @@ onUnmounted(() => {
         >
           <Icon
             icon="circle-info"
-            class="w-4 h-4 text-(--ui-text-muted)"
+            class="w-4 h-4 text-(--ui-text)"
           />
         </button>
 
@@ -291,7 +291,7 @@ onUnmounted(() => {
         >
           <Icon
             icon="gear"
-            class="w-4 h-4 text-(--ui-text-muted)"
+            class="w-4 h-4 text-(--ui-text)"
           />
         </button>
 
@@ -305,7 +305,7 @@ onUnmounted(() => {
           <Icon
             icon="refresh"
             :class="[
-              'w-4 h-4 text-(--ui-text-muted) transition-transform duration-500',
+              'w-4 h-4 text-(--ui-text) transition-transform duration-500',
               { 'animate-spin': loading }
             ]"
           />
@@ -327,7 +327,7 @@ onUnmounted(() => {
         >
           <Icon
             icon="x"
-            class="w-4 h-4 text-(--ui-text-muted)"
+            class="w-4 h-4 text-(--ui-text)"
           />
         </button>
       </div>
@@ -340,7 +340,7 @@ onUnmounted(() => {
         >
           <label
             :for="`setting-${option.id}`"
-            class="text-sm text-(--ui-text-muted) cursor-pointer"
+            class="text-sm text-(--ui-text) cursor-pointer"
           >
             {{ option.label }}
           </label>
@@ -377,7 +377,7 @@ onUnmounted(() => {
         >
           <Icon
             icon="x"
-            class="w-4 h-4 text-(--ui-text-muted)"
+            class="w-4 h-4 text-(--ui-text)"
           />
         </button>
       </div>
@@ -388,7 +388,7 @@ onUnmounted(() => {
           :key="shortcut.key"
           class="flex items-center justify-between text-sm"
         >
-          <span class="text-(--ui-text-muted)">{{ shortcut.description }}</span>
+          <span class="text-(--ui-text)">{{ shortcut.description }}</span>
           <kbd class="px-2 py-1 bg-(--ui-surface-muted) border border-(--ui-border) rounded text-xs font-mono">
             {{ shortcut.key }}
           </kbd>

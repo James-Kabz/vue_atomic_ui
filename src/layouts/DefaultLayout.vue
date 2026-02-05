@@ -52,7 +52,7 @@
       <template #brand>
         <slot name="footer-brand">
           <Logo class="mb-4" />
-          <Text class="text-(--ui-text-muted) max-w-md">
+          <Text class="text-(--ui-text) max-w-md">
             Your application description goes here.
           </Text>
         </slot>

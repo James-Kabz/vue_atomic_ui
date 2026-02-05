@@ -604,7 +604,7 @@ const handleMultiFileRemoved = (field, files) => {
       <h2 class="text-xl font-semibold text-(--ui-text)">
         {{ modalType === 'create' ? `Add New ${entityName}` : `Edit ${entityName}` }}
       </h2>
-      <p class="text-sm text-(--ui-text-muted) mt-1">
+      <p class="text-sm text-(--ui-text) mt-1">
         {{
           modalType === 'create'
             ? `Fill in the details to create a new ${entityName.toLowerCase()}.`
@@ -726,7 +726,7 @@ const handleMultiFileRemoved = (field, files) => {
                 />
                 <Label
                   :for="fieldId"
-                  class="ml-2 text-sm text-(--ui-text-muted)"
+                  class="ml-2 text-sm text-(--ui-text)"
                 >
                   {{ field.checkboxLabel || field.label }}
                 </Label>
@@ -759,7 +759,7 @@ const handleMultiFileRemoved = (field, files) => {
                 </button>
                 <Label
                   :for="fieldId"
-                  class="ml-3 text-sm text-(--ui-text-muted)"
+                  class="ml-3 text-sm text-(--ui-text)"
                 >
                   {{ field.checkboxLabel || field.label }}
                 </Label>
@@ -787,7 +787,7 @@ const handleMultiFileRemoved = (field, files) => {
                   />
                   <Label
                     :for="`${fieldId}-${option.value}`"
-                    class="ml-2 text-sm text-(--ui-text-muted)"
+                    class="ml-2 text-sm text-(--ui-text)"
                   >
                     {{ option.label }}
                   </Label>
@@ -810,7 +810,7 @@ const handleMultiFileRemoved = (field, files) => {
                 <!-- Help text -->
                 <p
                   v-if="field.helpText"
-                  class="mt-2 text-xs text-(--ui-text-soft)"
+                  class="mt-2 text-xs text-(--ui-text)"
                 >
                   {{ field.helpText }}
                 </p>
@@ -833,7 +833,7 @@ const handleMultiFileRemoved = (field, files) => {
                 <!-- Help text -->
                 <p
                   v-if="field.helpText"
-                  class="mt-2 text-xs text-(--ui-text-soft)"
+                  class="mt-2 text-xs text-(--ui-text)"
                 >
                   {{ field.helpText }}
                 </p>
@@ -868,7 +868,7 @@ const handleMultiFileRemoved = (field, files) => {
                     :aria-describedby="ariaDescribedBy"
                     @update:model-value="setFieldValue(field.name, $event)"
                   />
-                  <span class="text-sm font-medium text-(--ui-text-muted) min-w-[3rem] text-right">
+                  <span class="text-sm font-medium text-(--ui-text) min-w-[3rem] text-right">
                     {{ getFieldValue(field.name) }}
                   </span>
                 </div>

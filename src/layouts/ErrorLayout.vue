@@ -101,7 +101,7 @@
 
               <button
                 v-if="showBackButton"
-                class="border border-(--ui-border) text-(--ui-text-muted) px-6 py-3 rounded-lg font-medium hover:bg-(--ui-surface-muted) transition-colors flex items-center justify-center gap-2"
+                class="border border-(--ui-border) text-(--ui-text) px-6 py-3 rounded-lg font-medium hover:bg-(--ui-surface-muted) transition-colors flex items-center justify-center gap-2"
                 @click="goBack"
               >
                 <span>←</span>
@@ -111,7 +111,7 @@
               <button
                 v-if="showRetryButton"
                 :disabled="isRetrying || !isOnline"
-                class="border border-(--ui-border) text-(--ui-text-muted) px-6 py-3 rounded-lg font-medium hover:bg-(--ui-surface-muted) transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                class="border border-(--ui-border) text-(--ui-text) px-6 py-3 rounded-lg font-medium hover:bg-(--ui-surface-muted) transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 @click="retry"
               >
                 <span
@@ -154,7 +154,7 @@
                   <li 
                     v-for="(item, index) in additionalInfoConfig.items" 
                     :key="index"
-                    class="flex items-start gap-3 text-sm text-(--ui-text-muted)"
+                    class="flex items-start gap-3 text-sm text-(--ui-text)"
                   >
                     <span :class="`w-4 h-4 text-${item.iconColor || 'slate-400'} shrink-0 mt-0.5`">
                       {{ item.icon }}
@@ -173,7 +173,7 @@
           :class="helpClasses"
         >
           <slot name="help">
-            <p class="text-sm text-(--ui-text-muted)">
+            <p class="text-sm text-(--ui-text)">
               {{ helpText }}
               <a
                 v-if="supportUrl"
@@ -190,7 +190,7 @@
         <!-- Error ID for debugging -->
         <div
           v-if="isDev"
-          class="text-xs text-(--ui-text-soft) font-mono mt-4"
+          class="text-xs text-(--ui-text) font-mono mt-4"
         >
           Error ID: {{ errorId }}
         </div>
@@ -497,7 +497,7 @@ export default {
     ])
 
     const codeClasses = computed(() => [
-      'text-6xl font-bold text-(--ui-text-soft) mb-4'
+      'text-6xl font-bold text-(--ui-text) mb-4'
     ])
 
     const titleClasses = computed(() => [
@@ -505,7 +505,7 @@ export default {
     ])
 
     const messageClasses = computed(() => [
-      'text-lg text-(--ui-text-muted) max-w-lg mx-auto'
+      'text-lg text-(--ui-text) max-w-lg mx-auto'
     ])
 
     const actionsClasses = computed(() => [

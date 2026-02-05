@@ -23,9 +23,9 @@
     >
       <Icon
         name="ImageOff"
-        class="h-8 w-8 text-(--ui-text-muted)"
+        class="h-8 w-8 text-(--ui-text)"
       />
-      <span class="text-sm text-(--ui-text-muted)">Failed to load image</span>
+      <span class="text-sm text-(--ui-text)">Failed to load image</span>
     </div>
   </div>
 </template>

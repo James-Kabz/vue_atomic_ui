@@ -327,7 +327,7 @@ defineExpose({
           {{ header?.title }}
         </h2>
         <button
-          class="p-2 rounded-lg text-(--ui-text-soft) hover:text-(--ui-text) hover:bg-(--ui-surface-muted) transition-colors"
+          class="p-2 rounded-lg text-(--ui-text) hover:text-(--ui-text) hover:bg-(--ui-surface-muted) transition-colors"
           aria-label="Close sidebar"
           @click="closeMobileSidebar"
         >
@@ -365,7 +365,7 @@ defineExpose({
                   'flex flex-col items-center justify-center rounded-xl transition-all duration-200 group relative py-4 px-3',
                   isItemActive(item)
                     ? 'bg-linear-to-br from-(--ui-primary-soft) to-(--ui-primary-soft) border border-(--ui-primary-soft) shadow-sm'
-                    : 'text-(--ui-text-soft) hover:bg-(--ui-surface-muted) hover:text-(--ui-text) border border-transparent'
+                    : 'text-(--ui-text) hover:bg-(--ui-surface-muted) hover:text-(--ui-text) border border-transparent'
                 )"
                 @click="handleNavigation(item)"
               >
@@ -376,7 +376,7 @@ defineExpose({
                     'w-12 h-12',
                     isItemActive(item)
                       ? 'bg-linear-to-br from-(--ui-primary) to-(--ui-primary) text-(--ui-text-inverse) shadow-md'
-                      : 'text-(--ui-text-soft) group-hover:text-(--ui-text) bg-(--ui-surface-muted) group-hover:bg-(--ui-surface-soft)'
+                      : 'text-(--ui-text) group-hover:text-(--ui-text) bg-(--ui-surface-muted) group-hover:bg-(--ui-surface-soft)'
                   )"
                 >
                   <Icon
@@ -391,7 +391,7 @@ defineExpose({
                     'text-xs font-medium text-center',
                     isItemActive(item) 
                       ? 'text-(--ui-primary) font-semibold' 
-                      : 'text-(--ui-text-soft) group-hover:text-(--ui-text)'
+                      : 'text-(--ui-text) group-hover:text-(--ui-text)'
                   )"
                 >
                   {{ item.label }}
@@ -413,7 +413,7 @@ defineExpose({
                   'flex flex-col items-center justify-center rounded-xl transition-all duration-200 cursor-pointer group relative py-4 px-3',
                   isItemActive(item)
                     ? 'bg-linear-to-br from-(--ui-primary-soft) to-(--ui-primary-soft) border border-(--ui-primary-soft) shadow-sm'
-                    : 'text-(--ui-text-soft) hover:bg-(--ui-surface-muted) hover:text-(--ui-text) border border-transparent'
+                    : 'text-(--ui-text) hover:bg-(--ui-surface-muted) hover:text-(--ui-text) border border-transparent'
                 )"
                 @click="handleSubmenuClick(item)"
               >
@@ -424,7 +424,7 @@ defineExpose({
                     'w-12 h-12',
                     isItemActive(item)
                       ? 'bg-linear-to-br from-(--ui-primary) to-(--ui-primary) text-(--ui-text-inverse) shadow-md'
-                      : 'text-(--ui-text-soft) group-hover:text-(--ui-text) bg-(--ui-surface-muted) group-hover:bg-(--ui-surface-soft)'
+                      : 'text-(--ui-text) group-hover:text-(--ui-text) bg-(--ui-surface-muted) group-hover:bg-(--ui-surface-soft)'
                   )"
                 >
                   <Icon
@@ -439,7 +439,7 @@ defineExpose({
                     'text-xs font-medium text-center',
                     isItemActive(item) 
                       ? 'text-(--ui-primary) font-semibold' 
-                      : 'text-(--ui-text-soft) group-hover:text-(--ui-text)'
+                      : 'text-(--ui-text) group-hover:text-(--ui-text)'
                   )"
                 >
                   {{ item.label }}
@@ -474,7 +474,7 @@ defineExpose({
             'flex flex-col items-center justify-center rounded-xl transition-all duration-200 cursor-pointer group relative py-4 px-3',
             isManagementSettingsActive
               ? 'bg-linear-to-br from-(--ui-primary-soft) to-(--ui-primary-soft) border border-(--ui-primary-soft) shadow-sm'
-              : 'text-(--ui-text-soft) hover:bg-(--ui-surface-muted) hover:text-(--ui-text) border border-transparent'
+              : 'text-(--ui-text) hover:bg-(--ui-surface-muted) hover:text-(--ui-text) border border-transparent'
           )"
           @click="handleManagementSettingsClick"
         >
@@ -484,7 +484,7 @@ defineExpose({
               'w-12 h-12',
               isManagementSettingsActive
                 ? 'bg-linear-to-br from-(--ui-primary) to-(--ui-primary) text-(--ui-text-inverse) shadow-md'
-                : 'text-(--ui-text-soft) group-hover:text-(--ui-text) bg-(--ui-surface-muted) group-hover:bg-(--ui-surface-soft)'
+                : 'text-(--ui-text) group-hover:text-(--ui-text) bg-(--ui-surface-muted) group-hover:bg-(--ui-surface-soft)'
             )"
           >
             <Icon
@@ -497,7 +497,7 @@ defineExpose({
               'text-xs font-medium text-center',
               isManagementSettingsActive 
                 ? 'text-(--ui-primary) font-semibold' 
-                : 'text-(--ui-text-soft) group-hover:text-(--ui-text)'
+                : 'text-(--ui-text) group-hover:text-(--ui-text)'
             )"
           >
             Settings
@@ -535,7 +535,7 @@ defineExpose({
         <div class="sticky top-0 ui-glossy-surface border-b ui-glossy-border z-10">
           <div class="flex items-center justify-between p-4">
             <button
-              class="p-2 -ml-2 rounded-lg text-(--ui-text-soft) hover:text-(--ui-text-muted) hover:bg-(--ui-surface-muted) transition-colors"
+              class="p-2 -ml-2 rounded-lg text-(--ui-text) hover:text-(--ui-text) hover:bg-(--ui-surface-muted) transition-colors"
               aria-label="Close submenu"
               @click="closeSubmenu"
             >
@@ -571,7 +571,7 @@ defineExpose({
                 class="w-full px-3 py-2 pl-9 pr-9 text-sm border border-(--ui-border) ui-glossy-border rounded-lg focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:border-transparent transition-all bg-(--ui-surface) ui-glossy-input"
                 @input="handleSearch(searchQuery)"
               >
-              <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-(--ui-text-soft)">
+              <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-(--ui-text)">
                 <Icon
                   icon="search"
                   class="w-4 h-4"
@@ -579,7 +579,7 @@ defineExpose({
               </div>
               <button
                 v-if="searchQuery"
-                class="absolute right-2 top-1/2 transform -translate-y-1/2 text-(--ui-text-soft) hover:text-(--ui-text-muted) transition-colors p-1"
+                class="absolute right-2 top-1/2 transform -translate-y-1/2 text-(--ui-text) hover:text-(--ui-text) transition-colors p-1"
                 @click="clearSearch"
               >
                 <Icon
@@ -592,7 +592,7 @@ defineExpose({
             <!-- Search Results Count -->
             <div
               v-if="searchQuery"
-              class="mt-2 text-xs text-(--ui-text-soft) px-1"
+              class="mt-2 text-xs text-(--ui-text) px-1"
             >
               {{ filteredSubmenuItems.length }} result{{ filteredSubmenuItems.length !== 1 ? 's' : '' }} found
             </div>
@@ -608,12 +608,12 @@ defineExpose({
           >
             <Icon
               icon="search"
-              class="w-12 h-12 mx-auto text-(--ui-text-soft) mb-3"
+              class="w-12 h-12 mx-auto text-(--ui-text) mb-3"
             />
-            <p class="text-sm text-(--ui-text-soft) mb-1">
+            <p class="text-sm text-(--ui-text) mb-1">
               No results found
             </p>
-            <p class="text-xs text-(--ui-text-soft)">
+            <p class="text-xs text-(--ui-text)">
               Try a different search term
             </p>
           </div>
@@ -632,7 +632,7 @@ defineExpose({
                   'flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative',
                   isItemActive(subItem)
                     ? 'bg-linear-to-br from-(--ui-primary-soft) to-(--ui-primary-soft) text-(--ui-primary) shadow-sm border border-(--ui-primary-soft)'
-                    : 'text-(--ui-text-muted) hover:bg-(--ui-surface-muted) hover:text-(--ui-text) border border-transparent',
+                    : 'text-(--ui-text) hover:bg-(--ui-surface-muted) hover:text-(--ui-text) border border-transparent',
                 )
               "
               @click="handleSubmenuNavigation(subItem)"
@@ -649,7 +649,7 @@ defineExpose({
                     'flex items-center justify-center w-8 h-8 rounded-lg mr-3 shrink-0 transition-colors ml-2',
                     isItemActive(subItem)
                       ? 'bg-linear-to-br from-(--ui-primary) to-(--ui-primary) text-(--ui-text-inverse) shadow-md'
-                      : 'bg-(--ui-surface-muted) text-(--ui-text-muted) group-hover:bg-(--ui-surface-soft)',
+                      : 'bg-(--ui-surface-muted) text-(--ui-text) group-hover:bg-(--ui-surface-soft)',
                   )
                 "
               >
@@ -662,7 +662,7 @@ defineExpose({
               <span 
                 :class="cn(
                   'flex-1 truncate font-semibold',
-                  isItemActive(subItem) ? 'text-(--ui-primary)' : 'text-(--ui-text-muted)'
+                  isItemActive(subItem) ? 'text-(--ui-primary)' : 'text-(--ui-text)'
                 )"
               >
                 {{ subItem.label }}
@@ -702,7 +702,7 @@ defineExpose({
         <div class="sticky top-0 z-10 ui-glossy-surface border-b ui-glossy-border">
           <div class="flex items-center justify-between p-4">
             <button
-              class="p-2 -ml-2 rounded-lg text-(--ui-text-soft) hover:text-(--ui-text-muted) hover:bg-(--ui-surface-muted) transition-colors"
+              class="p-2 -ml-2 rounded-lg text-(--ui-text) hover:text-(--ui-text) hover:bg-(--ui-surface-muted) transition-colors"
               aria-label="Close management settings"
               @click="closeManagementSettings"
             >
@@ -736,7 +736,7 @@ defineExpose({
               <!-- Section Header -->
               <div
                 v-if="setting.type === 'section'"
-                class="px-3 py-2 text-xs font-semibold text-(--ui-text-soft) uppercase tracking-wider"
+                class="px-3 py-2 text-xs font-semibold text-(--ui-text) uppercase tracking-wider"
               >
                 {{ setting.label }}
               </div>
@@ -749,7 +749,7 @@ defineExpose({
                     'flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative',
                     isItemActive(setting)
                       ? 'bg-linear-to-br from-(--ui-primary-soft) to-(--ui-primary-soft) text-(--ui-primary) shadow-sm border border-(--ui-primary-soft)'
-                      : 'text-(--ui-text-muted) hover:bg-(--ui-surface-muted) hover:text-(--ui-text) border border-transparent',
+                      : 'text-(--ui-text) hover:bg-(--ui-surface-muted) hover:text-(--ui-text) border border-transparent',
                   )
                 "
                 @click="handleManagementSettingsNavigation(setting)"
@@ -766,7 +766,7 @@ defineExpose({
                       'flex items-center justify-center w-8 h-8 rounded-lg mr-3 shrink-0 transition-colors',
                       isItemActive(setting)
                         ? 'bg-linear-to-br from-(--ui-primary) to-(--ui-primary) text-(--ui-text-inverse) shadow-md'
-                        : 'bg-(--ui-surface-muted) text-(--ui-text-muted) group-hover:bg-(--ui-surface-soft)',
+                        : 'bg-(--ui-surface-muted) text-(--ui-text) group-hover:bg-(--ui-surface-soft)',
                     )
                   "
                 >
@@ -779,7 +779,7 @@ defineExpose({
                 <span
                   :class="cn(
                     'flex-1 truncate font-semibold',
-                    isItemActive(setting) ? 'text-(--ui-primary)' : 'text-(--ui-text-muted)'
+                    isItemActive(setting) ? 'text-(--ui-primary)' : 'text-(--ui-text)'
                   )"
                 >
                   {{ setting.label }}

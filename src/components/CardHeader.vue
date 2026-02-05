@@ -17,7 +17,7 @@
       </h2>
       <p
         v-if="subtitle || $slots.description"
-        class="text-(--ui-text-muted)"
+        class="text-(--ui-text)"
       >
         <slot name="description">
           {{ subtitle }}

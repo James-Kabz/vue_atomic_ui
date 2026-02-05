@@ -62,9 +62,9 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          'ui-glossy-button-strong text-(--ui-text-inverse) hover:brightness-110',
+          'ui-glossy-button-strong text-(--ui-text) hover:brightness-110',
         danger:
-          'ui-glossy-overlay text-(--ui-text-inverse) bg-(--ui-danger) hover:bg-(--ui-danger-strong)',
+          'ui-glossy-overlay text-(--ui-text) bg-(--ui-danger) hover:bg-(--ui-danger-strong)',
         outline:
           'ui-glossy-button ui-glossy-border border text-(--ui-text) bg-(--ui-surface) hover:brightness-105',
         secondary:
@@ -74,15 +74,15 @@ const buttonVariants = cva(
         link:
           'text-(--ui-primary) hover:underline',
         success:
-          'ui-glossy-overlay text-(--ui-text-inverse) bg-(--ui-success) hover:bg-(--ui-success-strong)',
+          'ui-glossy-overlay text-(--ui-text) bg-(--ui-success) hover:bg-(--ui-success-strong)',
         warning:
           'ui-glossy-overlay text-(--ui-text) bg-(--ui-warning) hover:bg-(--ui-warning)',
         info:
-          'ui-glossy-button-strong text-(--ui-text-inverse) hover:brightness-110',
+          'ui-glossy-button-strong text-(--ui-text) hover:brightness-110',
         subtle:
           'ui-glossy-button ui-glossy-border border text-(--ui-text) bg-(--ui-surface) hover:brightness-105',
         dark:
-          'ui-glossy-button ui-glossy-border border text-(--ui-text-inverse) bg-(--ui-surface-strong) hover:brightness-105',
+          'ui-glossy-button ui-glossy-border border text-(--ui-text) bg-(--ui-surface-strong) hover:brightness-105',
         light:
           'ui-glossy-button ui-glossy-border border text-(--ui-text) bg-(--ui-surface) hover:brightness-105',
         primaryOutline:
@@ -92,7 +92,7 @@ const buttonVariants = cva(
         successOutline:
           'ui-glossy-button border border-(--ui-success) text-(--ui-success) hover:brightness-105',
         gradient:
-          'ui-glossy-button-strong bg-linear-to-r from-(--ui-primary) to-(--ui-accent) text-(--ui-text-inverse) hover:from-(--ui-primary) hover:to-(--ui-accent-strong)',
+          'ui-glossy-button-strong bg-linear-to-r from-(--ui-primary) to-(--ui-accent) text-(--ui-text) hover:from-(--ui-primary) hover:to-(--ui-accent-strong)',
       },
       size: {
         '2xs': 'h-6 px-2 py-1 text-xs rounded',

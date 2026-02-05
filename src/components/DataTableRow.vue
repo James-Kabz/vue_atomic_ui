@@ -197,11 +197,11 @@ const rowClasses = computed(() =>
 
 const getCellTextSize = () => {
   const sizes = {
-    compact: 'xs',
-    normal: 'sm',
-    comfortable: 'base'
+    compact: 'sm',
+    normal: 'md',
+    comfortable: 'lg'
   }
-  return sizes[props.density] || 'sm'
+  return sizes[props.density] || 'md'
 }
 
 const checkboxCellClasses = computed(() => 

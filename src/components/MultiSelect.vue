@@ -169,7 +169,7 @@ watch(isOpen, (open) => {
     >
       <div
         v-if="selectedLabels.length === 0"
-        class="text-(--ui-text-soft)"
+        class="text-(--ui-text)"
       >
         {{ placeholder || 'Select options' }}
       </div>
@@ -187,7 +187,7 @@ watch(isOpen, (open) => {
         </Badge>
       </div>
       <svg
-        class="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-(--ui-text-soft) pointer-events-none transition-transform duration-200"
+        class="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-(--ui-text) pointer-events-none transition-transform duration-200"
         :class="{ 'rotate-180': isOpen }"
         fill="currentColor"
         viewBox="0 0 20 20"
@@ -262,7 +262,7 @@ watch(isOpen, (open) => {
           <!-- No results -->
           <div
             v-else
-            class="px-4 py-6 text-sm text-(--ui-text-soft) text-center"
+            class="px-4 py-6 text-sm text-(--ui-text) text-center"
           >
             No options found
           </div>

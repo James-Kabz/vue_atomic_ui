@@ -206,7 +206,7 @@ const indicatorClasses = computed(() => [
   {
     'bg-(--ui-primary) border-(--ui-primary) text-(--ui-text-inverse)': isChecked.value && !props.disabled && props.variant === 'default',
     'bg-(--ui-danger) border-(--ui-danger) text-(--ui-text-inverse)': isChecked.value && !props.disabled && props.variant === 'error',
-    'bg-(--ui-surface-soft) border-(--ui-border) ui-glossy-border text-(--ui-text-soft)': isChecked.value && props.disabled,
+    'bg-(--ui-surface-soft) border-(--ui-border) ui-glossy-border text-(--ui-text)': isChecked.value && props.disabled,
     'bg-(--ui-surface) ui-glossy-surface border-(--ui-border) ui-glossy-border hover:border-(--ui-border-strong)': !isChecked.value && !props.disabled && props.variant === 'default',
     'bg-(--ui-surface) ui-glossy-surface border-(--ui-danger-soft) hover:border-(--ui-danger-soft)': !isChecked.value && !props.disabled && props.variant === 'error',
     'bg-(--ui-surface-muted) border-(--ui-border) ui-glossy-border': !isChecked.value && props.disabled,
@@ -221,12 +221,12 @@ const labelClasses = computed(() => [
   'text-sm font-medium cursor-pointer select-none',
   {
     'text-(--ui-text)': !props.disabled,
-    'text-(--ui-text-soft)': props.disabled
+    'text-(--ui-text)': props.disabled
   }
 ])
 
 const descriptionClasses = computed(() => [
-  'text-xs text-(--ui-text-soft) mt-1'
+  'text-xs text-(--ui-text) mt-1'
 ])
 
 // Handle indeterminate state

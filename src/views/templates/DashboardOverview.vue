@@ -109,7 +109,7 @@ const revenueChart = {
   labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
   datasets: [{
     data: [22, 25, 19, 30, 42, 38],
-    borderColor: '#2563eb'
+    borderColor: 'var(--ui-primary)'
   }]
 }
 
@@ -129,7 +129,7 @@ const pipelineChart = {
           <h1 class="text-2xl font-semibold text-(--ui-text)">
             Executive Overview
           </h1>
-          <p class="text-(--ui-text-muted) mt-1">
+          <p class="text-(--ui-text) mt-1">
             Snapshot of platform health and recent operational activity.
           </p>
         </div>
@@ -158,7 +158,7 @@ const pipelineChart = {
               <div class="text-2xl font-semibold text-(--ui-text)">
                 {{ stat.value }}
               </div>
-              <p class="text-sm text-(--ui-text-soft) mt-1">
+              <p class="text-sm text-(--ui-text) mt-1">
                 {{ stat.helper }}
               </p>
             </div>
@@ -205,7 +205,7 @@ const pipelineChart = {
               <p class="text-sm font-semibold text-(--ui-text)">
                 Vendor renewal approved
               </p>
-              <p class="text-xs text-(--ui-text-soft)">
+              <p class="text-xs text-(--ui-text)">
                 Signed off by Finance · 2 hours ago
               </p>
             </div>
@@ -213,7 +213,7 @@ const pipelineChart = {
               <p class="text-sm font-semibold text-(--ui-text)">
                 Risk score recalibration
               </p>
-              <p class="text-xs text-(--ui-text-soft)">
+              <p class="text-xs text-(--ui-text)">
                 Scheduled for Feb 10 · 1 day ago
               </p>
             </div>
@@ -221,7 +221,7 @@ const pipelineChart = {
               <p class="text-sm font-semibold text-(--ui-text)">
                 New policy rollout
               </p>
-              <p class="text-xs text-(--ui-text-soft)">
+              <p class="text-xs text-(--ui-text)">
                 HR compliance · 3 days ago
               </p>
             </div>

@@ -23,7 +23,6 @@ const statusOptions = [
 const addButtonConfig = {
   label: 'Add User',
   icon: 'plus',
-  variant: 'success',
   size: 'md',
   tooltip: 'Create a new user'
 }
@@ -90,7 +89,7 @@ const handleToggleColumn = ({ column, visible }) => {
           <h1 class="text-2xl font-semibold text-(--ui-text)">
             User Directory
           </h1>
-          <p class="text-(--ui-text-muted) mt-1">
+          <p class="text-(--ui-text) mt-1">
             Track active users, permissions, and last activity.
           </p>
         </div>
@@ -119,6 +118,7 @@ const handleToggleColumn = ({ column, visible }) => {
         <DataTableToolBar
           :selected-items="selectedUsers"
           :total-items="filteredUsers.length"
+          item-label="users found"
           :bulk-actions="bulkActions"
           :density="density"
           :toggleable-columns="columns"
@@ -126,6 +126,7 @@ const handleToggleColumn = ({ column, visible }) => {
           :show-density-toggle="true"
           :show-column-toggle="false"
           :show-refresh="false"
+          :show-table-info="true"
           @update:density="(value) => (density = value)"
           @toggle-column="handleToggleColumn"
         />

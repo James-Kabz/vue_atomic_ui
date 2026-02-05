@@ -82,7 +82,7 @@ const handleMobileSidebarToggle = () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-slate-50">
+  <div class="min-h-screen bg-(--ui-bg) ui-glossy-surface">
     <Sidebar
       ref="sidebarRef"
       :sidebar-width="sidebarWidth"

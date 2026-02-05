@@ -17,7 +17,7 @@
 
     <!-- Header right content -->
     <template #header-right>
-      <button class="p-2 rounded-lg text-(--ui-text-muted) hover:bg-(--ui-surface-muted) relative">
+      <button class="p-2 rounded-lg text-(--ui-text) hover:bg-(--ui-surface-muted) relative">
         <svg
           class="w-6 h-6"
           fill="none"
@@ -41,7 +41,7 @@
         <h2 class="text-2xl font-bold text-(--ui-text) mb-4">
           Welcome to Dashboard
         </h2>
-        <p class="text-(--ui-text-muted)">
+        <p class="text-(--ui-text)">
           This is a demo of the Vue Dashboard Layout package. The sidebar can be collapsed,
           and all components are fully customizable through props and slots.
         </p>

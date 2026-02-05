@@ -479,7 +479,7 @@ const getFileIconColor = (file) => {
   if (['zip', 'rar', '7z', 'tar', 'gz'].includes(ext)) return 'text-(--ui-warning) bg-(--ui-warning-soft)'
   if (['mp4', 'mov', 'avi', 'mkv', 'webm'].includes(ext)) return 'text-(--ui-danger) bg-(--ui-danger-soft)'
   if (['mp3', 'wav', 'ogg', 'flac'].includes(ext)) return 'text-(--ui-warning) bg-(--ui-warning-soft)'
-  return 'text-(--ui-text-muted) bg-(--ui-surface-muted)'
+  return 'text-(--ui-text) bg-(--ui-surface-muted)'
 }
 
 const handleSubmit = async () => {
@@ -550,7 +550,7 @@ const handleCancel = () => {
       </h2>
       <p
         v-if="description"
-        class="text-sm text-(--ui-text-muted) mt-1"
+        class="text-sm text-(--ui-text) mt-1"
       >
         {{ description }}
       </p>
@@ -650,7 +650,7 @@ const handleCancel = () => {
               />
               <Label
                 :for="fieldId"
-                class="ml-2 text-sm text-(--ui-text-muted)"
+                class="ml-2 text-sm text-(--ui-text)"
               >
                 {{ field.checkboxLabel || field.label }}
               </Label>
@@ -683,7 +683,7 @@ const handleCancel = () => {
               </button>
               <Label
                 :for="fieldId"
-                class="ml-3 text-sm text-(--ui-text-muted)"
+                class="ml-3 text-sm text-(--ui-text)"
               >
                 {{ field.checkboxLabel || field.label }}
               </Label>
@@ -710,7 +710,7 @@ const handleCancel = () => {
                 />
                 <Label
                   :for="`${fieldId}-${option.value}`"
-                  class="ml-2 text-sm text-(--ui-text-muted)"
+                  class="ml-2 text-sm text-(--ui-text)"
                 >
                   {{ option.label }}
                 </Label>
@@ -728,7 +728,7 @@ const handleCancel = () => {
                 :accept="field.accept"
                 :disabled="isLoading || field.disabled"
                 :class="[
-                  'w-full text-sm text-(--ui-text-soft) file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-(--ui-primary-soft) file:text-(--ui-primary) hover:file:bg-(--ui-primary-soft)',
+                  'w-full text-sm text-(--ui-text) file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-(--ui-primary-soft) file:text-(--ui-primary) hover:file:bg-(--ui-primary-soft)',
                   hasError ? 'border-(--ui-danger)' : 'border-(--ui-border) ui-glossy-border'
                 ]"
                 :aria-describedby="ariaDescribedBy"
@@ -736,7 +736,7 @@ const handleCancel = () => {
               />
               <p
                 v-if="field.helpText"
-                class="text-xs text-(--ui-text-soft)"
+                class="text-xs text-(--ui-text)"
               >
                 {{ field.helpText }}
               </p>
@@ -777,7 +777,7 @@ const handleCancel = () => {
                 <div class="flex items-center justify-center px-4 py-4">
                   <div class="bg-(--ui-surface-muted) rounded-full p-2.5 mr-3">
                     <svg
-                      class="h-6 w-6 text-(--ui-text-muted)"
+                      class="h-6 w-6 text-(--ui-text)"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
@@ -792,10 +792,10 @@ const handleCancel = () => {
                     </svg>
                   </div>
                   <div class="flex flex-col">
-                    <p class="text-sm font-medium text-(--ui-text-muted)">
+                    <p class="text-sm font-medium text-(--ui-text)">
                       <span class="text-(--ui-primary) font-semibold">Click to upload</span> or drag and drop
                     </p>
-                    <p class="text-xs text-(--ui-text-soft)">
+                    <p class="text-xs text-(--ui-text)">
                       {{ field.maxSize ? `Up to ${formatFileSize(field.maxSize)}` : 'No size limit' }}
                       <span
                         v-if="field.accept"
@@ -813,7 +813,7 @@ const handleCancel = () => {
               <!-- Help text -->
               <p
                 v-if="field.helpText"
-                class="text-xs text-(--ui-text-soft)"
+                class="text-xs text-(--ui-text)"
               >
                 {{ field.helpText }}
               </p>
@@ -831,7 +831,7 @@ const handleCancel = () => {
                   <div class="flex items-center space-x-3 flex-1 min-w-0">
                     <div class="relative h-10 w-10 shrink-0">
                       <svg
-                        class="h-10 w-10 text-(--ui-text-soft)"
+                        class="h-10 w-10 text-(--ui-text)"
                         viewBox="0 0 36 36"
                       >
                         <circle
@@ -854,18 +854,18 @@ const handleCancel = () => {
                           transform="rotate(-90 18 18)"
                         />
                       </svg>
-                      <span class="absolute inset-0 flex items-center justify-center text-xs font-medium text-(--ui-text-muted)">
+                      <span class="absolute inset-0 flex items-center justify-center text-xs font-medium text-(--ui-text)">
                         {{ Math.round(fileItem.progress) }}%
                       </span>
                     </div>
                     <div class="flex flex-col min-w-0">
                       <span class="text-sm font-medium text-(--ui-text) truncate">{{ fileItem.file.name }}</span>
-                      <span class="text-xs text-(--ui-text-soft)">Uploading...</span>
+                      <span class="text-xs text-(--ui-text)">Uploading...</span>
                     </div>
                   </div>
                   <button
                     type="button"
-                    class="text-(--ui-text-soft) hover:text-(--ui-danger) hover:bg-(--ui-danger-soft) rounded-full p-1 transition-colors ml-2"
+                    class="text-(--ui-text) hover:text-(--ui-danger) hover:bg-(--ui-danger-soft) rounded-full p-1 transition-colors ml-2"
                     @click.stop="cancelUpload(field, fileItem.id)"
                   >
                     <svg
@@ -927,12 +927,12 @@ const handleCancel = () => {
                     </div>
                     <div class="flex flex-col min-w-0">
                       <span class="text-sm font-medium text-(--ui-text) truncate">{{ file.name }}</span>
-                      <span class="text-xs text-(--ui-text-soft)">{{ formatFileSize(file.size) }}</span>
+                      <span class="text-xs text-(--ui-text)">{{ formatFileSize(file.size) }}</span>
                     </div>
                   </div>
                   <button
                     type="button"
-                    class="text-(--ui-text-soft) hover:text-(--ui-danger) hover:bg-(--ui-danger-soft) rounded-full p-1.5 transition-colors ml-2"
+                    class="text-(--ui-text) hover:text-(--ui-danger) hover:bg-(--ui-danger-soft) rounded-full p-1.5 transition-colors ml-2"
                     :disabled="isLoading || field.disabled"
                     @click.stop="removeMultiFile(field, index)"
                   >
@@ -992,7 +992,7 @@ const handleCancel = () => {
                   class="flex-1"
                   :aria-describedby="ariaDescribedBy"
                 />
-                <span class="text-sm font-medium text-(--ui-text-muted) min-w-[3rem] text-right">
+                <span class="text-sm font-medium text-(--ui-text) min-w-[3rem] text-right">
                   {{ formData[field.name] }}
                 </span>
               </div>

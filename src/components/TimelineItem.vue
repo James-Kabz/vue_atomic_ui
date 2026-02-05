@@ -37,13 +37,13 @@
       </h3>
       <p
         v-if="subtitle"
-        class="text-(--ui-text-soft) text-sm"
+        class="text-(--ui-text) text-sm"
       >
         <slot name="subtitle">
           {{ subtitle }}
         </slot>
       </p>
-      <div class="mt-2 text-(--ui-text-muted) text-sm">
+      <div class="mt-2 text-(--ui-text) text-sm">
         <slot />
       </div>
     </div>

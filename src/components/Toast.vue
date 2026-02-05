@@ -53,7 +53,7 @@
             </div>
             <div
               v-if="toast.message || toast.description"
-              class="text-sm leading-relaxed text-(--ui-text-muted)"
+              class="text-sm leading-relaxed text-(--ui-text)"
             >
               {{ toast.message || toast.description }}
             </div>
@@ -84,7 +84,7 @@
           <!-- Close Button -->
           <button
             v-if="isDismissible(toast)"
-            class="absolute right-2 top-2 flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-(--ui-text-soft) opacity-0 transition-all hover:bg-black/5 dark:hover:bg-white/5 hover:text-(--ui-text) focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-(--ui-ring) focus:ring-offset-1 group-hover:opacity-100"
+            class="absolute right-2 top-2 flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-(--ui-text) opacity-0 transition-all hover:bg-black/5 dark:hover:bg-white/5 hover:text-(--ui-text) focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-(--ui-ring) focus:ring-offset-1 group-hover:opacity-100"
             aria-label="Dismiss"
             @click="dismiss(toast.id)"
           >
@@ -198,18 +198,18 @@ const iconMap = {
   info: 'info',
   success: 'check-circle',
   warning: 'triangle-exclamation',
-  error: 'circle-circle-xmark',
+  error: 'circle-xmark',
   loading: 'loader-circle'
 }
 
 // Icon color classes with refined palette
 const iconColorMap = {
-  default: 'text-(--ui-text-muted)',
+  default: 'text-(--ui-text)',
   info: 'text-blue-600 dark:text-blue-400',
   success: 'text-green-600 dark:text-green-400',
   warning: 'text-amber-600 dark:text-amber-400',
   error: 'text-red-600 dark:text-red-400',
-  loading: 'text-(--ui-text-muted)'
+  loading: 'text-(--ui-text)'
 }
 
 // Icon background classes for better visual hierarchy

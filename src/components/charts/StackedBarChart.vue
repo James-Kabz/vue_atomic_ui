@@ -53,7 +53,7 @@ const props = defineProps({
   },
   axisLabelClasses: {
     type: String,
-    default: 'fill-(--ui-text-muted) text-xs font-medium'
+    default: 'fill-(--ui-text) text-xs font-medium'
   },
   maxValue: {
     type: Number,
@@ -292,7 +292,7 @@ const handleBarClick = (dataIndex, barIndex) => {
         <text
           :x="padding.left + chartWidth / 2"
           :y="height - 10"
-          class="fill-(--ui-text-muted) text-sm font-semibold"
+          class="fill-(--ui-text) text-sm font-semibold"
           text-anchor="middle"
         >
           {{ xAxisLabel }}
@@ -318,7 +318,7 @@ const handleBarClick = (dataIndex, barIndex) => {
         <text
           :x="-(padding.top + chartHeight / 2)"
           :y="padding.left - 40"
-          class="fill-(--ui-text-muted) text-sm font-semibold"
+          class="fill-(--ui-text) text-sm font-semibold"
           text-anchor="middle"
           transform="rotate(-90)"
         >
@@ -369,7 +369,7 @@ const handleBarClick = (dataIndex, barIndex) => {
           </p>
         </div>
         <div class="ml-5">
-          <p class="text-xs text-(--ui-text-soft) mb-1">
+          <p class="text-xs text-(--ui-text) mb-1">
             {{ tooltip.barLabel }}
           </p>
           <span class="text-2xl font-bold">{{ tooltip.value }}%</span>

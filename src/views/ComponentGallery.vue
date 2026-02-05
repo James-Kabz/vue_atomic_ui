@@ -322,12 +322,12 @@ const previewProfileMenu = ref([
           </ul>
           <Tab>
             <TabPanel label="Summary">
-              <p class="text-sm text-(--ui-text-muted)">
+              <p class="text-sm text-(--ui-text)">
                 Tab panel content
               </p>
             </TabPanel>
             <TabPanel label="Details">
-              <p class="text-sm text-(--ui-text-muted)">
+              <p class="text-sm text-(--ui-text)">
                 Second panel content
               </p>
             </TabPanel>
@@ -352,7 +352,7 @@ const previewProfileMenu = ref([
             <template #prefix>
               <Icon
                 icon="search"
-                class="w-4 h-4 text-(--ui-text-soft)"
+                class="w-4 h-4 text-(--ui-text)"
               />
             </template>
             <Input
@@ -371,7 +371,7 @@ const previewProfileMenu = ref([
           />
           <div class="flex items-center gap-3">
             <Switch v-model="switchValue" />
-            <span class="text-sm text-(--ui-text-muted)">Switch</span>
+            <span class="text-sm text-(--ui-text)">Switch</span>
           </div>
           <Slider
             v-model="sliderValue"
@@ -534,7 +534,7 @@ const previewProfileMenu = ref([
           >
             <ModalHeader>Modal Header</ModalHeader>
             <ModalBody>
-              <p class="text-sm text-(--ui-text-muted)">
+              <p class="text-sm text-(--ui-text)">
                 Modal body content.
               </p>
             </ModalBody>
@@ -646,7 +646,7 @@ const previewProfileMenu = ref([
               subtitle="Sign in to continue"
             >
               <div class="p-6 bg-(--ui-surface) rounded-lg shadow-sm">
-                <p class="text-sm text-(--ui-text-muted)">
+                <p class="text-sm text-(--ui-text)">
                   Auth slot content
                 </p>
               </div>
@@ -662,7 +662,7 @@ const previewProfileMenu = ref([
                   Action
                 </Button>
               </template>
-              <div class="p-4 text-sm text-(--ui-text-muted)">
+              <div class="p-4 text-sm text-(--ui-text)">
                 Default layout content
               </div>
             </DefaultLayout>

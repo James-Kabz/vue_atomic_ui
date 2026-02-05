@@ -346,5 +346,5 @@ const imageContainerVariants = cva('overflow-hidden', {
 /* --- Static classes --- */
 const imageClasses = 'w-full h-full object-cover'
 const titleClasses = 'font-semibold text-(--ui-text) line-clamp-2'
-const subtitleClasses = 'text-sm text-(--ui-text-muted) mt-1 line-clamp-2'
+const subtitleClasses = 'text-sm text-(--ui-text) mt-1 line-clamp-2'
 </script>

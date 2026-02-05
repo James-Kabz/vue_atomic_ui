@@ -224,7 +224,7 @@ watch(isOpen, (open) => {
     >
       <div
         v-if="!selectedOption"
-        class="text-(--ui-text-soft)"
+        class="text-(--ui-text)"
       >
         {{ placeholder || 'Select an option' }}
       </div>
@@ -235,7 +235,7 @@ watch(isOpen, (open) => {
         {{ selectedOption.label }}
       </div>
       <svg
-        class="absolute right-2 top-2.5 h-5 w-5 text-(--ui-text-soft)"
+        class="absolute right-2 top-2.5 h-5 w-5 text-(--ui-text)"
         fill="currentColor"
         viewBox="0 0 20 20"
       >
@@ -305,7 +305,7 @@ watch(isOpen, (open) => {
         <!-- No results -->
         <div
           v-else-if="!props.allowCreate"
-          class="px-4 py-3 text-sm text-(--ui-text-soft) text-center"
+          class="px-4 py-3 text-sm text-(--ui-text) text-center"
         >
           No options found
         </div>

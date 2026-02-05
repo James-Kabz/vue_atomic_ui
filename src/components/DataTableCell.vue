@@ -40,8 +40,8 @@ const props = defineProps({
   },
   textSize: {
     type: String,
-    default: 'sm',
-    validator: (value) => ['xs', 'sm', 'base', 'lg'].includes(value)
+    default: 'md',
+    validator: (value) => ['xs', 'sm', 'md', 'base', 'lg'].includes(value)
   },
   textColor: {
     type: String,
@@ -89,7 +89,7 @@ const cellVariants = cva('whitespace-nowrap text-(--ui-text)', {
   defaultVariants: {
     align: 'left',
     padding: 'normal',
-    textSize: 'sm'
+    textSize: 'md'
   }
 })
 

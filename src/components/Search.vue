@@ -31,7 +31,7 @@
         <!-- Clear -->
         <button
           v-if="!loading && clearable"
-          class="text-(--ui-text-soft) hover:text-(--ui-text-muted) transition-colors p-1 rounded-full hover:bg-(--ui-surface-muted)"
+          class="text-(--ui-text) hover:text-(--ui-text) transition-colors p-1 rounded-full hover:bg-(--ui-surface-muted)"
           :aria-label="clearLabel"
           @click="handleClear"
         >
@@ -43,7 +43,7 @@
           v-else-if="loading"
           class="animate-spin"
         >
-          <LoadingIcon class="w-4 h-4 text-(--ui-text-soft)" />
+          <LoadingIcon class="w-4 h-4 text-(--ui-text)" />
         </div>
       </div>
     </div>
@@ -87,7 +87,7 @@
               </div>
               <div
                 v-if="result.description"
-                class="text-sm text-(--ui-text-soft) truncate"
+                class="text-sm text-(--ui-text) truncate"
               >
                 {{ highlightMatch(result.description) }}
               </div>
@@ -95,7 +95,7 @@
 
             <div
               v-if="result.category"
-              class="text-xs text-(--ui-text-soft) ml-3"
+              class="text-xs text-(--ui-text) ml-3"
             >
               {{ result.category }}
             </div>
@@ -105,7 +105,7 @@
         <!-- No Results -->
         <div
           v-else-if="showNoResults"
-          class="px-4 py-3 text-sm text-(--ui-text-soft) text-center"
+          class="px-4 py-3 text-sm text-(--ui-text) text-center"
         >
           {{ noResultsText }}
         </div>
@@ -290,7 +290,7 @@ const highlightMatch = (text) => {
 
 // Variants
 const inputVariants = cva(
-  'block w-full rounded-lg border bg-(--ui-surface) ui-glossy-surface transition-colors duration-200 placeholder:text-(--ui-text-soft) disabled:bg-(--ui-surface-muted) disabled:text-(--ui-text-soft) disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:border-(--ui-primary)',
+  'block w-full rounded-lg border bg-(--ui-surface) ui-glossy-surface transition-colors duration-200 placeholder:text-(--ui-text) disabled:bg-(--ui-surface-muted) disabled:text-(--ui-text) disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:border-(--ui-primary)',
   {
     variants: {
       size: {
@@ -303,7 +303,7 @@ const inputVariants = cva(
   }
 )
 
-const iconVariants = cva('text-(--ui-text-soft)', {
+const iconVariants = cva('text-(--ui-text)', {
   variants: {
     size: {
       sm: 'w-4 h-4',

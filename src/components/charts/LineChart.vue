@@ -190,7 +190,7 @@ const props = defineProps({
   },
   axisLabelClasses: {
     type: String,
-    default: 'fill-(--ui-text-muted) text-xs font-medium'
+    default: 'fill-(--ui-text) text-xs font-medium'
   },
   tooltipBackground: {
     type: String,

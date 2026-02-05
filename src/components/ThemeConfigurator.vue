@@ -1,6 +1,8 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { getMode, getTheme, setMode, setTheme } from '../lib/theme'
+import Option from './Option.vue'
+import Select from './Select.vue'
 
 const themes = [
   'ocean',
@@ -18,13 +20,13 @@ const open = ref(false)
 const currentTheme = ref(getTheme() || 'ocean')
 const currentMode = ref(getMode() || 'light')
 
-const applyTheme = () => {
-  setTheme(currentTheme.value)
-}
+watch(currentTheme, (value) => {
+  setTheme(value)
+})
 
-const applyMode = () => {
-  setMode(currentMode.value)
-}
+watch(currentMode, (value) => {
+  setMode(value)
+})
 </script>
 
 <template>
@@ -44,38 +46,36 @@ const applyMode = () => {
         Appearance
       </div>
       <div class="mt-3 space-y-3">
-        <label class="block text-xs font-medium text-(--ui-text-muted)">
+        <label class="block text-xs font-medium text-(--ui-text)">
           Mode
-          <select
+          <Select
             v-model="currentMode"
-            class="mt-1 w-full rounded-lg border border-(--ui-border) bg-(--ui-surface) px-3 py-2 text-sm"
-            @change="applyMode"
+            class="mt-1 w-full"
           >
-            <option
+            <Option
               v-for="mode in modes"
               :key="mode"
               :value="mode"
             >
               {{ mode }}
-            </option>
-          </select>
+            </Option>
+          </Select>
         </label>
 
-        <label class="block text-xs font-medium text-(--ui-text-muted)">
+        <label class="block text-xs font-medium text-(--ui-text)">
           Theme
-          <select
+          <Select
             v-model="currentTheme"
-            class="mt-1 w-full rounded-lg border border-(--ui-border) bg-(--ui-surface) px-3 py-2 text-sm"
-            @change="applyTheme"
+            class="mt-1 w-full"
           >
-            <option
+            <Option
               v-for="theme in themes"
               :key="theme"
               :value="theme"
             >
               {{ theme }}
-            </option>
-          </select>
+            </Option>
+          </Select>
         </label>
       </div>
     </div>

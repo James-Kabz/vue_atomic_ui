@@ -42,10 +42,10 @@ const trendSummary = computed(() => {
     <div class="space-y-6">
       <div class="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 class="text-2xl font-semibold text-slate-900">
+          <h1 class="text-2xl font-semibold text-(--ui-text)">
             Analytics
           </h1>
-          <p class="text-slate-600 mt-1">
+          <p class="text-(--ui-text) mt-1">
             Monitor risk scoring, review throughput, and regional trends.
           </p>
         </div>
@@ -71,16 +71,16 @@ const trendSummary = computed(() => {
         >
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-3xl font-semibold text-slate-900">
+              <p class="text-3xl font-semibold text-(--ui-text)">
                 {{ weeklyScore[weeklyScore.length - 1] }}
               </p>
-              <p class="text-sm text-slate-500">
+              <p class="text-sm text-(--ui-text)">
                 Rolling average
               </p>
             </div>
             <div
               class="px-3 py-1 rounded-full text-xs font-semibold"
-              :class="trendSummary.direction === 'up' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'"
+              :class="trendSummary.direction === 'up' ? 'bg-(--ui-success-soft) text-(--ui-success)' : 'bg-(--ui-warning-soft) text-(--ui-warning)'"
             >
               {{ trendSummary.direction === 'up' ? '+' : '' }}{{ trendSummary.value }}%
             </div>
@@ -91,7 +91,7 @@ const trendSummary = computed(() => {
           variant="outlined"
           padding="lg"
         >
-          <div class="space-y-2 text-sm text-slate-600">
+          <div class="space-y-2 text-sm text-(--ui-text)">
             <p>Date range: {{ dateFrom || 'Any' }} - {{ dateTo || 'Any' }}</p>
             <p>Source: {{ dataSource || 'All sources' }}</p>
             <p>Segments: 4 active cohorts</p>
@@ -103,19 +103,19 @@ const trendSummary = computed(() => {
           padding="lg"
         >
           <div class="space-y-3">
-            <div class="rounded-lg border border-slate-200 p-3">
-              <p class="text-sm font-semibold text-slate-900">
+            <div class="rounded-lg border border-(--ui-border) ui-glossy-border p-3">
+              <p class="text-sm font-semibold text-(--ui-text)">
                 Vendor renewal cycle
               </p>
-              <p class="text-xs text-slate-500">
+              <p class="text-xs text-(--ui-text)">
                 Due in 5 days
               </p>
             </div>
-            <div class="rounded-lg border border-slate-200 p-3">
-              <p class="text-sm font-semibold text-slate-900">
+            <div class="rounded-lg border border-(--ui-border) ui-glossy-border p-3">
+              <p class="text-sm font-semibold text-(--ui-text)">
                 Quarterly policy review
               </p>
-              <p class="text-xs text-slate-500">
+              <p class="text-xs text-(--ui-text)">
                 Due in 2 weeks
               </p>
             </div>

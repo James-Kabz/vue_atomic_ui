@@ -100,7 +100,7 @@ const headerVariants = cva(
   }
 )
 
-const contentVariants = cva('overflow-hidden text-(--ui-text-muted) border-t border-(--ui-border) ui-glossy-border', {
+const contentVariants = cva('overflow-hidden text-(--ui-text) border-t border-(--ui-border) ui-glossy-border', {
   variants: {
     size: {
       sm: 'p-3 text-sm',
