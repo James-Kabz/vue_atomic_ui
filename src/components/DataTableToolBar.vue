@@ -30,12 +30,12 @@
         </div>
 
         <!-- Default info when no selection -->
-      <div
-        v-else-if="totalItems > 0"
-        :class="itemCountClasses"
-      >
-        {{ totalItems }} {{ itemLabel }}
-      </div>
+        <div
+          v-else-if="totalItems > 0"
+          :class="itemCountClasses"
+        >
+          {{ totalItems }} {{ itemLabel }}
+        </div>
       </div>
 
       <!-- Right side - View controls and actions -->
@@ -61,16 +61,16 @@
         </div>
 
         <!-- Column visibility toggle -->
-      <div
-        v-if="showColumnToggle"
-        class="relative"
-      >
-        <button
-          ref="columnToggleButton"
-          :class="columnToggleButtonClasses"
-          type="button"
-          @click.stop="toggleColumnMenu"
+        <div
+          v-if="showColumnToggle"
+          class="relative"
         >
+          <button
+            ref="columnToggleButton"
+            :class="columnToggleButtonClasses"
+            type="button"
+            @click.stop="toggleColumnMenu"
+          >
             <font-awesome-icon
               icon="columns"
               class="w-4 h-4"
@@ -79,41 +79,41 @@
           </button>
 
           <!-- Column menu -->
-        <Teleport to="body">
-          <div
-            v-show="showColumnMenu"
-            ref="columnMenu"
-            :class="columnMenuClasses"
-            :style="columnMenuStyle"
-            @click.stop
-          >
-            <div class="p-3">
-              <div :class="columnMenuHeaderClasses">
-                Show Columns
-              </div>
-              <div class="space-y-1">
-                <div
-                  v-for="column in toggleableColumns"
-                  :key="column.key"
-                  :class="columnMenuItemClasses"
-                >
-                  <label class="flex items-center gap-2 cursor-pointer w-full">
-                    <input
-                      type="checkbox"
-                      :checked="isColumnVisible(column.key)"
-                      :class="checkboxClasses"
-                      @change="toggleColumn(column.key, $event.target.checked)"
-                    >
-                    <span :class="labelClasses">
-                      {{ column.label }}
-                    </span>
-                  </label>
+          <Teleport to="body">
+            <div
+              v-show="showColumnMenu"
+              ref="columnMenu"
+              :class="columnMenuClasses"
+              :style="columnMenuStyle"
+              @click.stop
+            >
+              <div class="p-3">
+                <div :class="columnMenuHeaderClasses">
+                  Show Columns
+                </div>
+                <div class="space-y-1">
+                  <div
+                    v-for="column in toggleableColumns"
+                    :key="column.key"
+                    :class="columnMenuItemClasses"
+                  >
+                    <label class="flex items-center gap-2 cursor-pointer w-full">
+                      <input
+                        type="checkbox"
+                        :checked="isColumnVisible(column.key)"
+                        :class="checkboxClasses"
+                        @change="toggleColumn(column.key, $event.target.checked)"
+                      >
+                      <span :class="labelClasses">
+                        {{ column.label }}
+                      </span>
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </Teleport>
-      </div>
+          </Teleport>
+        </div>
 
         <!-- Refresh button -->
         <button
@@ -139,7 +139,6 @@
         </div>
       </div>
     </div>
-
   </div>
 </template>
 

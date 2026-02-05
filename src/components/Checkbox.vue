@@ -221,7 +221,7 @@ const labelClasses = computed(() => [
   'text-sm font-medium cursor-pointer select-none',
   {
     'text-(--ui-text)': !props.disabled,
-    'text-(--ui-text)': props.disabled
+    'text-(--ui-text-muted)': props.disabled
   }
 ])
 
