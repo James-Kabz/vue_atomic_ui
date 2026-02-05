@@ -545,7 +545,7 @@
     --ui-surface-strong: var(--color-slate-950);
 
     --ui-text: var(--color-slate-950);
-    --ui-text-muted: var(--color-slate-600);
+    --ui-text-muted: var(--color-slate-700);
     --ui-text-soft: var(--color-slate-500);
 
     --ui-border: var(--color-slate-200);
