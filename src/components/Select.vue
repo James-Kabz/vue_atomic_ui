@@ -80,7 +80,7 @@ const selectClasses = computed(() =>
 const selectButtonClasses = computed(() =>
   cn(
     'w-full px-3 py-2 text-left border rounded-md focus:outline-none focus:ring-2 focus:ring-(--ui-primary) bg-(--ui-surface) ui-glossy-input ui-glossy-border',
-    hasError ? 'border-(--ui-danger)' : 'border-(--ui-border)',
+    props.hasError ? 'border-(--ui-danger)' : 'border-(--ui-border)',
     props.disabled ? 'bg-(--ui-surface-muted) cursor-not-allowed opacity-50' : 'hover:border-(--ui-border-strong)',
     props.class
   )
