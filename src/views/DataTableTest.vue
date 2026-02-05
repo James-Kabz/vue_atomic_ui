@@ -1,14 +1,14 @@
 <template>
   <div
     id="app"
-    class="min-h-screen bg-(--ui-surface-muted)"
+    class="min-h-screen bg-(--ui-bg) ui-glossy-panel"
   >
     <div class="container mx-auto py-8">
       <h1 class="text-3xl font-bold text-(--ui-text) mb-8">
         Vue DataTable with Filters
       </h1>
       <!-- DataTable with Filters -->
-      <div class="bg-(--ui-surface) rounded-lg shadow-sm border border-(--ui-border) overflow-hidden">
+      <div class="rounded-lg shadow-sm border border-(--ui-border) overflow-hidden">
         <!-- Filters Component -->
         <DataTableFilters
           v-model:search-query="searchQuery"

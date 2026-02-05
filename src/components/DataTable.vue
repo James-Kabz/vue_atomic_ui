@@ -218,7 +218,7 @@ const showModal = ref(false)
 const modalContent = ref('')
 
 // CVA variants
-const tableContainerVariants = cva('ui-glossy-surface border ui-glossy-border rounded-lg overflow-hidden', {
+const tableContainerVariants = cva('ui-glossy-surface border ui-glossy-border rounded-lg relative', {
   variants: {
     variant: {
       default: 'shadow-sm',

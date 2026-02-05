@@ -61,16 +61,16 @@
         </div>
 
         <!-- Column visibility toggle -->
-        <div
-          v-if="showColumnToggle"
-          class="relative"
+      <div
+        v-if="showColumnToggle"
+        class="relative"
+      >
+        <button
+          ref="columnToggleButton"
+          :class="columnToggleButtonClasses"
+          type="button"
+          @click.stop="toggleColumnMenu"
         >
-          <button
-            ref="columnToggleButton"
-            :class="columnToggleButtonClasses"
-            type="button"
-            @click.stop="toggleColumnMenu"
-          >
             <font-awesome-icon
               icon="columns"
               class="w-4 h-4"
@@ -79,10 +79,12 @@
           </button>
 
           <!-- Column menu -->
+        <Teleport to="body">
           <div
             v-show="showColumnMenu"
             ref="columnMenu"
             :class="columnMenuClasses"
+            :style="columnMenuStyle"
             @click.stop
           >
             <div class="p-3">
@@ -110,7 +112,8 @@
               </div>
             </div>
           </div>
-        </div>
+        </Teleport>
+      </div>
 
         <!-- Refresh button -->
         <button
@@ -234,6 +237,7 @@ const emit = defineEmits(['bulk-action', 'update:density', 'toggle-column', 'ref
 const showColumnMenu = ref(false)
 const columnToggleButton = ref(null)
 const columnMenu = ref(null)
+const columnMenuStyle = ref({})
 
 const selectedCount = computed(() => props.selectedItems.length)
 
@@ -323,7 +327,7 @@ const columnToggleButtonClasses = computed(() =>
 )
 
 const columnMenuClasses = computed(() => 
-  'absolute right-0 top-full mt-1 w-56 ui-glossy-popover ui-glossy-border rounded-lg shadow-lg z-50 max-h-64 overflow-y-auto'
+  'ui-glossy-popover ui-glossy-border rounded-lg shadow-lg z-[9999] max-h-64 overflow-y-auto'
 )
 
 const columnMenuHeaderClasses = computed(() => 
@@ -343,6 +347,20 @@ const labelClasses = computed(() =>
 )
 
 // Click outside handler
+const updateColumnMenuPosition = () => {
+  if (!columnToggleButton.value) return
+  const rect = columnToggleButton.value.getBoundingClientRect()
+  const width = 224
+  const left = Math.max(12, rect.right - width)
+  columnMenuStyle.value = {
+    position: 'fixed',
+    top: `${rect.bottom + 6}px`,
+    left: `${left}px`,
+    width: `${width}px`,
+    zIndex: 9999
+  }
+}
+
 const handleClickOutside = (event) => {
   if (
     columnToggleButton.value &&
@@ -357,6 +375,9 @@ const handleClickOutside = (event) => {
 // Methods
 const toggleColumnMenu = () => {
   showColumnMenu.value = !showColumnMenu.value
+  if (showColumnMenu.value) {
+    updateColumnMenuPosition()
+  }
 }
 
 const getBulkActionClasses = (action) => 
@@ -392,9 +413,13 @@ const toggleColumn = (columnKey, visible) => {
 // Lifecycle
 onMounted(() => {
   document.addEventListener('click', handleClickOutside)
+  window.addEventListener('scroll', updateColumnMenuPosition, true)
+  window.addEventListener('resize', updateColumnMenuPosition)
 })
 
 onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside)
+  window.removeEventListener('scroll', updateColumnMenuPosition, true)
+  window.removeEventListener('resize', updateColumnMenuPosition)
 })
 </script>
