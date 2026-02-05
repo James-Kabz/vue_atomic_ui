@@ -77,6 +77,15 @@ const selectClasses = computed(() =>
   )
 )
 
+const selectButtonClasses = computed(() =>
+  cn(
+    'w-full px-3 py-2 text-left border rounded-md focus:outline-none focus:ring-2 focus:ring-(--ui-primary) bg-(--ui-surface) ui-glossy-input ui-glossy-border',
+    hasError ? 'border-(--ui-danger)' : 'border-(--ui-border)',
+    props.disabled ? 'bg-(--ui-surface-muted) cursor-not-allowed opacity-50' : 'hover:border-(--ui-border-strong)',
+    props.class
+  )
+)
+
 const updateDropdownPosition = () => {
   if (!buttonRef.value) return
 
@@ -214,11 +223,7 @@ watch(isOpen, (open) => {
       ref="buttonRef"
       type="button"
       :disabled="disabled"
-      :class="[
-        'w-full px-3 py-2 text-left border rounded-md focus:outline-none focus:ring-2 focus:ring-(--ui-primary) bg-(--ui-surface) ui-glossy-input ui-glossy-border',
-        hasError ? 'border-(--ui-danger)' : 'border-(--ui-border)',
-        disabled ? 'bg-(--ui-surface-muted) cursor-not-allowed opacity-50' : 'hover:border-(--ui-border-strong)'
-      ]"
+      :class="selectButtonClasses"
       @click="toggleDropdown"
       @keydown="handleKeydown"
     >

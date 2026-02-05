@@ -194,6 +194,7 @@ defineProps({
   right: 0;
   bottom: 0;
   z-index: 9999;
+  background-color: var(--loader-bg);
 }
 
 .loader__backdrop {
@@ -349,7 +350,7 @@ defineProps({
 }
 
 .loader__ring-track {
-  border: 4px solid #e5e7eb;
+  border: 4px solid var(--ui-border);
   border-radius: 50%;
 }
 
@@ -381,7 +382,7 @@ defineProps({
 }
 
 .loader__spinner {
-  border: 3px solid #f3f4f6;
+  border: 3px solid var(--ui-border);
   border-top: 3px solid var(--loader-color);
   border-radius: 50%;
   animation: spin 1s linear infinite;
