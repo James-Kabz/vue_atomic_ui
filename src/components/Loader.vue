@@ -1,120 +1,63 @@
 <template>
-  <div 
-    v-if="loading"
-    :class="[
-      'loader',
-      `loader--${type}`,
-      `loader--${size}`,
-      overlay ? 'loader--overlay' : '',
-      fullscreen ? 'loader--fullscreen' : ''
-    ]"
-    :style="{ 
+  <div v-if="loading" :class="[
+    'loader',
+    `loader--${type}`,
+    `loader--${size}`,
+    overlay ? 'loader--overlay' : '',
+    fullscreen ? 'loader--fullscreen' : ''
+  ]" :style="{
       '--loader-color': color,
-      '--loader-bg': backgroundColor 
-    }"
-  >
+      '--loader-bg': backgroundColor
+    }">
     <!-- Optional backdrop -->
-    <div
-      v-if="overlay"
-      class="loader__backdrop"
-    />
-    
+    <div v-if="overlay" class="loader__backdrop" />
+
     <!-- Loader container -->
     <div class="loader__container">
       <!-- Text above loader -->
-      <div
-        v-if="text && textPosition === 'top'"
-        class="loader__text loader__text--top"
-      >
+      <div v-if="text && textPosition === 'top'" class="loader__text loader__text--top">
         {{ text }}
       </div>
 
       <!-- Spin Loader -->
-      <div 
-        v-if="type === 'spin'" 
-        class="loader__spin"
-      />
-      
+      <div v-if="type === 'spin'" class="loader__spin" />
+
       <!-- Pulse Loader -->
-      <div 
-        v-else-if="type === 'pulse'" 
-        class="loader__pulse"
-      />
-      
+      <div v-else-if="type === 'pulse'" class="loader__pulse" />
+
       <!-- Bounce Loader -->
-      <div
-        v-else-if="type === 'bounce'"
-        class="loader__bounce"
-      >
-        <div 
-          v-for="i in 3" 
-          :key="i" 
-          class="loader__bounce-dot"
-          :style="{ animationDelay: `${(i - 1) * 0.1}s` }"
-        />
+      <div v-else-if="type === 'bounce'" class="loader__bounce">
+        <div v-for="i in 3" :key="i" class="loader__bounce-dot" :style="{ animationDelay: `${(i - 1) * 0.1}s` }" />
       </div>
-      
+
       <!-- Ripple Loader -->
-      <div
-        v-else-if="type === 'ripple'"
-        class="loader__ripple"
-      >
-        <div 
-          v-for="i in 2" 
-          :key="i" 
-          class="loader__ripple-ring"
-          :style="{ animationDelay: `${(i - 1) * 0.5}s` }"
-        />
+      <div v-else-if="type === 'ripple'" class="loader__ripple">
+        <div v-for="i in 2" :key="i" class="loader__ripple-ring" :style="{ animationDelay: `${(i - 1) * 0.5}s` }" />
       </div>
-      
+
       <!-- Bars Loader -->
-      <div
-        v-else-if="type === 'bars'"
-        class="loader__bars"
-      >
-        <div 
-          v-for="i in 5" 
-          :key="i" 
-          class="loader__bar"
-          :style="{ animationDelay: `${(i - 1) * 0.1}s` }"
-        />
+      <div v-else-if="type === 'bars'" class="loader__bars">
+        <div v-for="i in 5" :key="i" class="loader__bar" :style="{ animationDelay: `${(i - 1) * 0.1}s` }" />
       </div>
-      
+
       <!-- Dots Loader -->
-      <div
-        v-else-if="type === 'dots'"
-        class="loader__dots"
-      >
-        <div 
-          v-for="i in 3" 
-          :key="i" 
-          class="loader__dot"
-          :style="{ animationDelay: `${(i - 1) * 0.16}s` }"
-        />
+      <div v-else-if="type === 'dots'" class="loader__dots">
+        <div v-for="i in 3" :key="i" class="loader__dot" :style="{ animationDelay: `${(i - 1) * 0.16}s` }" />
       </div>
-      
+
       <!-- Ring Loader -->
-      <div
-        v-else-if="type === 'ring'"
-        class="loader__ring"
-      >
+      <div v-else-if="type === 'ring'" class="loader__ring">
         <div class="loader__ring-track" />
         <div class="loader__ring-fill" />
       </div>
 
       <!-- Spinner with text -->
-      <div
-        v-else-if="type === 'spinner-text'"
-        class="loader__spinner-text"
-      >
+      <div v-else-if="type === 'spinner-text'" class="loader__spinner-text">
         <div class="loader__spinner" />
       </div>
 
       <!-- Text below loader -->
-      <div
-        v-if="text && textPosition === 'bottom'"
-        class="loader__text loader__text--bottom"
-      >
+      <div v-if="text && textPosition === 'bottom'" class="loader__text loader__text--bottom">
         {{ text }}
       </div>
     </div>
@@ -132,7 +75,7 @@ defineProps({
     type: String,
     default: 'spin',
     validator: (value) => [
-      'spin', 'pulse', 'bounce', 'ripple', 
+      'spin', 'pulse', 'bounce', 'ripple',
       'bars', 'dots', 'ring', 'spinner-text'
     ].includes(value)
   },
@@ -231,15 +174,37 @@ defineProps({
 }
 
 /* Size variants */
-.loader--small .loader__container { gap: 8px; }
-.loader--medium .loader__container { gap: 12px; }
-.loader--large .loader__container { gap: 16px; }
-.loader--xl .loader__container { gap: 20px; }
+.loader--small .loader__container {
+  gap: 8px;
+}
 
-.loader--small .loader__text { font-size: 12px; }
-.loader--medium .loader__text { font-size: 14px; }
-.loader--large .loader__text { font-size: 16px; }
-.loader--xl .loader__text { font-size: 18px; }
+.loader--medium .loader__container {
+  gap: 12px;
+}
+
+.loader--large .loader__container {
+  gap: 16px;
+}
+
+.loader--xl .loader__container {
+  gap: 20px;
+}
+
+.loader--small .loader__text {
+  font-size: 12px;
+}
+
+.loader--medium .loader__text {
+  font-size: 14px;
+}
+
+.loader--large .loader__text {
+  font-size: 16px;
+}
+
+.loader--xl .loader__text {
+  font-size: 18px;
+}
 
 /* Spin Loader */
 .loader__spin {
@@ -249,10 +214,29 @@ defineProps({
   animation: spin 1s linear infinite;
 }
 
-.loader--small .loader__spin { width: 24px; height: 24px; border-width: 3px; }
-.loader--medium .loader__spin { width: 40px; height: 40px; border-width: 4px; }
-.loader--large .loader__spin { width: 56px; height: 56px; border-width: 5px; }
-.loader--xl .loader__spin { width: 72px; height: 72px; border-width: 6px; }
+.loader--small .loader__spin {
+  width: 24px;
+  height: 24px;
+  border-width: 3px;
+}
+
+.loader--medium .loader__spin {
+  width: 40px;
+  height: 40px;
+  border-width: 4px;
+}
+
+.loader--large .loader__spin {
+  width: 56px;
+  height: 56px;
+  border-width: 5px;
+}
+
+.loader--xl .loader__spin {
+  width: 72px;
+  height: 72px;
+  border-width: 6px;
+}
 
 /* Pulse Loader */
 .loader__pulse {
@@ -261,10 +245,25 @@ defineProps({
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-.loader--small .loader__pulse { width: 24px; height: 24px; }
-.loader--medium .loader__pulse { width: 40px; height: 40px; }
-.loader--large .loader__pulse { width: 56px; height: 56px; }
-.loader--xl .loader__pulse { width: 72px; height: 72px; }
+.loader--small .loader__pulse {
+  width: 24px;
+  height: 24px;
+}
+
+.loader--medium .loader__pulse {
+  width: 40px;
+  height: 40px;
+}
+
+.loader--large .loader__pulse {
+  width: 56px;
+  height: 56px;
+}
+
+.loader--xl .loader__pulse {
+  width: 72px;
+  height: 72px;
+}
 
 /* Bounce Loader */
 .loader__bounce {
@@ -279,10 +278,25 @@ defineProps({
   animation: bounce 1.4s ease-in-out infinite both;
 }
 
-.loader--small .loader__bounce-dot { width: 8px; height: 8px; }
-.loader--medium .loader__bounce-dot { width: 12px; height: 12px; }
-.loader--large .loader__bounce-dot { width: 16px; height: 16px; }
-.loader--xl .loader__bounce-dot { width: 20px; height: 20px; }
+.loader--small .loader__bounce-dot {
+  width: 8px;
+  height: 8px;
+}
+
+.loader--medium .loader__bounce-dot {
+  width: 12px;
+  height: 12px;
+}
+
+.loader--large .loader__bounce-dot {
+  width: 16px;
+  height: 16px;
+}
+
+.loader--xl .loader__bounce-dot {
+  width: 20px;
+  height: 20px;
+}
 
 /* Ripple Loader */
 .loader__ripple {
@@ -299,15 +313,49 @@ defineProps({
   transform: translate(-50%, -50%);
 }
 
-.loader--small .loader__ripple { width: 40px; height: 40px; }
-.loader--medium .loader__ripple { width: 60px; height: 60px; }
-.loader--large .loader__ripple { width: 80px; height: 80px; }
-.loader--xl .loader__ripple { width: 100px; height: 100px; }
+.loader--small .loader__ripple {
+  width: 40px;
+  height: 40px;
+}
 
-.loader--small .loader__ripple-ring { width: 40px; height: 40px; border-width: 2px; }
-.loader--medium .loader__ripple-ring { width: 60px; height: 60px; border-width: 3px; }
-.loader--large .loader__ripple-ring { width: 80px; height: 80px; border-width: 4px; }
-.loader--xl .loader__ripple-ring { width: 100px; height: 100px; border-width: 5px; }
+.loader--medium .loader__ripple {
+  width: 60px;
+  height: 60px;
+}
+
+.loader--large .loader__ripple {
+  width: 80px;
+  height: 80px;
+}
+
+.loader--xl .loader__ripple {
+  width: 100px;
+  height: 100px;
+}
+
+.loader--small .loader__ripple-ring {
+  width: 40px;
+  height: 40px;
+  border-width: 2px;
+}
+
+.loader--medium .loader__ripple-ring {
+  width: 60px;
+  height: 60px;
+  border-width: 3px;
+}
+
+.loader--large .loader__ripple-ring {
+  width: 80px;
+  height: 80px;
+  border-width: 4px;
+}
+
+.loader--xl .loader__ripple-ring {
+  width: 100px;
+  height: 100px;
+  border-width: 5px;
+}
 
 /* Bars Loader */
 .loader__bars {
@@ -322,10 +370,25 @@ defineProps({
   animation: bar-scale 1s ease-in-out infinite;
 }
 
-.loader--small .loader__bar { width: 3px; height: 16px; }
-.loader--medium .loader__bar { width: 4px; height: 24px; }
-.loader--large .loader__bar { width: 5px; height: 32px; }
-.loader--xl .loader__bar { width: 6px; height: 40px; }
+.loader--small .loader__bar {
+  width: 3px;
+  height: 16px;
+}
+
+.loader--medium .loader__bar {
+  width: 4px;
+  height: 24px;
+}
+
+.loader--large .loader__bar {
+  width: 5px;
+  height: 32px;
+}
+
+.loader--xl .loader__bar {
+  width: 6px;
+  height: 40px;
+}
 
 /* Dots Loader */
 .loader__dots {
@@ -339,10 +402,25 @@ defineProps({
   animation: dot-bounce 1.4s ease-in-out infinite both;
 }
 
-.loader--small .loader__dot { width: 8px; height: 8px; }
-.loader--medium .loader__dot { width: 12px; height: 12px; }
-.loader--large .loader__dot { width: 16px; height: 16px; }
-.loader--xl .loader__dot { width: 20px; height: 20px; }
+.loader--small .loader__dot {
+  width: 8px;
+  height: 8px;
+}
+
+.loader--medium .loader__dot {
+  width: 12px;
+  height: 12px;
+}
+
+.loader--large .loader__dot {
+  width: 16px;
+  height: 16px;
+}
+
+.loader--xl .loader__dot {
+  width: 20px;
+  height: 20px;
+}
 
 /* Ring Loader */
 .loader__ring {
@@ -365,13 +443,32 @@ defineProps({
 }
 
 .loader--small .loader__ring-track,
-.loader--small .loader__ring-fill { width: 24px; height: 24px; border-width: 3px; }
+.loader--small .loader__ring-fill {
+  width: 24px;
+  height: 24px;
+  border-width: 3px;
+}
+
 .loader--medium .loader__ring-track,
-.loader--medium .loader__ring-fill { width: 40px; height: 40px; border-width: 4px; }
+.loader--medium .loader__ring-fill {
+  width: 40px;
+  height: 40px;
+  border-width: 4px;
+}
+
 .loader--large .loader__ring-track,
-.loader--large .loader__ring-fill { width: 56px; height: 56px; border-width: 5px; }
+.loader--large .loader__ring-fill {
+  width: 56px;
+  height: 56px;
+  border-width: 5px;
+}
+
 .loader--xl .loader__ring-track,
-.loader--xl .loader__ring-fill { width: 72px; height: 72px; border-width: 6px; }
+.loader--xl .loader__ring-fill {
+  width: 72px;
+  height: 72px;
+  border-width: 6px;
+}
 
 /* Spinner with text */
 .loader__spinner-text {
@@ -388,28 +485,59 @@ defineProps({
   animation: spin 1s linear infinite;
 }
 
-.loader--small .loader__spinner { width: 20px; height: 20px; }
-.loader--medium .loader__spinner { width: 32px; height: 32px; }
-.loader--large .loader__spinner { width: 44px; height: 44px; }
-.loader--xl .loader__spinner { width: 56px; height: 56px; }
+.loader--small .loader__spinner {
+  width: 20px;
+  height: 20px;
+}
+
+.loader--medium .loader__spinner {
+  width: 32px;
+  height: 32px;
+}
+
+.loader--large .loader__spinner {
+  width: 44px;
+  height: 44px;
+}
+
+.loader--xl .loader__spinner {
+  width: 56px;
+  height: 56px;
+}
 
 /* Animations */
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
 }
 
 @keyframes bounce {
-  0%, 80%, 100% { 
+
+  0%,
+  80%,
+  100% {
     transform: scale(0);
     opacity: 0.5;
-  } 
-  40% { 
+  }
+
+  40% {
     transform: scale(1);
     opacity: 1;
   }
@@ -420,6 +548,7 @@ defineProps({
     transform: translate(-50%, -50%) scale(0);
     opacity: 1;
   }
+
   100% {
     transform: translate(-50%, -50%) scale(1);
     opacity: 0;
@@ -427,19 +556,27 @@ defineProps({
 }
 
 @keyframes bar-scale {
-  0%, 40%, 100% { 
-    transform: scaleY(0.4); 
+
+  0%,
+  40%,
+  100% {
+    transform: scaleY(0.4);
   }
-  20% { 
-    transform: scaleY(1); 
+
+  20% {
+    transform: scaleY(1);
   }
 }
 
 @keyframes dot-bounce {
-  0%, 80%, 100% { 
+
+  0%,
+  80%,
+  100% {
     transform: scale(0);
-  } 
-  40% { 
+  }
+
+  40% {
     transform: scale(1);
   }
 }
