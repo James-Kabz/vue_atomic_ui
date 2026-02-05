@@ -356,16 +356,16 @@ export default {
                     class="aspect-square flex items-center justify-center text-xs rounded-md relative transition-all hover:scale-110"
                     :class="[
                       // Base styles
-                      !day.isCurrentMonth ? 'text-(--ui-text)' : 'text-(--ui-text)',
+                      !day.isCurrentMonth ? 'text-(--ui-text)' : 'text-(--ui-muted)',
 
                       // Today styling
                       day.isToday ? 'bg-(--ui-primary) text-(--ui-text-inverse) font-extrabold shadow-md ring-2 ring-(--ui-primary)' : '',
 
                       // Event styling - highly visible
-                      day.events.length > 0 && !day.isToday && day.isCurrentMonth ? 'bg-(--ui-danger-soft) text-(--ui-danger) font-bold border-2 border-(--ui-danger-soft) shadow-sm' : '',
+                      day.events.length > 0 && !day.isToday && day.isCurrentMonth ? 'bg-(--ui-danger) text-(--ui-danger) font-bold border-2 border-(--ui-danger-soft) shadow-sm' : '',
 
                       // Regular styling
-                      day.events.length === 0 && !day.isToday && day.isCurrentMonth ? 'hover:bg-(--ui-surface-muted)' : ''
+                      day.events.length === 0 && !day.isToday && day.isCurrentMonth ? 'hover:bg-(--ui-surface)' : ''
                     ]"
                   >
                     {{ day.dayNumber }}
@@ -374,7 +374,7 @@ export default {
                     <div
                       v-if="day.events.length > 1 && day.isCurrentMonth"
                       class="absolute -top-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center text-[8px] font-black shadow-md"
-                      :class="day.isToday ? 'bg-(--ui-warning-soft) text-(--ui-primary)' : 'bg-(--ui-danger) text-(--ui-text-inverse)'"
+                      :class="day.isToday ? 'bg-(--ui-warning-strong) text-(--ui-primary)' : 'bg-(--ui-danger) text-(--ui-text-inverse)'"
                     >
                       {{ day.events.length }}
                     </div>
