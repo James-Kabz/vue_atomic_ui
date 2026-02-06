@@ -5,6 +5,7 @@ import Button from '../../components/Button.vue'
 import DataTable from '../../components/DataTable.vue'
 import DataTableFilters from '../../components/DataTableFilters.vue'
 import DataTableToolBar from '../../components/DataTableToolBar.vue'
+import ReusableFormModal from '../../components/ReusableFormModal.vue'
 import DashboardShell from './DashboardShell.vue'
 
 const searchQuery = ref('')
@@ -13,6 +14,7 @@ const dateTo = ref('')
 const selectedStatus = ref('')
 const selectedUsers = ref([])
 const density = ref('normal')
+const showAddUserModal = ref(false)
 
 const statusOptions = [
   { label: 'Active', value: 'active' },
@@ -80,6 +82,70 @@ const handleToggleColumn = ({ column, visible }) => {
     visibleColumnKeys.value = visibleColumnKeys.value.filter((key) => key !== column)
   }
 }
+
+const userFormFields = [
+  {
+    name: 'name',
+    label: 'Full Name',
+    type: 'text',
+    required: true,
+    placeholder: 'Jordan Blake',
+    wrapperClass: 'col-span-12 md:col-span-6'
+  },
+  {
+    name: 'email',
+    label: 'Email Address',
+    type: 'email',
+    required: true,
+    placeholder: 'jordan@company.com',
+    wrapperClass: 'col-span-12 md:col-span-6'
+  },
+  {
+    name: 'role',
+    label: 'Role',
+    type: 'select',
+    required: true,
+    placeholder: 'Select role',
+    options: [
+      { label: 'Admin', value: 'Admin' },
+      { label: 'Manager', value: 'Manager' },
+      { label: 'Analyst', value: 'Analyst' },
+      { label: 'Reviewer', value: 'Reviewer' }
+    ],
+    wrapperClass: 'col-span-12 md:col-span-6'
+  },
+  {
+    name: 'status',
+    label: 'Status',
+    type: 'select',
+    required: true,
+    options: statusOptions,
+    wrapperClass: 'col-span-12 md:col-span-6'
+  }
+]
+
+const handleAddUser = ({ formData }) => {
+  const payload = formData instanceof FormData
+    ? Object.fromEntries(formData.entries())
+    : formData
+
+  if (!payload?.name || !payload?.email || !payload?.role) {
+    return
+  }
+
+  allUsers.value = [
+    ...allUsers.value,
+    {
+      id: allUsers.value.length + 1,
+      name: payload.name,
+      role: payload.role,
+      status: payload.status || 'active',
+      lastLogin: 'Just now'
+    }
+  ]
+
+  showAddUserModal.value = false
+}
 </script>
 
 <template>
@@ -113,7 +179,7 @@ const handleToggleColumn = ({ column, visible }) => {
           :add-button="addButtonConfig"
           search-placeholder="Search users"
           @export="() => {}"
-          @add="() => {}"
+          @add="showAddUserModal = true"
         />
 
         <DataTableToolBar
@@ -154,5 +220,16 @@ const handleToggleColumn = ({ column, visible }) => {
         </DataTable>
       </div>
     </div>
+
+    <ReusableFormModal
+      v-model="showAddUserModal"
+      modal-type="create"
+      entity-name="User"
+      :fields="userFormFields"
+      :initial-data="{ status: 'active' }"
+      modal-size="3xl"
+      @submit="handleAddUser"
+      @close="showAddUserModal = false"
+    />
   </DashboardShell>
 </template>

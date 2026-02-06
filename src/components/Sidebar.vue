@@ -525,14 +525,14 @@ defineExpose({
         v-if="submenuOpen"
         :class="
           cn(
-            'fixed z-40   border-r overflow-y-auto shadow-lg',
+            'fixed z-40   border-r ui-border overflow-y-auto shadow-lg',
             isMobile ? 'left-0 w-52 top-20 h-screen' : 'w-56 top-16 h-[calc(100vh-4rem)]',
           )
         "
         :style="submenuStyle"
       >
         <!-- Submenu Header -->
-        <div class="sticky top-0  border-b  z-10">
+        <div class="sticky top-0  border-b ui-border  z-10">
           <div class="flex items-center justify-between p-4">
             <button
               class="p-2 -ml-2 rounded-lg ui-text hover:text-(--ui-text) hover:bg-(--ui-surface) transition-colors"
@@ -631,8 +631,8 @@ defineExpose({
                 cn(
                   'flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative',
                   isItemActive(subItem)
-                    ? 'bg-linear-to-br from-(--ui-primary-soft) to-(--ui-primary-soft) ui-primary shadow-sm border border-(--ui-primary-soft)'
-                    : 'ui-text hover:bg-(--ui-surface) hover:text-(--ui-text) border border-transparent',
+                    ? 'bg-linear-to-br from-(--ui-primary-soft) to-(--ui-primary-soft) ui-primary shadow-sm border border-(--ui-border-strong)'
+                    : 'ui-text hover:bg-(--ui-surface) hover:text-(--ui-text) border ui-border-strong',
                 )
               "
               @click="handleSubmenuNavigation(subItem)"
@@ -692,14 +692,14 @@ defineExpose({
         v-if="managementSettingsOpen"
         :class="
           cn(
-            'fixed z-40   border-r overflow-y-auto shadow-lg',
+            'fixed z-40   border-r ui-border-strong overflow-y-auto shadow-lg',
             isMobile ? 'left-0 w-52 top-20 h-full' : 'w-58 h-[calc(100vh-4rem)]',
           )
         "
         :style="{ ...managementStyle, top: isMobile ? '55px' : '4rem' }"
       >
         <!-- Management Settings Header -->
-        <div class="sticky top-0 z-10  border-b ">
+        <div class="sticky top-0 z-10  border-b ui-border-strong">
           <div class="flex items-center justify-between p-4">
             <button
               class="p-2 -ml-2 rounded-lg ui-text hover:text-(--ui-text) hover:bg-(--ui-surface) transition-colors"
@@ -748,8 +748,8 @@ defineExpose({
                   cn(
                     'flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative',
                     isItemActive(setting)
-                      ? 'bg-linear-to-br from-(--ui-primary-soft) to-(--ui-primary-soft) ui-primary shadow-sm border border-(--ui-primary-soft)'
-                      : 'ui-text hover:bg-(--ui-surface) hover:text-(--ui-text) border border-transparent',
+                      ? 'bg-linear-to-br from-(--ui-primary-soft) to-(--ui-primary-soft) ui-primary shadow-sm border border-(--ui-border-strong)'
+                      : 'ui-text hover:bg-(--ui-surface) hover:text-(--ui-text) border ui-border-strong',
                   )
                 "
                 @click="handleManagementSettingsNavigation(setting)"

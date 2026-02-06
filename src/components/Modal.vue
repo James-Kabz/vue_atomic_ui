@@ -107,7 +107,7 @@ onUnmounted(() => {
     >
       <div
         v-if="modelValue"
-        class="fixed ui-bg inset-0 z-50 backdrop-blur-2xl flex items-center justify-center"
+        class="fixed ui-bg inset-0 z-9999 backdrop-blur-2xl flex items-center justify-center"
         :class="{ 'pointer-events-none': resizable }"
         @click="handleBackdropClick"
       >

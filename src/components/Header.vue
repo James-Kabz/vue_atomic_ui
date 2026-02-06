@@ -246,11 +246,11 @@ watch(searchQuery, (newValue) => emit('search', newValue))
 <template>
   <header
     :class="cn(
-      'fixed top-0 z-50 ui-bg border-b ui-border-strong  transition-all duration-300 ease-in-out w-full'
+      'fixed top-0 z-9999 ui-bg border-b ui-border-strong  transition-all duration-300 ease-in-out w-full'
     )"
     :style="{ left: '0' }"
   >
-    <div class="flex items-center justify-between h-14 sm:h-16 px-3 sm:px-4 md:px-6">
+    <div class="flex items-center justify-between h-20 sm:h-20 px-3 sm:px-4 md:px-6">
       <!-- Left side - Organisation & Page Info -->
       <div class="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
         <!-- Mobile Sidebar Toggle - Moved to far left -->
@@ -286,7 +286,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
         <!-- Organisation Info Card - Simplified for mobile -->
         <div
           v-if="showOrganisationInfo && currentOrganisation"
-          class="shrink-0 bg-linear-to-r from-(--ui-primary-soft) via-(--ui-accent-soft) to-(--ui-accent-soft) px-2 py-1.5 rounded-lg border border-(--ui-primary-soft) shadow-sm flex items-center gap-2 relative hover:shadow-md transition-shadow max-w-40 sm:max-w-xs"
+          class="shrink-0 ui-bg border ui-border-strong px-2.5 py-1.5 rounded-lg shadow-2xs flex items-center gap-2 relative hover:bg-(--ui-surface) transition-colors max-w-40 sm:max-w-md"
         >
           <!-- Organisation Logo - Smaller on all screens -->
           <div
@@ -307,23 +307,24 @@ watch(searchQuery, (newValue) => emit('search', newValue))
           <!-- Organisation Details with Switcher -->
           <button
             v-if="organisations.length > 1"
-            class="flex items-center gap-1.5 min-w-0 cursor-pointer hover:bg-[color:color-mix(in oklab, var(--ui-surface), transparent 50%)] rounded-md px-1.5 py-0.5 transition-all group flex-1"
+            class="flex items-center gap-8 w-56 cursor-pointer hover:bg-[color:color-mix(in oklab, var(--ui-surface), transparent 50%)] rounded-md px-1 py-1 transition-all group"
             @click="toggleOrganisationDropdown"
           >
-            <div class="min-w-0 flex-1">
+            <div class="flex-1 min-w-0">
               <p
-                class="text-xs font-bold ui-primary truncate max-w-[100px] sm:max-w-40 group-hover:text-(--ui-primary) leading-tight"
+                class="text-sm font-bold ui-text truncate group-hover:text-(--ui-primary) leading-tight "
               >
                 {{ currentOrganisation.organisation_name }}
               </p>
-              <div class="flex items-center gap-1 mt-0.5">
+              <div class="flex items-center gap-1.5">
                 <Icon
                   icon="user"
-                  class="w-2.5 h-2.5 ui-primary shrink-0"
+                  size="lg"
+                  class="ui-primary shrink-0"
                 />
                 <p
                   v-if="formattedActiveRoles"
-                  class="text-[10px] sm:text-xs ui-primary truncate font-medium leading-tight"
+                  class="text-sm ui-primary truncate font-bold leading-tight"
                 >
                   {{ formattedActiveRoles }}
                 </p>
@@ -331,7 +332,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
             </div>
             <Icon
               icon="chevron-down"
-              class="w-3 h-3 ui-primary shrink-0 group-hover:text-(--ui-primary) transition-transform"
+              class="w-4 h-4 ui-primary shrink-0 group-hover:text-(--ui-primary) transition-transform"
               :class="{ 'rotate-180': showOrganisationDropdown }"
             />
           </button>
@@ -369,10 +370,10 @@ watch(searchQuery, (newValue) => emit('search', newValue))
           >
             <div
               v-if="showOrganisationDropdown"
-              class="absolute top-full left-0 right-0 sm:left-0 sm:right-auto mt-2 w-full sm:w-80   rounded-xl shadow-xl z-50 max-h-96 overflow-hidden"
+              class="ui-surface-strong absolute top-full left-0 right-0 sm:left-0 sm:right-auto mt-2 lg:w-80 w-72 rounded-xl shadow-xl z-50 max-h-96 overflow-hidden"
             >
               <div class="p-3 sm:p-4 border-b ui-border-strong bg-linear-to-r from-(--ui-primary-soft) to-(--ui-accent-soft)">
-                <h3 class="text-sm font-bold ui-text flex items-center gap-2">
+                <h3 class="text-md font-bold ui-text flex items-center gap-2">
                   <Icon
                     icon="list"
                     class="w-4 h-4 ui-primary"
@@ -388,7 +389,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                   v-for="org in organisations"
                   :key="org.org_id || org.organisation_name"
                   :class="cn(
-                    'flex items-center w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm transition-all group',
+                    'flex items-center w-full px-3 sm:px-4 py-2.5 sm:py-3 text-md transition-all group',
                     org.org_id === currentOrganisation?.org_id
                       ? 'bg-linear-to-r from-(--ui-primary-soft) to-(--ui-accent-soft) ui-primary border-l-4 border-(--ui-primary)'
                       : 'ui-text hover:bg-(--ui-surface) border-l-4 border-transparent'
@@ -415,7 +416,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                     />
                   </div>
                   <div class="flex-1 text-left min-w-0">
-                    <p class="font-semibold truncate text-sm">
+                    <p class="font-semibold truncate text-md">
                       {{ org.organisation_name }}
                     </p>
                     <p
@@ -439,7 +440,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
         <!-- Breadcrumb - Hidden on mobile -->
         <nav
           v-if="showBreadcrumb"
-          class="hidden lg:flex items-center space-x-2 text-sm truncate"
+          class="hidden lg:flex items-center space-x-2 text-md truncate"
         >
           <span class="ui-text truncate">{{ currentSection }}</span>
           <Icon
@@ -467,7 +468,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
             v-model="searchQuery"
             type="text"
             :placeholder="searchPlaceholder"
-            class="ui-bg pl-8 sm:pl-10 pr-8 sm:pr-4 py-1.5 sm:py-2 w-36 sm:w-48 md:w-64 text-xs sm:text-sm border ui-border-strong  rounded-lg focus:ring-2 focus:ring-(--ui-primary) focus:border-(--ui-primary) outline-none transition-all ui-surface "
+            class="ui-bg pl-8 sm:pl-10 pr-8 sm:pr-4 py-1.5 sm:py-2 w-36 sm:w-48 md:w-64 text-xs sm:text-md border ui-border-strong  rounded-lg focus:ring-2 focus:ring-(--ui-primary) focus:border-(--ui-primary) outline-none transition-all ui-surface "
           >
           <button
             v-if="isMobile"
@@ -520,10 +521,10 @@ watch(searchQuery, (newValue) => emit('search', newValue))
         >
           <div
             v-if="showNotificationsDropdown"
-            class="ui-bg absolute right-2 sm:right-4 md:right-6 top-14 sm:top-16 mt-2 w-[calc(100vw-1rem)] max-w-sm sm:w-80 md:w-96 rounded-2xl shadow-xl z-50"
+            class="ui-bg absolute right-2 sm:right-4 md:right-6 top-14 sm:top-16 mt-2 w-[calc(100vw-1rem)] max-w-sm sm:w-80 md:w-96 rounded-2xl shadow-xl z-9999"
           >
             <div class="p-3 sm:p-4 border-b ui-border-strong bg-linear-to-r from-(--ui-primary-soft) to-(--ui-accent-soft) rounded-lg">
-              <h3 class="text-sm sm:text-base font-bold ui-text">
+              <h3 class="text-md sm:text-base font-bold ui-text">
                 {{ notificationsTitle }}
               </h3>
               <p
@@ -543,7 +544,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                   icon="bell"
                   class="w-10 h-10 sm:w-12 sm:h-12 mx-auto ui-text mb-2"
                 />
-                <p class="text-sm ui-text">
+                <p class="text-md ui-text">
                   No notifications
                 </p>
               </div>
@@ -586,7 +587,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                   <div class="flex-1 min-w-0">
                     <!-- Notification Title -->
                     <div class="flex items-start justify-between gap-2">
-                      <p class="text-xs sm:text-sm font-semibold ui-text flex-1 leading-tight">
+                      <p class="text-xs sm:text-md font-semibold ui-text flex-1 leading-tight">
                         {{ notification.title }}
                       </p>
                       <!-- Unread indicator -->
@@ -672,7 +673,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
               class="p-2 sm:p-3 text-center border-t ui-border-strong ui-surface-muted"
             >
               <button
-                class="text-xs sm:text-sm font-semibold ui-primary hover:text-(--ui-primary) transition-colors"
+                class="text-xs sm:text-md font-semibold ui-primary hover:text-(--ui-primary) transition-colors"
                 @click="handleViewAllNotifications"
               >
                 View all notifications →
@@ -682,31 +683,31 @@ watch(searchQuery, (newValue) => emit('search', newValue))
         </transition>
 
         <!-- Profile Dropdown -->
-        <div class="relative ui-bg">
+        <div class="relative">
           <button
-            class="flex items-center space-x-1 sm:space-x-2 md:space-x-3 p-1 sm:p-2 rounded-lg hover:bg-(--ui-surface) transition-colors"
+            class="shrink-0 ui-bg border ui-border-strong px-3 py-4 rounded-lg shadow-2xs flex items-start gap-4 relative hover:bg-(--ui-surface) transition-colors max-w-40 sm:max-w-md"
             @click="toggleProfile"
           >
             <div
               class="w-7 h-7 sm:w-8 sm:h-8 bg-linear-to-br from-(--ui-primary-soft) to-(--ui-accent-soft) rounded-full flex items-center justify-center transition-colors shadow-sm"
             >
-              <span class="ui-primary text-xs sm:text-sm font-medium">{{ userInitials }}</span>
+              <span class="ui-primary text-xs sm:text-sm font-semibold">{{ userInitials }}</span>
             </div>
             <!-- Hide details on mobile or when showUserDetails is false -->
             <div
               v-if="showUserDetails"
-              class="hidden md:block text-left max-w-40 truncate"
+              class="hidden md:block text-left max-w-40 min-w-0"
             >
-              <p class="text-sm font-medium ui-text truncate">
+              <p class="text-sm font-bold ui-text truncate leading-tight">
                 {{ user.name }}
               </p>
-              <p class="text-xs ui-text truncate leading-tight">
+              <p class="text-sm ui-primary font-bold truncate leading-tight">
                 {{ userRoleNames }}
               </p>
             </div>
             <Icon
               icon="chevron-down"
-              class="w-3.5 h-3.5 sm:w-4 sm:h-4 ui-text"
+              class="w-3.5 h-3.5 ui-text mt-0.5"
             />
           </button>
 
@@ -724,7 +725,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
               class="ui-surface absolute right-0 mt-4 w-56 sm:w-58 rounded-lg shadow-lg z-50"
             >
               <div class="p-3 sm:p-4 border-b ui-border-strong">
-                <p class="text-sm font-medium ui-text truncate">
+                <p class="text-md font-medium ui-text truncate">
                   {{ user.name }}
                 </p>
                 <p class="text-xs ui-text truncate">
@@ -740,7 +741,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                     v-if="item.route"
                     :to="item.route"
                     :class="cn(
-                      'flex items-center px-2.5 sm:px-3 py-2 sm:py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative',
+                      'flex items-center px-2.5 sm:px-3 py-2 sm:py-2.5 rounded-lg text-md font-medium transition-all duration-200 group relative',
                       isItemActive(item)
                         ? 'bg-linear-to-br from-(--ui-primary-soft) to-(--ui-primary-soft) ui-primary shadow-sm border border-(--ui-primary-soft)'
                         : 'ui-text hover:bg-(--ui-surface) hover:text-(--ui-text) border border-transparent'
@@ -768,7 +769,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                     </div>
                     <span
                       :class="cn(
-                        'flex-1 truncate font-semibold text-xs sm:text-sm',
+                        'flex-1 truncate font-semibold text-xs sm:text-md',
                         isItemActive(item) ? 'ui-primary' : 'ui-text'
                       )"
                     >
@@ -777,7 +778,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                   </router-link>
                   <button
                     v-else
-                    class="flex items-center w-full px-2.5 sm:px-3 py-2 sm:py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative ui-text hover:bg-(--ui-surface) hover:text-(--ui-text) border border-transparent"
+                    class="flex items-center w-full px-2.5 sm:px-3 py-2 sm:py-2.5 rounded-lg text-md font-medium transition-all duration-200 group relative ui-text hover:bg-(--ui-surface) hover:text-(--ui-text) border border-transparent"
                     @click="handleProfileAction(item)"
                   >
                     <div
@@ -789,7 +790,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                         class="w-3.5 h-3.5 sm:w-4 sm:h-4"
                       />
                     </div>
-                    <span class="flex-1 truncate font-semibold ui-text text-xs sm:text-sm">
+                    <span class="flex-1 truncate font-semibold ui-text text-xs sm:text-md">
                       {{ item.label }}
                     </span>
                   </button>
@@ -797,7 +798,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
               </div>
               <div class="border-t ui-border-strong py-2">
                 <button
-                  class="flex items-center w-full px-2.5 sm:px-3 py-2 sm:py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative ui-danger hover:bg-(--ui-danger-soft) border border-transparent"
+                  class="flex items-center w-full px-2.5 sm:px-3 py-2 sm:py-2.5 rounded-lg text-md font-medium transition-all duration-200 group relative ui-danger hover:bg-(--ui-danger-soft) border border-transparent"
                   @click="handleLogout"
                 >
                   <div
@@ -808,7 +809,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                       class="w-3.5 h-3.5 sm:w-4 sm:h-4"
                     />
                   </div>
-                  <span class="truncate font-semibold ui-danger text-xs sm:text-sm">
+                  <span class="truncate font-semibold ui-danger text-xs sm:text-md">
                     Sign out
                   </span>
                 </button>

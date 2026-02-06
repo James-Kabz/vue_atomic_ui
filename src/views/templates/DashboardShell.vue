@@ -10,11 +10,7 @@ const props = defineProps({
     default: () => ({
       name: 'Jordan Blake',
       email: 'jordan@company.com',
-      roles: ['admin'],
-      organisations: [
-        { id: 1, name: 'STL Horizon', role: 'Admin' }
-      ],
-      currentOrganisation: { id: 1, name: 'STL Horizon', role: 'Admin' }
+      roles: ['admin']
     })
   },
   navigationItems: {
@@ -23,6 +19,17 @@ const props = defineProps({
       { type: 'section', label: 'Dashboard' },
       { type: 'link', name: 'overview', label: 'Overview', route: '/templates/overview', icon: 'home' },
       { type: 'link', name: 'analytics', label: 'Analytics', route: '/templates/analytics', icon: 'chart-bar' },
+      {
+        type: 'link',
+        name: 'reports',
+        label: 'Reports',
+        icon: 'list',
+        subItems: [
+          { name: 'reports-overview', label: 'Overview', route: '/templates/reports/overview', icon: 'chart-bar' },
+          { name: 'reports-activity', label: 'Activity', route: '/templates/reports/activity', icon: 'calendar' },
+          { name: 'reports-audit', label: 'Audit Log', route: '/templates/reports/audit', icon: 'clock' }
+        ]
+      },
       { type: 'section', label: 'Operations' },
       { type: 'link', name: 'users', label: 'Users', route: '/templates/users', icon: 'users' },
       { type: 'link', name: 'billing', label: 'Billing', route: '/templates/billing', icon: 'credit-card' }
@@ -69,11 +76,27 @@ const sidebarRef = ref(null)
 const mobileOpen = ref(false)
 const sidebarWidth = 130
 
+const organisations = ref([
+  { org_id: 1, organisation_name: 'STL Horizon', type: { name: 'Product' }, role: 'Admin' },
+  { org_id: 2, organisation_name: 'Northwind Labs', type: { name: 'Research' }, role: 'Manager' },
+  { org_id: 3, organisation_name: 'Atlas Systems', type: { name: 'Operations' }, role: 'Analyst' }
+])
+
+const currentOrganisation = ref(organisations.value[0])
+
+const activeRoles = computed(() => {
+  if (!currentOrganisation.value?.role) return []
+  return [currentOrganisation.value.role]
+})
+
 const handleNavigation = (item) => emit('navigate', item)
 const handleSearch = (query) => emit('search', query)
 const handleProfileAction = (item) => emit('profile-action', item)
 const handleLogout = () => emit('logout')
-const handleOrganisationChange = (org) => emit('organisation-change', org)
+const handleOrganisationChange = (org) => {
+  currentOrganisation.value = org
+  emit('organisation-change', org)
+}
 
 const handleMobileSidebarToggle = () => {
   mobileOpen.value = !mobileOpen.value
@@ -105,8 +128,10 @@ const handleMobileSidebarToggle = () => {
       :notifications="notifications"
       :profile-menu-items="profileMenuItems"
       :mobile-open="mobileOpen"
-      :current-organisation="user?.currentOrganisation || user?.organisations?.[0]"
-      :organisations="user?.organisations || []"
+      :current-organisation="currentOrganisation"
+      :organisations="organisations"
+      :active-roles="activeRoles"
+      :show-organisation-dropdown="organisations.length > 1"
       @search="handleSearch"
       @profile-action="handleProfileAction"
       @logout="handleLogout"
