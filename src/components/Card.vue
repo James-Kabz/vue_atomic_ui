@@ -90,7 +90,7 @@
       v-if="badge"
       class="absolute top-3 right-3"
     >
-      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium --ui-bg ui-text">
+      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ui-bg ui-text">
         {{ badge }}
       </span>
     </div>
@@ -199,14 +199,14 @@ const imageAspect = computed(() => {
 
 /* --- Variants --- */
 const cardVariants = cva(
-  'rounded-lg overflow-hidden transition-all duration-200 relative',
+  'rounded-lg overflow-hidden transition-all duration-200 relative ui-text',
   {
     variants: {
       variant: {
-        default: '',
-        outlined: '',
-        elevated: ' ',
-        filled: '',
+        default: 'ui-surface',
+        outlined: 'ui-surface',
+        elevated: 'ui-surface shadow-md',
+        filled: 'ui-surface-soft',
         ghost: 'bg-transparent'
       },
       padding: {

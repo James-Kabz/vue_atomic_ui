@@ -31,8 +31,9 @@ describe('Alert', () => {
       props: { variant: 'success' }
     })
     const alertDiv = wrapper.find('[role="alert"]')
-    expect(alertDiv.classes()).toContain('bg-(--ui-success-soft)')
-    expect(alertDiv.classes()).toContain('')
+    expect(alertDiv.classes()).toContain('ui-success-soft')
+    expect(alertDiv.classes()).toContain('ui-success')
+    expect(alertDiv.classes()).toContain('border')
   })
 
   it('shows icon by default', () => {

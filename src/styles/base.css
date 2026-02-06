@@ -108,11 +108,10 @@
     background-color: var(--ui-surface);
     color: var(--ui-text);
   }
-/* 
   .ui-bg {
     background-color: var(--ui-bg);
     color: var(--ui-text);
-  } */
+  }
 
   .ui-surface-muted {
     background-color: var(--ui-surface-muted);

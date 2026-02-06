@@ -109,9 +109,10 @@ describe('Card Integration', () => {
     const cards = wrapper.findAllComponents(Card)
 
     // Check variants
-    expect(cards[0].classes()).toContain('')
-    expect(cards[1].classes()).toContain('')
-    expect(cards[2].classes()).toContain('')
+    expect(cards[0].classes()).toContain('border-2')
+    expect(cards[0].classes()).toContain('ui-border-strong')
+    expect(cards[1].classes()).toContain('shadow-md')
+    expect(cards[2].classes()).toContain('ui-surface-soft')
 
     // Check padding (approximate checks)
     expect(cards[0].classes()).toContain('p-3') // sm padding

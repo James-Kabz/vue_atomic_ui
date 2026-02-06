@@ -13,7 +13,7 @@
     <!-- Dismiss button -->
     <button
       v-if="dismissible"
-      class="ml-1 hover:bg-[color:color-mix(in oklab, var(----ui-bg), transparent 90%)] rounded-full p-0.5 transition-colors"
+      class="ml-1 hover:bg-[color:color-mix(in oklab, var(--ui-bg), transparent 90%)] rounded-full p-0.5 transition-colors"
       :aria-label="dismissLabel"
       @click="handleDismiss"
     >
@@ -71,7 +71,7 @@ const handleDismiss = () => emit('dismiss')
 
 // cva-powered class variants
 const badgeVariants = cva(
-  'inline-flex items-center font-medium border transition-all duration-200  ',
+  'inline-flex items-center font-medium border transition-all duration-200',
   {
     variants: {
       variant: {
@@ -97,7 +97,7 @@ const badgeVariants = cva(
         subtle:
           'ui-surface-muted ui-text hover:bg-(--ui-bg)',
         dark:
-          '--ui-bg ui-text hover:bg-(----ui-bg)',
+          'ui-bg ui-text hover:bg-(--ui-bg)',
         light:
           'ui-surface-muted ui-text border ui-border-strong hover:bg-(--ui-surface)',
         primaryOutline:

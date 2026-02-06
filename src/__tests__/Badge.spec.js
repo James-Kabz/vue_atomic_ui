@@ -15,7 +15,7 @@ describe('Badge', () => {
   it('renders with default props', () => {
     const wrapper = mount(Badge)
     expect(wrapper.classes()).toContain('inline-flex')
-    expect(wrapper.classes()).toContain('bg-(--ui-primary-soft)')
+    expect(wrapper.classes()).toContain('ui-primary-soft')
   })
 
   it('displays slot content', () => {
@@ -31,35 +31,35 @@ describe('Badge', () => {
     const wrapper = mount(Badge, {
       props: { variant: 'danger' }
     })
-    expect(wrapper.classes()).toContain('bg-(--ui-danger-soft)')
+    expect(wrapper.classes()).toContain('ui-danger-soft')
   })
 
   it('applies primary variant classes', () => {
     const wrapper = mount(Badge, {
       props: { variant: 'primary' }
     })
-    expect(wrapper.classes()).toContain('bg-(--ui-primary-soft)')
+    expect(wrapper.classes()).toContain('ui-primary-soft')
   })
 
   it('applies success variant classes', () => {
     const wrapper = mount(Badge, {
       props: { variant: 'success' }
     })
-    expect(wrapper.classes()).toContain('bg-(--ui-success-soft)')
+    expect(wrapper.classes()).toContain('ui-success-soft')
   })
 
   it('applies warning variant classes', () => {
     const wrapper = mount(Badge, {
       props: { variant: 'warning' }
     })
-    expect(wrapper.classes()).toContain('bg-(--ui-warning-soft)')
+    expect(wrapper.classes()).toContain('ui-warning-soft')
   })
 
   it('applies info variant classes', () => {
     const wrapper = mount(Badge, {
       props: { variant: 'info' }
     })
-    expect(wrapper.classes()).toContain('bg-(--ui-primary-soft)')
+    expect(wrapper.classes()).toContain('ui-primary-soft')
   })
 
   it('applies ghost variant classes', () => {
@@ -73,28 +73,28 @@ describe('Badge', () => {
     const wrapper = mount(Badge, {
       props: { variant: 'link' }
     })
-    expect(wrapper.classes()).toContain('text-(--ui-primary)')
+    expect(wrapper.classes()).toContain('ui-primary')
   })
 
   it('applies subtle variant classes', () => {
     const wrapper = mount(Badge, {
       props: { variant: 'subtle' }
     })
-    expect(wrapper.classes()).toContain('bg-(--ui-surface)')
+    expect(wrapper.classes()).toContain('ui-surface-muted')
   })
 
   it('applies dark variant classes', () => {
     const wrapper = mount(Badge, {
       props: { variant: 'dark' }
     })
-    expect(wrapper.classes()).toContain('bg-(----ui-bg)')
+    expect(wrapper.classes()).toContain('ui-bg')
   })
 
   it('applies light variant classes', () => {
     const wrapper = mount(Badge, {
       props: { variant: 'light' }
     })
-    expect(wrapper.classes()).toContain('bg-(--ui-surface)')
+    expect(wrapper.classes()).toContain('ui-surface-muted')
   })
 
   it('applies primaryOutline variant classes', () => {
