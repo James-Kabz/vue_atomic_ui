@@ -67,7 +67,7 @@
     >
       <div
         v-if="isOpen"
-        :class="['absolute z-99999 mt-2 rounded-lg shadow-lg p-4 ui-bg', calendarPosition]"
+        :class="['absolute z-99999 mt-2 rounded-lg shadow-lg p-4 ui-surface', calendarPosition]"
         @click.stop
       >
         <!-- Header -->

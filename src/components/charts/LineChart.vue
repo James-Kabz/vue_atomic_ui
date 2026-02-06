@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-full">
+  <div class="ui-surface w-full h-full">
     <svg
       :width="width"
       :height="height"

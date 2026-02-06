@@ -342,7 +342,7 @@ export default {
                   <div
                     v-for="day in weekDaysShort"
                     :key="day"
-                    class="text-center text-2xl font-black ui-text"
+                    class="text-center text-xl font-black ui-text"
                   >
                     {{ day }}
                   </div>
@@ -353,7 +353,7 @@ export default {
                   <div
                     v-for="(day, index) in month.days"
                     :key="index"
-                    class="aspect-square flex items-center justify-center text-xl font-thin rounded-md relative transition-all hover:scale-110"
+                    class="aspect-square flex items-center justify-center text-lg font-normal rounded-md relative transition-all hover:scale-110"
                     :class="[
                       // Base styles
                       !day.isCurrentMonth ? 'ui-text' : 'text-(--ui-muted)',
@@ -373,7 +373,7 @@ export default {
                     <!-- Event count badge for multiple events -->
                     <div
                       v-if="day.events.length > 1 && day.isCurrentMonth"
-                      class="absolute -top-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center text-[8px] font-black shadow-md"
+                      class="absolute -top-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center text-sm font-black shadow-md"
                       :class="day.isToday ? 'bg-(--ui-warning-strong) ui-primary' : 'ui-danger-bg ui-text'"
                     >
                       {{ day.events.length }}
@@ -395,7 +395,7 @@ export default {
             <div
               v-for="day in weekDays"
               :key="day"
-              class="text-center text-2xl font-semibold ui-text py-3 uppercase tracking-wider"
+              class="text-center text-xl font-semibold ui-text py-3 uppercase tracking-wider"
             >
               {{ day }}
             </div>
@@ -417,7 +417,7 @@ export default {
               <!-- Date Number -->
               <div class="flex items-center justify-between mb-1 px-1">
                 <span
-                  class="text-3xl font-thin"
+                  class="text-2xl font-light"
                   :class="[
                     day.isCurrentMonth ? 'ui-text' : 'ui-text-muted',
                     day.isToday ? 'ui-primary-soft ui-text w-6 h-6 flex items-center justify-center rounded-full text-xs' : ''
@@ -564,7 +564,7 @@ export default {
                 {{ dayViewDate.dayName }}
               </div>
               <div
-                class="text-3xl font-bold mt-2"
+                class="text-2xl font-bold mt-2"
                 :class="[
                   dayViewDate.isToday ? 'ui-primary' : 'ui-text'
                 ]"

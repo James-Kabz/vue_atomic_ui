@@ -244,7 +244,7 @@ onUnmounted(() => {
     tabindex="0"
     :style="containerStyles"
     :class="cn(
-      ' rounded-xl border ui-border-strong  overflow-hidden transition-all select-none flex flex-col relative',
+      ' rounded-xl border ui-border-strong overflow-hidden transition-all select-none flex flex-col relative',
       'shadow-sm',
       isDragging ? 'opacity-50 scale-95' : 'hover:shadow-lg cursor-move',
       isFocused ? 'ring-2 ring-(--ui-primary) ring-offset-2' : ''
@@ -348,7 +348,7 @@ onUnmounted(() => {
             :id="`setting-${option.id}`"
             :class="[
               'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
-              customSettings[option.id] ? 'ui-primary-bg' : 'ui-bg'
+              customSettings[option.id] ? 'ui-primary' : 'ui-surface'
             ]"
             @click="updateSetting(option.id, !customSettings[option.id])"
           >

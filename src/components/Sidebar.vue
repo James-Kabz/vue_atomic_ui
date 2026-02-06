@@ -309,7 +309,7 @@ defineExpose({
     <!-- Sidebar -->
     <aside
       :class="cn(
-        'fixed left-0 z-9999 ui-bg border-r ui-border-strong overflow-hidden flex flex-col',
+        'fixed left-0 z-40 ui-bg border-r ui-border-strong overflow-hidden flex flex-col',
         'transition-all duration-300 ease-in-out',
         ' ',
         isMobile
@@ -350,7 +350,7 @@ defineExpose({
 
       <!-- Navigation -->
       <nav class="flex-1 overflow-y-auto overflow-x-hidden p-4">
-        <div class="space-y-2">
+        <div class="space-y-2 mt-2">
           <template
             v-for="item in navigationItems"
             :key="item.name || item.label"

@@ -343,7 +343,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="relative w-full bg-(--ui-bg) rounded-md">
+  <div class="relative w-full bg-(--ui-surface) rounded-md">
     <!-- Input Field -->
     <div class="relative">
       <input
@@ -419,7 +419,7 @@ onBeforeUnmount(() => {
           v-if="isOpen"
           ref="calendarRef"
           :style="calendarStyle"
-          class="fixed z-10000 rounded-lg shadow-xl p-3 w-64 --ui-bg ui-border-strong"
+          class="fixed z-10000 rounded-lg shadow-xl p-3 w-64 ui-surface ui-border-strong"
           @click.stop
         >
           <!-- Header -->

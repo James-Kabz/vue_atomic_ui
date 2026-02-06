@@ -258,11 +258,11 @@ const handleSliceClick = (slice, index) => {
 </script>
 
 <template>
-  <div class="w-full h-full relative">
+  <div class="ui-surface w-full h-full relative">
     <!-- Empty State -->
     <div
       v-if="!hasValidData"
-      class="w-full h-full flex items-center justify-center"
+      class="ui-surface w-full h-full flex items-center justify-center"
     >
       <div class="text-center">
         <div class="ui-text mb-2">
@@ -399,7 +399,7 @@ const handleSliceClick = (slice, index) => {
       }"
       class="animate-in fade-in duration-200"
     >
-      <div class="--ui-bg ui-text px-4 py-3 rounded-lg shadow-2xl border ui-border-strong min-w-[180px]">
+      <div class="ui-surface ui-text px-4 py-3 rounded-lg shadow-2xl border ui-border-strong min-w-[180px]">
         <div class="flex items-center gap-2 mb-1.5">
           <div
             :style="{ backgroundColor: tooltip.color }"
@@ -418,7 +418,7 @@ const handleSliceClick = (slice, index) => {
         </div>
         <!-- Tooltip arrow -->
         <div
-          class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 rotate-45 w-2 h-2 --ui-bg border-r border-b ui-border-strong"
+          class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 rotate-45 w-2 h-2 ui-surface border-r border-b ui-border-strong"
         />
       </div>
     </div>

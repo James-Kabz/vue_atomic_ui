@@ -21,11 +21,11 @@
 
   html {
     /* Light mode - Vercel style */
-    --ui-bg: #fbfbfb;
+    --ui-bg: #ffffff;
     --ui-surface: #ffffff;
     --ui-surface-muted: #fafafa;
     --ui-surface-soft: #f4f4f5;
-    --ui-surface-strong: #f0f0f0;
+    --ui-surface-strong: #f7f7f7;
 
     --ui-text: #000000;
     --ui-text-muted: #666666;
@@ -61,10 +61,10 @@
   html[data-mode="dark"] {
     /* Dark mode - Vercel style */
     --ui-bg: #16161600;
-    --ui-surface: #1b1b1b;
-    --ui-surface-muted: #1e1e1e;
-    --ui-surface-soft: #1f1f1f;
-    --ui-surface-strong: #1a1a1a;
+    --ui-surface: #171717;
+    --ui-surface-muted: #191919;
+    --ui-surface-soft: #1c1c1c;
+    --ui-surface-strong: #171717;
 
     --ui-text: #ffffff;
     --ui-text-muted: #a1a1a1;
