@@ -67,7 +67,7 @@ const getCellValue = () => {
   return props.column.key.split('.').reduce((obj, key) => obj?.[key], props.item)
 }
 
-const cellVariants = cva('whitespace-nowrap text-(--ui-text)', {
+const cellVariants = cva('whitespace-nowrap ui-text', {
   variants: {
     align: {
       left: 'text-left',
@@ -95,7 +95,7 @@ const cellVariants = cva('whitespace-nowrap text-(--ui-text)', {
 
 const cellClasses = computed(() => {
   const align = props.align || props.column.align || 'left'
-  const textColorClass = props.textColor ? `text-${props.textColor}` : 'text-(--ui-text)'
+  const textColorClass = props.textColor ? `text-${props.textColor}` : 'ui-text'
   const widthClass = props.width ? `w-${props.width}` : ''
   
   return cn(

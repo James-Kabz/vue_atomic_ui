@@ -176,34 +176,34 @@ const previewProfileMenu = ref([
 </script>
 
 <template>
-  <div class="max-w-7xl mx-auto">
+  <div class="max-w-full mx-auto">
     <div class="mb-4 flex items-center gap-3">
       <router-link
         to="/templates/overview"
-        class="px-3 py-1.5 rounded-md text-sm font-medium border border-(--ui-border) hover:bg-(--ui-surface-muted)"
+        class="px-3 py-1.5 rounded-md text-sm font-medium border ui-border-strong hover:bg-(--ui-surface)"
       >
         Dashboard
       </router-link>
       <router-link
         to="/components"
-        class="px-3 py-1.5 rounded-md text-sm font-medium border border-(--ui-border) hover:bg-(--ui-surface-muted)"
+        class="px-3 py-1.5 rounded-md text-sm font-medium border ui-border-strong hover:bg-(--ui-surface)"
       >
         Component Showcase
       </router-link>
       <router-link
         to="/components/full-gallery"
-        class="px-3 py-1.5 rounded-md text-sm font-medium border border-(--ui-border) hover:bg-(--ui-surface-muted)"
+        class="px-3 py-1.5 rounded-md text-sm font-medium border ui-border-strong hover:bg-(--ui-surface)"
       >
         Full Gallery
       </router-link>
     </div>
 
-    <div class="sticky top-0 z-40 bg-[color:color-mix(in oklab, var(--ui-surface), transparent 5%)] backdrop-blur border border-(--ui-border) rounded-lg p-3">
+    <div class="sticky top-0 z-40 bg-[color:color-mix(in oklab, var(--ui-surface), transparent 5%)] backdrop-blur border ui-border-strong rounded-lg p-3">
       <div class="flex flex-wrap items-center gap-2">
         <button
           v-for="section in jumpSections"
           :key="section.id"
-          class="px-3 py-1.5 text-xs font-medium rounded-full border border-(--ui-border) hover:bg-(--ui-surface-muted)"
+          class="px-3 py-1.5 text-xs font-medium rounded-full border ui-border-strong hover:bg-(--ui-surface)"
           @click="scrollToSection(section.id)"
         >
           {{ section.label }}
@@ -322,12 +322,12 @@ const previewProfileMenu = ref([
           </ul>
           <Tab>
             <TabPanel label="Summary">
-              <p class="text-sm text-(--ui-text)">
+              <p class="text-sm ui-text">
                 Tab panel content
               </p>
             </TabPanel>
             <TabPanel label="Details">
-              <p class="text-sm text-(--ui-text)">
+              <p class="text-sm ui-text">
                 Second panel content
               </p>
             </TabPanel>
@@ -352,7 +352,7 @@ const previewProfileMenu = ref([
             <template #prefix>
               <Icon
                 icon="search"
-                class="w-4 h-4 text-(--ui-text)"
+                class="w-4 h-4 ui-text"
               />
             </template>
             <Input
@@ -371,7 +371,7 @@ const previewProfileMenu = ref([
           />
           <div class="flex items-center gap-3">
             <Switch v-model="switchValue" />
-            <span class="text-sm text-(--ui-text)">Switch</span>
+            <span class="text-sm ui-text">Switch</span>
           </div>
           <Slider
             v-model="sliderValue"
@@ -407,7 +407,7 @@ const previewProfileMenu = ref([
             title="Mini Table"
             description="Header component demo"
           />
-          <table class="w-full border border-(--ui-border) rounded-md overflow-hidden">
+          <table class="w-full border ui-border-strong rounded-md overflow-hidden">
             <tbody>
               <tr>
                 <DataTableCell
@@ -534,7 +534,7 @@ const previewProfileMenu = ref([
           >
             <ModalHeader>Modal Header</ModalHeader>
             <ModalBody>
-              <p class="text-sm text-(--ui-text)">
+              <p class="text-sm ui-text">
                 Modal body content.
               </p>
             </ModalBody>
@@ -615,7 +615,7 @@ const previewProfileMenu = ref([
         padding="lg"
       >
         <div class="space-y-6 layout-preview">
-          <div class="rounded-md border border-(--ui-border) overflow-hidden">
+          <div class="rounded-md border ui-border-strong overflow-hidden">
             <Header
               :sidebar-width="130"
               current-section="Preview"
@@ -629,7 +629,7 @@ const previewProfileMenu = ref([
               :organisations="previewUser.organisations"
             />
           </div>
-          <div class="rounded-md border border-(--ui-border) overflow-hidden">
+          <div class="rounded-md border ui-border-strong overflow-hidden">
             <Sidebar
               :sidebar-width="130"
               :header="{ title: 'Preview' }"
@@ -640,19 +640,19 @@ const previewProfileMenu = ref([
               :current-path="'/templates/overview'"
             />
           </div>
-          <div class="rounded-md border border-(--ui-border) overflow-hidden auth-preview">
+          <div class="rounded-md border ui-border-strong overflow-hidden auth-preview">
             <AuthLayout
               title="Auth Layout"
               subtitle="Sign in to continue"
             >
-              <div class="p-6 bg-(--ui-surface) rounded-lg shadow-sm">
-                <p class="text-sm text-(--ui-text)">
+              <div class="p-6 ui-bg rounded-lg shadow-sm">
+                <p class="text-sm ui-text">
                   Auth slot content
                 </p>
               </div>
             </AuthLayout>
           </div>
-          <div class="rounded-md border border-(--ui-border) overflow-hidden default-preview">
+          <div class="rounded-md border ui-border-strong overflow-hidden default-preview">
             <DefaultLayout>
               <template #header-actions>
                 <Button
@@ -662,12 +662,12 @@ const previewProfileMenu = ref([
                   Action
                 </Button>
               </template>
-              <div class="p-4 text-sm text-(--ui-text)">
+              <div class="p-4 text-sm ui-text">
                 Default layout content
               </div>
             </DefaultLayout>
           </div>
-          <div class="rounded-md border border-(--ui-border) overflow-hidden error-preview">
+          <div class="rounded-md border ui-border-strong overflow-hidden error-preview">
             <ErrorLayout>
               <template #title>
                 Something went wrong

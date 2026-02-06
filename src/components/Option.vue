@@ -33,9 +33,9 @@ const props = defineProps({
 
 const optionClasses = computed(() =>
   [
-    'bg-(--ui-bg) ui-glossy-panel',
-    'text-(--ui-text)',
-    props.disabled ? 'text-(--ui-text-soft)' : 'text-(--ui-text)'
+    'bg-(--ui-bg) ',
+    'ui-text',
+    props.disabled ? 'ui-text-soft' : 'ui-text'
   ]
 )
 </script>

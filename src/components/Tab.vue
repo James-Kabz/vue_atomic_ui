@@ -2,7 +2,7 @@
   <div class="w-full">
     <!-- Tab headers -->
     <div
-      class="flex space-x-1 border-b border-(--ui-border) ui-glossy-border"
+      class="flex space-x-1 border-b ui-border-strong "
       role="tablist"
     >
       <button
@@ -13,8 +13,8 @@
         :class="cn(
           tabVariants({ size: props.size, variant: props.variant }),
           activeIndex === index
-            ? 'border-(--ui-primary) text-(--ui-primary) bg-(--ui-primary-soft)'
-            : 'border-transparent text-(--ui-text) hover:text-(--ui-text) hover:border-(--ui-border)',
+            ? 'border-(--ui-primary) ui-primary ui-primary-soft'
+            : 'border-transparent ui-text hover:text-(--ui-text) hover:border-(--ui-border-strong)',
           props.loading && 'cursor-not-allowed opacity-50'
         )"
         :aria-selected="activeIndex === index"

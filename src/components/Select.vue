@@ -58,12 +58,12 @@ const selectedOption = computed(() => {
 })
 
 const selectVariants = cva(
-  'border border-(--ui-border) ui-glossy-border rounded-md focus:outline-none focus:ring-2 focus:ring-(--ui-primary) text-sm min-w-[60px] focus:border-transparent ui-glossy-input',
+  'border ui-border-strong  rounded-md focus:outline-none focus:ring-2 focus:ring-(--ui-primary) text-sm min-w-[60px] focus:border-transparent ',
   {
     variants: {
       disabled: {
-        true: 'bg-(--ui-surface-muted) cursor-not-allowed opacity-50',
-        false: 'bg-(--ui-surface) hover:border-(--ui-border-strong)'
+        true: 'ui-surface-muted cursor-not-allowed opacity-50',
+        false: 'ui-surface hover:border-(--ui-border-strong)'
       }
     }
   }
@@ -79,9 +79,9 @@ const selectClasses = computed(() =>
 
 const selectButtonClasses = computed(() =>
   cn(
-    'w-full px-3 py-2 text-left border rounded-md focus:outline-none focus:ring-2 focus:ring-(--ui-primary) bg-(--ui-surface) ui-glossy-input ui-glossy-border',
-    props.hasError ? 'border-(--ui-danger)' : 'border-(--ui-border)',
-    props.disabled ? 'bg-(--ui-surface-muted) cursor-not-allowed opacity-50' : 'hover:border-(--ui-border-strong)',
+    'w-full px-3 py-2 text-left border rounded-md focus:outline-none focus:ring-2 focus:ring-(--ui-primary) ui-surface  ',
+    props.hasError ? 'border-(--ui-danger)' : 'ui-border',
+    props.disabled ? 'ui-surface-muted cursor-not-allowed opacity-50' : 'hover:border-(--ui-border-strong)',
     props.class
   )
 )
@@ -229,18 +229,18 @@ watch(isOpen, (open) => {
     >
       <div
         v-if="!selectedOption"
-        class="text-(--ui-text)"
+        class="ui-text"
       >
         {{ placeholder || 'Select an option' }}
       </div>
       <div
         v-else
-        class="text-(--ui-text)"
+        class="ui-text"
       >
         {{ selectedOption.label }}
       </div>
       <svg
-        class="absolute right-2 top-2.5 h-5 w-5 text-(--ui-text)"
+        class="absolute right-2 top-2.5 h-5 w-5 ui-text"
         fill="currentColor"
         viewBox="0 0 20 20"
       >
@@ -258,16 +258,16 @@ watch(isOpen, (open) => {
         ref="dropdownRef"
         :style="dropdownStyle"
         data-select-dropdown
-        class="ui-glossy-popover ui-glossy-border shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-(--ui-surface-strong) ring-opacity-5 overflow-auto focus:outline-none"
+        class="  shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-(----ui-bg) ring-opacity-5 overflow-auto focus:outline-none"
       >
         <!-- Search input -->
-        <div class="px-3 py-2 border-b border-(--ui-border)">
+        <div class="px-3 py-2 border-b ui-border">
           <input
             ref="searchInput"
             v-model="searchQuery"
             type="text"
             placeholder="Search options..."
-            class="w-full px-2 py-1 text-sm border border-(--ui-border) ui-glossy-border rounded focus:outline-none focus:ring-1 focus:ring-(--ui-primary) bg-(--ui-surface) ui-glossy-input"
+            class="w-full px-2 py-1 text-sm border ui-border-strong  rounded focus:outline-none focus:ring-1 focus:ring-(--ui-primary) ui-surface "
             @input="filterOptions"
             @keydown="handleKeydown"
             @keydown.enter.prevent="handleKeydown"
@@ -284,13 +284,13 @@ watch(isOpen, (open) => {
             :key="option.value"
             type="button"
             class="cursor-pointer select-none relative py-2 pl-3 pr-9 w-full text-left hover:bg-(--ui-primary-soft) focus:bg-(--ui-primary-soft) focus:outline-none transition-colors duration-150"
-            :class="{ 'bg-(--ui-primary-soft) text-(--ui-primary)': modelValue === option.value }"
+            :class="{ 'ui-primary-soft ui-primary': modelValue === option.value }"
             @click.stop="selectOption(option.value)"
           >
             <span class="block font-normal truncate">{{ option.label }}</span>
             <span
               v-if="modelValue === option.value"
-              class="absolute inset-y-0 right-0 flex items-center pr-4 text-(--ui-primary)"
+              class="absolute inset-y-0 right-0 flex items-center pr-4 ui-primary"
             >
               <svg
                 class="h-5 w-5"
@@ -310,7 +310,7 @@ watch(isOpen, (open) => {
         <!-- No results -->
         <div
           v-else-if="!props.allowCreate"
-          class="px-4 py-3 text-sm text-(--ui-text) text-center"
+          class="px-4 py-3 text-sm ui-text text-center"
         >
           No options found
         </div>
@@ -320,7 +320,7 @@ watch(isOpen, (open) => {
         >
           <button
             type="button"
-            class="w-full text-left px-2 py-1 text-sm text-(--ui-primary) hover:bg-(--ui-primary-soft) rounded cursor-pointer transition-colors"
+            class="w-full text-left px-2 py-1 text-sm ui-primary hover:bg-(--ui-primary-soft) rounded cursor-pointer transition-colors"
             @click.stop="createOption"
             @mousedown.prevent
           >

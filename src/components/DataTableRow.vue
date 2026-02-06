@@ -69,20 +69,20 @@ const rowVariants = cva('transition-colors', {
       false: ''
     },
     selected: {
-      true: 'bg-(--ui-primary-soft) border-l-2 border-(--ui-primary)',
+      true: 'ui-primary-soft border-l-2 border-(--ui-primary)',
       false: ''
     },
     variant: {
-      default: 'border-b border-(--ui-ring) ui-glossy-border',
-      bordered: 'border-b border-(--ui-ring) ui-glossy-border',
-      minimal: 'border-b border-(--ui-ring) ui-glossy-border'
+      default: 'border-b border-(--ui-border-strong) ',
+      bordered: 'border-b border-(--ui-border-strong) ',
+      minimal: 'border-b border-(--ui-border-strong) '
     }
   },
   compoundVariants: [
     {
       hoverable: true,
       clickable: true,
-      class: 'hover:bg-(--ui-surface-muted)'
+      class: 'hover:bg-(--ui-surface)'
     }
   ],
   defaultVariants: {
@@ -94,7 +94,7 @@ const rowVariants = cva('transition-colors', {
   }
 })
 
-const cellVariants = cva('whitespace-nowrap text-sm text-(--ui-text)', {
+const cellVariants = cva('whitespace-nowrap text-sm ui-text', {
   variants: {
     density: {
       compact: 'px-4 py-2',

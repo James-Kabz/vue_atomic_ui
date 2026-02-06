@@ -22,6 +22,7 @@ const statusOptions = [
 
 const addButtonConfig = {
   label: 'Add User',
+  variant: 'success',
   icon: 'plus',
   size: 'md',
   tooltip: 'Create a new user'
@@ -83,13 +84,13 @@ const handleToggleColumn = ({ column, visible }) => {
 
 <template>
   <DashboardShell current-page="Users">
-    <div class="space-y-6">
+    <div class="space-y-6 ui-bg">
       <div class="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 class="text-2xl font-semibold text-(--ui-text)">
+          <h1 class="text-2xl font-semibold ui-text">
             User Directory
           </h1>
-          <p class="text-(--ui-text) mt-1">
+          <p class="ui-text mt-1">
             Track active users, permissions, and last activity.
           </p>
         </div>
@@ -98,7 +99,7 @@ const handleToggleColumn = ({ column, visible }) => {
         </Button>
       </div>
 
-      <div class="bg-(--ui-surface) rounded-xl shadow-sm border border-(--ui-border) overflow-hidden">
+      <div class="ui-bg rounded-xl shadow-sm border ui-border-strong overflow-hidden">
         <DataTableFilters
           v-model:search-query="searchQuery"
           v-model:date-from="dateFrom"

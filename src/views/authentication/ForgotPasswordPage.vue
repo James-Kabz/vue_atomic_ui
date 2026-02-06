@@ -69,13 +69,13 @@ const handleTryAgain = () => {
     <div class="text-center space-y-2">
       <Typography
         variant="display-sm"
-        class="text-(--ui-text)"
+        class="ui-text"
       >
         Forgot Password?
       </Typography>
       <Typography
         variant="body-sm"
-        class="text-(--ui-text)"
+        class="ui-text"
       >
         Enter your email and company code to receive a password reset link.
       </Typography>
@@ -86,9 +86,9 @@ const handleTryAgain = () => {
       v-if="isSubmitted"
       class="text-center space-y-4"
     >
-      <div class="mx-auto w-12 h-12 bg-(--ui-success-soft) rounded-full flex items-center justify-center">
+      <div class="mx-auto w-12 h-12 ui-success-soft rounded-full flex items-center justify-center">
         <svg
-          class="w-6 h-6 text-(--ui-success)"
+          class="w-6 h-6 ui-success"
           fill="none"
           viewBox="0 0 24 24"
           stroke-width="2"
@@ -105,13 +105,13 @@ const handleTryAgain = () => {
       <div class="space-y-2">
         <Typography
           variant="text-sm"
-          class="text-(--ui-text) font-semibold"
+          class="ui-text font-semibold"
         >
           Reset Link Sent!
         </Typography>
         <Typography
           variant="body-sm"
-          class="text-(--ui-text)"
+          class="ui-text"
         >
           We've sent a password reset link to {{ email }}. Please check your email and follow the instructions.
         </Typography>
@@ -120,7 +120,7 @@ const handleTryAgain = () => {
       <div class="pt-4 space-y-3">
         <Typography
           variant="body-sm"
-          class="text-(--ui-text)"
+          class="ui-text"
         >
           Didn't receive the email? Check your spam folder or try again.
         </Typography>
@@ -154,7 +154,7 @@ const handleTryAgain = () => {
             v-model="email"
             placeholder="Enter your email address"
             type="email"
-            :class="hasError ? 'border-(--ui-danger)' : 'border-(--ui-border)'"
+            :class="hasError ? 'border-(--ui-danger)' : 'ui-border-strong'"
             :aria-describedby="ariaDescribedBy"
             :disabled="isLoading"
           />
@@ -173,7 +173,7 @@ const handleTryAgain = () => {
             v-model="companyCode"
             placeholder="Enter your company code"
             type="text"
-            :class="hasError ? 'border-(--ui-danger)' : 'border-(--ui-border)'"
+            :class="hasError ? 'border-(--ui-danger)' : 'ui-border-strong'"
             :aria-describedby="ariaDescribedBy"
             :disabled="isLoading"
           />
@@ -198,12 +198,12 @@ const handleTryAgain = () => {
     <div class="text-center">
       <Typography
         variant="body-sm"
-        class="text-(--ui-text)"
+        class="ui-text"
       >
         Remember your password?
         <Link
           href="/"
-          class="text-(--ui-primary) hover:text-(--ui-primary) font-medium ml-1"
+          class="ui-primary hover:text-(--ui-primary) font-medium ml-1"
         >
           Back to Sign In
         </Link>

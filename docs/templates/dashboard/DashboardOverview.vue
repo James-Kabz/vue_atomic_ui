@@ -203,7 +203,7 @@ const pipelineChart = {
           variant="outlined"
         >
           <div class="space-y-3">
-            <div class="rounded-lg border border-(--ui-border) ui-glossy-border p-3">
+            <div class="rounded-lg border border-(--ui-border-strong) ui-glossy-border p-3">
               <p class="text-sm font-semibold text-(--ui-text)">
                 Vendor renewal approved
               </p>
@@ -211,7 +211,7 @@ const pipelineChart = {
                 Signed off by Finance · 2 hours ago
               </p>
             </div>
-            <div class="rounded-lg border border-(--ui-border) ui-glossy-border p-3">
+            <div class="rounded-lg border border-(--ui-border-strong) ui-glossy-border p-3">
               <p class="text-sm font-semibold text-(--ui-text)">
                 Risk score recalibration
               </p>
@@ -219,7 +219,7 @@ const pipelineChart = {
                 Scheduled for Feb 10 · 1 day ago
               </p>
             </div>
-            <div class="rounded-lg border border-(--ui-border) ui-glossy-border p-3">
+            <div class="rounded-lg border border-(--ui-border-strong) ui-glossy-border p-3">
               <p class="text-sm font-semibold text-(--ui-text)">
                 New policy rollout
               </p>

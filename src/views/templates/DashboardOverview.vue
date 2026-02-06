@@ -126,10 +126,10 @@ const pipelineChart = {
     <div class="space-y-6">
       <div class="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 class="text-2xl font-semibold text-(--ui-text)">
+          <h1 class="text-2xl font-semibold ui-text">
             Executive Overview
           </h1>
-          <p class="text-(--ui-text) mt-1">
+          <p class="ui-text mt-1">
             Snapshot of platform health and recent operational activity.
           </p>
         </div>
@@ -155,10 +155,10 @@ const pipelineChart = {
         >
           <div class="flex items-end justify-between">
             <div>
-              <div class="text-2xl font-semibold text-(--ui-text)">
+              <div class="text-2xl font-semibold ui-text">
                 {{ stat.value }}
               </div>
-              <p class="text-sm text-(--ui-text) mt-1">
+              <p class="text-sm ui-text mt-1">
                 {{ stat.helper }}
               </p>
             </div>
@@ -201,27 +201,27 @@ const pipelineChart = {
           variant="outlined"
         >
           <div class="space-y-3">
-            <div class="rounded-lg border border-(--ui-border) p-3">
-              <p class="text-sm font-semibold text-(--ui-text)">
+            <div class="rounded-lg border ui-border-strong p-3">
+              <p class="text-sm font-semibold ui-text">
                 Vendor renewal approved
               </p>
-              <p class="text-xs text-(--ui-text)">
+              <p class="text-xs ui-text">
                 Signed off by Finance · 2 hours ago
               </p>
             </div>
-            <div class="rounded-lg border border-(--ui-border) p-3">
-              <p class="text-sm font-semibold text-(--ui-text)">
+            <div class="rounded-lg border ui-border-strong p-3">
+              <p class="text-sm font-semibold ui-text">
                 Risk score recalibration
               </p>
-              <p class="text-xs text-(--ui-text)">
+              <p class="text-xs ui-text">
                 Scheduled for Feb 10 · 1 day ago
               </p>
             </div>
-            <div class="rounded-lg border border-(--ui-border) p-3">
-              <p class="text-sm font-semibold text-(--ui-text)">
+            <div class="rounded-lg border ui-border-strong p-3">
+              <p class="text-sm font-semibold ui-text">
                 New policy rollout
               </p>
-              <p class="text-xs text-(--ui-text)">
+              <p class="text-xs ui-text">
                 HR compliance · 3 days ago
               </p>
             </div>

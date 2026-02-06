@@ -13,7 +13,7 @@
     <!-- Dismiss button -->
     <button
       v-if="dismissible"
-      class="ml-1 hover:bg-[color:color-mix(in oklab, var(--ui-surface-strong), transparent 90%)] rounded-full p-0.5 transition-colors"
+      class="ml-1 hover:bg-[color:color-mix(in oklab, var(----ui-bg), transparent 90%)] rounded-full p-0.5 transition-colors"
       :aria-label="dismissLabel"
       @click="handleDismiss"
     >
@@ -71,43 +71,43 @@ const handleDismiss = () => emit('dismiss')
 
 // cva-powered class variants
 const badgeVariants = cva(
-  'inline-flex items-center font-medium border transition-all duration-200 ui-glossy-overlay ui-glossy-border',
+  'inline-flex items-center font-medium border transition-all duration-200  ',
   {
     variants: {
       variant: {
         default:
-          'border border-(--ui-primary-soft) bg-(--ui-primary-soft) text-(--ui-primary) hover:bg-(--ui-primary-soft) dark:border-(--ui-primary-soft) dark:bg-(--ui-primary-soft) dark:text-(--ui-primary)',
+          'border border-(--ui-primary-soft) ui-primary-soft ui-primary hover:bg-(--ui-primary-soft) dark:border-(--ui-primary-soft) dark:bg-(--ui-primary-soft) dark:text-(--ui-primary)',
         secondary:
-          'border border-(--ui-border) bg-(--ui-surface-muted) text-(--ui-text) hover:bg-(--ui-surface-muted) dark:border-(--ui-border) dark:bg-(--ui-surface-muted) dark:text-(--ui-text)',
+          'border ui-border-strong ui-surface-muted ui-text hover:bg-(--ui-surface) dark:border-(--ui-border-strong) dark:bg-(--ui-surface) dark:text-(--ui-text)',
         danger:
-          'border border-(--ui-danger-soft) bg-(--ui-danger-soft) text-(--ui-danger) hover:bg-(--ui-danger-soft) dark:border-(--ui-danger-soft) dark:bg-(--ui-danger-soft) dark:text-(--ui-danger)',
+          'border border-(--ui-danger-soft) ui-danger-soft ui-danger hover:bg-(--ui-danger-soft) dark:border-(--ui-danger-soft) dark:bg-(--ui-danger-soft) dark:text-(--ui-danger)',
         primary:
-          'border border-(--ui-primary-soft) bg-(--ui-primary-soft) text-(--ui-primary) hover:bg-(--ui-primary-soft) dark:border-(--ui-primary-soft) dark:bg-(--ui-primary-soft) dark:text-(--ui-primary)',
-        outline: 'text-(--ui-text) border',
+          'border border-(--ui-primary-soft) ui-primary-soft ui-primary hover:bg-(--ui-primary-soft) dark:border-(--ui-primary-soft) dark:bg-(--ui-primary-soft) dark:text-(--ui-primary)',
+        outline: 'ui-text border',
         success:
-          'border border-(--ui-success-soft) bg-(--ui-success-soft) text-(--ui-success) dark:border-(--ui-success-soft) dark:bg-(--ui-success-soft) dark:text-(--ui-success)',
+          'border border-(--ui-success-soft) ui-success-soft ui-success dark:border-(--ui-success-soft) dark:bg-(--ui-success-soft) dark:text-(--ui-success)',
         warning:
-          'border border-(--ui-warning-soft) bg-(--ui-warning-soft) text-(--ui-warning) hover:bg-(--ui-warning-soft) dark:border-(--ui-warning-soft) dark:bg-(--ui-warning-soft) dark:text-(--ui-warning)',
+          'border border-(--ui-warning-soft) ui-warning-soft ui-warning hover:bg-(--ui-warning-soft) dark:border-(--ui-warning-soft) dark:bg-(--ui-warning-soft) dark:text-(--ui-warning)',
         info:
-          'border border-(--ui-primary-soft) bg-(--ui-primary-soft) text-(--ui-primary) hover:bg-(--ui-primary-soft) dark:border-(--ui-primary-soft) dark:bg-(--ui-primary-soft) dark:text-(--ui-primary)',
+          'border border-(--ui-primary-soft) ui-primary-soft ui-primary hover:bg-(--ui-primary-soft) dark:border-(--ui-primary-soft) dark:bg-(--ui-primary-soft) dark:text-(--ui-primary)',
         ghost:
-          'bg-transparent text-(--ui-text) hover:bg-(--ui-surface-muted)',
+          'bg-transparent ui-text hover:bg-(--ui-surface)',
         link:
-          'text-(--ui-primary) hover:underline',
+          'ui-primary hover:underline',
         subtle:
-          'bg-(--ui-surface-muted) text-(--ui-text) hover:bg-(--ui-surface-soft)',
+          'ui-surface-muted ui-text hover:bg-(--ui-bg)',
         dark:
-          'bg-(--ui-surface-strong) text-(--ui-text-inverse) hover:bg-(--ui-surface-strong)',
+          '--ui-bg ui-text hover:bg-(----ui-bg)',
         light:
-          'bg-(--ui-surface-muted) text-(--ui-text) border border-(--ui-border) hover:bg-(--ui-surface-muted)',
+          'ui-surface-muted ui-text border ui-border-strong hover:bg-(--ui-surface)',
         primaryOutline:
-          'border border-(--ui-primary) text-(--ui-primary) bg-transparent hover:bg-(--ui-primary-soft)',
+          'border border-(--ui-primary) ui-primary bg-transparent hover:bg-(--ui-primary-soft)',
         dangerOutline:
-          'border border-(--ui-danger) text-(--ui-danger) bg-transparent hover:bg-(--ui-danger-soft)',
+          'border border-(--ui-danger) ui-danger bg-transparent hover:bg-(--ui-danger-soft)',
         successOutline:
-          'border border-(--ui-success) text-(--ui-success) bg-transparent hover:bg-(--ui-success-soft)',
+          'border border-(--ui-success) ui-success bg-transparent hover:bg-(--ui-success-soft)',
         gradient:
-          'bg-linear-to-r from-(--ui-primary-soft) to-(--ui-accent) text-(--ui-text-inverse) hover:from-(--ui-primary) hover:to-(--ui-accent)',
+          'bg-linear-to-r from-(--ui-primary-soft) to-(--ui-accent) ui-text hover:from-(--ui-primary) hover:to-(--ui-accent)',
       },
       size: {
         sm: 'px-2 py-0.5 text-xs',

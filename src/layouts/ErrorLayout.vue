@@ -6,7 +6,7 @@
       :class="backgroundClasses"
     >
       <slot name="background">
-        <div class="absolute inset-0 bg-linear-to-br from-(--ui-surface-muted) to-(--ui-surface-muted)" />
+        <div class="absolute inset-0 bg-linear-to-br from-(--ui-surface) to-(--ui-surface)" />
       </slot>
     </div>
 
@@ -21,10 +21,10 @@
           <div class="flex justify-center">
             <slot name="logo">
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-(--ui-primary) rounded-xl flex items-center justify-center">
-                  <span class="text-(--ui-text-inverse) font-bold text-lg">STL</span>
+                <div class="w-10 h-10 ui-primary-bg rounded-xl flex items-center justify-center">
+                  <span class="ui-text font-bold text-lg">STL</span>
                 </div>
-                <span class="text-2xl font-bold text-(--ui-text)">{{ brandName }}</span>
+                <span class="text-2xl font-bold ui-text">{{ brandName }}</span>
               </div>
             </slot>
           </div>
@@ -75,10 +75,10 @@
         <!-- Network Status -->
         <div
           v-if="!isOnline"
-          class="bg-(--ui-danger-soft) border border-(--ui-danger-soft) rounded-lg p-4 mx-auto max-w-md mb-6"
+          class="ui-danger-soft border border-(--ui-danger-soft) rounded-lg p-4 mx-auto max-w-md mb-6"
         >
-          <div class="flex items-center justify-center gap-2 text-(--ui-danger)">
-            <span class="w-3 h-3 bg-(--ui-danger) rounded-full animate-pulse" />
+          <div class="flex items-center justify-center gap-2 ui-danger">
+            <span class="w-3 h-3 ui-danger-bg rounded-full animate-pulse" />
             <span class="font-medium">No Internet Connection</span>
           </div>
         </div>
@@ -92,7 +92,7 @@
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
               <button
                 v-if="showHomeButton"
-                class="bg-(--ui-primary) text-(--ui-text-inverse) px-6 py-3 rounded-lg font-medium hover:bg-(--ui-primary-strong) transition-colors flex items-center justify-center gap-2"
+                class="ui-primary-bg ui-text px-6 py-3 rounded-lg font-medium hover:bg-(--ui-primary-strong) transition-colors flex items-center justify-center gap-2"
                 @click="goHome"
               >
                 <span>{{ homeButtonIcon }}</span>
@@ -101,7 +101,7 @@
 
               <button
                 v-if="showBackButton"
-                class="border border-(--ui-border) text-(--ui-text) px-6 py-3 rounded-lg font-medium hover:bg-(--ui-surface-muted) transition-colors flex items-center justify-center gap-2"
+                class="border ui-border-strong ui-text px-6 py-3 rounded-lg font-medium hover:bg-(--ui-surface) transition-colors flex items-center justify-center gap-2"
                 @click="goBack"
               >
                 <span>←</span>
@@ -111,7 +111,7 @@
               <button
                 v-if="showRetryButton"
                 :disabled="isRetrying || !isOnline"
-                class="border border-(--ui-border) text-(--ui-text) px-6 py-3 rounded-lg font-medium hover:bg-(--ui-surface-muted) transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                class="border ui-border-strong ui-text px-6 py-3 rounded-lg font-medium hover:bg-(--ui-surface) transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 @click="retry"
               >
                 <span
@@ -125,7 +125,7 @@
               <button
                 v-if="showSupportButton"
                 :disabled="reportSent"
-                class="bg-(--ui-surface-soft) text-(--ui-text-inverse) px-6 py-3 rounded-lg font-medium hover:bg-(--ui-surface-soft) transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                class="ui-bg ui-text px-6 py-3 rounded-lg font-medium hover:bg-(--ui-bg) transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 @click="$emit('contact-support')"
               >
                 <span v-if="reportSent">✓</span>
@@ -146,15 +146,15 @@
               v-if="additionalInfoConfig"
               class="mt-8 max-w-md mx-auto"
             >
-              <div class="ui-glossy-panel ui-glossy-border rounded-lg shadow-sm p-6">
-                <h3 class="text-lg font-semibold text-(--ui-text) mb-4">
+              <div class="  rounded-lg shadow-sm p-6">
+                <h3 class="text-lg font-semibold ui-text mb-4">
                   {{ additionalInfoConfig.title }}
                 </h3>
                 <ul class="space-y-3">
                   <li 
                     v-for="(item, index) in additionalInfoConfig.items" 
                     :key="index"
-                    class="flex items-start gap-3 text-sm text-(--ui-text)"
+                    class="flex items-start gap-3 text-sm ui-text"
                   >
                     <span :class="`w-4 h-4 text-${item.iconColor || 'slate-400'} shrink-0 mt-0.5`">
                       {{ item.icon }}
@@ -173,12 +173,12 @@
           :class="helpClasses"
         >
           <slot name="help">
-            <p class="text-sm text-(--ui-text)">
+            <p class="text-sm ui-text">
               {{ helpText }}
               <a
                 v-if="supportUrl"
                 :href="supportUrl"
-                class="text-(--ui-primary) hover:text-(--ui-primary) underline ml-1"
+                class="ui-primary hover:text-(--ui-primary) underline ml-1"
               >
                 <span class="inline-block w-4 h-4 mr-1">❓</span>
                 Get Help
@@ -190,7 +190,7 @@
         <!-- Error ID for debugging -->
         <div
           v-if="isDev"
-          class="text-xs text-(--ui-text) font-mono mt-4"
+          class="text-xs ui-text font-mono mt-4"
         >
           Error ID: {{ errorId }}
         </div>
@@ -497,15 +497,15 @@ export default {
     ])
 
     const codeClasses = computed(() => [
-      'text-6xl font-bold text-(--ui-text) mb-4'
+      'text-6xl font-bold ui-text mb-4'
     ])
 
     const titleClasses = computed(() => [
-      'text-3xl font-bold text-(--ui-text)'
+      'text-3xl font-bold ui-text'
     ])
 
     const messageClasses = computed(() => [
-      'text-lg text-(--ui-text) max-w-lg mx-auto'
+      'text-lg ui-text max-w-lg mx-auto'
     ])
 
     const actionsClasses = computed(() => [

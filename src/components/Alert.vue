@@ -220,16 +220,16 @@ const iconComponent = computed(() => {
 
 /* ===== Variants with CVA ===== */
 const alertVariants = cva(
-  'relative w-full rounded-lg border p-4 flex items-start gap-3 ui-glossy-overlay ui-glossy-border',
+  'relative w-full rounded-lg border p-4 flex items-start gap-3  ',
   {
     variants: {
       variant: {
-        default: 'bg-(--ui-surface) text-(--ui-text) ui-glossy-surface',
-        danger: 'bg-(--ui-danger-soft) text-(--ui-danger)',
-        info: 'bg-(--ui-primary-soft) text-(--ui-primary)',
-        success: 'bg-(--ui-success-soft) text-(--ui-success)',
-        warning: 'bg-(--ui-warning-soft) text-(--ui-warning)',
-        error: 'bg-(--ui-danger-soft) text-(--ui-danger)'
+        default: 'ui-surface ui-text ',
+        danger: 'ui-danger-soft ui-danger',
+        info: 'ui-primary-soft ui-primary',
+        success: 'ui-success-soft ui-success',
+        warning: 'ui-warning-soft ui-warning',
+        error: 'ui-danger-soft ui-danger'
       }
     },
     defaultVariants: { variant: 'default' }
@@ -238,25 +238,25 @@ const alertVariants = cva(
 
 const iconClasses = computed(() => {
   const colors = {
-    info: 'text-(--ui-primary)',
-    success: 'text-(--ui-success)',
-    warning: 'text-(--ui-warning)',
-    error: 'text-(--ui-danger)',
-    default: 'text-(--ui-text)',
-    danger: 'text-(--ui-danger)'
+    info: 'ui-primary',
+    success: 'ui-success',
+    warning: 'ui-warning',
+    error: 'ui-danger',
+    default: 'ui-text',
+    danger: 'ui-danger'
   }
   return ['w-5 h-5', colors[props.variant]]
 })
 
 const dismissButtonClasses = computed(() => {
   const colors = {
-    info: 'text-(--ui-primary) hover:text-(--ui-primary) hover:bg-(--ui-primary-soft)',
-    success: 'text-(--ui-success) hover:text-(--ui-success) hover:bg-(--ui-success-soft)',
-    warning: 'text-(--ui-warning) hover:text-(--ui-warning) hover:bg-(--ui-warning-soft)',
-    error: 'text-(--ui-danger) hover:text-(--ui-danger) hover:bg-(--ui-danger-soft)',
-    default: 'text-(--ui-text) hover:text-(--ui-text) hover:bg-(--ui-surface-muted)',
+    info: 'ui-primary hover:text-(--ui-primary) hover:bg-(--ui-primary-soft)',
+    success: 'ui-success hover:text-(--ui-success) hover:bg-(--ui-success-soft)',
+    warning: 'ui-warning hover:text-(--ui-warning) hover:bg-(--ui-warning-soft)',
+    error: 'ui-danger hover:text-(--ui-danger) hover:bg-(--ui-danger-soft)',
+    default: 'ui-text hover:text-(--ui-text) hover:bg-(--ui-surface)',
     danger:
-      'text-(--ui-danger) hover:text-(--ui-danger) hover:bg-(--ui-danger-soft)'
+      'ui-danger hover:text-(--ui-danger) hover:bg-(--ui-danger-soft)'
   }
   return ['shrink-0 p-1 rounded-md transition-colors duration-200', colors[props.variant]]
 })

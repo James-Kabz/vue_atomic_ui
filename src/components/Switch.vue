@@ -39,15 +39,15 @@ const switchVariants = cva(
         lg: 'h-7 w-12'
       },
       checked: {
-        true: 'bg-(--ui-danger)',
-        false: 'bg-(--ui-surface-soft)'
+        true: 'ui-danger-bg',
+        false: 'ui-bg'
       }
     }
   }
 )
 
 const thumbVariants = cva(
-  'pointer-events-none block rounded-full bg-(--ui-surface) ui-glossy-surface shadow-lg ring-0 transition-transform',
+  'pointer-events-none block rounded-full ui-surface  shadow-lg ring-0 transition-transform',
   {
     variants: {
       size: {

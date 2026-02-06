@@ -80,21 +80,21 @@ describe('Badge', () => {
     const wrapper = mount(Badge, {
       props: { variant: 'subtle' }
     })
-    expect(wrapper.classes()).toContain('bg-(--ui-surface-muted)')
+    expect(wrapper.classes()).toContain('bg-(--ui-surface)')
   })
 
   it('applies dark variant classes', () => {
     const wrapper = mount(Badge, {
       props: { variant: 'dark' }
     })
-    expect(wrapper.classes()).toContain('bg-(--ui-surface-strong)')
+    expect(wrapper.classes()).toContain('bg-(----ui-bg)')
   })
 
   it('applies light variant classes', () => {
     const wrapper = mount(Badge, {
       props: { variant: 'light' }
     })
-    expect(wrapper.classes()).toContain('bg-(--ui-surface-muted)')
+    expect(wrapper.classes()).toContain('bg-(--ui-surface)')
   })
 
   it('applies primaryOutline variant classes', () => {

@@ -58,12 +58,12 @@ const props = defineProps({
   }
 })
 
-const headerVariants = cva('border-b ui-glossy-border', {
+const headerVariants = cva('border-b ui-border-strong', {
   variants: {
     variant: {
-      default: 'ui-glossy-surface',
+      default: 'ui-border-strong',
       minimal: 'bg-transparent border-none',
-      bordered: 'ui-glossy-surface border-2'
+      bordered: ' border-2 ui-border-strong'
     },
     padding: {
       compact: 'px-4 py-2',
@@ -77,7 +77,7 @@ const headerVariants = cva('border-b ui-glossy-border', {
   }
 })
 
-const titleVariants = cva('font-semibold text-(--ui-text)', {
+const titleVariants = cva('font-semibold ui-text', {
   variants: {
     size: {
       sm: 'text-base',
@@ -90,7 +90,7 @@ const titleVariants = cva('font-semibold text-(--ui-text)', {
   }
 })
 
-const descriptionVariants = cva('text-(--ui-text) mt-1', {
+const descriptionVariants = cva('ui-text mt-1', {
   variants: {
     size: {
       sm: 'text-xs',

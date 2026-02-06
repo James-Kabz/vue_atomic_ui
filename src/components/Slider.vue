@@ -9,7 +9,7 @@
       class="w-full accent-(--ui-primary) cursor-pointer"
       @input="updateValue"
     >
-    <div class="flex justify-between text-xs text-(--ui-text) mt-1">
+    <div class="flex justify-between text-xs ui-text mt-1">
       <span>{{ min }}</span>
       <span>{{ modelValue }}</span>
       <span>{{ max }}</span>

@@ -25,7 +25,7 @@
       <div class="flex-1 min-w-0">
         <div
           v-if="title"
-          class="text-sm font-medium text-(--ui-text)"
+          class="text-sm font-medium ui-text"
         >
           {{ title }}
         </div>
@@ -73,7 +73,7 @@ const itemVariants = cva('', {
   variants: {
     variant: {
       default: '',
-      interactive: 'hover:bg-(--ui-surface-muted) cursor-pointer'
+      interactive: 'hover:bg-(--ui-surface) cursor-pointer'
     }
   }
 })

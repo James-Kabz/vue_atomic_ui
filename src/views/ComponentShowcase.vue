@@ -171,19 +171,18 @@ const currentPath = computed(() => `#${currentSection.value}`);
 </script>
 
 <template>
-  <div class="max-w-full mx-auto bg-(--ui-surface-muted)">
+  <div class="max-w-full mx-auto ui-bg">
     <!-- Simplified Sidebar Navigation - No router-link, just buttons -->
-    <aside class="fixed left-0 top-0 z-40 h-screen w-52 border-r bg-(--ui-surface) border-(--ui-border) overflow-y-auto">
+    <aside class="fixed ui-bg left-0 top-0 z-40 h-screen w-52 border-r ui-border-strong overflow-y-auto">
       <nav class="p-4">
         <div class="space-y-2">
           <button
             v-for="item in navigationItems"
-            :key="item.label"
-            :class="[
+            :key="item.label "           :class="[
               'w-full flex flex-col items-center justify-center rounded-xl transition-all duration-200 group relative py-4 px-3',
               currentPath === item.route
                 ? 'bg-linear-to-br from-(--ui-primary-soft) to-(--ui-primary-soft) border border-(--ui-primary-soft) shadow-sm'
-                : 'text-(--ui-text) hover:bg-(--ui-surface-muted) hover:text-(--ui-text) border border-transparent'
+                : 'ui-text hover:bg-(--ui-surface) hover:text-(--ui-text) border border-transparent'
             ]"
             @click="handleSidebarNavigate(item)"
           >
@@ -192,8 +191,8 @@ const currentPath = computed(() => `#${currentSection.value}`);
               :class="[
                 'flex items-center justify-center rounded-lg transition-colors mb-2 w-12 h-12',
                 currentPath === item.route
-                  ? 'bg-linear-to-br from-(--ui-primary) to-(--ui-primary) text-(--ui-text-inverse) shadow-md'
-                  : 'text-(--ui-text) group-hover:text-(--ui-text) bg-(--ui-surface-muted) group-hover:bg-(--ui-surface-soft)'
+                  ? 'bg-linear-to-br from-(--ui-primary) to-(--ui-primary) ui-text shadow-md'
+                  : 'ui-text group-hover:text-(--ui-text) ui-surface-muted group-hover:bg-(--ui-bg)'
               ]"
             >
               <Icon
@@ -207,8 +206,8 @@ const currentPath = computed(() => `#${currentSection.value}`);
               :class="[
                 'text-xs font-medium text-center',
                 currentPath === item.route
-                  ? 'text-(--ui-primary) font-semibold'
-                  : 'text-(--ui-text) group-hover:text-(--ui-text)'
+                  ? 'ui-primary font-semibold'
+                  : 'ui-text group-hover:text-(--ui-text)'
               ]"
             >
               {{ item.label }}
@@ -220,22 +219,22 @@ const currentPath = computed(() => `#${currentSection.value}`);
 
     <!-- Main Content -->
     <div class="ml-52 min-h-screen">
-      <div class="sticky top-0 z-40 bg-[color:color-mix(in oklab, var(--ui-surface), transparent 10%)] backdrop-blur border-b border-(--ui-border) px-8 py-3 flex items-center gap-3">
+      <div class="sticky top-0 z-40 bg-[color:color-mix(in oklab, var(--ui-surface), transparent 10%)] backdrop-blur border-b ui-border-strong px-8 py-3 flex items-center gap-3">
         <router-link
           to="/templates/overview"
-          class="px-3 py-1.5 rounded-md text-sm font-medium border border-(--ui-border) hover:bg-(--ui-surface-muted)"
+          class="px-3 py-1.5 rounded-md text-sm font-medium border ui-border-strong hover:bg-(--ui-surface)"
         >
           Dashboard
         </router-link>
         <router-link
           to="/components"
-          class="px-3 py-1.5 rounded-md text-sm font-medium border border-(--ui-border) hover:bg-(--ui-surface-muted)"
+          class="px-3 py-1.5 rounded-md text-sm font-medium border ui-border-strong hover:bg-(--ui-surface)"
         >
           Component Showcase
         </router-link>
         <router-link
           to="/components/full-gallery"
-          class="px-3 py-1.5 rounded-md text-sm font-medium border border-(--ui-border) hover:bg-(--ui-surface-muted)"
+          class="px-3 py-1.5 rounded-md text-sm font-medium border ui-border-strong hover:bg-(--ui-surface)"
         >
           Full Gallery
         </router-link>
@@ -247,7 +246,7 @@ const currentPath = computed(() => `#${currentSection.value}`);
             <h1 class="text-4xl font-bold mb-4">
               Component Showcase
             </h1>
-            <p class="text-lg text-(--ui-text)">
+            <p class="text-lg ui-text">
               Explore our comprehensive component library with interactive examples
             </p>
           </div>
@@ -448,7 +447,7 @@ const currentPath = computed(() => `#${currentSection.value}`);
                       Option 3
                     </option>
                   </Select>
-                  <p class="text-sm text-(--ui-text) mt-2">
+                  <p class="text-sm ui-text mt-2">
                     Selected: {{ selectValue }}
                   </p>
                 </div>
@@ -499,7 +498,7 @@ const currentPath = computed(() => `#${currentSection.value}`);
                       label="Large checkbox"
                     />
                   </div>
-                  <p class="text-sm text-(--ui-text) mt-2">
+                  <p class="text-sm ui-text mt-2">
                     Value: {{ checkboxValue }}
                   </p>
                 </div>
@@ -531,7 +530,7 @@ const currentPath = computed(() => `#${currentSection.value}`);
                       disabled
                     />
                   </div>
-                  <p class="text-sm text-(--ui-text) mt-2">
+                  <p class="text-sm ui-text mt-2">
                     Selected: {{ radioValue }}
                   </p>
                 </div>
@@ -697,7 +696,7 @@ const currentPath = computed(() => `#${currentSection.value}`);
                     Start Progress
                   </Button>
                   <Progress :value="progressValue" />
-                  <p class="text-sm text-(--ui-text) mt-2">
+                  <p class="text-sm ui-text mt-2">
                     {{ progressValue }}% complete
                   </p>
                 </div>
@@ -857,7 +856,7 @@ const currentPath = computed(() => `#${currentSection.value}`);
                   <p>Main content of the card.</p>
                   <template #footer>
                     <div class="flex justify-between items-center">
-                      <span class="text-sm text-(--ui-text)">Footer content</span>
+                      <span class="text-sm ui-text">Footer content</span>
                       <Button size="sm">
                         Footer Action
                       </Button>
@@ -889,7 +888,7 @@ const currentPath = computed(() => `#${currentSection.value}`);
                           size="md"
                         />
                         <div class="space-y-1">
-                          <div class="font-medium text-(--ui-text)">
+                          <div class="font-medium ui-text">
                             Jordan Blake
                           </div>
                           <Badge variant="success">
@@ -1007,7 +1006,7 @@ const currentPath = computed(() => `#${currentSection.value}`);
                     <Button @click="toggleLoading">
                       Toggle Loading
                     </Button>
-                    <span class="text-sm text-(--ui-text)">Status: {{ loading ? 'Loading' : 'Not Loading' }}</span>
+                    <span class="text-sm ui-text">Status: {{ loading ? 'Loading' : 'Not Loading' }}</span>
                   </div>
 
                   <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -1116,11 +1115,11 @@ const currentPath = computed(() => `#${currentSection.value}`);
                 <template #legend>
                   <div class="flex items-center gap-4 text-sm">
                     <div class="flex items-center gap-2">
-                      <div class="w-3 h-3 bg-(--ui-primary) rounded" />
+                      <div class="w-3 h-3 ui-primary-bg rounded" />
                       <span>Sales</span>
                     </div>
                     <div class="flex items-center gap-2">
-                      <div class="w-3 h-3 bg-(--ui-danger) rounded" />
+                      <div class="w-3 h-3 ui-danger-bg rounded" />
                       <span>Expenses</span>
                     </div>
                   </div>

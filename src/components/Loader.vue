@@ -208,7 +208,7 @@ defineProps({
 
 /* Spin Loader */
 .loader__spin {
-  border: 4px solid var(--ui-border);
+  border: 4px solid var(--ui-border-strong);
   border-top: 4px solid var(--loader-color);
   border-radius: 50%;
   animation: spin 1s linear infinite;
@@ -428,7 +428,7 @@ defineProps({
 }
 
 .loader__ring-track {
-  border: 4px solid var(--ui-border);
+  border: 4px solid var(--ui-border-strong);
   border-radius: 50%;
 }
 
@@ -479,7 +479,7 @@ defineProps({
 }
 
 .loader__spinner {
-  border: 3px solid var(--ui-border);
+  border: 3px solid var(--ui-border-strong);
   border-top: 3px solid var(--loader-color);
   border-radius: 50%;
   animation: spin 1s linear infinite;

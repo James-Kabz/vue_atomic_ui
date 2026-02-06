@@ -69,16 +69,16 @@ const triggerVariants = cva(
   {
     variants: {
       variant: {
-        default: 'ui-glossy-button-strong text-(--ui-text-inverse) bg-(--ui-primary) hover:bg-(--ui-primary-strong)',
-        outline: 'ui-glossy-button ui-glossy-border border text-(--ui-text) bg-(--ui-surface) hover:brightness-105',
-        ghost: 'text-(--ui-text) hover:bg-(--ui-surface-muted) hover:text-(--ui-text)'
+        default: 'ui-text ui-primary-bg hover:bg-(--ui-primary-strong)',
+        outline: '  border ui-text ui-surface hover:brightness-105',
+        ghost: 'ui-text hover:bg-(--ui-surface) hover:text-(--ui-text)'
       }
     }
   }
 )
 
 const dropdownVariants = cva(
-  'absolute z-50 min-w-[8rem] overflow-hidden rounded-md border ui-glossy-popover ui-glossy-border p-1 text-(--ui-text) shadow-md',
+  'absolute z-50 min-w-[8rem] overflow-hidden rounded-md border   p-1 ui-text shadow-md',
   {
     variants: {
       placement: {

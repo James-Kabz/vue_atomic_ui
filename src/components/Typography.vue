@@ -158,7 +158,7 @@ const variantClasses = computed(() => {
     'display-lg': 'text-6xl font-bold leading-tight tracking-tight',
     'display-xl': 'text-7xl font-bold leading-tight tracking-tighter',
     'display-2xl': 'text-8xl font-bold leading-tight tracking-tighter',
-    caption: 'text-xs leading-normal text-(--ui-text)',
+    caption: 'text-xs leading-normal ui-text',
     overline: 'text-xs font-medium uppercase tracking-wider leading-normal',
     label: 'text-sm font-medium leading-normal'
   }
@@ -171,18 +171,18 @@ const colorClasses = computed(() => {
   }
   
   const colors = {
-    default: 'text-(--ui-text)',
-    primary: 'text-(--ui-primary)',
-    secondary: 'text-(--ui-text)',
-    accent: 'text-(--ui-accent)',
-    success: 'text-(--ui-success)',
-    warning: 'text-(--ui-warning)',
-    danger: 'text-(--ui-danger)',
-    info: 'text-(--ui-primary)',
-    muted: 'text-(--ui-text)',
-    disabled: 'text-(--ui-text)',
-    white: 'text-(--ui-text-inverse)',
-    black: 'text-(--ui-text)'
+    default: 'ui-text',
+    primary: 'ui-primary',
+    secondary: 'ui-text',
+    accent: 'ui-accent',
+    success: 'ui-success',
+    warning: 'ui-warning',
+    danger: 'ui-danger',
+    info: 'ui-primary',
+    muted: 'ui-text',
+    disabled: 'ui-text',
+    white: 'ui-text',
+    black: 'ui-text'
   }
   return colors[props.color]
 })
@@ -322,7 +322,7 @@ const typographyClasses = computed(() => [
     <slot />
     <span
       v-if="required"
-      class="text-(--ui-danger) ml-1"
+      class="ui-danger ml-1"
       aria-hidden="true"
     >*</span>
   </component>

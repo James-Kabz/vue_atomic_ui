@@ -2,6 +2,39 @@
 
 This document provides comprehensive usage examples and API reference for all Vue components in the STL Horizon Vue Atomic UI library.
 
+## Styling Conventions
+
+Use **base classes** for static color decisions and **token utilities** for interactive states.
+
+Base classes (static):
+
+- `ui-surface`, `ui-surface-muted`, `ui-bg`, `--ui-bg`
+- `ui-panel`
+- `ui-text`, `ui-text-muted`, `ui-text-soft`, `ui-text`
+- `ui-border`, `ui-border-strong`, `ui-border-surface`
+- `ui-primary`, `ui-primary-bg`, `ui-primary-soft`
+- `ui-accent`, `ui-accent-bg`, `ui-accent-soft`
+- `ui-success`, `ui-success-bg`, `ui-success-soft`
+- `ui-warning`, `ui-warning-bg`, `ui-warning-soft`
+- `ui-danger`, `ui-danger-bg`, `ui-danger-soft`
+
+Token utilities (interactive states only):
+
+- `hover:bg-(--ui-primary-strong)`
+- `focus:ring-(--ui-primary)`
+- `focus:border-(--ui-primary)`
+- `disabled:bg-(--ui-surface)`
+
+Example:
+
+```vue
+<button
+  class="ui-primary-bg ui-border rounded-md px-4 py-2 font-medium hover:bg-(--ui-primary-strong) focus:ring-2 focus:ring-(--ui-primary)"
+>
+  Action
+</button>
+```
+
 ## Table of Contents
 
 - [Accordion](#accordion)

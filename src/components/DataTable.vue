@@ -218,12 +218,12 @@ const showModal = ref(false)
 const modalContent = ref('')
 
 // CVA variants
-const tableContainerVariants = cva('ui-glossy-surface border ui-glossy-border rounded-lg relative', {
+const tableContainerVariants = cva(' border ui-border-strong  rounded-lg relative', {
   variants: {
     variant: {
-      default: 'shadow-sm',
-      bordered: 'border-2 ui-glossy-border',
-      minimal: 'border-none shadow-none bg-transparent'
+      default: 'shadow-sm ui-border-strong',
+      bordered: 'border-2 ui-border-strong',
+      minimal: 'border-none ui-border-strong shadow-none bg-transparent'
     }
   },
   defaultVariants: {
@@ -234,9 +234,9 @@ const tableContainerVariants = cva('ui-glossy-surface border ui-glossy-border ro
 const tableVariants = cva('min-w-full', {
   variants: {
     variant: {
-      default: 'divide-y divide-(--ui-stronger)',
-      bordered: 'border-collapse [&_td]:border [&_th]:border [&_td]:border-(--ui-stronger) [&_th]:border-(--ui-stronger)',
-      minimal: 'divide-y divide-(--ui-stronger)'
+      default: 'divide-y divide-(--ui-border-strong)',
+      bordered: 'border-collapse [&_td]:border [&_th]:border [&_td]:border-(--ui-border-strong) [&_th]:border-(--ui-border-strong)',
+      minimal: 'divide-y divide-(--ui-border-strong)'
     }
   },
   defaultVariants: {
@@ -247,9 +247,9 @@ const tableVariants = cva('min-w-full', {
 const headVariants = cva('', {
   variants: {
     variant: {
-      default: 'ui-glossy-surface border-b border-(--ui-stronger)',
-      bordered: 'ui-glossy-surface border-b-2 border-(--ui-stronger)',
-      minimal: 'bg-transparent border-b border-(--ui-stronger)'
+      default: ' border-b border-(--ui-border-strong)',
+      bordered: ' border-b-2 border-(--ui-border-strong)',
+      minimal: 'bg-transparent border-b border-(--ui-border-strong)'
     }
   },
   defaultVariants: {
@@ -260,9 +260,9 @@ const headVariants = cva('', {
 const bodyVariants = cva('divide-y', {
   variants: {
     variant: {
-      default: 'ui-glossy-surface divide-(--ui-stronger)',
-      bordered: 'ui-glossy-surface divide-(--ui-stronger)',
-      minimal: 'bg-transparent divide-(--ui-stronger)'
+      default: ' divide-(--ui-border-strong)',
+      bordered: ' divide-(--ui-border-strong)',
+      minimal: 'bg-transparent divide-(--ui-border-strong)'
     }
   },
   defaultVariants: {
@@ -553,9 +553,9 @@ const getHeaderCellClasses = (column) => {
 
   return cn(
     densityPadding[props.density],
-    'text-left text-sm font-extrabold text-(--ui-text) uppercase tracking-wider',
+    'text-left text-sm font-extrabold ui-text uppercase tracking-wider',
     {
-      'cursor-pointer hover:bg-(--ui-surface-muted) transition-colors': column.sortable && !props.loading && !props.sortLoading,
+      'cursor-pointer hover:bg-(--ui-surface) transition-colors': column.sortable && !props.loading && !props.sortLoading,
       'cursor-not-allowed opacity-50': props.loading || (props.sortLoading && sortColumn.value === column.key)
     }
   )
@@ -570,7 +570,7 @@ const getDataCellClasses = () => {
 
   return cn(
     densityPadding[props.density],
-    'whitespace-nowrap text-sm text-(--ui-text)'
+    'whitespace-nowrap text-sm ui-text'
   )
 }
 
@@ -626,7 +626,7 @@ const checkboxCellClasses = computed(() => {
 
   return cn(
     densityPadding[props.density],
-    'whitespace-nowrap text-sm text-(--ui-text) w-12'
+    'whitespace-nowrap text-sm ui-text w-12'
   )
 })
 
@@ -658,8 +658,8 @@ const emptyCellClasses = computed(() => {
 
 const getSortIconClasses = (column, direction) => cn(
   {
-    'text-(--ui-primary)': sortColumn.value === column.key && sortDirection.value === direction,
-    'text-(--ui-text)': sortColumn.value !== column.key || sortDirection.value !== direction
+    'ui-primary': sortColumn.value === column.key && sortDirection.value === direction,
+    'ui-text': sortColumn.value !== column.key || sortDirection.value !== direction
   }
 )
 
@@ -864,7 +864,7 @@ defineExpose({
                   v-if="selectable"
                   :class="checkboxCellClasses"
                 >
-                  <div class="w-4 h-4 bg-(--ui-surface-soft) rounded" />
+                  <div class="w-4 h-4 ui-bg rounded" />
                 </td>
 
                 <!-- Data columns skeleton -->
@@ -873,7 +873,7 @@ defineExpose({
                   :key="column.key"
                   :class="getDataCellClasses()"
                 >
-                  <div class="h-4 bg-(--ui-surface-soft) rounded w-3/4" />
+                  <div class="h-4 ui-bg rounded w-3/4" />
                 </td>
 
                 <!-- Actions column skeleton -->
@@ -882,8 +882,8 @@ defineExpose({
                   :class="actionsCellClasses"
                 >
                   <div class="flex gap-2 justify-center">
-                    <div class="w-6 h-6 bg-(--ui-surface-soft) rounded" />
-                    <div class="w-6 h-6 bg-(--ui-surface-soft) rounded" />
+                    <div class="w-6 h-6 ui-surface rounded" />
+                    <div class="w-6 h-6 ui-surface rounded" />
                   </div>
                 </td>
               </tr>
@@ -918,7 +918,7 @@ defineExpose({
                   >
                     <span
                       v-if="formatCellValue(slotProps.item, slotProps.column).toString().split(' ').length > 10"
-                      class="cursor-pointer text-(--ui-primary) hover:text-(--ui-primary)"
+                      class="cursor-pointer ui-primary hover:text-(--ui-primary)"
                       @click.stop="openModal(formatCellValue(slotProps.item, slotProps.column))"
                     >
                       {{ truncateText(formatCellValue(slotProps.item, slotProps.column)) }}
@@ -978,16 +978,16 @@ defineExpose({
               >
                 <slot name="empty">
                   <div class="flex flex-col items-center justify-center py-12">
-                    <div class="text-(--ui-text) mb-4 flex justify-center">
+                    <div class="ui-text mb-4 flex justify-center">
                       <Icon
                         icon="search"
                         class="w-16 h-16"
                       />
                     </div>
-                    <p class="text-(--ui-text) text-lg font-medium mb-2">
+                    <p class="ui-text text-lg font-medium mb-2">
                       {{ emptyText }}
                     </p>
-                    <p class="text-(--ui-text) text-sm">
+                    <p class="ui-text text-sm">
                       {{ emptySubtitle }}
                     </p>
                   </div>
@@ -1031,7 +1031,7 @@ defineExpose({
         <h3 class="text-md font-semibold mb-4">
           Full Text
         </h3>
-        <div class="text-xl font-bold text-(--ui-text) whitespace-pre-wrap wrap-break-word">
+        <div class="text-xl font-bold ui-text whitespace-pre-wrap wrap-break-word">
           {{ modalContent }}
         </div>
       </div>

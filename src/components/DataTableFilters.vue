@@ -1,5 +1,5 @@
 <template>
-  <div class="ui-glossy-surface border-b ui-glossy-border">
+  <div class=" border-b ui-border">
     <!-- Main Filters Bar -->
     <div :class="filtersClasses">
       <!-- Search Input -->
@@ -56,7 +56,7 @@
           </Select>
           <Icon
             icon="chevron-down"
-            class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-(--ui-text) pointer-events-none"
+            class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 ui-text pointer-events-none"
           />
         </div>
       </div>
@@ -85,7 +85,7 @@
           </Select>
           <Icon
             icon="chevron-down"
-            class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-(--ui-text) pointer-events-none"
+            class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 ui-text pointer-events-none"
           />
         </div>
       </div>
@@ -230,7 +230,7 @@
             <div class="relative flex-1">
               <Icon
                 icon="calendar"
-                class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-(--ui-text)"
+                class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 ui-text"
               />
               <input
                 type="date"
@@ -244,7 +244,7 @@
             <div class="relative flex-1">
               <Icon
                 icon="calendar"
-                class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-(--ui-text)"
+                class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 ui-text"
               />
               <input
                 type="date"
@@ -353,7 +353,7 @@
             </Select>
             <Icon
               icon="chevron-down"
-              class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-(--ui-text) pointer-events-none"
+              class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 ui-text pointer-events-none"
             />
           </div>
 
@@ -364,7 +364,7 @@
             <span
               v-for="selectedValue in multiFilter.selected"
               :key="selectedValue"
-              class="inline-flex items-center gap-1 bg-(--ui-primary-soft) text-(--ui-primary) text-xs px-2 py-1 rounded-full"
+              class="inline-flex items-center gap-1 ui-primary-soft ui-primary text-xs px-2 py-1 rounded-full"
             >
               {{ getMultiSelectOptionLabel(multiFilter, selectedValue) }}
               <button
@@ -418,16 +418,16 @@
   <!-- File Upload Modal -->
   <div
     v-if="showFileUpload && isFileUploadModalOpen"
-    class="fixed inset-0 bg-(--ui-surface-strong)/60 z-50 flex items-center justify-center p-4"
+    class="fixed inset-0 ui-bg backdrop-blur-3xl z-50 flex items-center justify-center p-4"
     @click.self="closeFileUploadModal"
   >
-    <div class="ui-glossy-popover ui-glossy-border rounded-xl shadow-2xl max-w-2xl w-full p-6">
+    <div class="rounded-xl shadow-2xl max-w-2xl w-full p-6">
       <div class="flex items-center justify-between mb-4">
-        <h3 class="text-lg font-semibold text-(--ui-text)">
+        <h3 class="text-lg font-semibold ui-text">
           Upload Files
         </h3>
         <button
-          class="text-(--ui-text) hover:text-(--ui-text) p-2 hover:bg-(--ui-surface-muted) rounded-full transition-all"
+          class="ui-text hover:text-(--ui-text) p-2 hover:bg-(--ui-surface) rounded-full transition-all"
           @click="closeFileUploadModal"
         >
           <Icon
@@ -737,9 +737,9 @@ const handleAddButtonClick = () => {
 const filtersVariants = cva('flex flex-wrap items-center gap-4', {
   variants: {
     variant: {
-      default: 'ui-glossy-surface',
+      default: 'bg-(--ui-bg) ui-border-strong shadow-sm',
       minimal: 'bg-transparent',
-      bordered: 'ui-glossy-surface'
+      bordered: 'ui-border-strong'
     },
     padding: {
       compact: 'px-4 py-3',
@@ -753,7 +753,7 @@ const filtersVariants = cva('flex flex-wrap items-center gap-4', {
   }
 })
 
-const inputVariants = cva('border border-(--ui-border) ui-glossy-border rounded-lg focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:border-transparent transition-all text-sm bg-(--ui-surface) ui-glossy-input', {
+const inputVariants = cva('border ui-border-strong  rounded-lg focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:border-transparent transition-all text-sm ui-surface ', {
   variants: {
     size: {
       sm: 'px-2 py-1.5',
@@ -769,10 +769,10 @@ const inputVariants = cva('border border-(--ui-border) ui-glossy-border rounded-
 const buttonVariants = cva('rounded-lg flex items-center font-medium transition-all', {
   variants: {
     variant: {
-      default: 'text-(--ui-text) hover:text-(--ui-text) border ui-glossy-border ui-glossy-button hover:brightness-105',
-      primary: 'text-(--ui-text-inverse) bg-(--ui-primary) hover:bg-(--ui-primary-strong) border border-(--ui-primary) shadow-sm ui-glossy-button-strong',
-      success: 'text-(--ui-text-inverse) bg-(--ui-success) hover:bg-(--ui-success-strong) border border-(--ui-success) shadow-sm ui-glossy-button-strong',
-      ghost: 'text-(--ui-text) hover:text-(--ui-text) hover:bg-(--ui-surface-muted)'
+      default: 'ui-text hover:text-(--ui-text) border ui-border-strong  hover:brightness-105',
+      primary: 'ui-text ui-primary-bg hover:bg-(--ui-primary-strong) border border-(--ui-primary) shadow-sm',
+      success: 'ui-text ui-success-bg hover:bg-(--ui-success-strong) border border-(--ui-success) shadow-sm',
+      ghost: 'ui-text hover:text-(--ui-text) hover:bg-(--ui-surface)'
     },
     size: {
       sm: 'px-2 py-1.5 text-xs',
@@ -808,7 +808,7 @@ const clearDateFilter = (key) => {
 
 const getDateFilterStatusClasses = (dateFilter) => {
   const hasValues = hasDateFilterValues(dateFilter)
-  return `text-xs px-2 py-1 rounded ${hasValues ? 'bg-(--ui-primary-soft) text-(--ui-primary)' : 'bg-(--ui-surface-muted) text-(--ui-text)'
+  return `text-xs px-2 py-1 rounded ${hasValues ? 'ui-primary-soft ui-primary' : 'ui-surface-muted ui-text'
     }`
 }
 
@@ -833,7 +833,7 @@ const clearNumberFilter = (key) => {
 
 const getNumberFilterStatusClasses = (numberFilter) => {
   const hasValues = hasNumberFilterValues(numberFilter)
-  return `text-xs px-2 py-1 rounded ${hasValues ? 'bg-(--ui-primary-soft) text-(--ui-primary)' : 'bg-(--ui-surface-muted) text-(--ui-text)'
+  return `text-xs px-2 py-1 rounded ${hasValues ? 'ui-primary-soft ui-primary' : 'ui-surface-muted ui-text'
     }`
 }
 
@@ -851,7 +851,7 @@ const hasMultiSelectFilterValues = (multiFilter) => {
 
 const getMultiSelectFilterStatusClasses = (multiFilter) => {
   const hasValues = hasMultiSelectFilterValues(multiFilter)
-  return `text-xs px-2 py-1 rounded ${hasValues ? 'bg-(--ui-primary-soft) text-(--ui-primary)' : 'bg-(--ui-surface-muted) text-(--ui-text)'
+  return `text-xs px-2 py-1 rounded ${hasValues ? 'ui-primary-soft ui-primary' : 'ui-surface-muted ui-text'
     }`
 }
 
@@ -1059,24 +1059,24 @@ const filtersClasses = computed(() =>
 )
 
 const searchIconClasses = computed(() =>
-  'absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-(--ui-text) group-hover:text-(--ui-text) transition-colors'
+  'absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 ui-text group-hover:text-(--ui-text) transition-colors'
 )
 
 const searchInputClasses = computed(() =>
   cn(
     inputVariants({ size: 'md' }),
-    'w-full pl-10 pr-10 hover:border-(--ui-border)'
+    'w-full pl-10 pr-10 hover:border-(--ui-border-strong)'
   )
 )
 
 const clearSearchButtonClasses = computed(() =>
-  'absolute right-3 top-1/2 transform -translate-y-1/2 text-(--ui-text) hover:text-(--ui-text) p-1 hover:bg-(--ui-surface-muted) rounded-full transition-all'
+  'absolute right-3 top-1/2 transform -translate-y-1/2 ui-text hover:text-(--ui-text) p-1 hover:bg-(--ui-surface) rounded-full transition-all'
 )
 
 const selectClasses = computed(() =>
   cn(
     inputVariants({ size: 'md' }),
-    'w-full pr-8 appearance-none hover:border-(--ui-border)'
+    'w-full pr-8 appearance-none hover:border-(--ui-border-strong)'
   )
 )
 
@@ -1092,11 +1092,11 @@ const advancedFiltersToggleClasses = computed(() => {
 })
 
 const filterCountBadgeClasses = computed(() =>
-  'bg-(--ui-surface) text-(--ui-primary) text-xs px-1.5 py-0.5 rounded-full min-w-[20px] text-center font-semibold'
+  'ui-surface ui-primary text-xs px-1.5 py-0.5 rounded-full min-w-[20px] text-center font-semibold'
 )
 
 const advancedFiltersContainerClasses = computed(() =>
-  'px-6 py-4 border-t border-(--ui-border) bg-(--ui-surface-muted)'
+  'px-6 py-4 border-t ui-border-strong ui-surface-muted'
 )
 
 const dateInputClasses = computed(() =>
@@ -1104,15 +1104,15 @@ const dateInputClasses = computed(() =>
 )
 
 const dateFilterLabelClasses = computed(() =>
-  'text-sm font-semibold text-(--ui-text)'
+  'text-sm font-semibold ui-text'
 )
 
 const dateRangeSeparatorClasses = computed(() =>
-  'text-(--ui-text) text-sm font-medium'
+  'ui-text text-sm font-medium'
 )
 
 const clearDateFilterButtonClasses = computed(() =>
-  'text-(--ui-text) hover:text-(--ui-text) p-1.5 hover:bg-(--ui-surface-soft) rounded-full transition-all'
+  'ui-text hover:text-(--ui-text) p-1.5 hover:bg-(--ui-bg) rounded-full transition-all'
 )
 
 const clearFiltersButtonClasses = computed(() =>
@@ -1124,19 +1124,19 @@ const exportButtonClasses = computed(() =>
 )
 
 const activeFiltersContainerClasses = computed(() =>
-  'px-6 py-3 bg-(--ui-primary-soft) border-t border-(--ui-primary-soft)'
+  'px-6 py-3 ui-primary-soft border-t border-(--ui-primary-soft)'
 )
 
 const activeFiltersLabelClasses = computed(() =>
-  'text-sm font-semibold text-(--ui-primary)'
+  'text-sm font-semibold ui-primary'
 )
 
 const activeFilterTagClasses = computed(() =>
-  'flex items-center gap-1.5 bg-(--ui-surface) border border-(--ui-primary-soft) text-(--ui-primary) px-3 py-1.5 rounded-full text-sm font-medium'
+  'flex items-center gap-1.5 ui-bg border border-(--ui-primary-soft) ui-text px-3 py-1.5 rounded-full text-sm font-medium'
 )
 
 const activeFilterRemoveButtonClasses = computed(() =>
-  'text-(--ui-primary) hover:text-(--ui-primary) ml-1 hover:bg-(--ui-primary-soft) rounded-full p-0.5 transition-all'
+  'ui-primary hover:text-(--ui-primary) ml-1 hover:bg-(--ui-primary-soft) rounded-full p-0.5 transition-all'
 )
 
 // Clear all filters

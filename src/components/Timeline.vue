@@ -1,7 +1,7 @@
 <template>
   <div
     :class="[
-      'relative flex text-(--ui-text)',
+      'relative flex ui-text',
       orientation === 'vertical' ? 'flex-col' : 'flex-row'
     ]"
   >

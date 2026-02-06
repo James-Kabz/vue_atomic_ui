@@ -81,11 +81,11 @@ const linkVariants = cva(
   {
     variants: {
       variant: {
-        primary: "text-(--ui-primary) hover:text-(--ui-primary) dark:text-(--ui-primary) dark:hover:text-(--ui-primary-soft)",
-        secondary: "text-(--ui-text) hover:text-(--ui-text) dark:text-(--ui-text) dark:hover:text-(--ui-text)",
-        muted: "text-(--ui-text) hover:text-(--ui-text) dark:text-(--ui-text) dark:hover:text-(--ui-text)",
-        danger: "text-(--ui-danger) hover:text-(--ui-danger) dark:text-(--ui-danger-soft) dark:hover:text-(--ui-danger-soft)",
-        success: "text-(--ui-success) hover:text-(--ui-success) dark:text-(--ui-success-soft) dark:hover:text-(--ui-success-soft)",
+        primary: "ui-primary hover:text-(--ui-primary) dark:text-(--ui-primary) dark:hover:text-(--ui-primary-soft)",
+        secondary: "ui-text hover:text-(--ui-text) dark:text-(--ui-text) dark:hover:text-(--ui-text)",
+        muted: "ui-text hover:text-(--ui-text) dark:text-(--ui-text) dark:hover:text-(--ui-text)",
+        danger: "ui-danger hover:text-(--ui-danger) dark:text-(--ui-danger-soft) dark:hover:text-(--ui-danger-soft)",
+        success: "ui-success hover:text-(--ui-success) dark:text-(--ui-success-soft) dark:hover:text-(--ui-success-soft)",
       },
       size: {
         xs: "text-xs",

@@ -47,13 +47,13 @@
           <div class="flex-1 min-w-0 pt-0.5">
             <div
               v-if="toast.title"
-              class="text-sm font-semibold leading-tight text-(--ui-text) mb-1"
+              class="text-md font-semibold leading-tight ui-text mb-1"
             >
               {{ toast.title }}
             </div>
             <div
               v-if="toast.message || toast.description"
-              class="text-sm leading-relaxed text-(--ui-text)"
+              class="text-md leading-relaxed ui-text"
             >
               {{ toast.message || toast.description }}
             </div>
@@ -84,7 +84,7 @@
           <!-- Close Button -->
           <button
             v-if="isDismissible(toast)"
-            class="absolute right-2 top-2 flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-(--ui-text) opacity-0 transition-all hover:bg-black/5 dark:hover:bg-white/5 hover:text-(--ui-text) focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-(--ui-ring) focus:ring-offset-1 group-hover:opacity-100"
+            class="absolute right-2 top-2 flex h-6 w-6 shrink-0 items-center justify-center rounded-md ui-text opacity-0 transition-all hover:bg-black/5 dark:hover:bg-white/5 hover:text-(--ui-text) focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-(--ui-ring) focus:ring-offset-1 group-hover:opacity-100"
             aria-label="Dismiss"
             @click="dismiss(toast.id)"
           >
@@ -174,16 +174,16 @@ const containerClasses = computed(() =>
 
 // Toast styling with refined variants
 const toastVariants = cva(
-  'group pointer-events-auto relative flex w-full items-start gap-3 overflow-hidden rounded-xl border backdrop-blur-xl bg-white/95 dark:bg-(--ui-surface)/95 text-(--ui-text) transition-all',
+  'group pointer-events-auto relative flex w-full items-start gap-3 overflow-hidden rounded-xl border backdrop-blur-xl bg-white/95 dark:bg-(--ui-surface)/95 ui-text transition-all',
   {
     variants: {
       variant: {
-        default: 'border-(--ui-border) shadow-sm',
+        default: 'ui-border-strong shadow-sm',
         info: 'border-blue-200 dark:border-blue-900/50 bg-blue-50/80 dark:bg-blue-950/30',
         success: 'border-green-200 dark:border-green-900/50 bg-green-50/80 dark:bg-green-950/30',
         warning: 'border-amber-200 dark:border-amber-900/50 bg-amber-50/80 dark:bg-amber-950/30',
         error: 'border-red-200 dark:border-red-900/50 bg-red-50/80 dark:bg-red-950/30',
-        loading: 'border-(--ui-border) shadow-sm'
+        loading: 'ui-border-strong shadow-sm'
       }
     },
     defaultVariants: { variant: 'default' }
@@ -204,42 +204,42 @@ const iconMap = {
 
 // Icon color classes with refined palette
 const iconColorMap = {
-  default: 'text-(--ui-text)',
+  default: 'ui-text',
   info: 'text-blue-600 dark:text-blue-400',
   success: 'text-green-600 dark:text-green-400',
   warning: 'text-amber-600 dark:text-amber-400',
   error: 'text-red-600 dark:text-red-400',
-  loading: 'text-(--ui-text)'
+  loading: 'ui-text'
 }
 
 // Icon background classes for better visual hierarchy
 const iconBackgroundMap = {
-  default: 'bg-(--ui-surface-soft)',
+  default: 'ui-bg',
   info: 'bg-blue-100 dark:bg-blue-900/30',
   success: 'bg-green-100 dark:bg-green-900/30',
   warning: 'bg-amber-100 dark:bg-amber-900/30',
   error: 'bg-red-100 dark:bg-red-900/30',
-  loading: 'bg-(--ui-surface-soft)'
+  loading: 'ui-bg'
 }
 
 // Progress bar colors
 const progressBarMap = {
-  default: 'bg-(--ui-border-strong)',
+  default: 'ui-border-strong-bg',
   info: 'bg-blue-500',
   success: 'bg-green-500',
   warning: 'bg-amber-500',
   error: 'bg-red-500',
-  loading: 'bg-(--ui-border-strong)'
+  loading: 'ui-border-strong-bg'
 }
 
 // Action button colors
 const actionButtonMap = {
-  default: 'text-(--ui-primary) hover:text-(--ui-primary-strong)',
+  default: 'ui-primary hover:text-(--ui-primary-strong)',
   info: 'text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300',
   success: 'text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300',
   warning: 'text-amber-600 hover:text-amber-700 dark:text-amber-400 dark:hover:text-amber-300',
   error: 'text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300',
-  loading: 'text-(--ui-primary) hover:text-(--ui-primary-strong)'
+  loading: 'ui-primary hover:text-(--ui-primary-strong)'
 }
 
 const getIconName = (toast) => toast.icon || iconMap[toast.variant] || iconMap.default

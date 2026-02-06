@@ -2,14 +2,14 @@
   <header
     :class="cn(
       cardHeaderVariants({ size }),
-      'text-(--ui-text)',
+      'ui-text',
       $attrs.class
     )"
   >
     <div :class="cn(contentVariants({ alignment }), 'flex flex-col')">
       <h2
         v-if="title || $slots.title"
-        class="text-(--ui-text)"
+        class="ui-text"
       >
         <slot name="title">
           {{ title }}
@@ -17,7 +17,7 @@
       </h2>
       <p
         v-if="subtitle || $slots.description"
-        class="text-(--ui-text)"
+        class="ui-text"
       >
         <slot name="description">
           {{ subtitle }}

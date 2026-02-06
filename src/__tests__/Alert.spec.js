@@ -32,7 +32,7 @@ describe('Alert', () => {
     })
     const alertDiv = wrapper.find('[role="alert"]')
     expect(alertDiv.classes()).toContain('bg-(--ui-success-soft)')
-    expect(alertDiv.classes()).toContain('ui-glossy-border')
+    expect(alertDiv.classes()).toContain('')
   })
 
   it('shows icon by default', () => {

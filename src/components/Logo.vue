@@ -61,7 +61,7 @@ const imageClasses = computed(() =>
 
 const textClasses = computed(() => 
   cn(
-    'font-bold text-(--ui-text)',
+    'font-bold ui-text',
     {
       'text-lg': props.size === 'sm',
       'text-xl': props.size === 'md',

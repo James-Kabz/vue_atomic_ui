@@ -40,10 +40,10 @@ const trendSummary = computed(() => {
     <div class="space-y-6">
       <div class="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 class="text-2xl font-semibold text-(--ui-text)">
+          <h1 class="text-2xl font-semibold ui-text">
             Analytics
           </h1>
-          <p class="text-(--ui-text) mt-1">
+          <p class="ui-text mt-1">
             Monitor risk scoring, review throughput, and regional trends.
           </p>
         </div>
@@ -69,16 +69,16 @@ const trendSummary = computed(() => {
         >
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-3xl font-semibold text-(--ui-text)">
+              <p class="text-3xl font-semibold ui-text">
                 {{ weeklyScore[weeklyScore.length - 1] }}
               </p>
-              <p class="text-sm text-(--ui-text)">
+              <p class="text-sm ui-text">
                 Rolling average
               </p>
             </div>
             <div
               class="px-3 py-1 rounded-full text-xs font-semibold"
-              :class="trendSummary.direction === 'up' ? 'bg-(--ui-success-soft) text-(--ui-success)' : 'bg-(--ui-warning-soft) text-(--ui-warning)'"
+              :class="trendSummary.direction === 'up' ? 'ui-success-soft ui-success' : 'ui-warning-soft ui-warning'"
             >
               {{ trendSummary.direction === 'up' ? '+' : '' }}{{ trendSummary.value }}%
             </div>
@@ -89,7 +89,7 @@ const trendSummary = computed(() => {
           variant="outlined"
           padding="lg"
         >
-          <div class="space-y-2 text-sm text-(--ui-text)">
+          <div class="space-y-2 text-sm ui-text">
             <p>Date range: {{ dateFrom || 'Any' }} - {{ dateTo || 'Any' }}</p>
             <p>Source: {{ dataSource || 'All sources' }}</p>
             <p>Segments: 4 active cohorts</p>
@@ -101,19 +101,19 @@ const trendSummary = computed(() => {
           padding="lg"
         >
           <div class="space-y-3">
-            <div class="rounded-lg border border-(--ui-border) p-3">
-              <p class="text-sm font-semibold text-(--ui-text)">
+            <div class="rounded-lg border ui-border-strong p-3">
+              <p class="text-sm font-semibold ui-text">
                 Vendor renewal cycle
               </p>
-              <p class="text-xs text-(--ui-text)">
+              <p class="text-xs ui-text">
                 Due in 5 days
               </p>
             </div>
-            <div class="rounded-lg border border-(--ui-border) p-3">
-              <p class="text-sm font-semibold text-(--ui-text)">
+            <div class="rounded-lg border ui-border-strong p-3">
+              <p class="text-sm font-semibold ui-text">
                 Quarterly policy review
               </p>
-              <p class="text-xs text-(--ui-text)">
+              <p class="text-xs ui-text">
                 Due in 2 weeks
               </p>
             </div>

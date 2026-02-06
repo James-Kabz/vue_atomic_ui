@@ -23,9 +23,9 @@
     >
       <Icon
         name="ImageOff"
-        class="h-8 w-8 text-(--ui-text)"
+        class="h-8 w-8 ui-text"
       />
-      <span class="text-sm text-(--ui-text)">Failed to load image</span>
+      <span class="text-sm ui-text">Failed to load image</span>
     </div>
   </div>
 </template>
@@ -74,7 +74,7 @@ const isLoading = ref(true)
 const hasError = ref(false)
 
 const containerVariants = cva(
-  'relative overflow-hidden bg-(--ui-surface-muted)',
+  'relative overflow-hidden ui-surface-muted',
   {
     variants: {
       aspectRatio: {
@@ -108,11 +108,11 @@ const imageClasses = computed(() =>
 )
 
 const placeholderClasses = computed(() => 
-  'absolute inset-0 flex items-center justify-center bg-(--ui-surface-muted)'
+  'absolute inset-0 flex items-center justify-center ui-surface-muted'
 )
 
 const errorClasses = computed(() => 
-  'absolute inset-0 flex flex-col items-center justify-center gap-2 bg-(--ui-surface-muted)'
+  'absolute inset-0 flex flex-col items-center justify-center gap-2 ui-surface-muted'
 )
 
 const handleLoad = (event) => {

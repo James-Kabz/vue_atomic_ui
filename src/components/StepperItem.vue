@@ -3,9 +3,9 @@
     <div
       :class="[
         'flex items-center justify-center w-8 h-8 rounded-full border-2',
-        active ? 'bg-(--ui-primary) border-(--ui-primary) text-(--ui-text-inverse)' :
-        completed ? 'bg-(--ui-success) border-(--ui-success) text-(--ui-text-inverse)' :
-        'border-(--ui-border) ui-glossy-border text-(--ui-text)'
+        active ? 'ui-primary-bg border-(--ui-primary) ui-text' :
+        completed ? 'ui-success-bg border-(--ui-success) ui-text' :
+        'ui-border-strong  ui-text'
       ]"
     >
       <span>{{ step }}</span>
@@ -16,7 +16,7 @@
       </div>
       <div
         v-if="description"
-        class="text-sm text-(--ui-text)"
+        class="text-sm ui-text"
       >
         {{ description }}
       </div>

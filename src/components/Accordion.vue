@@ -161,9 +161,9 @@ const accordionVariants = cva('w-full', {
 const itemVariants = cva('transition-all duration-200', {
   variants: {
     variant: {
-      default: 'ui-glossy-surface border ui-glossy-border rounded-lg overflow-hidden shadow-sm hover:shadow-md',
-      bordered: 'ui-glossy-surface border-2 ui-glossy-border rounded-xl overflow-hidden hover:border-(--ui-primary-soft)',
-      filled: 'ui-glossy-surface border ui-glossy-border rounded-xl overflow-hidden shadow-sm',
+      default: ' border ui-border-strong rounded-lg overflow-hidden shadow-sm hover:shadow-md',
+      bordered: ' border-2  ui-border-strong rounded-xl overflow-hidden hover:border-(--ui-border)',
+      filled: ' border ui-border-strong rounded-xl overflow-hidden shadow-sm',
       flush: ''
     }
   }
@@ -174,10 +174,10 @@ const headerVariants = cva(
   {
     variants: {
       variant: {
-        default: 'hover:bg-(--ui-surface-muted)',
+        default: 'hover:bg-(--ui-surface-strong)',
         bordered: 'hover:bg-[color:color-mix(in oklab, var(--ui-primary-soft), transparent 50%)]',
         filled: 'hover:bg-[color:color-mix(in oklab, var(--ui-surface), transparent 30%)]',
-        flush: 'hover:bg-(--ui-surface-muted)'
+        flush: 'hover:bg-(--ui-surface)'
       },
       size: {
         sm: 'px-4 py-3',
@@ -188,16 +188,16 @@ const headerVariants = cva(
   }
 )
 
-const chevronVariants = cva('ml-4 shrink-0 text-(--ui-text) transition-all duration-200', {
+const chevronVariants = cva('ml-4 shrink-0 ui-text transition-all duration-200', {
   variants: {
     expanded: {
-      true: 'rotate-180 text-(--ui-primary)',
+      true: 'rotate-180 ui-primary',
       false: ''
     }
   }
 })
 
-const contentVariants = cva('overflow-hidden text-(--ui-text) bg-(--ui-surface)', {
+const contentVariants = cva('overflow-hidden ui-text ui-surface', {
   variants: {
     size: {
       sm: 'px-4 py-3 text-sm',
@@ -215,12 +215,13 @@ const itemClasses = computed(() =>
   cn(itemVariants({ variant: props.variant }))
 )
 
+
 const headerClasses = (index) =>
   cn(
     headerVariants({ variant: props.variant, size: props.size }),
-    isExpanded(index) && props.variant === 'bordered' && 'bg-[color:color-mix(in oklab, var(--ui-primary-soft), transparent 70%)] border-(--ui-primary-soft)',
-    isExpanded(index) && props.variant === 'filled' && 'bg-(--ui-surface)',
-    isExpanded(index) && props.variant === 'default' && 'bg-(--ui-surface-muted)',
+    isExpanded(index) && props.variant === 'bordered' && 'bg-[color:color-mix(in oklab, var(--ui-primary-soft), transparent 70%)] border-(--ui-border-strong)',
+    isExpanded(index) && props.variant === 'filled' && 'ui-surface',
+    isExpanded(index) && props.variant === 'default' && 'ui-bg',
     (props.disabled || props.items[index]?.disabled) && 'cursor-not-allowed opacity-50'
   )
 

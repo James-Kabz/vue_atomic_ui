@@ -23,10 +23,10 @@ const graphContainerVariants = cva(
   {
     variants: {
       variant: {
-        default: 'ui-glossy-surface border ui-glossy-border',
-        outlined: 'ui-glossy-surface border-2 ui-glossy-border',
-        elevated: 'ui-glossy-surface shadow-lg border ui-glossy-border',
-        filled: 'ui-glossy-surface border ui-glossy-border'
+        default: ' border ',
+        outlined: ' border-2 ',
+        elevated: ' shadow-lg border ',
+        filled: ' border '
       },
       padding: {
         none: '',
@@ -44,7 +44,7 @@ const graphContainerVariants = cva(
 )
 
 const headerVariants = cva(
-  'border-b border-(--ui-border) last:border-b-0',
+  'border-b ui-border-strong last:border-b-0',
   {
     variants: {
       padding: {
@@ -59,7 +59,7 @@ const headerVariants = cva(
 )
 
 const filtersVariants = cva(
-  'border-b border-(--ui-border)',
+  'border-b ui-border-strong',
   {
     variants: {
       padding: {
@@ -86,7 +86,7 @@ const contentVariants = cva('', {
 })
 
 const legendVariants = cva(
-  'border-t border-(--ui-border) bg-[color:color-mix(in oklab, var(--ui-surface-muted), transparent 50%)]',
+  'border-t ui-border-strong bg-[color:color-mix(in oklab, var(--ui-surface), transparent 50%)]',
   {
     variants: {
       padding: {
@@ -101,7 +101,7 @@ const legendVariants = cva(
 )
 
 const footerVariants = cva(
-  'border-t border-(--ui-border) bg-[color:color-mix(in oklab, var(--ui-surface-muted), transparent 50%)]',
+  'border-t ui-border-strong bg-[color:color-mix(in oklab, var(--ui-surface), transparent 50%)]',
   {
     variants: {
       padding: {
@@ -116,8 +116,8 @@ const footerVariants = cva(
 )
 
 /* --- Static classes --- */
-const titleClasses = 'text-lg font-semibold text-(--ui-text) truncate'
-const subtitleClasses = 'text-sm text-(--ui-text) mt-1'
+const titleClasses = 'text-lg font-semibold ui-text truncate'
+const subtitleClasses = 'text-sm ui-text mt-1'
 </script>
 
 <template>

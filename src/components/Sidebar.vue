@@ -309,9 +309,9 @@ defineExpose({
     <!-- Sidebar -->
     <aside
       :class="cn(
-        'fixed left-0 z-40 border-r overflow-hidden flex flex-col',
+        'fixed left-0 z-9999 ui-bg border-r ui-border-strong overflow-hidden flex flex-col',
         'transition-all duration-300 ease-in-out',
-        'ui-glossy-panel ui-glossy-border',
+        ' ',
         isMobile
           ? cn('transform h-screen', isMobileOpen ? 'translate-x-0' : '-translate-x-full')
           : 'translate-x-0 h-[calc(100vh-4rem)]'
@@ -321,13 +321,13 @@ defineExpose({
       <!-- Mobile Header with Close Button -->
       <div
         v-if="isMobile"
-        class="flex items-center justify-between p-4 border-b border-(--ui-border) shrink-0 lg:hidden"
+        class="flex ui-bg items-center justify-between p-4 border-b ui-border-strong shrink-0 lg:hidden"
       >
-        <h2 class="text-lg font-bold text-(--ui-text)">
+        <h2 class="text-lg font-bold ui-text">
           {{ header?.title }}
         </h2>
         <button
-          class="p-2 rounded-lg text-(--ui-text) hover:text-(--ui-text) hover:bg-(--ui-surface-muted) transition-colors"
+          class="p-2 rounded-lg ui-text hover:text-(--ui-text) hover:bg-(--ui-surface) transition-colors"
           aria-label="Close sidebar"
           @click="closeMobileSidebar"
         >
@@ -365,7 +365,7 @@ defineExpose({
                   'flex flex-col items-center justify-center rounded-xl transition-all duration-200 group relative py-4 px-3',
                   isItemActive(item)
                     ? 'bg-linear-to-br from-(--ui-primary-soft) to-(--ui-primary-soft) border border-(--ui-primary-soft) shadow-sm'
-                    : 'text-(--ui-text) hover:bg-(--ui-surface-muted) hover:text-(--ui-text) border border-transparent'
+                    : 'ui-text hover:bg-(--ui-surface) hover:text-(--ui-text) border border-transparent'
                 )"
                 @click="handleNavigation(item)"
               >
@@ -375,8 +375,8 @@ defineExpose({
                     'flex items-center justify-center rounded-lg transition-colors mb-2',
                     'w-12 h-12',
                     isItemActive(item)
-                      ? 'bg-linear-to-br from-(--ui-primary) to-(--ui-primary) text-(--ui-text-inverse) shadow-md'
-                      : 'text-(--ui-text) group-hover:text-(--ui-text) bg-(--ui-surface-muted) group-hover:bg-(--ui-surface-soft)'
+                      ? 'bg-linear-to-br from-(--ui-primary) to-(--ui-primary) ui-text shadow-md'
+                      : 'ui-text group-hover:text-(--ui-text) ui-surface-muted group-hover:bg-(--ui-bg)'
                   )"
                 >
                   <Icon
@@ -390,8 +390,8 @@ defineExpose({
                   :class="cn(
                     'text-xs font-medium text-center',
                     isItemActive(item) 
-                      ? 'text-(--ui-primary) font-semibold' 
-                      : 'text-(--ui-text) group-hover:text-(--ui-text)'
+                      ? 'ui-primary font-semibold' 
+                      : 'ui-text group-hover:text-(--ui-text)'
                   )"
                 >
                   {{ item.label }}
@@ -400,7 +400,7 @@ defineExpose({
                 <!-- Badge -->
                 <span
                   v-if="item.badge"
-                  class="absolute top-2 right-2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold rounded-full bg-(--ui-danger) text-(--ui-text-inverse)"
+                  class="absolute top-2 right-2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold rounded-full ui-danger-bg ui-text"
                 >
                   {{ item.badge }}
                 </span>
@@ -413,7 +413,7 @@ defineExpose({
                   'flex flex-col items-center justify-center rounded-xl transition-all duration-200 cursor-pointer group relative py-4 px-3',
                   isItemActive(item)
                     ? 'bg-linear-to-br from-(--ui-primary-soft) to-(--ui-primary-soft) border border-(--ui-primary-soft) shadow-sm'
-                    : 'text-(--ui-text) hover:bg-(--ui-surface-muted) hover:text-(--ui-text) border border-transparent'
+                    : 'ui-text hover:bg-(--ui-surface) hover:text-(--ui-text) border border-transparent'
                 )"
                 @click="handleSubmenuClick(item)"
               >
@@ -423,8 +423,8 @@ defineExpose({
                     'flex items-center justify-center rounded-lg transition-colors mb-2',
                     'w-12 h-12',
                     isItemActive(item)
-                      ? 'bg-linear-to-br from-(--ui-primary) to-(--ui-primary) text-(--ui-text-inverse) shadow-md'
-                      : 'text-(--ui-text) group-hover:text-(--ui-text) bg-(--ui-surface-muted) group-hover:bg-(--ui-surface-soft)'
+                      ? 'bg-linear-to-br from-(--ui-primary) to-(--ui-primary) ui-text shadow-md'
+                      : 'ui-text group-hover:text-(--ui-text) ui-surface-muted group-hover:bg-(--ui-bg)'
                   )"
                 >
                   <Icon
@@ -438,8 +438,8 @@ defineExpose({
                   :class="cn(
                     'text-xs font-medium text-center',
                     isItemActive(item) 
-                      ? 'text-(--ui-primary) font-semibold' 
-                      : 'text-(--ui-text) group-hover:text-(--ui-text)'
+                      ? 'ui-primary font-semibold' 
+                      : 'ui-text group-hover:text-(--ui-text)'
                   )"
                 >
                   {{ item.label }}
@@ -448,7 +448,7 @@ defineExpose({
                 <!-- Badge -->
                 <span
                   v-if="item.badge"
-                  class="absolute top-2 right-2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold rounded-full bg-(--ui-danger) text-(--ui-text-inverse)"
+                  class="absolute top-2 right-2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold rounded-full ui-danger-bg ui-text"
                 >
                   {{ item.badge }}
                 </span>
@@ -456,7 +456,7 @@ defineExpose({
                 <!-- Active indicator dot for parent items -->
                 <div
                   v-if="isItemActive(item) && hasSubItems(item)"
-                  class="absolute top-1.5 right-1.5 w-2 h-2 bg-(--ui-primary) rounded-full"
+                  class="absolute top-1.5 right-1.5 w-2 h-2 ui-primary-bg rounded-full"
                 />
               </div>
             </div>
@@ -467,14 +467,14 @@ defineExpose({
       <!-- Bottom Navigation - Management Settings -->
       <div
         v-if="showManagementSettings"
-        class="border-t border-(--ui-border) p-4 shrink-0"
+        class="border-t ui-border-strong p-4 shrink-0"
       >
         <div
           :class="cn(
             'flex flex-col items-center justify-center rounded-xl transition-all duration-200 cursor-pointer group relative py-4 px-3',
             isManagementSettingsActive
               ? 'bg-linear-to-br from-(--ui-primary-soft) to-(--ui-primary-soft) border border-(--ui-primary-soft) shadow-sm'
-              : 'text-(--ui-text) hover:bg-(--ui-surface-muted) hover:text-(--ui-text) border border-transparent'
+              : 'ui-text hover:bg-(--ui-surface) hover:text-(--ui-text) border border-transparent'
           )"
           @click="handleManagementSettingsClick"
         >
@@ -483,8 +483,8 @@ defineExpose({
               'flex items-center justify-center rounded-lg transition-colors mb-2',
               'w-12 h-12',
               isManagementSettingsActive
-                ? 'bg-linear-to-br from-(--ui-primary) to-(--ui-primary) text-(--ui-text-inverse) shadow-md'
-                : 'text-(--ui-text) group-hover:text-(--ui-text) bg-(--ui-surface-muted) group-hover:bg-(--ui-surface-soft)'
+                ? 'bg-linear-to-br from-(--ui-primary) to-(--ui-primary) ui-text shadow-md'
+                : 'ui-text group-hover:text-(--ui-text) ui-surface-muted group-hover:bg-(--ui-bg)'
             )"
           >
             <Icon
@@ -496,8 +496,8 @@ defineExpose({
             :class="cn(
               'text-xs font-medium text-center',
               isManagementSettingsActive 
-                ? 'text-(--ui-primary) font-semibold' 
-                : 'text-(--ui-text) group-hover:text-(--ui-text)'
+                ? 'ui-primary font-semibold' 
+                : 'ui-text group-hover:text-(--ui-text)'
             )"
           >
             Settings
@@ -506,7 +506,7 @@ defineExpose({
           <!-- Active indicator dot for management settings -->
           <div
             v-if="isManagementSettingsActive"
-            class="absolute top-1.5 right-1.5 w-2 h-2 bg-(--ui-primary) rounded-full"
+            class="absolute top-1.5 right-1.5 w-2 h-2 ui-primary-bg rounded-full"
           />
         </div>
       </div>
@@ -525,17 +525,17 @@ defineExpose({
         v-if="submenuOpen"
         :class="
           cn(
-            'fixed z-40 ui-glossy-popover ui-glossy-border border-r overflow-y-auto shadow-lg',
+            'fixed z-40   border-r overflow-y-auto shadow-lg',
             isMobile ? 'left-0 w-52 top-20 h-screen' : 'w-56 top-16 h-[calc(100vh-4rem)]',
           )
         "
         :style="submenuStyle"
       >
         <!-- Submenu Header -->
-        <div class="sticky top-0 ui-glossy-surface border-b ui-glossy-border z-10">
+        <div class="sticky top-0  border-b  z-10">
           <div class="flex items-center justify-between p-4">
             <button
-              class="p-2 -ml-2 rounded-lg text-(--ui-text) hover:text-(--ui-text) hover:bg-(--ui-surface-muted) transition-colors"
+              class="p-2 -ml-2 rounded-lg ui-text hover:text-(--ui-text) hover:bg-(--ui-surface) transition-colors"
               aria-label="Close submenu"
               @click="closeSubmenu"
             >
@@ -553,7 +553,7 @@ defineExpose({
                 />
               </svg>
             </button>
-            <h3 class="flex-1 text-sm font-bold text-(--ui-text) ml-2">
+            <h3 class="flex-1 text-sm font-bold ui-text ml-2">
               {{ currentSubmenu?.label }}
             </h3>
           </div>
@@ -568,10 +568,10 @@ defineExpose({
                 v-model="searchQuery"
                 type="text"
                 :placeholder="searchPlaceholder"
-                class="w-full px-3 py-2 pl-9 pr-9 text-sm border border-(--ui-border) ui-glossy-border rounded-lg focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:border-transparent transition-all bg-(--ui-surface) ui-glossy-input"
+                class="w-full px-3 py-2 pl-9 pr-9 text-sm border ui-border-strong  rounded-lg focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:border-transparent transition-all ui-surface "
                 @input="handleSearch(searchQuery)"
               >
-              <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-(--ui-text)">
+              <div class="absolute left-3 top-1/2 transform -translate-y-1/2 ui-text">
                 <Icon
                   icon="search"
                   class="w-4 h-4"
@@ -579,7 +579,7 @@ defineExpose({
               </div>
               <button
                 v-if="searchQuery"
-                class="absolute right-2 top-1/2 transform -translate-y-1/2 text-(--ui-text) hover:text-(--ui-text) transition-colors p-1"
+                class="absolute right-2 top-1/2 transform -translate-y-1/2 ui-text hover:text-(--ui-text) transition-colors p-1"
                 @click="clearSearch"
               >
                 <Icon
@@ -592,7 +592,7 @@ defineExpose({
             <!-- Search Results Count -->
             <div
               v-if="searchQuery"
-              class="mt-2 text-xs text-(--ui-text) px-1"
+              class="mt-2 text-xs ui-text px-1"
             >
               {{ filteredSubmenuItems.length }} result{{ filteredSubmenuItems.length !== 1 ? 's' : '' }} found
             </div>
@@ -608,12 +608,12 @@ defineExpose({
           >
             <Icon
               icon="search"
-              class="w-12 h-12 mx-auto text-(--ui-text) mb-3"
+              class="w-12 h-12 mx-auto ui-text mb-3"
             />
-            <p class="text-sm text-(--ui-text) mb-1">
+            <p class="text-sm ui-text mb-1">
               No results found
             </p>
-            <p class="text-xs text-(--ui-text)">
+            <p class="text-xs ui-text">
               Try a different search term
             </p>
           </div>
@@ -631,8 +631,8 @@ defineExpose({
                 cn(
                   'flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative',
                   isItemActive(subItem)
-                    ? 'bg-linear-to-br from-(--ui-primary-soft) to-(--ui-primary-soft) text-(--ui-primary) shadow-sm border border-(--ui-primary-soft)'
-                    : 'text-(--ui-text) hover:bg-(--ui-surface-muted) hover:text-(--ui-text) border border-transparent',
+                    ? 'bg-linear-to-br from-(--ui-primary-soft) to-(--ui-primary-soft) ui-primary shadow-sm border border-(--ui-primary-soft)'
+                    : 'ui-text hover:bg-(--ui-surface) hover:text-(--ui-text) border border-transparent',
                 )
               "
               @click="handleSubmenuNavigation(subItem)"
@@ -648,8 +648,8 @@ defineExpose({
                   cn(
                     'flex items-center justify-center w-8 h-8 rounded-lg mr-3 shrink-0 transition-colors ml-2',
                     isItemActive(subItem)
-                      ? 'bg-linear-to-br from-(--ui-primary) to-(--ui-primary) text-(--ui-text-inverse) shadow-md'
-                      : 'bg-(--ui-surface-muted) text-(--ui-text) group-hover:bg-(--ui-surface-soft)',
+                      ? 'bg-linear-to-br from-(--ui-primary) to-(--ui-primary) ui-text shadow-md'
+                      : 'ui-surface-muted ui-text group-hover:bg-(--ui-bg)',
                   )
                 "
               >
@@ -662,14 +662,14 @@ defineExpose({
               <span 
                 :class="cn(
                   'flex-1 truncate font-semibold',
-                  isItemActive(subItem) ? 'text-(--ui-primary)' : 'text-(--ui-text)'
+                  isItemActive(subItem) ? 'ui-primary' : 'ui-text'
                 )"
               >
                 {{ subItem.label }}
               </span>
               <span
                 v-if="subItem.badge"
-                class="ml-2 inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold rounded-full bg-(--ui-danger) text-(--ui-text-inverse)"
+                class="ml-2 inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold rounded-full ui-danger-bg ui-text"
               >
                 {{ subItem.badge }}
               </span>
@@ -692,17 +692,17 @@ defineExpose({
         v-if="managementSettingsOpen"
         :class="
           cn(
-            'fixed z-40 ui-glossy-popover ui-glossy-border border-r overflow-y-auto shadow-lg',
+            'fixed z-40   border-r overflow-y-auto shadow-lg',
             isMobile ? 'left-0 w-52 top-20 h-full' : 'w-58 h-[calc(100vh-4rem)]',
           )
         "
         :style="{ ...managementStyle, top: isMobile ? '55px' : '4rem' }"
       >
         <!-- Management Settings Header -->
-        <div class="sticky top-0 z-10 ui-glossy-surface border-b ui-glossy-border">
+        <div class="sticky top-0 z-10  border-b ">
           <div class="flex items-center justify-between p-4">
             <button
-              class="p-2 -ml-2 rounded-lg text-(--ui-text) hover:text-(--ui-text) hover:bg-(--ui-surface-muted) transition-colors"
+              class="p-2 -ml-2 rounded-lg ui-text hover:text-(--ui-text) hover:bg-(--ui-surface) transition-colors"
               aria-label="Close management settings"
               @click="closeManagementSettings"
             >
@@ -720,7 +720,7 @@ defineExpose({
                 />
               </svg>
             </button>
-            <h3 class="flex-1 text-sm font-bold text-(--ui-text) ml-2">
+            <h3 class="flex-1 text-sm font-bold ui-text ml-2">
               Management Settings
             </h3>
           </div>
@@ -736,7 +736,7 @@ defineExpose({
               <!-- Section Header -->
               <div
                 v-if="setting.type === 'section'"
-                class="px-3 py-2 text-xs font-semibold text-(--ui-text) uppercase tracking-wider"
+                class="px-3 py-2 text-xs font-semibold ui-text uppercase tracking-wider"
               >
                 {{ setting.label }}
               </div>
@@ -748,8 +748,8 @@ defineExpose({
                   cn(
                     'flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative',
                     isItemActive(setting)
-                      ? 'bg-linear-to-br from-(--ui-primary-soft) to-(--ui-primary-soft) text-(--ui-primary) shadow-sm border border-(--ui-primary-soft)'
-                      : 'text-(--ui-text) hover:bg-(--ui-surface-muted) hover:text-(--ui-text) border border-transparent',
+                      ? 'bg-linear-to-br from-(--ui-primary-soft) to-(--ui-primary-soft) ui-primary shadow-sm border border-(--ui-primary-soft)'
+                      : 'ui-text hover:bg-(--ui-surface) hover:text-(--ui-text) border border-transparent',
                   )
                 "
                 @click="handleManagementSettingsNavigation(setting)"
@@ -765,8 +765,8 @@ defineExpose({
                     cn(
                       'flex items-center justify-center w-8 h-8 rounded-lg mr-3 shrink-0 transition-colors',
                       isItemActive(setting)
-                        ? 'bg-linear-to-br from-(--ui-primary) to-(--ui-primary) text-(--ui-text-inverse) shadow-md'
-                        : 'bg-(--ui-surface-muted) text-(--ui-text) group-hover:bg-(--ui-surface-soft)',
+                        ? 'bg-linear-to-br from-(--ui-primary) to-(--ui-primary) ui-text shadow-md'
+                        : 'ui-surface-muted ui-text group-hover:bg-(--ui-bg)',
                     )
                   "
                 >
@@ -779,7 +779,7 @@ defineExpose({
                 <span
                   :class="cn(
                     'flex-1 truncate font-semibold',
-                    isItemActive(setting) ? 'text-(--ui-primary)' : 'text-(--ui-text)'
+                    isItemActive(setting) ? 'ui-primary' : 'ui-text'
                   )"
                 >
                   {{ setting.label }}

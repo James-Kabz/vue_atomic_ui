@@ -1,5 +1,5 @@
 <template>
-  <div :class="cn('p-6 pt-0 text-(--ui-text)', $attrs.class)">
+  <div :class="cn('p-6 pt-0 ui-text', $attrs.class)">
     <slot />
   </div>
 </template>

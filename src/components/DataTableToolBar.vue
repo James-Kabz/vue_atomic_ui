@@ -7,7 +7,7 @@
           v-if="selectedCount > 0"
           class="flex items-center gap-3"
         >
-          <span class="text-sm text-(--ui-text)">
+          <span class="text-sm ui-text">
             {{ selectedCount }} selected
           </span>
 
@@ -248,12 +248,12 @@ const densityOptions = [
 
 
 // CVA Variants
-const toolbarVariants = cva('flex items-center justify-between border-b ui-glossy-border', {
+const toolbarVariants = cva('flex items-center justify-between border-b ui-border-strong', {
   variants: {
     variant: {
-      default: 'ui-glossy-surface',
-      minimal: 'bg-transparent border-(--ui-border)',
-      bordered: 'ui-glossy-surface border-(--ui-border)'
+      default: 'ui-border-strong',
+      minimal: 'bg-transparent ui-border-strong',
+      bordered: ' ui-border-strong'
     },
     padding: {
       compact: 'p-2',
@@ -267,12 +267,12 @@ const toolbarVariants = cva('flex items-center justify-between border-b ui-gloss
   }
 })
 
-const bulkActionVariants = cva('px-3 py-1.5 text-sm font-medium rounded-md flex items-center gap-1 transition-colors ui-glossy-overlay', {
+const bulkActionVariants = cva('px-3 py-1.5 text-sm font-medium rounded-md flex items-center gap-1 transition-colors ', {
   variants: {
     variant: {
-      danger: 'text-(--ui-danger) bg-(--ui-danger) hover:bg-(--ui-danger-soft) border border-(--ui-danger-soft)',
-      primary: 'text-(--ui-primary) bg-(--ui-primary-soft) hover:bg-(--ui-primary-soft) border border-(--ui-primary-soft)',
-      secondary: 'text-(--ui-text) bg-(--ui-surface-soft) hover:bg-(--ui-surface-soft) border border-(--ui-border)'
+      danger: 'ui-danger ui-danger-bg hover:bg-(--ui-danger-soft) border border-(--ui-danger-soft)',
+      primary: 'ui-primary ui-primary-soft hover:bg-(--ui-primary-soft) border border-(--ui-primary-soft)',
+      secondary: 'ui-text ui-bg hover:bg-(--ui-bg) border ui-border-strong'
     }
   },
   defaultVariants: {
@@ -280,11 +280,11 @@ const bulkActionVariants = cva('px-3 py-1.5 text-sm font-medium rounded-md flex 
   }
 });
 
-const densityButtonVariants = cva('p-2 border ui-glossy-border transition-colors ui-glossy-button', {
+const densityButtonVariants = cva('p-2 border ui-border-strong  transition-colors ', {
   variants: {
     active: {
-      true: 'bg-(--ui-primary-soft) text-(--ui-primary) border-(--ui-primary-soft)',
-      false: 'bg-(--ui-surface) text-(--ui-text) hover:bg-(--ui-surface-muted)'
+      true: 'ui-primary-soft ui-primary border-(--ui-primary-soft)',
+      false: 'ui-surface ui-text hover:bg-(--ui-surface)'
     },
     position: {
       first: 'rounded-l-md border-r-0',
@@ -298,11 +298,11 @@ const densityButtonVariants = cva('p-2 border ui-glossy-border transition-colors
   }
 })
 
-const refreshButtonVariants = cva('px-3 py-2 text-sm border ui-glossy-border rounded-md flex items-center gap-2 transition-colors ui-glossy-button', {
+const refreshButtonVariants = cva('px-3 py-2 text-sm border ui-border-strong rounded-md flex items-center gap-2 transition-colors ', {
   variants: {
     state: {
-      normal: 'text-(--ui-text) hover:text-(--ui-text) hover:bg-(--ui-surface-muted)',
-      refreshing: 'text-(--ui-text) opacity-75 cursor-not-allowed'
+      normal: 'ui-text hover:text-(--ui-text) hover:bg-(--ui-surface)',
+      refreshing: 'ui-text opacity-75 cursor-not-allowed'
     }
   },
   defaultVariants: {
@@ -318,31 +318,31 @@ const toolbarClasses = computed(() =>
   }))
 )
 
-const itemCountClasses = computed(() => 'text-md text-(--ui-text)')
+const itemCountClasses = computed(() => 'text-md ui-text')
 const densityToggleClasses = computed(() => 'flex items-center')
 
 const columnToggleButtonClasses = computed(() => 
-  'flex items-center gap-2 px-3 py-2 text-sm text-(--ui-text) hover:text-(--ui-text) border ui-glossy-border rounded-md ui-glossy-button hover:brightness-105 transition-colors focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:ring-offset-1'
+  'flex items-center gap-2 px-3 py-2 text-sm ui-text hover:text-(--ui-text) border ui-border-strong rounded-md  hover:brightness-105 transition-colors focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:ring-offset-1'
 )
 
 const columnMenuClasses = computed(() => 
-  'ui-glossy-popover ui-glossy-border rounded-lg shadow-lg z-[9999] max-h-64 overflow-y-auto'
+  'ui-bg  rounded-lg shadow-lg z-[9999] max-h-64 overflow-y-auto'
 )
 
 const columnMenuHeaderClasses = computed(() => 
-  'text-xs font-medium text-(--ui-text) uppercase tracking-wider mb-2 border-b border-(--ui-border) pb-2'
+  'text-xs font-medium ui-text uppercase tracking-wider mb-2 border-b ui-border-strong pb-2'
 )
 
 const columnMenuItemClasses = computed(() => 
-  'py-1 hover:bg-(--ui-surface-muted) rounded transition-colors'
+  'py-1 hover:bg-(--ui-surface) rounded transition-colors'
 )
 
 const checkboxClasses = computed(() => 
-  'w-4 h-4 rounded border-(--ui-border) text-(--ui-primary) focus:ring-(--ui-primary) focus:ring-2 focus:ring-offset-1'
+  'w-4 h-4 rounded ui-border-strong ui-primary focus:ring-(--ui-primary) focus:ring-2 focus:ring-offset-1'
 )
 
 const labelClasses = computed(() => 
-  'text-sm text-(--ui-text) flex-1 select-none'
+  'text-sm ui-text flex-1 select-none'
 )
 
 // Click outside handler

@@ -32,7 +32,7 @@ const props = defineProps({
   ariaLabel: String
 })
 
-const groupVariants = cva('inline-flex ui-glossy-border', {
+const groupVariants = cva('inline-flex ', {
   variants: {
     orientation: {
       horizontal: 'flex-row [&>*:not(:first-child)]:ml-[-1px] [&>*:not(:first-child):not(:last-child)]:rounded-none [&>*:first-child]:rounded-r-none [&>*:last-child]:rounded-l-none',

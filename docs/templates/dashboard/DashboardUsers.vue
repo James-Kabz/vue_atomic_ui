@@ -85,7 +85,7 @@ const handleToggleColumn = ({ column, visible }) => {
 
 <template>
   <DashboardShell current-page="Users">
-    <div class="space-y-6">
+    <div class="space-y-6 ui-bg">
       <div class="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 class="text-2xl font-semibold text-(--ui-text)">
@@ -100,7 +100,7 @@ const handleToggleColumn = ({ column, visible }) => {
         </Button>
       </div>
 
-      <div class="bg-(--ui-surface) ui-glossy-surface rounded-xl shadow-sm border border-(--ui-border) ui-glossy-border overflow-hidden">
+      <div class="ui-bg rounded-xl shadow-sm overflow-hidden">
         <DataTableFilters
           v-model:search-query="searchQuery"
           v-model:date-from="dateFrom"

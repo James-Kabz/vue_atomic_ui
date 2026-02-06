@@ -8,7 +8,7 @@
     </h2>
     <p
       v-if="description"
-      class="text-sm text-(--ui-text)"
+      class="text-sm ui-text"
     >
       {{ description }}
     </p>

@@ -204,12 +204,12 @@ const indicatorClasses = computed(() => [
   'cursor-pointer select-none',
   sizeClasses.value,
   {
-    'bg-(--ui-primary) border-(--ui-primary) text-(--ui-text-inverse)': isChecked.value && !props.disabled && props.variant === 'default',
-    'bg-(--ui-danger) border-(--ui-danger) text-(--ui-text-inverse)': isChecked.value && !props.disabled && props.variant === 'error',
-    'bg-(--ui-surface-soft) border-(--ui-border) ui-glossy-border text-(--ui-text)': isChecked.value && props.disabled,
-    'bg-(--ui-surface) ui-glossy-surface border-(--ui-border) ui-glossy-border hover:border-(--ui-border-strong)': !isChecked.value && !props.disabled && props.variant === 'default',
-    'bg-(--ui-surface) ui-glossy-surface border-(--ui-danger-soft) hover:border-(--ui-danger-soft)': !isChecked.value && !props.disabled && props.variant === 'error',
-    'bg-(--ui-surface-muted) border-(--ui-border) ui-glossy-border': !isChecked.value && props.disabled,
+    'ui-primary-bg border-(--ui-primary) ui-text': isChecked.value && !props.disabled && props.variant === 'default',
+    'ui-danger-bg border-(--ui-danger) ui-text': isChecked.value && !props.disabled && props.variant === 'error',
+    'ui-bg ui-border-strong  ui-text': isChecked.value && props.disabled,
+    'ui-surface  ui-border-strong  hover:border-(--ui-border-strong)': !isChecked.value && !props.disabled && props.variant === 'default',
+    'ui-surface  border-(--ui-danger-soft) hover:border-(--ui-danger-soft)': !isChecked.value && !props.disabled && props.variant === 'error',
+    'ui-surface-muted ui-border-strong ': !isChecked.value && props.disabled,
     'cursor-not-allowed': props.disabled,
     'focus-within:ring-2 focus-within:ring-offset-2': !props.disabled,
     'focus-within:ring-(--ui-primary)': !props.disabled && props.variant === 'default',
@@ -220,13 +220,13 @@ const indicatorClasses = computed(() => [
 const labelClasses = computed(() => [
   'text-sm font-medium cursor-pointer select-none',
   {
-    'text-(--ui-text)': !props.disabled,
-    'text-(--ui-text-muted)': props.disabled
+    'ui-text': !props.disabled,
+    'ui-text-muted': props.disabled
   }
 ])
 
 const descriptionClasses = computed(() => [
-  'text-xs text-(--ui-text) mt-1'
+  'text-xs ui-text mt-1'
 ])
 
 // Handle indeterminate state

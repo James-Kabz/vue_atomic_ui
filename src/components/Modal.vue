@@ -5,7 +5,7 @@ import { cn } from '@/utils/cn'
 import Icon from './Icon.vue'
 
 const modalVariants = cva(
-  'relative w-full max-h-[100vh] overflow-y-auto border pt-12 pr-12 pb-6 pl-6 shadow-lg duration-200 sm:rounded-lg ui-glossy-popover ui-glossy-border',
+  'ui-surface ui-border relative w-full max-h-[100vh] overflow-y-auto rounded-xl shadow-lg duration-200 p-0 overflow-hidden',
   {
     variants: {
       size: {
@@ -107,13 +107,13 @@ onUnmounted(() => {
     >
       <div
         v-if="modelValue"
-        class="fixed inset-0 z-50 bg-[color:color-mix(in oklab, var(--ui-surface-strong), transparent 30%)] backdrop-blur-sm flex items-center justify-center"
+        class="fixed ui-bg inset-0 z-50 backdrop-blur-2xl flex items-center justify-center"
         :class="{ 'pointer-events-none': resizable }"
         @click="handleBackdropClick"
       >
         <div
           :class="cn(modalVariants({ size }), props.class, resizable ? 'resize overflow-hidden pointer-events-auto relative' : '')"
-          :style="resizable ? 'min-width: 400px; min-height: 200px; resize: both;' : ''"
+          :style="resizable ? 'min-width: 400px; min-height: 700px; resize: both;' : ''"
         >
           <button
             v-if="showClose"

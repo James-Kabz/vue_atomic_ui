@@ -244,7 +244,7 @@ onUnmounted(() => {
     tabindex="0"
     :style="containerStyles"
     :class="cn(
-      'ui-glossy-surface rounded-xl border ui-glossy-border overflow-hidden transition-all select-none flex flex-col relative',
+      ' rounded-xl border ui-border-strong  overflow-hidden transition-all select-none flex flex-col relative',
       'shadow-sm',
       isDragging ? 'opacity-50 scale-95' : 'hover:shadow-lg cursor-move',
       isFocused ? 'ring-2 ring-(--ui-primary) ring-offset-2' : ''
@@ -256,15 +256,15 @@ onUnmounted(() => {
   >
     <div
       v-if="showHeader"
-      class="flex bg-(--ui-bg) ui-glossy-panel items-center justify-between px-6 py-4 border-b border-(--ui-border) shrink-0"
+      class="flex bg-(--ui-surface)  items-center justify-between px-6 py-4 border-b ui-border-strong shrink-0"
     >
       <div class="flex items-center gap-3">
         <Icon
           v-if="icon"
           :icon="icon"
-          class="w-5 h-5 text-(--ui-text)"
+          class="w-5 h-5 ui-text"
         />
-        <h3 class="font-semibold text-lg text-(--ui-text)">
+        <h3 class="font-semibold text-lg ui-text">
           {{ title }}
         </h3>
       </div>
@@ -278,20 +278,20 @@ onUnmounted(() => {
         >
           <Icon
             icon="circle-info"
-            class="w-4 h-4 text-(--ui-text)"
+            class="w-4 h-4 ui-text"
           />
         </button>
 
         <button
           v-if="customizationOptions.length > 0"
           class="p-2 rounded-lg hover:bg-[color:color-mix(in oklab, var(--ui-surface), transparent 20%)] transition-all duration-200 hover:scale-105 active:scale-95"
-          :class="{ 'bg-(--ui-primary-soft)': showCustomization }"
+          :class="{ 'ui-primary-soft': showCustomization }"
           title="Customize (C)"
           @click="toggleCustomization"
         >
           <Icon
             icon="gear"
-            class="w-4 h-4 text-(--ui-text)"
+            class="w-4 h-4 ui-text"
           />
         </button>
 
@@ -305,7 +305,7 @@ onUnmounted(() => {
           <Icon
             icon="refresh"
             :class="[
-              'w-4 h-4 text-(--ui-text) transition-transform duration-500',
+              'w-4 h-4 ui-text transition-transform duration-500',
               { 'animate-spin': loading }
             ]"
           />
@@ -315,19 +315,19 @@ onUnmounted(() => {
 
     <div
       v-if="showCustomization"
-      class="absolute top-16 right-4 z-20 bg-(--ui-surface) rounded-lg shadow-xl border border-(--ui-border) p-4 min-w-[250px]"
+      class="absolute top-16 right-4 z-20 ui-surface rounded-lg shadow-xl border ui-border-strong p-4 min-w-[250px]"
     >
       <div class="flex items-center justify-between mb-3">
-        <h4 class="font-semibold text-sm text-(--ui-text)">
+        <h4 class="font-semibold text-sm ui-text">
           Customize Widget
         </h4>
         <button
-          class="p-1 rounded hover:bg-(--ui-surface-muted)"
+          class="p-1 rounded hover:bg-(--ui-surface)"
           @click="showCustomization = false"
         >
           <Icon
             icon="x"
-            class="w-4 h-4 text-(--ui-text)"
+            class="w-4 h-4 ui-text"
           />
         </button>
       </div>
@@ -340,7 +340,7 @@ onUnmounted(() => {
         >
           <label
             :for="`setting-${option.id}`"
-            class="text-sm text-(--ui-text) cursor-pointer"
+            class="text-sm ui-text cursor-pointer"
           >
             {{ option.label }}
           </label>
@@ -348,13 +348,13 @@ onUnmounted(() => {
             :id="`setting-${option.id}`"
             :class="[
               'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
-              customSettings[option.id] ? 'bg-(--ui-primary)' : 'bg-(--ui-surface-soft)'
+              customSettings[option.id] ? 'ui-primary-bg' : 'ui-bg'
             ]"
             @click="updateSetting(option.id, !customSettings[option.id])"
           >
             <span
               :class="[
-                'inline-block h-4 w-4 transform rounded-full bg-(--ui-surface) transition-transform',
+                'inline-block h-4 w-4 transform rounded-full ui-surface transition-transform',
                 customSettings[option.id] ? 'translate-x-6' : 'translate-x-1'
               ]"
             />
@@ -365,19 +365,19 @@ onUnmounted(() => {
 
     <div
       v-if="showKeyboardHelp"
-      class="absolute top-16 right-4 z-20 bg-(--ui-surface) rounded-lg shadow-xl border border-(--ui-border) p-4 min-w-[280px]"
+      class="absolute top-16 right-4 z-20 ui-surface rounded-lg shadow-xl border ui-border-strong p-4 min-w-[280px]"
     >
       <div class="flex items-center justify-between mb-3">
-        <h4 class="font-semibold text-sm text-(--ui-text)">
+        <h4 class="font-semibold text-sm ui-text">
           Keyboard Shortcuts
         </h4>
         <button
-          class="p-1 rounded hover:bg-(--ui-surface-muted)"
+          class="p-1 rounded hover:bg-(--ui-surface)"
           @click="showKeyboardHelp = false"
         >
           <Icon
             icon="x"
-            class="w-4 h-4 text-(--ui-text)"
+            class="w-4 h-4 ui-text"
           />
         </button>
       </div>
@@ -388,8 +388,8 @@ onUnmounted(() => {
           :key="shortcut.key"
           class="flex items-center justify-between text-sm"
         >
-          <span class="text-(--ui-text)">{{ shortcut.description }}</span>
-          <kbd class="px-2 py-1 bg-(--ui-surface-muted) border border-(--ui-border) rounded text-xs font-mono">
+          <span class="ui-text">{{ shortcut.description }}</span>
+          <kbd class="px-2 py-1 ui-surface-muted border ui-border-strong rounded text-xs font-mono">
             {{ shortcut.key }}
           </kbd>
         </div>
@@ -433,7 +433,7 @@ onUnmounted(() => {
 
     <div
       v-if="$slots.footer"
-      class="border-t border-(--ui-border) px-6 py-3 bg-(--ui-surface-muted) shrink-0"
+      class="border-t ui-border-strong px-6 py-3 ui-surface-muted shrink-0"
     >
       <slot name="footer" />
     </div>

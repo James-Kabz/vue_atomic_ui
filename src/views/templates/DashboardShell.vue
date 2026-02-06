@@ -33,7 +33,6 @@ const props = defineProps({
     default: () => ([
       { name: 'profile', label: 'Profile', route: '/profile', icon: 'user' },
       { name: 'settings', label: 'Settings', route: '/settings', icon: 'cog' },
-      { name: 'logout', label: 'Sign out', route: '/logout', icon: 'log-out' }
     ])
   },
   currentRoute: {
@@ -117,20 +116,20 @@ const handleMobileSidebarToggle = () => {
     />
 
     <main
-      class="transition-all ui-glossy-surface duration-300 ease-in-out pt-16 min-h-screen"
+      class="transition-all  duration-300 ease-in-out pt-16 min-h-screen"
       :style="{ marginLeft: sidebarRef?.contentMarginLeft + 'px' }"
     >
       <div class="p-6">
         <div class="mb-6 flex items-center gap-3">
           <router-link
             to="/templates/overview"
-            class="px-3 py-1.5 rounded-md text-sm font-medium border border-(--ui-border) hover:bg-(--ui-surface-muted)"
+            class="px-3 py-1.5 rounded-md text-sm font-medium border ui-border-strong hover:bg-(--ui-surface)"
           >
             Dashboard
           </router-link>
           <router-link
             to="/components"
-            class="px-3 py-1.5 rounded-md text-sm font-medium border border-(--ui-border) hover:bg-(--ui-surface-muted)"
+            class="px-3 py-1.5 rounded-md text-sm font-medium border x-strong hover:bg-(--ui-surface)"
           >
             Component Showcase
           </router-link>

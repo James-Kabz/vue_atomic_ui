@@ -17,7 +17,7 @@
       class="absolute inset-0 bg-[color:color-mix(in oklab, var(--ui-surface), transparent 40%)] backdrop-blur-sm flex items-center justify-center z-10"
       aria-hidden="true"
     >
-      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-(--ui-border-strong)" />
+      <div class="animate-spin rounded-full h-8 w-8 border-b-2 ui-border-strong" />
     </div>
 
     <!-- Header -->
@@ -90,7 +90,7 @@
       v-if="badge"
       class="absolute top-3 right-3"
     >
-      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-(--ui-surface-strong) text-(--ui-text-inverse)">
+      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium --ui-bg ui-text">
         {{ badge }}
       </span>
     </div>
@@ -203,10 +203,10 @@ const cardVariants = cva(
   {
     variants: {
       variant: {
-        default: 'ui-glossy-surface',
-        outlined: 'ui-glossy-surface',
-        elevated: 'ui-glossy-surface ui-glossy-shadow',
-        filled: 'ui-glossy-surface',
+        default: '',
+        outlined: '',
+        elevated: ' ',
+        filled: '',
         ghost: 'bg-transparent'
       },
       padding: {
@@ -234,27 +234,27 @@ const cardVariants = cva(
       {
         variant: 'default',
         bordered: true,
-        class: 'border ui-glossy-border'
+        class: 'border ui-border-strong'
       },
       {
         variant: 'outlined',
         bordered: true,
-        class: 'border-2 ui-glossy-border'
+        class: 'border-2 ui-border-strong'
       },
       {
         variant: 'elevated',
         bordered: true,
-        class: 'border ui-glossy-border'
+        class: 'border ui-border-strong'
       },
       {
         variant: 'filled',
         bordered: true,
-        class: 'border ui-glossy-border'
+        class: 'border ui-border-strong'
       },
       {
         clickable: true,
         hoverable: false,
-        class: 'hover:bg-(--ui-surface-muted)'
+        class: 'hover:bg-(--ui-surface)'
       }
     ],
     defaultVariants: {
@@ -275,7 +275,7 @@ const headerVariants = cva('', {
       xl: 'px-8 pt-8 pb-6'
     },
     hasBorder: {
-      true: 'border-b border-(--ui-border) mb-0',
+      true: 'border-b ui-border-strong mb-0',
       false: ''
     }
   }
@@ -293,7 +293,7 @@ const contentVariants = cva('', {
   }
 })
 
-const footerVariants = cva('border-t border-(--ui-border) bg-[color:color-mix(in oklab, var(--ui-surface-muted), transparent 50%)]', {
+const footerVariants = cva('border-t ui-border-strong bg-[color:color-mix(in oklab, var(--ui-surface), transparent 50%)]', {
   variants: {
     padding: {
       none: 'p-4 pt-3',
@@ -345,6 +345,6 @@ const imageContainerVariants = cva('overflow-hidden', {
 
 /* --- Static classes --- */
 const imageClasses = 'w-full h-full object-cover'
-const titleClasses = 'font-semibold text-(--ui-text) line-clamp-2'
-const subtitleClasses = 'text-sm text-(--ui-text) mt-1 line-clamp-2'
+const titleClasses = 'font-semibold ui-text line-clamp-2'
+const subtitleClasses = 'text-sm ui-text mt-1 line-clamp-2'
 </script>

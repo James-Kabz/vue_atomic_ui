@@ -1,5 +1,5 @@
 <template>
-  <div class="ui-glossy-surface border-b ui-glossy-border">
+  <div class=" border-b ">
     <!-- Main Filters Bar -->
     <div :class="filtersClasses">
       <!-- Date Range Filter -->
@@ -10,7 +10,7 @@
         <div class="relative flex-1">
           <Icon
             icon="calendar"
-            class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-(--ui-text)"
+            class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 ui-text"
           />
           <input
             v-model="dateFrom"
@@ -19,11 +19,11 @@
             placeholder="From date"
           >
         </div>
-        <span class="text-(--ui-text) text-sm">to</span>
+        <span class="ui-text text-sm">to</span>
         <div class="relative flex-1">
           <Icon
             icon="calendar"
-            class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-(--ui-text)"
+            class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 ui-text"
           />
           <input
             v-model="dateTo"
@@ -57,7 +57,7 @@
           </Select>
           <Icon
             icon="chart-bar"
-            class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-(--ui-text) pointer-events-none"
+            class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 ui-text pointer-events-none"
           />
         </div>
       </div>
@@ -86,7 +86,7 @@
           </Select>
           <Icon
             icon="database"
-            class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-(--ui-text) pointer-events-none"
+            class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 ui-text pointer-events-none"
           />
         </div>
       </div>
@@ -235,9 +235,9 @@ const selectedDataSource = ref('')
 const filtersVariants = cva('flex flex-wrap items-center gap-4', {
     variants: {
         variant: {
-            default: 'ui-glossy-surface',
+            default: '',
             minimal: 'bg-transparent',
-            bordered: 'ui-glossy-surface'
+            bordered: ''
         },
         padding: {
             compact: 'px-4 py-3',
@@ -301,39 +301,39 @@ const filtersClasses = computed(() =>
 )
 
 const dateInputClasses = computed(() =>
-    'w-full pl-10 pr-3 py-2 border border-(--ui-border) ui-glossy-border rounded-lg focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:border-transparent text-sm bg-(--ui-surface) ui-glossy-input'
+    'w-full pl-10 pr-3 py-2 border ui-border-strong  rounded-lg focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:border-transparent text-sm ui-surface '
 )
 
 const selectClasses = computed(() =>
-    'w-full pr-8 appearance-none border border-(--ui-border) ui-glossy-border rounded-lg focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:border-transparent text-sm py-2 pl-3 bg-(--ui-surface) ui-glossy-input'
+    'w-full pr-8 appearance-none border ui-border-strong  rounded-lg focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:border-transparent text-sm py-2 pl-3 ui-surface '
 )
 
 const clearFiltersButtonClasses = computed(() =>
-    'text-(--ui-text) hover:text-(--ui-text) border ui-glossy-border ui-glossy-button hover:brightness-105 px-3 py-2 rounded-lg text-sm font-medium transition-all'
+    'ui-text hover:text-(--ui-text) border   hover:brightness-105 px-3 py-2 rounded-lg text-sm font-medium transition-all'
 )
 
 const exportButtonClasses = computed(() =>
-    'text-(--ui-text-inverse) bg-(--ui-primary) hover:bg-(--ui-primary-strong) border border-(--ui-primary) ui-glossy-button-strong px-3 py-2 rounded-lg text-sm font-medium transition-all'
+    'ui-text ui-primary-bg hover:bg-(--ui-primary-strong) border border-(--ui-primary)  px-3 py-2 rounded-lg text-sm font-medium transition-all'
 )
 
 const refreshButtonClasses = computed(() =>
-    'text-(--ui-text) hover:text-(--ui-text) border ui-glossy-border ui-glossy-button hover:brightness-105 px-3 py-2 rounded-lg text-sm font-medium transition-all'
+    'ui-text hover:text-(--ui-text) border   hover:brightness-105 px-3 py-2 rounded-lg text-sm font-medium transition-all'
 )
 
 const activeFiltersContainerClasses = computed(() =>
-    'px-6 py-3 bg-(--ui-primary-soft) border-t border-(--ui-primary-soft)'
+    'px-6 py-3 ui-primary-soft border-t border-(--ui-primary-soft)'
 )
 
 const activeFiltersLabelClasses = computed(() =>
-    'text-sm font-semibold text-(--ui-primary)'
+    'text-sm font-semibold ui-primary'
 )
 
 const activeFilterTagClasses = computed(() =>
-    'flex items-center gap-1.5 bg-(--ui-surface) border border-(--ui-primary-soft) text-(--ui-primary) px-3 py-1.5 rounded-full text-sm font-medium'
+    'flex items-center gap-1.5 ui-surface border border-(--ui-primary-soft) ui-primary px-3 py-1.5 rounded-full text-sm font-medium'
 )
 
 const activeFilterRemoveButtonClasses = computed(() =>
-    'text-(--ui-primary) hover:text-(--ui-primary) ml-1 hover:bg-(--ui-primary-soft) rounded-full p-0.5 transition-all'
+    'ui-primary hover:text-(--ui-primary) ml-1 hover:bg-(--ui-primary-soft) rounded-full p-0.5 transition-all'
 )
 
 // Methods

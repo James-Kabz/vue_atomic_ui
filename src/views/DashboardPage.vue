@@ -16,8 +16,8 @@ const stats = ref([
     change: 12,
     trend: 'up',
     icon: 'users',
-    bgColor: 'bg-(--ui-primary-soft)',
-    iconColor: 'text-(--ui-primary)'
+    bgColor: 'ui-primary-soft',
+    iconColor: 'ui-primary'
   },
   {
     label: 'Revenue',
@@ -25,8 +25,8 @@ const stats = ref([
     change: 8,
     trend: 'up',
     icon: 'dollar-sign',
-    bgColor: 'bg-(--ui-success-soft)',
-    iconColor: 'text-(--ui-success)'
+    bgColor: 'ui-success-soft',
+    iconColor: 'ui-success'
   },
   {
     label: 'Orders',
@@ -34,8 +34,8 @@ const stats = ref([
     change: 3,
     trend: 'down',
     icon: 'shopping-bag',
-    bgColor: 'bg-(--ui-warning-soft)',
-    iconColor: 'text-(--ui-warning)'
+    bgColor: 'ui-warning-soft',
+    iconColor: 'ui-warning'
   },
   {
     label: 'Conversion Rate',
@@ -43,8 +43,8 @@ const stats = ref([
     change: 15,
     trend: 'up',
     icon: 'percent',
-    bgColor: 'bg-(--ui-accent-soft)',
-    iconColor: 'text-(--ui-accent)'
+    bgColor: 'ui-accent-soft',
+    iconColor: 'ui-accent'
   }
 ])
 
@@ -101,12 +101,12 @@ const refreshData = () => {
 
 const getStatusColor = (status) => {
   const colors = {
-    'Completed': 'bg-(--ui-success-soft) text-(--ui-success)',
-    'In Progress': 'bg-(--ui-warning-soft) text-(--ui-warning)',
-    'Failed': 'bg-(--ui-danger-soft) text-(--ui-danger)',
-    'Pending': 'bg-(--ui-surface-muted) text-(--ui-text)'
+    'Completed': 'ui-success-soft ui-success',
+    'In Progress': 'ui-warning-soft ui-warning',
+    'Failed': 'ui-danger-soft ui-danger',
+    'Pending': 'ui-surface-muted ui-text'
   }
-  return colors[status] || 'bg-(--ui-surface-muted) text-(--ui-text)'
+  return colors[status] || 'ui-surface-muted ui-text'
 }
 </script>
 
@@ -127,22 +127,22 @@ const getStatusColor = (status) => {
     <!-- Page Header -->
     <div class="flex items-center justify-between">
       <div>
-        <h1 class="text-2xl font-bold text-(--ui-text)">
+        <h1 class="text-2xl font-bold ui-text">
           Dashboard Demo
         </h1>
-        <p class="text-(--ui-text) mt-1">
+        <p class="ui-text mt-1">
           Welcome to the Vue UI Dashboard demo page
         </p>
       </div>
       <div class="flex items-center space-x-3">
         <button
-          class="px-4 py-2 bg-(--ui-primary) text-(--ui-text-inverse) rounded-lg hover:bg-(--ui-primary-strong) transition-colors"
+          class="px-4 py-2 ui-primary-bg ui-text rounded-lg hover:bg-(--ui-primary-strong) transition-colors"
           @click="toggleSidebar"
         >
           {{ sidebarCollapsed ? 'Expand' : 'Collapse' }} Sidebar
         </button>
         <button
-          class="px-4 py-2 bg-(--ui-surface-muted) text-(--ui-text) rounded-lg hover:bg-(--ui-surface-soft) transition-colors"
+          class="px-4 py-2 ui-surface-muted ui-text rounded-lg hover:bg-(--ui-bg) transition-colors"
           @click="refreshData"
         >
           Refresh Data
@@ -155,14 +155,14 @@ const getStatusColor = (status) => {
       <div
         v-for="stat in stats"
         :key="stat.label"
-        class="bg-(--ui-surface) p-6 rounded-lg shadow-sm border border-(--ui-border)"
+        class="ui-surface p-6 rounded-lg shadow-sm border ui-border-strong"
       >
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-sm font-medium text-(--ui-text)">
+            <p class="text-sm font-medium ui-text">
               {{ stat.label }}
             </p>
-            <p class="text-2xl font-bold text-(--ui-text) mt-1">
+            <p class="text-2xl font-bold ui-text mt-1">
               {{ stat.value }}
             </p>
           </div>
@@ -174,10 +174,10 @@ const getStatusColor = (status) => {
           </div>
         </div>
         <div class="flex items-center mt-4">
-          <span :class="`text-sm font-medium ${stat.trend === 'up' ? 'text-(--ui-success)' : 'text-(--ui-danger)'}`">
+          <span :class="`text-sm font-medium ${stat.trend === 'up' ? 'ui-success' : 'ui-danger'}`">
             {{ stat.trend === 'up' ? '+' : '-' }}{{ stat.change }}%
           </span>
-          <span class="text-sm text-(--ui-text) ml-2">from last month</span>
+          <span class="text-sm ui-text ml-2">from last month</span>
         </div>
       </div>
     </div>
@@ -185,22 +185,22 @@ const getStatusColor = (status) => {
     <!-- Charts Section -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <!-- Chart 1 -->
-      <div class="bg-(--ui-surface) p-6 rounded-lg shadow-sm border border-(--ui-border)">
+      <div class="ui-surface p-6 rounded-lg shadow-sm border ui-border-strong">
         <div class="flex items-center justify-between mb-6">
-          <h3 class="text-lg font-semibold text-(--ui-text)">
+          <h3 class="text-lg font-semibold ui-text">
             Revenue Overview
           </h3>
-          <select class="text-sm border border-(--ui-border) rounded-lg px-3 py-2">
+          <select class="text-sm border ui-border-strong rounded-lg px-3 py-2">
             <option>Last 7 days</option>
             <option>Last 30 days</option>
             <option>Last 90 days</option>
           </select>
         </div>
-        <div class="h-64 bg-(--ui-surface-muted) rounded-lg flex items-center justify-center">
+        <div class="h-64 ui-surface-muted rounded-lg flex items-center justify-center">
           <div class="text-center">
-            <div class="w-16 h-16 bg-(--ui-primary-soft) rounded-full flex items-center justify-center mx-auto mb-3">
+            <div class="w-16 h-16 ui-primary-soft rounded-full flex items-center justify-center mx-auto mb-3">
               <svg
-                class="w-8 h-8 text-(--ui-primary)"
+                class="w-8 h-8 ui-primary"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -213,7 +213,7 @@ const getStatusColor = (status) => {
                 />
               </svg>
             </div>
-            <p class="text-(--ui-text)">
+            <p class="ui-text">
               Chart component would go here
             </p>
           </div>
@@ -221,21 +221,21 @@ const getStatusColor = (status) => {
       </div>
 
       <!-- Chart 2 -->
-      <div class="bg-(--ui-surface) p-6 rounded-lg shadow-sm border border-(--ui-border)">
+      <div class="ui-surface p-6 rounded-lg shadow-sm border ui-border-strong">
         <div class="flex items-center justify-between mb-6">
-          <h3 class="text-lg font-semibold text-(--ui-text)">
+          <h3 class="text-lg font-semibold ui-text">
             User Activity
           </h3>
           <div class="flex items-center space-x-2">
-            <span class="inline-flex items-center w-3 h-3 bg-(--ui-primary) rounded-full" />
-            <span class="text-sm text-(--ui-text)">Active Users</span>
+            <span class="inline-flex items-center w-3 h-3 ui-primary-bg rounded-full" />
+            <span class="text-sm ui-text">Active Users</span>
           </div>
         </div>
-        <div class="h-64 bg-(--ui-surface-muted) rounded-lg flex items-center justify-center">
+        <div class="h-64 ui-surface-muted rounded-lg flex items-center justify-center">
           <div class="text-center">
-            <div class="w-16 h-16 bg-(--ui-success-soft) rounded-full flex items-center justify-center mx-auto mb-3">
+            <div class="w-16 h-16 ui-success-soft rounded-full flex items-center justify-center mx-auto mb-3">
               <svg
-                class="w-8 h-8 text-(--ui-success)"
+                class="w-8 h-8 ui-success"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -248,7 +248,7 @@ const getStatusColor = (status) => {
                 />
               </svg>
             </div>
-            <p class="text-(--ui-text)">
+            <p class="ui-text">
               Activity chart would go here
             </p>
           </div>
@@ -257,58 +257,58 @@ const getStatusColor = (status) => {
     </div>
 
     <!-- Recent Activity Table -->
-    <div class="bg-(--ui-surface) rounded-lg shadow-sm border border-(--ui-border)">
-      <div class="p-6 border-b border-(--ui-border)">
+    <div class="ui-surface rounded-lg shadow-sm border ui-border-strong">
+      <div class="p-6 border-b ui-border-strong">
         <div class="flex items-center justify-between">
-          <h3 class="text-lg font-semibold text-(--ui-text)">
+          <h3 class="text-lg font-semibold ui-text">
             Recent Activity
           </h3>
-          <button class="text-sm text-(--ui-primary) hover:text-(--ui-primary)">
+          <button class="text-sm ui-primary hover:text-(--ui-primary)">
             View all
           </button>
         </div>
       </div>
       <div class="overflow-x-auto">
         <table class="w-full">
-          <thead class="bg-(--ui-surface-muted)">
+          <thead class="ui-surface-muted">
             <tr>
-              <th class="px-6 py-3 text-left text-xs font-medium text-(--ui-text) uppercase tracking-wider">
+              <th class="px-6 py-3 text-left text-xs font-medium ui-text uppercase tracking-wider">
                 User
               </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-(--ui-text) uppercase tracking-wider">
+              <th class="px-6 py-3 text-left text-xs font-medium ui-text uppercase tracking-wider">
                 Action
               </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-(--ui-text) uppercase tracking-wider">
+              <th class="px-6 py-3 text-left text-xs font-medium ui-text uppercase tracking-wider">
                 Status
               </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-(--ui-text) uppercase tracking-wider">
+              <th class="px-6 py-3 text-left text-xs font-medium ui-text uppercase tracking-wider">
                 Time
               </th>
             </tr>
           </thead>
-          <tbody class="bg-(--ui-surface) divide-y divide-gray-200">
+          <tbody class="ui-surface divide-y divide-gray-200">
             <tr
               v-for="activity in recentActivities"
               :key="activity.id"
-              class="hover:bg-(--ui-surface-muted)"
+              class="hover:bg-(--ui-surface)"
             >
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex items-center">
-                  <div class="w-8 h-8 bg-(--ui-surface-soft) rounded-full flex items-center justify-center">
-                    <span class="text-xs font-medium text-(--ui-text)">{{ activity.user.initials }}</span>
+                  <div class="w-8 h-8 ui-bg rounded-full flex items-center justify-center">
+                    <span class="text-xs font-medium ui-text">{{ activity.user.initials }}</span>
                   </div>
                   <div class="ml-3">
-                    <div class="text-sm font-medium text-(--ui-text)">
+                    <div class="text-sm font-medium ui-text">
                       {{ activity.user.name }}
                     </div>
-                    <div class="text-sm text-(--ui-text)">
+                    <div class="text-sm ui-text">
                       {{ activity.user.email }}
                     </div>
                   </div>
                 </div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-(--ui-text)">
+                <div class="text-sm ui-text">
                   {{ activity.action }}
                 </div>
               </td>
@@ -317,7 +317,7 @@ const getStatusColor = (status) => {
                   {{ activity.status }}
                 </span>
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-(--ui-text)">
+              <td class="px-6 py-4 whitespace-nowrap text-sm ui-text">
                 {{ activity.time }}
               </td>
             </tr>
@@ -327,8 +327,8 @@ const getStatusColor = (status) => {
     </div>
 
     <!-- Debug Info -->
-    <div class="bg-(--ui-surface-muted) p-4 rounded-lg">
-      <h4 class="font-medium text-(--ui-text) mb-2">
+    <div class="ui-surface-muted p-4 rounded-lg">
+      <h4 class="font-medium ui-text mb-2">
         Layout Debug Info
       </h4>
       <div class="grid grid-cols-2 gap-4 text-sm">

@@ -472,14 +472,14 @@ const getFileIcon = (file) => {
 
 const getFileIconColor = (file) => {
   const ext = file.name.split('.').pop()?.toLowerCase()
-  if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp'].includes(ext)) return 'text-(--ui-accent) bg-(--ui-accent-soft)'
-  if (['pdf'].includes(ext)) return 'text-(--ui-danger) bg-(--ui-danger-soft)'
-  if (['doc', 'docx'].includes(ext)) return 'text-(--ui-primary) bg-(--ui-primary-soft)'
-  if (['xls', 'xlsx', 'csv'].includes(ext)) return 'text-(--ui-success) bg-(--ui-success-soft)'
-  if (['zip', 'rar', '7z', 'tar', 'gz'].includes(ext)) return 'text-(--ui-warning) bg-(--ui-warning-soft)'
-  if (['mp4', 'mov', 'avi', 'mkv', 'webm'].includes(ext)) return 'text-(--ui-danger) bg-(--ui-danger-soft)'
-  if (['mp3', 'wav', 'ogg', 'flac'].includes(ext)) return 'text-(--ui-warning) bg-(--ui-warning-soft)'
-  return 'text-(--ui-text) bg-(--ui-surface-muted)'
+  if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp'].includes(ext)) return 'ui-accent ui-accent-soft'
+  if (['pdf'].includes(ext)) return 'ui-danger ui-danger-soft'
+  if (['doc', 'docx'].includes(ext)) return 'ui-primary ui-primary-soft'
+  if (['xls', 'xlsx', 'csv'].includes(ext)) return 'ui-success ui-success-soft'
+  if (['zip', 'rar', '7z', 'tar', 'gz'].includes(ext)) return 'ui-warning ui-warning-soft'
+  if (['mp4', 'mov', 'avi', 'mkv', 'webm'].includes(ext)) return 'ui-danger ui-danger-soft'
+  if (['mp3', 'wav', 'ogg', 'flac'].includes(ext)) return 'ui-warning ui-warning-soft'
+  return 'ui-text ui-surface-muted'
 }
 
 const handleSubmit = async () => {
@@ -545,12 +545,12 @@ const handleCancel = () => {
       v-if="title"
       class="mb-6"
     >
-      <h2 class="text-xl font-semibold text-(--ui-text)">
+      <h2 class="text-xl font-semibold ui-text">
         {{ title }}
       </h2>
       <p
         v-if="description"
-        class="text-sm text-(--ui-text) mt-1"
+        class="text-sm ui-text mt-1"
       >
         {{ description }}
       </p>
@@ -590,7 +590,7 @@ const handleCancel = () => {
               :placeholder="field.placeholder"
               :disabled="isLoading || field.disabled"
               :readonly="field.disabled"
-              :class="hasError ? 'border-(--ui-danger)' : 'border-(--ui-border) ui-glossy-border'"
+              :class="hasError ? 'border-(--ui-danger)' : 'ui-border-strong '"
               :aria-describedby="ariaDescribedBy"
             />
 
@@ -603,8 +603,8 @@ const handleCancel = () => {
               :disabled="isLoading || field.disabled"
               :rows="field.rows || 3"
               :class="[
-                'w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-(--ui-primary) bg-(--ui-surface) ui-glossy-surface ui-glossy-input ui-glossy-border border',
-                hasError ? 'border-(--ui-danger)' : 'border-(--ui-border) ui-glossy-border',
+                'w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-(--ui-primary) ui-surface    border',
+                hasError ? 'border-(--ui-danger)' : 'ui-border-strong ',
               ]"
               :aria-describedby="ariaDescribedBy"
             />
@@ -645,12 +645,12 @@ const handleCancel = () => {
                 v-model="formData[field.name]"
                 type="checkbox"
                 :disabled="isLoading || field.disabled"
-                class="h-4 w-4 text-(--ui-primary) focus:ring-(--ui-primary) border-(--ui-border) ui-glossy-border rounded"
+                class="h-4 w-4 ui-primary focus:ring-(--ui-primary) ui-border-strong  rounded"
                 :aria-describedby="ariaDescribedBy"
               />
               <Label
                 :for="fieldId"
-                class="ml-2 text-sm text-(--ui-text)"
+                class="ml-2 text-sm ui-text"
               >
                 {{ field.checkboxLabel || field.label }}
               </Label>
@@ -669,21 +669,21 @@ const handleCancel = () => {
                 :disabled="isLoading || field.disabled"
                 :class="[
                   'relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-(--ui-primary) focus:ring-offset-2',
-                  formData[field.name] ? 'bg-(--ui-primary)' : 'bg-(--ui-surface-soft)',
+                  formData[field.name] ? 'ui-primary-bg' : 'ui-bg',
                   (isLoading || field.disabled) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
                 ]"
                 @click="formData[field.name] = !formData[field.name]"
               >
                 <span
                   :class="[
-                    'inline-block h-4 w-4 transform rounded-full bg-(--ui-surface) ui-glossy-surface transition-transform',
+                    'inline-block h-4 w-4 transform rounded-full ui-surface  transition-transform',
                     formData[field.name] ? 'translate-x-6' : 'translate-x-1'
                   ]"
                 />
               </button>
               <Label
                 :for="fieldId"
-                class="ml-3 text-sm text-(--ui-text)"
+                class="ml-3 text-sm ui-text"
               >
                 {{ field.checkboxLabel || field.label }}
               </Label>
@@ -705,12 +705,12 @@ const handleCancel = () => {
                   type="radio"
                   :value="option.value"
                   :disabled="isLoading || field.disabled"
-                  class="h-4 w-4 text-(--ui-primary) focus:ring-(--ui-primary) border-(--ui-border) ui-glossy-border"
+                  class="h-4 w-4 ui-primary focus:ring-(--ui-primary) ui-border-strong "
                   :aria-describedby="ariaDescribedBy"
                 />
                 <Label
                   :for="`${fieldId}-${option.value}`"
-                  class="ml-2 text-sm text-(--ui-text)"
+                  class="ml-2 text-sm ui-text"
                 >
                   {{ option.label }}
                 </Label>
@@ -728,15 +728,15 @@ const handleCancel = () => {
                 :accept="field.accept"
                 :disabled="isLoading || field.disabled"
                 :class="[
-                  'w-full text-sm text-(--ui-text) file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-(--ui-primary-soft) file:text-(--ui-primary) hover:file:bg-(--ui-primary-soft)',
-                  hasError ? 'border-(--ui-danger)' : 'border-(--ui-border) ui-glossy-border'
+                  'w-full text-sm ui-text file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-(--ui-primary-soft) file:text-(--ui-primary) hover:file:bg-(--ui-primary-soft)',
+                  hasError ? 'border-(--ui-danger)' : 'ui-border-strong '
                 ]"
                 :aria-describedby="ariaDescribedBy"
                 @change="handleFileChange(field, $event)"
               />
               <p
                 v-if="field.helpText"
-                class="text-xs text-(--ui-text)"
+                class="text-xs ui-text"
               >
                 {{ field.helpText }}
               </p>
@@ -752,10 +752,10 @@ const handleCancel = () => {
                 :class="[
                   'border-2 border-dashed rounded-xl cursor-pointer transition-all duration-200',
                   dragOverFields[field.name]
-                    ? 'border-(--ui-primary) bg-(--ui-primary-soft) ring-2 ring-(--ui-primary)'
+                    ? 'border-(--ui-primary) ui-primary-soft ring-2 ring-(--ui-primary)'
                     : hasError
                       ? 'border-(--ui-danger-soft) hover:border-(--ui-danger-soft) bg-[color:color-mix(in oklab, var(--ui-danger-soft), transparent 50%)]'
-                      : 'border-(--ui-border) ui-glossy-border hover:border-(--ui-border-strong) hover:bg-(--ui-surface-muted)',
+                      : 'ui-border  hover:border-(--ui-border-strong) hover:bg-(--ui-surface)',
                   (isLoading || field.disabled) ? 'opacity-50 cursor-not-allowed' : ''
                 ]"
                 @drop="handleMultiFileDrop(field, $event)"
@@ -775,9 +775,9 @@ const handleCancel = () => {
                   @change="handleMultiFileSelect(field, $event)"
                 >
                 <div class="flex items-center justify-center px-4 py-4">
-                  <div class="bg-(--ui-surface-muted) rounded-full p-2.5 mr-3">
+                  <div class="ui-surface-muted rounded-full p-2.5 mr-3">
                     <svg
-                      class="h-6 w-6 text-(--ui-text)"
+                      class="h-6 w-6 ui-text"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
@@ -792,10 +792,10 @@ const handleCancel = () => {
                     </svg>
                   </div>
                   <div class="flex flex-col">
-                    <p class="text-sm font-medium text-(--ui-text)">
-                      <span class="text-(--ui-primary) font-semibold">Click to upload</span> or drag and drop
+                    <p class="text-sm font-medium ui-text">
+                      <span class="ui-primary font-semibold">Click to upload</span> or drag and drop
                     </p>
-                    <p class="text-xs text-(--ui-text)">
+                    <p class="text-xs ui-text">
                       {{ field.maxSize ? `Up to ${formatFileSize(field.maxSize)}` : 'No size limit' }}
                       <span
                         v-if="field.accept"
@@ -813,7 +813,7 @@ const handleCancel = () => {
               <!-- Help text -->
               <p
                 v-if="field.helpText"
-                class="text-xs text-(--ui-text)"
+                class="text-xs ui-text"
               >
                 {{ field.helpText }}
               </p>
@@ -826,12 +826,12 @@ const handleCancel = () => {
                 <div
                   v-for="fileItem in uploadingFilesMap[field.name]"
                   :key="fileItem.id"
-                  class="flex items-center justify-between p-3 bg-(--ui-surface) ui-glossy-surface border border-(--ui-border) ui-glossy-border rounded-lg"
+                  class="flex items-center justify-between p-3 ui-surface  border ui-border-strong  rounded-lg"
                 >
                   <div class="flex items-center space-x-3 flex-1 min-w-0">
                     <div class="relative h-10 w-10 shrink-0">
                       <svg
-                        class="h-10 w-10 text-(--ui-text)"
+                        class="h-10 w-10 ui-text"
                         viewBox="0 0 36 36"
                       >
                         <circle
@@ -854,18 +854,18 @@ const handleCancel = () => {
                           transform="rotate(-90 18 18)"
                         />
                       </svg>
-                      <span class="absolute inset-0 flex items-center justify-center text-xs font-medium text-(--ui-text)">
+                      <span class="absolute inset-0 flex items-center justify-center text-xs font-medium ui-text">
                         {{ Math.round(fileItem.progress) }}%
                       </span>
                     </div>
                     <div class="flex flex-col min-w-0">
-                      <span class="text-sm font-medium text-(--ui-text) truncate">{{ fileItem.file.name }}</span>
-                      <span class="text-xs text-(--ui-text)">Uploading...</span>
+                      <span class="text-sm font-medium ui-text truncate">{{ fileItem.file.name }}</span>
+                      <span class="text-xs ui-text">Uploading...</span>
                     </div>
                   </div>
                   <button
                     type="button"
-                    class="text-(--ui-text) hover:text-(--ui-danger) hover:bg-(--ui-danger-soft) rounded-full p-1 transition-colors ml-2"
+                    class="ui-text hover:text-(--ui-danger) hover:bg-(--ui-danger-soft) rounded-full p-1 transition-colors ml-2"
                     @click.stop="cancelUpload(field, fileItem.id)"
                   >
                     <svg
@@ -894,7 +894,7 @@ const handleCancel = () => {
                 <div
                   v-for="(file, index) in formData[field.name]"
                   :key="`uploaded-${index}`"
-                  class="flex items-center justify-between p-3 bg-(--ui-surface) ui-glossy-surface border border-(--ui-border) ui-glossy-border rounded-lg hover:shadow-sm transition-shadow"
+                  class="flex items-center justify-between p-3 ui-surface  border ui-border-strong  rounded-lg hover:shadow-sm transition-shadow"
                 >
                   <div class="flex items-center space-x-3 flex-1 min-w-0">
                     <div
@@ -926,13 +926,13 @@ const handleCancel = () => {
                       </svg>
                     </div>
                     <div class="flex flex-col min-w-0">
-                      <span class="text-sm font-medium text-(--ui-text) truncate">{{ file.name }}</span>
-                      <span class="text-xs text-(--ui-text)">{{ formatFileSize(file.size) }}</span>
+                      <span class="text-sm font-medium ui-text truncate">{{ file.name }}</span>
+                      <span class="text-xs ui-text">{{ formatFileSize(file.size) }}</span>
                     </div>
                   </div>
                   <button
                     type="button"
-                    class="text-(--ui-text) hover:text-(--ui-danger) hover:bg-(--ui-danger-soft) rounded-full p-1.5 transition-colors ml-2"
+                    class="ui-text hover:text-(--ui-danger) hover:bg-(--ui-danger-soft) rounded-full p-1.5 transition-colors ml-2"
                     :disabled="isLoading || field.disabled"
                     @click.stop="removeMultiFile(field, index)"
                   >
@@ -957,7 +957,7 @@ const handleCancel = () => {
               <!-- File count summary -->
               <p
                 v-if="formData[field.name]?.length > 0"
-                class="text-xs text-(--ui-primary) font-medium"
+                class="text-xs ui-primary font-medium"
               >
                 {{ formData[field.name].length }} file(s) uploaded
                 <span v-if="field.maxFiles"> of {{ field.maxFiles }} max</span>
@@ -992,7 +992,7 @@ const handleCancel = () => {
                   class="flex-1"
                   :aria-describedby="ariaDescribedBy"
                 />
-                <span class="text-sm font-medium text-(--ui-text) min-w-[3rem] text-right">
+                <span class="text-sm font-medium ui-text min-w-[3rem] text-right">
                   {{ formData[field.name] }}
                 </span>
               </div>
@@ -1022,7 +1022,7 @@ const handleCancel = () => {
               v-model="formData[field.name]"
               type="time"
               :disabled="isLoading || field.disabled"
-              :class="hasError ? 'border-(--ui-danger)' : 'border-(--ui-border) ui-glossy-border'"
+              :class="hasError ? 'border-(--ui-danger)' : 'ui-border-strong '"
               :aria-describedby="ariaDescribedBy"
             />
 
@@ -1033,7 +1033,7 @@ const handleCancel = () => {
               v-model="formData[field.name]"
               type="datetime-local"
               :disabled="isLoading || field.disabled"
-              :class="hasError ? 'border-(--ui-danger)' : 'border-(--ui-border) ui-glossy-border'"
+              :class="hasError ? 'border-(--ui-danger)' : 'ui-border-strong '"
               :aria-describedby="ariaDescribedBy"
             />
 
@@ -1044,7 +1044,7 @@ const handleCancel = () => {
               v-model="formData[field.name]"
               type="month"
               :disabled="isLoading || field.disabled"
-              :class="hasError ? 'border-(--ui-danger)' : 'border-(--ui-border) ui-glossy-border'"
+              :class="hasError ? 'border-(--ui-danger)' : 'ui-border-strong '"
               :aria-describedby="ariaDescribedBy"
             />
 
@@ -1055,7 +1055,7 @@ const handleCancel = () => {
               v-model="formData[field.name]"
               type="week"
               :disabled="isLoading || field.disabled"
-              :class="hasError ? 'border-(--ui-danger)' : 'border-(--ui-border) ui-glossy-border'"
+              :class="hasError ? 'border-(--ui-danger)' : 'ui-border-strong '"
               :aria-describedby="ariaDescribedBy"
             />
           </template>

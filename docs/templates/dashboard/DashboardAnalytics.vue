@@ -103,7 +103,7 @@ const trendSummary = computed(() => {
           padding="lg"
         >
           <div class="space-y-3">
-            <div class="rounded-lg border border-(--ui-border) ui-glossy-border p-3">
+            <div class="rounded-lg border border-(--ui-border-strong) ui-glossy-border p-3">
               <p class="text-sm font-semibold text-(--ui-text)">
                 Vendor renewal cycle
               </p>
@@ -111,7 +111,7 @@ const trendSummary = computed(() => {
                 Due in 5 days
               </p>
             </div>
-            <div class="rounded-lg border border-(--ui-border) ui-glossy-border p-3">
+            <div class="rounded-lg border border-(--ui-border-strong) ui-glossy-border p-3">
               <p class="text-sm font-semibold text-(--ui-text)">
                 Quarterly policy review
               </p>

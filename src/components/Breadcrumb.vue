@@ -16,8 +16,8 @@
           :class="[
             'text-sm font-medium transition-colors hover:text-(--ui-text)',
             index === items.length - 1 
-              ? 'text-(--ui-text)' 
-              : 'text-(--ui-text) hover:text-(--ui-text)'
+              ? 'ui-text' 
+              : 'ui-text hover:text-(--ui-text)'
           ]"
           :aria-current="index === items.length - 1 ? 'page' : undefined"
         >

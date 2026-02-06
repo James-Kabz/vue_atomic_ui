@@ -227,7 +227,7 @@ defineExpose({
 </script>
 
 <template>
-  <div class="min-h-screen bg-(--ui-surface-muted)">
+  <div class="min-h-screen ui-surface-muted">
     <!-- Sidebar -->
     <Sidebar
       ref="sidebarRef"

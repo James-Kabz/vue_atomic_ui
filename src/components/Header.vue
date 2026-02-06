@@ -165,19 +165,19 @@ const checkMobile = () => {
 
 const getNotificationTypeClass = (notification) => {
   if (notification.title.includes('Overdue')) {
-    return 'bg-(--ui-danger-soft) text-(--ui-danger)'
+    return 'ui-danger-soft ui-danger'
   }
 
   if (notification.title.includes('Due in 0')) {
-    return 'bg-(--ui-warning-soft) text-(--ui-warning)'
+    return 'ui-warning-soft ui-warning'
   }
 
   const classes = {
-    'due_date_reminder': 'bg-(--ui-warning-soft) text-(--ui-warning)',
-    'info': 'bg-(--ui-primary-soft) text-(--ui-primary)',
-    'success': 'bg-(--ui-success-soft) text-(--ui-success)',
-    'warning': 'bg-(--ui-warning-soft) text-(--ui-warning)',
-    'error': 'bg-(--ui-danger-soft) text-(--ui-danger)'
+    'due_date_reminder': 'ui-warning-soft ui-warning',
+    'info': 'ui-primary-soft ui-primary',
+    'success': 'ui-success-soft ui-success',
+    'warning': 'ui-warning-soft ui-warning',
+    'error': 'ui-danger-soft ui-danger'
   }
 
   return classes[notification.type] || classes.info
@@ -246,7 +246,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
 <template>
   <header
     :class="cn(
-      'fixed top-0 z-50 ui-glossy-panel border-b ui-glossy-border transition-all duration-300 ease-in-out w-full'
+      'fixed top-0 z-50 ui-bg border-b ui-border-strong  transition-all duration-300 ease-in-out w-full'
     )"
     :style="{ left: '0' }"
   >
@@ -256,7 +256,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
         <!-- Mobile Sidebar Toggle - Moved to far left -->
         <button
           v-if="isMobile"
-          class="p-2 text-(--ui-text) hover:text-(--ui-text) rounded-lg hover:bg-(--ui-surface-muted) transition-colors shrink-0"
+          class="p-2 ui-text hover:text-(--ui-text) rounded-lg hover:bg-(--ui-surface) transition-colors shrink-0"
           @click="emit('toggle-mobile-sidebar')"
         >
           <Icon
@@ -280,7 +280,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
         <!-- Divider -->
         <div
           v-if="companyLogo && showOrganisationInfo && currentOrganisation"
-          class="h-6 sm:h-8 w-px bg-(--ui-surface-soft) shrink-0 hidden sm:block"
+          class="h-6 sm:h-8 w-px ui-bg shrink-0 hidden sm:block"
         />
 
         <!-- Organisation Info Card - Simplified for mobile -->
@@ -297,10 +297,10 @@ watch(searchQuery, (newValue) => emit('search', newValue))
               <img
                 :src="organisationLogo"
                 :alt="`${currentOrganisation.organisation_name} logo`"
-                class="w-6 h-6 sm:w-8 sm:h-8 object-contain rounded-md bg-(--ui-surface) p-0.5 border border-(--ui-primary-soft) shadow-sm"
+                class="w-6 h-6 sm:w-8 sm:h-8 object-contain rounded-md ui-bg p-0.5 border border-(--ui-primary-soft) shadow-sm"
               >
               <!-- Online indicator - smaller -->
-              <div class="absolute -bottom-0.5 -right-0.5 w-2 h-2 bg-(--ui-success) border border-(--ui-surface) rounded-full" />
+              <div class="absolute -bottom-0.5 -right-0.5 w-2 h-2 ui-success-bg border ui-border-surface rounded-full" />
             </div>
           </div>
 
@@ -312,18 +312,18 @@ watch(searchQuery, (newValue) => emit('search', newValue))
           >
             <div class="min-w-0 flex-1">
               <p
-                class="text-xs font-bold text-(--ui-primary) truncate max-w-[100px] sm:max-w-40 group-hover:text-(--ui-primary) leading-tight"
+                class="text-xs font-bold ui-primary truncate max-w-[100px] sm:max-w-40 group-hover:text-(--ui-primary) leading-tight"
               >
                 {{ currentOrganisation.organisation_name }}
               </p>
               <div class="flex items-center gap-1 mt-0.5">
                 <Icon
                   icon="user"
-                  class="w-2.5 h-2.5 text-(--ui-primary) shrink-0"
+                  class="w-2.5 h-2.5 ui-primary shrink-0"
                 />
                 <p
                   v-if="formattedActiveRoles"
-                  class="text-[10px] sm:text-xs text-(--ui-primary) truncate font-medium leading-tight"
+                  class="text-[10px] sm:text-xs ui-primary truncate font-medium leading-tight"
                 >
                   {{ formattedActiveRoles }}
                 </p>
@@ -331,7 +331,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
             </div>
             <Icon
               icon="chevron-down"
-              class="w-3 h-3 text-(--ui-primary) shrink-0 group-hover:text-(--ui-primary) transition-transform"
+              class="w-3 h-3 ui-primary shrink-0 group-hover:text-(--ui-primary) transition-transform"
               :class="{ 'rotate-180': showOrganisationDropdown }"
             />
           </button>
@@ -341,17 +341,17 @@ watch(searchQuery, (newValue) => emit('search', newValue))
             v-else
             class="min-w-0 flex-1"
           >
-            <p class="text-xs font-bold text-(--ui-primary) truncate max-w-[100px] sm:max-w-40 leading-tight">
+            <p class="text-xs font-bold ui-primary truncate max-w-[100px] sm:max-w-40 leading-tight">
               {{ currentOrganisation.organisation_name }}
             </p>
             <div class="flex items-center gap-1 mt-0.5">
               <Icon
                 icon="user"
-                class="w-2.5 h-2.5 text-(--ui-primary) shrink-0"
+                class="w-2.5 h-2.5 ui-primary shrink-0"
               />
               <p
                 v-if="formattedActiveRoles"
-                class="text-[10px] sm:text-xs text-(--ui-primary) truncate font-medium leading-tight"
+                class="text-[10px] sm:text-xs ui-primary truncate font-medium leading-tight"
               >
                 {{ formattedActiveRoles }}
               </p>
@@ -369,17 +369,17 @@ watch(searchQuery, (newValue) => emit('search', newValue))
           >
             <div
               v-if="showOrganisationDropdown"
-              class="absolute top-full left-0 right-0 sm:left-0 sm:right-auto mt-2 w-full sm:w-80 ui-glossy-popover ui-glossy-border rounded-xl shadow-xl z-50 max-h-96 overflow-hidden"
+              class="absolute top-full left-0 right-0 sm:left-0 sm:right-auto mt-2 w-full sm:w-80   rounded-xl shadow-xl z-50 max-h-96 overflow-hidden"
             >
-              <div class="p-3 sm:p-4 border-b border-(--ui-border) bg-linear-to-r from-(--ui-primary-soft) to-(--ui-accent-soft)">
-                <h3 class="text-sm font-bold text-(--ui-text) flex items-center gap-2">
+              <div class="p-3 sm:p-4 border-b ui-border-strong bg-linear-to-r from-(--ui-primary-soft) to-(--ui-accent-soft)">
+                <h3 class="text-sm font-bold ui-text flex items-center gap-2">
                   <Icon
                     icon="list"
-                    class="w-4 h-4 text-(--ui-primary)"
+                    class="w-4 h-4 ui-primary"
                   />
                   {{ organisationSwitcherTitle }}
                 </h3>
-                <p class="text-xs text-(--ui-text) mt-1">
+                <p class="text-xs ui-text mt-1">
                   {{ organisationSwitcherDescription }}
                 </p>
               </div>
@@ -390,8 +390,8 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                   :class="cn(
                     'flex items-center w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm transition-all group',
                     org.org_id === currentOrganisation?.org_id
-                      ? 'bg-linear-to-r from-(--ui-primary-soft) to-(--ui-accent-soft) text-(--ui-primary) border-l-4 border-(--ui-primary)'
-                      : 'text-(--ui-text) hover:bg-(--ui-surface-muted) border-l-4 border-transparent'
+                      ? 'bg-linear-to-r from-(--ui-primary-soft) to-(--ui-accent-soft) ui-primary border-l-4 border-(--ui-primary)'
+                      : 'ui-text hover:bg-(--ui-surface) border-l-4 border-transparent'
                   )"
                   @click="handleOrganisationChange(org)"
                 >
@@ -402,16 +402,16 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                     <img
                       :src="getOrgLogoUrl(org)"
                       :alt="`${org.organisation_name} logo`"
-                      class="w-7 h-7 sm:w-8 sm:h-8 object-contain rounded-lg bg-(--ui-surface) p-0.5 sm:p-1 border border-(--ui-border) group-hover:border-(--ui-primary-soft) transition-colors"
+                      class="w-7 h-7 sm:w-8 sm:h-8 object-contain rounded-lg ui-surface p-0.5 sm:p-1 border ui-border-strong group-hover:border-(--ui-primary-soft) transition-colors"
                     >
                   </div>
                   <div
                     v-else
-                    class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-linear-to-br from-(--ui-surface-soft) to-(--ui-surface-soft) flex items-center justify-center mr-2 sm:mr-3 shrink-0"
+                    class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-linear-to-br from-(--ui-bg) to-(--ui-bg) flex items-center justify-center mr-2 sm:mr-3 shrink-0"
                   >
                     <Icon
                       icon="building"
-                      class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-(--ui-text)"
+                      class="w-3.5 h-3.5 sm:w-4 sm:h-4 ui-text"
                     />
                   </div>
                   <div class="flex-1 text-left min-w-0">
@@ -420,7 +420,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                     </p>
                     <p
                       v-if="org.type"
-                      class="text-xs text-(--ui-text) truncate"
+                      class="text-xs ui-text truncate"
                     >
                       {{ org.type.name }}
                     </p>
@@ -428,7 +428,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                   <Icon
                     v-if="org.org_id === currentOrganisation?.org_id"
                     icon="check-circle"
-                    class="w-4 h-4 sm:w-5 sm:h-5 text-(--ui-primary) shrink-0 ml-2"
+                    class="w-4 h-4 sm:w-5 sm:h-5 ui-primary shrink-0 ml-2"
                   />
                 </button>
               </div>
@@ -441,17 +441,17 @@ watch(searchQuery, (newValue) => emit('search', newValue))
           v-if="showBreadcrumb"
           class="hidden lg:flex items-center space-x-2 text-sm truncate"
         >
-          <span class="text-(--ui-text) truncate">{{ currentSection }}</span>
+          <span class="ui-text truncate">{{ currentSection }}</span>
           <Icon
             icon="chevron-right"
-            class="w-4 h-4 text-(--ui-text) shrink-0"
+            class="w-4 h-4 ui-text shrink-0"
           />
-          <span class="text-(--ui-text) font-semibold truncate">{{ currentPage }}</span>
+          <span class="ui-text font-semibold truncate">{{ currentPage }}</span>
         </nav>
       </div>
 
       <!-- Right side - Actions -->
-      <div class="flex items-center space-x-1 sm:space-x-2 md:space-x-3">
+      <div class="flex ui-bg items-center space-x-1 sm:space-x-2 md:space-x-3">
         <!-- Search - Mobile optimized -->
         <div
           v-if="showSearch && (!isMobile || showMobileSearch)"
@@ -460,18 +460,18 @@ watch(searchQuery, (newValue) => emit('search', newValue))
           <div class="absolute inset-y-0 left-0 pl-2 sm:pl-3 flex items-center pointer-events-none">
             <Icon
               icon="search"
-              class="w-4 h-4 text-(--ui-text)"
+              class="w-4 h-4 ui-text"
             />
           </div>
           <input
             v-model="searchQuery"
             type="text"
             :placeholder="searchPlaceholder"
-            class="pl-8 sm:pl-10 pr-8 sm:pr-4 py-1.5 sm:py-2 w-36 sm:w-48 md:w-64 text-xs sm:text-sm border border-(--ui-border) ui-glossy-border rounded-lg focus:ring-2 focus:ring-(--ui-primary) focus:border-(--ui-primary) outline-none transition-all bg-(--ui-surface) ui-glossy-input"
+            class="ui-bg pl-8 sm:pl-10 pr-8 sm:pr-4 py-1.5 sm:py-2 w-36 sm:w-48 md:w-64 text-xs sm:text-sm border ui-border-strong  rounded-lg focus:ring-2 focus:ring-(--ui-primary) focus:border-(--ui-primary) outline-none transition-all ui-surface "
           >
           <button
             v-if="isMobile"
-            class="absolute right-2 top-1/2 -translate-y-1/2 text-(--ui-text) hover:text-(--ui-text) p-1"
+            class="absolute right-2 top-1/2 -translate-y-1/2 ui-text hover:text-(--ui-text) p-1"
             @click="showMobileSearch = false"
           >
             <Icon
@@ -482,7 +482,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
         </div>
         <button
           v-else-if="showSearch && isMobile"
-          class="p-2 text-(--ui-text) hover:text-(--ui-text) rounded-lg hover:bg-(--ui-surface-muted) transition-colors"
+          class="p-2 ui-text hover:text-(--ui-text) rounded-lg hover:bg-(--ui-surface) transition-colors"
           @click="showMobileSearch = true"
         >
           <Icon
@@ -494,7 +494,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
         <!-- Notifications -->
         <button
           v-if="showNotifications"
-          class="relative p-1.5 sm:p-2 text-(--ui-text) hover:text-(--ui-text) rounded-lg hover:bg-(--ui-surface-muted) transition-colors"
+          class="relative p-1.5 sm:p-2 ui-text hover:text-(--ui-text) rounded-lg hover:bg-(--ui-surface) transition-colors"
           @click="toggleNotifications"
         >
           <Icon
@@ -503,7 +503,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
           />
           <span
             v-if="notificationCount > 0"
-            class="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 min-w-4 h-4 sm:min-w-[18px] sm:h-[18px] bg-(--ui-danger) text-(--ui-text-inverse) text-[10px] sm:text-xs rounded-full flex items-center justify-center font-semibold px-0.5 sm:px-1"
+            class="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 min-w-4 h-4 sm:min-w-[18px] sm:h-[18px] ui-danger-bg ui-text text-[10px] sm:text-xs rounded-full flex items-center justify-center font-semibold px-0.5 sm:px-1"
           >
             {{ notificationCount > 9 ? '9+' : notificationCount }}
           </span>
@@ -520,15 +520,15 @@ watch(searchQuery, (newValue) => emit('search', newValue))
         >
           <div
             v-if="showNotificationsDropdown"
-            class="absolute right-2 sm:right-4 md:right-6 top-14 sm:top-16 mt-2 w-[calc(100vw-1rem)] max-w-sm sm:w-80 md:w-96 ui-glossy-popover ui-glossy-border rounded-xl shadow-xl z-50"
+            class="ui-bg absolute right-2 sm:right-4 md:right-6 top-14 sm:top-16 mt-2 w-[calc(100vw-1rem)] max-w-sm sm:w-80 md:w-96 rounded-2xl shadow-xl z-50"
           >
-            <div class="p-3 sm:p-4 border-b border-(--ui-border) bg-linear-to-r from-(--ui-primary-soft) to-(--ui-accent-soft)">
-              <h3 class="text-sm sm:text-base font-bold text-(--ui-text)">
+            <div class="p-3 sm:p-4 border-b ui-border-strong bg-linear-to-r from-(--ui-primary-soft) to-(--ui-accent-soft) rounded-lg">
+              <h3 class="text-sm sm:text-base font-bold ui-text">
                 {{ notificationsTitle }}
               </h3>
               <p
                 v-if="notificationCount > 0"
-                class="text-xs text-(--ui-text) mt-1"
+                class="text-xs ui-text mt-1"
               >
                 You have {{ notificationCount }} unread notification{{ notificationCount > 1 ? 's' : '' }}
               </p>
@@ -541,9 +541,9 @@ watch(searchQuery, (newValue) => emit('search', newValue))
               >
                 <Icon
                   icon="bell"
-                  class="w-10 h-10 sm:w-12 sm:h-12 mx-auto text-(--ui-text) mb-2"
+                  class="w-10 h-10 sm:w-12 sm:h-12 mx-auto ui-text mb-2"
                 />
-                <p class="text-sm text-(--ui-text)">
+                <p class="text-sm ui-text">
                   No notifications
                 </p>
               </div>
@@ -553,7 +553,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                 v-else
                 :key="notification.id"
                 :class="[
-                  'p-3 sm:p-4 border-b border-(--ui-border) hover:bg-(--ui-surface-muted) cursor-pointer transition-colors',
+                  'p-3 sm:p-4 border-b ui-border-strong hover:bg-(--ui-surface) cursor-pointer transition-colors',
                   notification.read ? 'opacity-60' : ''
                 ]"
                 @click="handleNotificationClick(notification)"
@@ -586,13 +586,13 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                   <div class="flex-1 min-w-0">
                     <!-- Notification Title -->
                     <div class="flex items-start justify-between gap-2">
-                      <p class="text-xs sm:text-sm font-semibold text-(--ui-text) flex-1 leading-tight">
+                      <p class="text-xs sm:text-sm font-semibold ui-text flex-1 leading-tight">
                         {{ notification.title }}
                       </p>
                       <!-- Unread indicator -->
                       <div
                         v-if="!notification.read"
-                        class="shrink-0 w-2 h-2 mt-1 bg-(--ui-primary) rounded-full"
+                        class="shrink-0 w-2 h-2 mt-1 ui-primary-bg rounded-full"
                       />
                     </div>
 
@@ -601,7 +601,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                       class="flex items-center gap-1 sm:gap-1.5 mt-1.5 flex-wrap"
                     >
                       <span
-                        class="inline-flex items-center px-1.5 sm:px-2 py-0.5 rounded text-[10px] sm:text-xs font-semibold bg-(--ui-accent-soft) text-(--ui-accent) border border-(--ui-accent-soft)"
+                        class="inline-flex items-center px-1.5 sm:px-2 py-0.5 rounded text-[10px] sm:text-xs font-semibold ui-accent-soft ui-accent border border-(--ui-accent-soft)"
                       >
                         <Icon
                           icon="tag"
@@ -611,10 +611,10 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                       </span>
                       <Icon
                         icon="chevron-right"
-                        class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-(--ui-text) hidden xs:block"
+                        class="w-2.5 h-2.5 sm:w-3 sm:h-3 ui-text hidden xs:block"
                       />
                       <span
-                        class="inline-flex items-center px-1.5 sm:px-2 py-0.5 rounded text-[10px] sm:text-xs font-medium bg-(--ui-surface-muted) text-(--ui-text) border border-(--ui-border)"
+                        class="inline-flex items-center px-1.5 sm:px-2 py-0.5 rounded text-[10px] sm:text-xs font-medium ui-surface-muted ui-text border ui-border-strong"
                       >
                         {{ notification.source.code }}
                       </span>
@@ -624,7 +624,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                     <div class="flex items-center gap-1.5 sm:gap-2 mt-1.5 sm:mt-2 flex-wrap">
                       <span
                         v-if="notification.model"
-                        class="inline-flex items-center px-1.5 sm:px-2 py-0.5 rounded text-[10px] sm:text-xs font-medium bg-(--ui-primary-soft) text-(--ui-primary)"
+                        class="inline-flex items-center px-1.5 sm:px-2 py-0.5 rounded text-[10px] sm:text-xs font-medium ui-primary-soft ui-primary"
                       >
                         <Icon
                           icon="file"
@@ -640,10 +640,10 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                         :class="[
                           'inline-flex items-center px-1.5 sm:px-2 py-0.5 rounded text-[10px] sm:text-xs font-medium whitespace-nowrap',
                           notification.title.includes('Overdue')
-                            ? 'bg-(--ui-danger-soft) text-(--ui-danger) border border-(--ui-danger-soft)'
+                            ? 'ui-danger-soft ui-danger border border-(--ui-danger-soft)'
                             : notification.title.includes('Due in 0')
-                              ? 'bg-(--ui-warning-soft) text-(--ui-warning) border border-(--ui-warning-soft)'
-                              : 'bg-(--ui-warning-soft) text-(--ui-warning) border border-(--ui-warning-soft)'
+                              ? 'ui-warning-soft ui-warning border border-(--ui-warning-soft)'
+                              : 'ui-warning-soft ui-warning border border-(--ui-warning-soft)'
                         ]"
                       >
                         <Icon
@@ -655,7 +655,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                     </div>
 
                     <!-- Time -->
-                    <p class="text-[10px] sm:text-xs text-(--ui-text) mt-1.5 sm:mt-2 flex items-center">
+                    <p class="text-[10px] sm:text-xs ui-text mt-1.5 sm:mt-2 flex items-center">
                       <Icon
                         icon="clock"
                         class="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-0.5 sm:mr-1"
@@ -669,10 +669,10 @@ watch(searchQuery, (newValue) => emit('search', newValue))
 
             <div
               v-if="notifications.length > 0"
-              class="p-2 sm:p-3 text-center border-t border-(--ui-border) bg-(--ui-surface-muted)"
+              class="p-2 sm:p-3 text-center border-t ui-border-strong ui-surface-muted"
             >
               <button
-                class="text-xs sm:text-sm font-semibold text-(--ui-primary) hover:text-(--ui-primary) transition-colors"
+                class="text-xs sm:text-sm font-semibold ui-primary hover:text-(--ui-primary) transition-colors"
                 @click="handleViewAllNotifications"
               >
                 View all notifications →
@@ -682,31 +682,31 @@ watch(searchQuery, (newValue) => emit('search', newValue))
         </transition>
 
         <!-- Profile Dropdown -->
-        <div class="relative">
+        <div class="relative ui-bg">
           <button
-            class="flex items-center space-x-1 sm:space-x-2 md:space-x-3 p-1 sm:p-2 rounded-lg hover:bg-(--ui-surface-muted) transition-colors"
+            class="flex items-center space-x-1 sm:space-x-2 md:space-x-3 p-1 sm:p-2 rounded-lg hover:bg-(--ui-surface) transition-colors"
             @click="toggleProfile"
           >
             <div
               class="w-7 h-7 sm:w-8 sm:h-8 bg-linear-to-br from-(--ui-primary-soft) to-(--ui-accent-soft) rounded-full flex items-center justify-center transition-colors shadow-sm"
             >
-              <span class="text-(--ui-primary) text-xs sm:text-sm font-medium">{{ userInitials }}</span>
+              <span class="ui-primary text-xs sm:text-sm font-medium">{{ userInitials }}</span>
             </div>
             <!-- Hide details on mobile or when showUserDetails is false -->
             <div
               v-if="showUserDetails"
               class="hidden md:block text-left max-w-40 truncate"
             >
-              <p class="text-sm font-medium text-(--ui-text) truncate">
+              <p class="text-sm font-medium ui-text truncate">
                 {{ user.name }}
               </p>
-              <p class="text-xs text-(--ui-text) truncate leading-tight">
+              <p class="text-xs ui-text truncate leading-tight">
                 {{ userRoleNames }}
               </p>
             </div>
             <Icon
               icon="chevron-down"
-              class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-(--ui-text)"
+              class="w-3.5 h-3.5 sm:w-4 sm:h-4 ui-text"
             />
           </button>
 
@@ -721,13 +721,13 @@ watch(searchQuery, (newValue) => emit('search', newValue))
           >
             <div
               v-if="showProfile"
-              class="absolute right-0 mt-2 w-56 sm:w-58 ui-glossy-popover ui-glossy-border rounded-lg shadow-lg z-50"
+              class="ui-surface absolute right-0 mt-4 w-56 sm:w-58 rounded-lg shadow-lg z-50"
             >
-              <div class="p-3 sm:p-4 border-b border-(--ui-border)">
-                <p class="text-sm font-medium text-(--ui-text) truncate">
+              <div class="p-3 sm:p-4 border-b ui-border-strong">
+                <p class="text-sm font-medium ui-text truncate">
                   {{ user.name }}
                 </p>
-                <p class="text-xs text-(--ui-text) truncate">
+                <p class="text-xs ui-text truncate">
                   {{ user.email }}
                 </p>
               </div>
@@ -742,8 +742,8 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                     :class="cn(
                       'flex items-center px-2.5 sm:px-3 py-2 sm:py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative',
                       isItemActive(item)
-                        ? 'bg-linear-to-br from-(--ui-primary-soft) to-(--ui-primary-soft) text-(--ui-primary) shadow-sm border border-(--ui-primary-soft)'
-                        : 'text-(--ui-text) hover:bg-(--ui-surface-muted) hover:text-(--ui-text) border border-transparent'
+                        ? 'bg-linear-to-br from-(--ui-primary-soft) to-(--ui-primary-soft) ui-primary shadow-sm border border-(--ui-primary-soft)'
+                        : 'ui-text hover:bg-(--ui-surface) hover:text-(--ui-text) border border-transparent'
                     )"
                     @click="handleNavigation(item)"
                   >
@@ -756,8 +756,8 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                       :class="cn(
                         'flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-lg mr-2 sm:mr-3 shrink-0 transition-colors ml-1 sm:ml-2',
                         isItemActive(item)
-                          ? 'bg-linear-to-br from-(--ui-primary) to-(--ui-primary) text-(--ui-text-inverse) shadow-md'
-                          : 'bg-(--ui-surface-muted) text-(--ui-text) group-hover:bg-(--ui-surface-soft)'
+                          ? 'bg-linear-to-br from-(--ui-primary) to-(--ui-primary) ui-text shadow-md'
+                          : 'ui-surface-muted ui-text group-hover:bg-(--ui-bg)'
                       )"
                     >
                       <Icon
@@ -769,7 +769,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                     <span
                       :class="cn(
                         'flex-1 truncate font-semibold text-xs sm:text-sm',
-                        isItemActive(item) ? 'text-(--ui-primary)' : 'text-(--ui-text)'
+                        isItemActive(item) ? 'ui-primary' : 'ui-text'
                       )"
                     >
                       {{ item.label }}
@@ -777,11 +777,11 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                   </router-link>
                   <button
                     v-else
-                    class="flex items-center w-full px-2.5 sm:px-3 py-2 sm:py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative text-(--ui-text) hover:bg-(--ui-surface-muted) hover:text-(--ui-text) border border-transparent"
+                    class="flex items-center w-full px-2.5 sm:px-3 py-2 sm:py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative ui-text hover:bg-(--ui-surface) hover:text-(--ui-text) border border-transparent"
                     @click="handleProfileAction(item)"
                   >
                     <div
-                      class="flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-lg mr-2 sm:mr-3 shrink-0 transition-colors ml-1 sm:ml-2 bg-(--ui-surface-muted) text-(--ui-text) group-hover:bg-(--ui-surface-soft)"
+                      class="flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-lg mr-2 sm:mr-3 shrink-0 transition-colors ml-1 sm:ml-2 ui-surface-muted ui-text group-hover:bg-(--ui-bg)"
                     >
                       <Icon
                         v-if="item.icon"
@@ -789,26 +789,26 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                         class="w-3.5 h-3.5 sm:w-4 sm:h-4"
                       />
                     </div>
-                    <span class="flex-1 truncate font-semibold text-(--ui-text) text-xs sm:text-sm">
+                    <span class="flex-1 truncate font-semibold ui-text text-xs sm:text-sm">
                       {{ item.label }}
                     </span>
                   </button>
                 </template>
               </div>
-              <div class="border-t border-(--ui-border) py-2">
+              <div class="border-t ui-border-strong py-2">
                 <button
-                  class="flex items-center w-full px-2.5 sm:px-3 py-2 sm:py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative text-(--ui-danger) hover:bg-(--ui-danger-soft) border border-transparent"
+                  class="flex items-center w-full px-2.5 sm:px-3 py-2 sm:py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative ui-danger hover:bg-(--ui-danger-soft) border border-transparent"
                   @click="handleLogout"
                 >
                   <div
-                    class="flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-lg mr-1 sm:mr-1 shrink-0 transition-colors ml-1 sm:ml-2 bg-(--ui-danger-soft) text-(--ui-danger) group-hover:bg-(--ui-danger-soft)"
+                    class="flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-lg mr-1 sm:mr-1 shrink-0 transition-colors ml-1 sm:ml-2 ui-danger-soft ui-danger group-hover:bg-(--ui-danger-soft)"
                   >
                     <Icon
                       icon="sign-out-alt"
                       class="w-3.5 h-3.5 sm:w-4 sm:h-4"
                     />
                   </div>
-                  <span class="truncate font-semibold text-(--ui-danger) text-xs sm:text-sm">
+                  <span class="truncate font-semibold ui-danger text-xs sm:text-sm">
                     Sign out
                   </span>
                 </button>

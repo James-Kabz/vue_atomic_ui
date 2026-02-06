@@ -141,24 +141,24 @@ const progressColor = computed(() => {
 })
 
 const backgroundColor = computed(() => {
-  return 'var(--ui-border)'
+  return 'var(--ui-border-strong)'
 })
 
 const textColor = computed(() => {
   if (props.dynamicColor) {
     const percentage = clampedValue.value
-    if (percentage >= 80) return 'text-(--ui-danger)'
-    if (percentage >= 60) return 'text-(--ui-warning)'
-    if (percentage >= 40) return 'text-(--ui-warning)'
-    if (percentage >= 20) return 'text-(--ui-success)'
-    return 'text-(--ui-text)'
+    if (percentage >= 80) return 'ui-danger'
+    if (percentage >= 60) return 'ui-warning'
+    if (percentage >= 40) return 'ui-warning'
+    if (percentage >= 20) return 'ui-success'
+    return 'ui-text'
   }
 
   const colors = {
-    default: 'text-(--ui-primary)',
-    success: 'text-(--ui-success)',
-    warning: 'text-(--ui-warning)',
-    danger: 'text-(--ui-danger)'
+    default: 'ui-primary',
+    success: 'ui-success',
+    warning: 'ui-warning',
+    danger: 'ui-danger'
   }
   return colors[props.variant] || colors.default
 })

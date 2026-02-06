@@ -75,7 +75,7 @@ const ariaDescribedBy = computed(() =>
 
 // variants with cva
 const textareaVariants = cva(
-  'block w-full rounded-lg border bg-(--ui-surface) ui-glossy-input ui-glossy-border transition-colors duration-200 placeholder:text-(--ui-text) focus:outline-none focus:ring-2 focus:ring-offset-0 disabled:bg-(--ui-surface-muted) disabled:text-(--ui-text) disabled:cursor-not-allowed',
+  'block w-full rounded-lg border ui-surface   transition-colors duration-200 placeholder:text-(--ui-text) focus:outline-none focus:ring-2 focus:ring-offset-0 disabled:bg-(--ui-surface) disabled:text-(--ui-text) disabled:cursor-not-allowed',
   {
     variants: {
       size: {
@@ -84,7 +84,7 @@ const textareaVariants = cva(
         lg: 'px-4 py-3 text-base'
       },
       variant: {
-        default: 'border-(--ui-border) focus:border-(--ui-primary) focus:ring-(--ui-primary)',
+        default: 'ui-border-strong focus:border-(--ui-primary) focus:ring-(--ui-primary)',
         error: 'border-(--ui-danger-soft) focus:border-(--ui-danger) focus:ring-(--ui-danger)',
         success: 'border-(--ui-success-soft) focus:border-(--ui-success) focus:ring-(--ui-success)'
       },

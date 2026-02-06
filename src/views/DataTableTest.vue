@@ -1,14 +1,14 @@
 <template>
   <div
     id="app"
-    class="min-h-screen bg-(--ui-bg) ui-glossy-panel"
+    class="min-h-screen bg-(--ui-bg) "
   >
     <div class="container mx-auto py-8">
-      <h1 class="text-3xl font-bold text-(--ui-text) mb-8">
+      <h1 class="text-3xl font-bold ui-text mb-8">
         Vue DataTable with Filters
       </h1>
       <!-- DataTable with Filters -->
-      <div class="rounded-lg shadow-sm border border-(--ui-border) overflow-hidden">
+      <div class="rounded-lg shadow-sm border ui-border-strong overflow-hidden">
         <!-- Filters Component -->
         <DataTableFilters
           v-model:search-query="searchQuery"
@@ -30,7 +30,7 @@
             <!-- Custom filters -->
             <select
               v-model="departmentFilter"
-              class="px-3 py-2 border border-(--ui-border) rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-(--ui-primary)"
+              class="px-3 py-2 border ui-border-strong rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-(--ui-primary)"
             >
               <option value="">
                 All Departments
@@ -72,7 +72,7 @@
             <!-- Additional toolbar actions -->
             <button
               :disabled="selectedUsers.length === 0"
-              class="px-3 py-2 text-sm text-(--ui-text) hover:text-(--ui-text) border border-(--ui-border) rounded-md hover:bg-(--ui-surface-muted) flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              class="px-3 py-2 text-sm ui-text hover:text-(--ui-text) border ui-border-strong rounded-md hover:bg-(--ui-surface) flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               @click="handleBulkExport"
             >
               <font-awesome-icon icon="download" />
@@ -110,10 +110,10 @@
                 @error="handleImageError"
               >
               <div>
-                <div class="font-medium text-(--ui-text)">
+                <div class="font-medium ui-text">
                   {{ item.name }}
                 </div>
-                <div class="text-xs text-(--ui-text)">
+                <div class="text-xs ui-text">
                   ID: {{ item.id }}
                 </div>
               </div>
@@ -127,7 +127,7 @@
                 <span
                   :class="[
                     'w-2 h-2 rounded-full',
-                    value === 'active' ? 'bg-(--ui-success)' : 'bg-(--ui-danger)'
+                    value === 'active' ? 'ui-success-bg' : 'ui-danger-bg'
                   ]"
                 />
                 {{ value }}
@@ -137,14 +137,14 @@
 
           <!-- Custom cell for salary -->
           <template #cell-salary="{ value }">
-            <span class="font-mono text-(--ui-success)">
+            <span class="font-mono ui-success">
               {{ formatCurrency(value) }}
             </span>
           </template>
 
           <!-- Custom cell for last login -->
           <template #cell-lastLogin="{ value }">
-            <span class="text-sm text-(--ui-text)">
+            <span class="text-sm ui-text">
               {{ formatDate(value) }}
             </span>
           </template>
@@ -469,8 +469,8 @@ const filteredUsers = computed(() => {
 const showStatusMessage = (message, type = 'success') => {
   statusMessage.value = message
   statusMessageClass.value = type === 'success'
-    ? 'bg-(--ui-success-soft) text-(--ui-success) border border-(--ui-success-soft)'
-    : 'bg-(--ui-danger-soft) text-(--ui-danger) border border-(--ui-danger-soft)'
+    ? 'ui-success-soft ui-success border border-(--ui-success-soft)'
+    : 'ui-danger-soft ui-danger border border-(--ui-danger-soft)'
 
   setTimeout(() => {
     statusMessage.value = ''
@@ -482,11 +482,11 @@ const getStatusBadgeClasses = (status) => {
 
   switch (status) {
     case 'active':
-      return `${baseClasses} bg-(--ui-success-soft) text-(--ui-success)`
+      return `${baseClasses} ui-success-soft ui-success`
     case 'inactive':
-      return `${baseClasses} bg-(--ui-danger-soft) text-(--ui-danger)`
+      return `${baseClasses} ui-danger-soft ui-danger`
     default:
-      return `${baseClasses} bg-(--ui-surface-muted) text-(--ui-text)`
+      return `${baseClasses} ui-surface-muted ui-text`
   }
 }
 

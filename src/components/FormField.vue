@@ -9,7 +9,7 @@
       {{ label }}
       <span
         v-if="required"
-        class="text-(--ui-danger) ml-1"
+        class="ui-danger ml-1"
         aria-label="required"
       >*</span>
     </label>
@@ -46,7 +46,7 @@
       <button
         v-if="type === 'password'"
         type="button"
-        class="absolute inset-y-0 right-0 pr-3 flex items-center text-(--ui-text) hover:text-(--ui-text) transition-colors"
+        class="absolute inset-y-0 right-0 pr-3 flex items-center ui-text hover:text-(--ui-text) transition-colors"
         :aria-label="showPassword ? 'Hide password' : 'Show password'"
         @click="togglePasswordVisibility"
       >
@@ -156,7 +156,7 @@ const ariaDescribedBy = computed(() => {
 
 /* ------------------ CVA Variants ------------------ */
 
-const fieldVariants = cva("text-(--ui-text)", {
+const fieldVariants = cva("ui-text", {
   variants: {
     size: {
       sm: "space-y-1",
@@ -167,7 +167,7 @@ const fieldVariants = cva("text-(--ui-text)", {
   defaultVariants: { size: "md" },
 })
 
-const labelVariants = cva("block text-(--ui-text)", {
+const labelVariants = cva("block ui-text", {
   variants: {
     size: {
       sm: "text-xs font-medium",
@@ -178,7 +178,7 @@ const labelVariants = cva("block text-(--ui-text)", {
   defaultVariants: { size: "md" },
 })
 
-const descriptionVariants = cva("text-(--ui-text)", {
+const descriptionVariants = cva("ui-text", {
   variants: {
     size: {
       sm: "text-xs",
@@ -197,14 +197,14 @@ const messageVariants = cva("flex items-start gap-2", {
       lg: "text-sm",
     },
     intent: {
-      error: "text-(--ui-danger)",
-      success: "text-(--ui-success)",
+      error: "ui-danger",
+      success: "ui-success",
     },
   },
   defaultVariants: { size: "md", intent: "error" },
 })
 
-const helpVariants = cva("text-(--ui-text)", {
+const helpVariants = cva("ui-text", {
   variants: {
     size: {
       sm: "text-xs",
