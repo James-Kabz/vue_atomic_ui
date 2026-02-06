@@ -5,6 +5,7 @@ import Button from '../components/Button.vue'
 describe('Button', () => {
   it('renders with default props', () => {
     const wrapper = mount(Button)
+    expect(wrapper.exists()).toBe(true)
   })
 
   it('applies variant class', () => {
