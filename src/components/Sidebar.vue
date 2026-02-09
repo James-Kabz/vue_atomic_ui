@@ -762,12 +762,12 @@ defineExpose({
                 <div
                   :class="
                     cn(
-                    'flex items-center justify-center w-8 h-8 rounded-lg mr-3 shrink-0 transition-colors',
-                    isItemActive(setting)
-                      ? 'ui-primary-bg shadow-sm'
-                      : 'ui-surface-muted ui-text group-hover:bg-(--ui-bg)',
-                  )
-                "
+                      'flex items-center justify-center w-8 h-8 rounded-lg mr-3 shrink-0 transition-colors',
+                      isItemActive(setting)
+                        ? 'ui-primary-bg shadow-sm'
+                        : 'ui-surface-muted ui-text group-hover:bg-(--ui-bg)',
+                    )
+                  "
                 >
                   <Icon
                     v-if="setting.icon"

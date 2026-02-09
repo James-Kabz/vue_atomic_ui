@@ -46,7 +46,6 @@ watch(currentMode, (value) => {
             </Option>
           </Select>
         </label>
-
       </div>
     </div>
   </div>

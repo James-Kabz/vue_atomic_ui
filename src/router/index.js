@@ -38,6 +38,11 @@ const router = createRouter({
           component: () => import('../views/docs/pages/ComponentsPage.vue')
         },
         {
+          path: 'components/:componentSlug',
+          name: 'docs.component-detail',
+          component: () => import('../views/docs/pages/ComponentDetailPage.vue')
+        },
+        {
           path: 'support',
           name: 'docs.support',
           component: () => import('../views/docs/pages/SupportPage.vue')

@@ -59,6 +59,13 @@ jobs:
         cache: 'npm'
         registry-url: 'https://registry.npmjs.org'
 
+    - name: Remove deprecated npm always-auth config
+      run: |
+        npm config delete always-auth --location=user || true
+        if [ -f "$HOME/.npmrc" ]; then
+          sed -i '/^always-auth=/d' "$HOME/.npmrc"
+        fi
+
     # CRITICAL: Update npm to version 11.5.1 or later for trusted publishing
     - name: Update npm to latest version
       run: npm install -g npm@latest
@@ -101,6 +108,7 @@ jobs:
 
     - name: Version bump and publish
       run: |
+        npm config delete always-auth --location=user || true
         echo "Version bump reason: ${{ steps.version.outputs.reason }}"
         echo "Bump type: ${{ steps.version.outputs.bump }}"
 

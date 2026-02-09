@@ -409,8 +409,8 @@ const saveRecipients = () => {
           </div>
           <button
             class="p-1.5 hover:bg-[color:color-mix(in oklab, var(--ui-surface), transparent 80%)] rounded-md transition-colors"
-            @click="showRecipientModal = false"
             aria-label="Close"
+            @click="showRecipientModal = false"
           >
             <Icon
               icon="x"
