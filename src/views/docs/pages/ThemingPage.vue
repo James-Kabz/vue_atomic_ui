@@ -5,8 +5,8 @@ const copied = ref(false)
 
 const treeShaking = `import { createApp } from 'vue'
 import App from './App.vue'
-import { Button, Input, Card } from '@stlhorizon/vue-ui'
-import '@stlhorizon/vue-ui/css'
+import { Button, Input, Card } from 'kabzvue'
+import 'kabzvue/css'
 
 const app = createApp(App)
 

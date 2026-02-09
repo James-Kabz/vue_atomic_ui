@@ -245,7 +245,7 @@ const componentDocs = exportedComponentNames.map((name) => {
     slug: toKebabCase(name),
     category,
     description: `${name} component for ${category.toLowerCase()}.`,
-    importSnippet: `import { ${name} } from '@stlhorizon/vue-ui'`,
+    importSnippet: `import { ${name} } from 'kabzvue'`,
     usageSnippet: usageOverrides[name] || `<${name} />`,
     sourcePath: moduleMeta ? moduleMeta.modulePath.replace('../../', 'src/') : null,
     loader: moduleMeta ? moduleMeta.loader : null

@@ -1,5 +1,5 @@
 {
-  "name": "@stlhorizon/vue-ui",
+  "name": "kabzvue",
   "version": "3.27.11",
   "private": false,
   "type": "module",
@@ -13,8 +13,8 @@
       "import": "./dist/index.esm.js",
       "require": "./dist/index.js"
     },
-    "./dist/vue-ui.css": "./dist/vue-ui.css",
-    "./css": "./dist/vue-ui.css"
+    "./dist/kabzvue.css": "./dist/kabzvue.css",
+    "./css": "./dist/kabzvue.css"
   },
   "files": [
     "dist"

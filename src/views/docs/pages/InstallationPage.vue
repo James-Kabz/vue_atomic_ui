@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 
-const packageName = '@stlhorizon/vue-ui'
+const packageName = 'kabzvue'
 
 const selectedManager = ref('npm')
 const copiedKey = ref('')

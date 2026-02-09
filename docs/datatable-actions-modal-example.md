@@ -13,7 +13,7 @@ import {
   DataTableFilters,
   DataTableToolBar,
   ReusableFormModal,
-} from '@stlhorizon/vue-ui'
+} from 'kabzvue'
 import { useAuth } from '@/composables/useAuth'
 import { useComplianceStore } from '@/stores/compliance/compliance'
 
