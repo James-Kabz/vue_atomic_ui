@@ -24,8 +24,11 @@
   },
   "scripts": {
     "dev": "vite",
+    "dev:docs": "vite --config vite.docs.config.js",
     "build": "vite build && vue-tsc --emitDeclarationOnly",
     "build:watch": "vite build --watch",
+    "build:docs": "vite build --config vite.docs.config.js",
+    "preview:docs": "vite preview --config vite.docs.config.js",
     "preview": "vite preview",
     "test:unit": "vitest",
     "test:unit:run": "vitest run",

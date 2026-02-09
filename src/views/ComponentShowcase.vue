@@ -1,1178 +1,774 @@
 <script setup>
-import Toast from '../components/Toast.vue';
-import Button from '../components/Button.vue';
-import Input from '../components/Input.vue';
-import Card from '../components/Card.vue';
-import Modal from '../components/Modal.vue';
-import Alert from '../components/Alert.vue';
-import Select from '../components/Select.vue';
-import Checkbox from '../components/Checkbox.vue';
-import Radio from '../components/Radio.vue';
-import Textarea from '../components/Textarea.vue';
-import FileUpload from '../components/FileUpload.vue';
-import Accordion from '../components/Accordion.vue';
-import Progress from '../components/Progress.vue';
-import CircularProgress from '../components/CircularProgress.vue';
-import Spinner from '../components/Spinner.vue';
-import Loader from '../components/Loader.vue';
-import Icon from '../components/Icon.vue';
-import Avatar from '../components/Avatar.vue';
-import Badge from '../components/Badge.vue';
-import Breadcrumb from '../components/Breadcrumb.vue';
-import ButtonGroup from '../components/ButtonGroup.vue';
-import CardHeader from '../components/CardHeader.vue';
-import CardBody from '../components/CardBody.vue';
-import CardFooter from '../components/CardFooter.vue';
-import CardContent from '../components/CardContent.vue';
-import CardTitle from '../components/CardTitle.vue';
-import Calendar from '../components/Calendar.vue';
-import EventsCalendar from '../components/EventsCalendar.vue';
-import DatePicker from '../components/DatePicker.vue';
-import { ref, computed } from 'vue';
-import { toast } from '../lib/toast.js';
-import Graph from '../components/Graph.vue'
-import BarChart from '../components/charts/BarChart.vue'
-import LineChart from '../components/charts/LineChart.vue'
-import GraphFilters from '../components/GraphFilters.vue'
-import DataTableTest from './DataTableTest.vue';
-import WidgetsTest from './WidgetsTest.vue';
+import { computed, ref } from 'vue'
+import Badge from '../components/Badge.vue'
+import Button from '../components/Button.vue'
+import Input from '../components/Input.vue'
 
-// Reactive data for examples
-const buttonLoading = ref(false);
-const inputValue = ref('');
-const modalOpen = ref(false);
-const selectValue = ref('');
-const datePickerValue = ref('');
-const calendarValue = ref('');
-const selectedDataSource = ref('')
-const dateFrom = ref('')
-const dateTo = ref('')
+const packageName = '@stlhorizon/vue-ui'
+const packageVersion = '3.27.10'
 
-// Chart data
-const barData = ref([120, 150, 180, 90, 200, 160])
-const barLabels = ref(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'])
+const sectionLinks = [
+  { id: 'setup-intro', label: 'Setup' },
+  { id: 'download', label: 'Download' },
+  { id: 'plugin', label: 'Plugin' },
+  { id: 'theme', label: 'Theme' },
+  { id: 'verify', label: 'Verify' },
+  { id: 'deployment', label: 'Deploy' },
+  { id: 'component-reference', label: 'Components' }
+]
 
-const lineData = ref([100, 120, 140, 110, 160, 180, 200])
-const lineLabels = ref(['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7'])
+const selectedManager = ref('npm')
+const copiedKey = ref('')
+const componentSearch = ref('')
+const liveQuery = ref('Policy reminder')
 
+const installCommands = {
+  npm: `npm install ${packageName}`,
+  pnpm: `pnpm add ${packageName}`,
+  yarn: `yarn add ${packageName}`,
+  bun: `bun add ${packageName}`
+}
 
-// Data sources for filters
-const dataSources = ref([
-  { value: 'sales', label: 'Sales Data' },
-  { value: 'marketing', label: 'Marketing Data' },
-  { value: 'finance', label: 'Financial Data' }
-])
-const checkboxValue = ref(false);
-const radioValue = ref('');
-const textareaValue = ref('');
-const progressValue = ref(75);
-const loading = ref(false);
-const currentSection = ref('buttons');
+const setupSnippets = {
+  pluginInstall: `import { createApp } from 'vue'\nimport App from './App.vue'\nimport VueUI, { initTheme } from '${packageName}'\nimport '${packageName}/css'\n\nconst app = createApp(App)\n\ninitTheme()\napp.use(VueUI)\napp.mount('#app')`,
+  prefixedPlugin: `import { createApp } from 'vue'\nimport App from './App.vue'\nimport VueUI from '${packageName}'\nimport '${packageName}/css'\n\nconst app = createApp(App)\n\napp.use(VueUI, { prefix: 'Ui' })\napp.mount('#app')`,
+  treeShaking: `import { createApp } from 'vue'\nimport App from './App.vue'\nimport { Button, Input, Card } from '${packageName}'\nimport '${packageName}/css'\n\nconst app = createApp(App)\n\napp.component('Button', Button)\napp.component('Input', Input)\napp.component('Card', Card)\napp.mount('#app')`,
+  verify: `# local check\nnpm run dev\n\n# build docs output\nnpm run build:docs`,
+  deploy: `# for vercel\nnpm run build:docs\n\n# output folder\ndist-docs/`,
+  firstUsage: `<template>\n  <div class=\"space-y-3\">\n    <Input v-model=\"query\" placeholder=\"Search reminders\" />\n    <Button variant=\"primary\">Run Search</Button>\n  </div>\n</template>\n\n<script setup>\nimport { ref } from 'vue'\nimport { Input, Button } from '${packageName}'\n\nconst query = ref('')\n<\\/script>`
+}
 
-// Accordion items
-const accordionItems = ref([
+const allExportedComponents = [
+  'Avatar',
+  'Badge',
+  'Button',
+  'Checkbox',
+  'Divider',
+  'Icon',
+  'Image',
+  'Input',
+  'Label',
+  'Link',
+  'Logo',
+  'Option',
+  'CircularProgress',
+  'Progress',
+  'ProgressBar',
+  'Radio',
+  'Select',
+  'Spinner',
+  'Switch',
+  'Text',
+  'Textarea',
+  'Tooltip',
+  'Typography',
+  'ThemeConfigurator',
+  'Loader',
+  'Alert',
+  'Breadcrumb',
+  'ButtonGroup',
+  'Card',
+  'CardHeader',
+  'CardBody',
+  'CardFooter',
+  'CardContent',
+  'CardTitle',
+  'DatePicker',
+  'Dropdown',
+  'DropdownItem',
+  'FileUpload',
+  'FormField',
+  'InputGroup',
+  'ListItem',
+  'MenuItem',
+  'Modal',
+  'ModalHeader',
+  'ModalBody',
+  'ModalFooter',
+  'Notification',
+  'Toast',
+  'Search',
+  'Slider',
+  'BarChart',
+  'GraphFilters',
+  'LineChart',
+  'StackedBarChart',
+  'Stepper',
+  'StepperItem',
+  'Tab',
+  'TabPanel',
+  'Accordion',
+  'Graph',
+  'AccordionItem',
+  'Calendar',
+  'EventsCalendar',
+  'DataTable',
+  'DataTableHeader',
+  'DataTableRow',
+  'DataTableCell',
+  'DataTablePagination',
+  'DataTableFilters',
+  'DataTableToolBar',
+  'Footer',
+  'Header',
+  'ReusableFormModal',
+  'ReusableForm',
+  'Sidebar',
+  'Timeline',
+  'TimelineItem',
+  'AuthLayout',
+  'DefaultLayout',
+  'ErrorLayout',
+  'DashboardWidget',
+  'ReminderConfig'
+]
+
+const componentGroups = [
   {
-    id: 'item1',
-    title: 'Getting Started',
-    content: 'Welcome to our component library! This accordion shows how to organize content in collapsible sections.'
+    title: 'Core UI',
+    description: 'Foundational visual elements and primitives.',
+    items: ['Avatar', 'Badge', 'Button', 'Divider', 'Icon', 'Image', 'Label', 'Link', 'Logo', 'Option', 'Text', 'Typography', 'ThemeConfigurator']
   },
   {
-    id: 'item2',
-    title: 'Installation',
-    content: 'To install our components, simply run npm install and import the components you need.'
+    title: 'Forms and Inputs',
+    description: 'Data entry and selection controls.',
+    items: ['Input', 'Textarea', 'Select', 'Checkbox', 'Radio', 'Switch', 'DatePicker', 'Slider', 'FileUpload', 'Search', 'FormField', 'InputGroup']
   },
   {
-    id: 'item3',
-    title: 'Usage',
-    content: 'Each component comes with comprehensive documentation and examples to help you get started quickly.'
+    title: 'Feedback and Overlay',
+    description: 'Status communication and modal/notification patterns.',
+    items: ['Alert', 'Notification', 'Toast', 'Loader', 'Spinner', 'Progress', 'ProgressBar', 'CircularProgress', 'Tooltip', 'Modal', 'ModalHeader', 'ModalBody', 'ModalFooter']
+  },
+  {
+    title: 'Surface and Navigation',
+    description: 'Navigation shells and composable container components.',
+    items: ['Breadcrumb', 'ButtonGroup', 'Card', 'CardHeader', 'CardBody', 'CardFooter', 'CardContent', 'CardTitle', 'Dropdown', 'DropdownItem', 'ListItem', 'MenuItem', 'Sidebar', 'Header', 'Footer', 'Tab', 'TabPanel', 'Accordion', 'AccordionItem', 'Timeline', 'TimelineItem']
+  },
+  {
+    title: 'Data and Visualization',
+    description: 'Tables, calendar, and charting building blocks.',
+    items: ['DataTable', 'DataTableHeader', 'DataTableRow', 'DataTableCell', 'DataTablePagination', 'DataTableFilters', 'DataTableToolBar', 'Calendar', 'EventsCalendar', 'Graph', 'GraphFilters', 'BarChart', 'LineChart', 'StackedBarChart', 'DashboardWidget']
+  },
+  {
+    title: 'Workflow and Layouts',
+    description: 'Workflow utilities and layout wrappers.',
+    items: ['Stepper', 'StepperItem', 'ReusableForm', 'ReusableFormModal', 'ReminderConfig', 'AuthLayout', 'DefaultLayout', 'ErrorLayout']
   }
-]);
+]
 
-// Sidebar navigation - Updated for hash navigation
-const navigationItems = ref([
-  { label: 'Buttons', icon: 'hand-pointer', route: '#buttons', type: 'link' },
-  { label: 'Forms', icon: 'clipboard-list', route: '#forms', type: 'link' },
-  { label: 'Data', icon: 'table-cells', route: '#data', type: 'link' },
-  { label: 'Feedback', icon: 'comment-dots', route: '#feedback', type: 'link' },
-  { label: 'Layout', icon: 'th-large', route: '#layout', type: 'link' },
-  { label: 'Graphs', icon: 'chart-bar', route: '#graphs', type: 'link' },
-  { label: 'Loaders', icon: 'spinner', route: '#loaders', type: 'link' },
-  { label: 'Widgets Test', icon: 'chart-pie', route: '#widgets-test', type: 'link' },
-]);
-
-const handleButtonClick = () => {
-  buttonLoading.value = true;
-  setTimeout(() => {
-    buttonLoading.value = false;
-    toast.success('Button clicked!');
-  }, 2000);
-};
-
-const showToast = () => {
-  toast.info('This is a toast notification!');
-};
-
-const startProgress = () => {
-  progressValue.value = 0;
-  const interval = setInterval(() => {
-    progressValue.value += 10;
-    if (progressValue.value >= 100) {
-      clearInterval(interval);
-    }
-  }, 200);
-};
-
-const handleDataSourceChange = (value) => {
-  selectedDataSource.value = value
-  console.log('Data source changed:', value)
-  // Here you would typically fetch new data based on the source
+const usageExamples = {
+  Accordion: '<Accordion :items="items" />',
+  AccordionItem: '<AccordionItem title="Section title">Content</AccordionItem>',
+  Alert: '<Alert variant="success" title="Saved" message="Changes have been saved." />',
+  AuthLayout: '<AuthLayout><LoginPage /></AuthLayout>',
+  Avatar: '<Avatar initials="JD" size="md" />',
+  Badge: '<Badge variant="success">Active</Badge>',
+  BarChart: '<BarChart :data="data" :labels="labels" />',
+  Breadcrumb: '<Breadcrumb :items="items" />',
+  Button: '<Button variant="primary">Save</Button>',
+  ButtonGroup: '<ButtonGroup><Button>Day</Button><Button>Week</Button></ButtonGroup>',
+  Calendar: '<Calendar v-model="selectedDate" />',
+  Card: '<Card title="Overview">Card content</Card>',
+  CardBody: '<CardBody>Body content</CardBody>',
+  CardContent: '<CardContent>Content area</CardContent>',
+  CardFooter: '<CardFooter>Footer actions</CardFooter>',
+  CardHeader: '<CardHeader>Header text</CardHeader>',
+  CardTitle: '<CardTitle>Quarterly Summary</CardTitle>',
+  Checkbox: '<Checkbox v-model="accepted" label="Accept policy" />',
+  CircularProgress: '<CircularProgress :value="72" />',
+  DashboardWidget: '<DashboardWidget title="Open tasks" :value="14" />',
+  DataTable: '<DataTable :rows="rows" :columns="columns" />',
+  DataTableCell: '<DataTableCell :value="row.name" />',
+  DataTableFilters: '<DataTableFilters :filters="filters" />',
+  DataTableHeader: '<DataTableHeader :columns="columns" />',
+  DataTablePagination: '<DataTablePagination :page="1" :total="100" />',
+  DataTableRow: '<DataTableRow :row="row" />',
+  DataTableToolBar: '<DataTableToolBar title="Users" />',
+  DatePicker: '<DatePicker v-model="date" />',
+  DefaultLayout: '<DefaultLayout><RouterView /></DefaultLayout>',
+  Divider: '<Divider />',
+  Dropdown: '<Dropdown :items="items" />',
+  DropdownItem: '<DropdownItem label="Edit" />',
+  ErrorLayout: '<ErrorLayout code="404" title="Not Found" />',
+  EventsCalendar: '<EventsCalendar :events="events" />',
+  FileUpload: '<FileUpload @files-selected="onFiles" />',
+  Footer: '<Footer company-name="STL Horizon" />',
+  FormField: '<FormField label="Email"><Input v-model="email" /></FormField>',
+  Graph: '<Graph :series="series" />',
+  GraphFilters: '<GraphFilters :filters="filters" />',
+  Header: '<Header :user="user" :profile-menu-items="menuItems" />',
+  Icon: '<Icon icon="check" class="w-4 h-4" />',
+  Image: '<Image src="/hero.png" alt="Hero image" />',
+  Input: '<Input v-model="value" placeholder="Enter value" />',
+  InputGroup: '<InputGroup><Input /><Button>Go</Button></InputGroup>',
+  Label: '<Label for="name">Name</Label>',
+  LineChart: '<LineChart :data="lineData" :labels="labels" />',
+  Link: '<Link href="/dashboard">Open Dashboard</Link>',
+  ListItem: '<ListItem>List content</ListItem>',
+  Loader: '<Loader text="Loading data" />',
+  Logo: '<Logo text="STL Horizon" />',
+  MenuItem: '<MenuItem label="Settings" icon="cog" />',
+  Modal: '<Modal v-model="open">Modal content</Modal>',
+  ModalBody: '<ModalBody>Body text</ModalBody>',
+  ModalFooter: '<ModalFooter><Button>Close</Button></ModalFooter>',
+  ModalHeader: '<ModalHeader title="Confirm action" />',
+  Notification: '<Notification title="Update" description="Profile updated." />',
+  Option: '<Option value="active" label="Active" />',
+  Progress: '<Progress :value="55" />',
+  ProgressBar: '<ProgressBar :value="80" />',
+  Radio: '<Radio v-model="plan" value="pro" label="Pro" />',
+  ReminderConfig: '<ReminderConfig :models="models" />',
+  ReusableForm: '<ReusableForm :fields="fields" @submit="onSubmit" />',
+  ReusableFormModal: '<ReusableFormModal v-model="open" :fields="fields" />',
+  Search: '<Search v-model="query" placeholder="Search" />',
+  Select: '<Select v-model="selected" :options="options" />',
+  Sidebar: '<Sidebar :items="navItems" />',
+  Slider: '<Slider v-model="value" :min="0" :max="100" />',
+  Spinner: '<Spinner size="md" />',
+  StackedBarChart: '<StackedBarChart :series="series" :labels="labels" />',
+  Stepper: '<Stepper :items="steps" :current-step="2" />',
+  StepperItem: '<StepperItem :step="1" title="Draft" />',
+  Switch: '<Switch v-model="enabled" label="Enable alerts" />',
+  Tab: '<Tab label="Overview" />',
+  TabPanel: '<TabPanel name="overview">Panel content</TabPanel>',
+  Text: '<Text as="p">Supporting copy</Text>',
+  Textarea: '<Textarea v-model="notes" rows="4" />',
+  ThemeConfigurator: '<ThemeConfigurator />',
+  Timeline: '<Timeline :items="items" />',
+  TimelineItem: '<TimelineItem title="Submitted" />',
+  Toast: 'toast.success("Saved successfully")',
+  Tooltip: '<Button v-tooltip="\'Helpful hint\'">Hover me</Button>',
+  Typography: '<Typography variant="body-sm">Readable text</Typography>'
 }
 
-
-
-const refreshChartData = () => {
-  console.log('Refreshing chart data...')
-  // Here you would refresh the chart data
+const componentNotes = {
+  Toast: 'Import the utility from the package: import { toast } from @stlhorizon/vue-ui',
+  Tooltip: 'Use as a directive after registering plugin or directive.',
+  AuthLayout: 'Layout wrapper for authentication pages.',
+  DefaultLayout: 'Layout wrapper for standard application pages.',
+  ErrorLayout: 'Layout wrapper for error states and fallback pages.'
 }
 
-const handleBarHover = (data) => {
-  console.log('Bar hovered:', data)
-}
+const installCommand = computed(() => installCommands[selectedManager.value])
+const groupedNames = computed(() => componentGroups.flatMap((group) => group.items))
+const uncategorizedComponents = computed(() => allExportedComponents.filter((name) => !groupedNames.value.includes(name)))
+const normalizedSearch = computed(() => componentSearch.value.trim().toLowerCase())
 
-const handlePointHover = (data) => {
-  console.log('Point hovered:', data)
-}
+const filteredGroups = computed(() => {
+  return componentGroups
+    .map((group) => {
+      const filteredItems = group.items.filter((item) => item.toLowerCase().includes(normalizedSearch.value))
+      return { ...group, filteredItems }
+    })
+    .filter((group) => group.filteredItems.length > 0)
+})
 
-const toggleLoading = () => {
-  loading.value = !loading.value;
-};
+const filteredUncategorized = computed(() => {
+  return uncategorizedComponents.value.filter((item) => item.toLowerCase().includes(normalizedSearch.value))
+})
 
-const scrollToSection = (sectionId) => {
-  const element = document.getElementById(sectionId);
+const filteredComponentsCount = computed(() => {
+  const groupedCount = filteredGroups.value.reduce((sum, group) => sum + group.filteredItems.length, 0)
+  return groupedCount + filteredUncategorized.value.length
+})
+
+const scrollToSection = (id) => {
+  const element = document.getElementById(id)
   if (element) {
-    element.scrollIntoView({ behavior: 'smooth' });
+    element.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
-  currentSection.value = sectionId;
-};
+}
 
-const handleSidebarNavigate = (item) => {
-  // Extract section id from route (remove the # symbol)
-  const sectionId = item.route.substring(1);
-  scrollToSection(sectionId);
-};
+const copySnippet = async (key, content) => {
+  if (!navigator?.clipboard) return
 
-const handleFilesSelected = (files) => {
-  console.log('Files selected:', files);
-  toast.success(`${files.length} file(s) selected`);
-};
+  await navigator.clipboard.writeText(content)
+  copiedKey.value = key
 
-// Compute current path based on current section
-const currentPath = computed(() => `#${currentSection.value}`);
+  window.setTimeout(() => {
+    if (copiedKey.value === key) copiedKey.value = ''
+  }, 1200)
+}
+
+const componentImportSnippet = (name) => `import { ${name} } from '${packageName}'`
+const componentUsageSnippet = (name) => usageExamples[name] || `<${name} />`
 </script>
 
 <template>
-  <div class="max-w-full mx-auto ui-bg">
-    <!-- Simplified Sidebar Navigation - No router-link, just buttons -->
-    <aside class="fixed ui-bg left-0 top-0 z-40 h-screen w-52 border-r ui-border-strong overflow-y-auto">
-      <nav class="p-4">
-        <div class="space-y-2">
-          <button
-            v-for="item in navigationItems"
-            :key="item.label "           :class="[
-              'w-full flex flex-col items-center justify-center rounded-xl transition-all duration-200 group relative py-4 px-3',
-              currentPath === item.route
-                ? 'bg-linear-to-br from-(--ui-primary-soft) to-(--ui-primary-soft) border border-(--ui-primary-soft) shadow-sm'
-                : 'ui-text hover:bg-(--ui-surface) hover:text-(--ui-text) border border-transparent'
-            ]"
-            @click="handleSidebarNavigate(item)"
-          >
-            <!-- Icon Container -->
-            <div
-              :class="[
-                'flex items-center justify-center rounded-lg transition-colors mb-2 w-12 h-12',
-                currentPath === item.route
-                  ? 'bg-linear-to-br from-(--ui-primary) to-(--ui-primary) ui-text shadow-md'
-                  : 'ui-text group-hover:text-(--ui-text) ui-surface-muted group-hover:bg-(--ui-bg)'
-              ]"
-            >
-              <Icon
-                :icon="item.icon"
-                class="w-6 h-6"
-              />
-            </div>
-
-            <!-- Label -->
-            <span
-              :class="[
-                'text-xs font-medium text-center',
-                currentPath === item.route
-                  ? 'ui-primary font-semibold'
-                  : 'ui-text group-hover:text-(--ui-text)'
-              ]"
-            >
-              {{ item.label }}
-            </span>
-          </button>
-        </div>
-      </nav>
-    </aside>
-
-    <!-- Main Content -->
-    <div class="ml-52 min-h-screen">
-      <div class="sticky top-0 z-40 bg-[color:color-mix(in oklab, var(--ui-surface), transparent 10%)] backdrop-blur border-b ui-border-strong px-8 py-3 flex items-center gap-3">
-        <router-link
-          to="/templates/overview"
-          class="px-3 py-1.5 rounded-md text-sm font-medium border ui-border-strong hover:bg-(--ui-surface)"
-        >
-          Dashboard
-        </router-link>
-        <router-link
-          to="/components"
-          class="px-3 py-1.5 rounded-md text-sm font-medium border ui-border-strong hover:bg-(--ui-surface)"
-        >
-          Component Showcase
-        </router-link>
-        <router-link
-          to="/components/full-gallery"
-          class="px-3 py-1.5 rounded-md text-sm font-medium border ui-border-strong hover:bg-(--ui-surface)"
-        >
-          Full Gallery
-        </router-link>
-      </div>
-
-      <div class="p-8">
-        <div class="w-full space-y-12">
-          <div class="text-center mb-12">
-            <h1 class="text-4xl font-bold mb-4">
-              Component Showcase
-            </h1>
-            <p class="text-lg ui-text">
-              Explore our comprehensive component library with interactive examples
+  <div class="min-h-screen ui-bg docs-shell">
+    <header class="sticky top-0 z-50 border-b ui-border-strong bg-[color:color-mix(in oklab, var(--ui-surface), transparent 6%)] backdrop-blur-md">
+      <div class="mx-auto flex max-w-[1400px] items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
+        <div class="flex items-center gap-3">
+          <div class="flex h-9 w-9 items-center justify-center rounded-lg docs-brand-chip text-sm font-bold text-white">
+            UI
+          </div>
+          <div>
+            <p class="text-sm font-semibold">
+              STL Horizon Vue UI
+            </p>
+            <p class="text-xs ui-text-muted">
+              Setup Guide v{{ packageVersion }}
             </p>
           </div>
+        </div>
 
-          <!-- Buttons Section -->
-          <section
-            id="buttons"
-            class="space-y-8"
+        <div class="hidden items-center gap-2 md:flex">
+          <button
+            v-for="link in sectionLinks"
+            :key="link.id"
+            type="button"
+            class="rounded-md border ui-border-strong px-3 py-1.5 text-xs font-medium hover:bg-(--ui-surface-soft)"
+            @click="scrollToSection(link.id)"
           >
-            <h2 class="text-3xl font-bold border-b pb-4">
-              Button Components
-            </h2>
-
-            <div class="space-y-6">
-              <div>
-                <h3 class="text-xl font-semibold mb-4">
-                  Variants
-                </h3>
-                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                  <Button variant="default">
-                    Default
-                  </Button>
-                  <Button variant="danger">
-                    danger
-                  </Button>
-                  <Button variant="outline">
-                    Outline
-                  </Button>
-                  <Button variant="ghost">
-                    Ghost
-                  </Button>
-                  <Button variant="success">
-                    Success
-                  </Button>
-                  <Button variant="warning">
-                    Warning
-                  </Button>
-                  <Button variant="info">
-                    Info
-                  </Button>
-                  <Button variant="subtle">
-                    Subtle
-                  </Button>
-                  <Button variant="dark">
-                    Dark
-                  </Button>
-                  <Button variant="light">
-                    Light
-                  </Button>
-                  <Button variant="primaryOutline">
-                    Primary Outline
-                  </Button>
-                  <Button variant="dangerOutline">
-                    danger Outline
-                  </Button>
-                  <Button variant="successOutline">
-                    Success Outline
-                  </Button>
-                  <Button variant="gradient">
-                    Gradient
-                  </Button>
-                </div>
-              </div>
-
-              <div>
-                <h3 class="text-xl font-semibold mb-4">
-                  Sizes
-                </h3>
-                <div class="flex flex-wrap gap-4 items-center">
-                  <Button size="xs">
-                    Extra Small
-                  </Button>
-                  <Button size="sm">
-                    Small
-                  </Button>
-                  <Button size="default">
-                    Default Size
-                  </Button>
-                  <Button size="lg">
-                    Large
-                  </Button>
-                  <Button
-                    size="icon"
-                    @click="showToast"
-                  >
-                    <svg
-                      class="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                      />
-                    </svg>
-                  </Button>
-                </div>
-              </div>
-
-              <div>
-                <h3 class="text-xl font-semibold mb-4">
-                  States
-                </h3>
-                <div class="flex flex-wrap gap-4 items-center">
-                  <Button
-                    :loading="buttonLoading"
-                    @click="handleButtonClick"
-                  >
-                    Loading Button
-                  </Button>
-                  <Button disabled>
-                    Disabled
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <!-- Forms Section -->
-          <section
-            id="forms"
-            class="space-y-8"
-          >
-            <h2 class="text-3xl font-bold border-b pb-4">
-              Form Components
-            </h2>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <!-- Input Examples -->
-              <div class="space-y-6">
-                <h3 class="text-xl font-semibold">
-                  Input Component
-                </h3>
-                <div class="space-y-4">
-                  <Input
-                    v-model="inputValue"
-                    placeholder="Basic input"
-                  />
-                  <Input
-                    v-model="inputValue"
-                    placeholder="With clear button"
-                    clearable
-                  />
-                  <Input
-                    v-model="inputValue"
-                    type="email"
-                    placeholder="Email input"
-                  />
-                  <Input
-                    v-model="inputValue"
-                    type="password"
-                    placeholder="Password input"
-                  />
-                  <Input
-                    v-model="inputValue"
-                    variant="error"
-                    placeholder="Error state"
-                    error="This field is required"
-                  />
-                  <Input
-                    v-model="inputValue"
-                    variant="success"
-                    placeholder="Success state"
-                  />
-                  <Input
-                    v-model="inputValue"
-                    size="sm"
-                    placeholder="Small size"
-                  />
-                  <Input
-                    v-model="inputValue"
-                    size="lg"
-                    placeholder="Large size"
-                  />
-                </div>
-              </div>
-
-              <!-- Select, Checkbox, Radio -->
-              <div class="space-y-6">
-                <div>
-                  <h4 class="text-lg font-semibold mb-3">
-                    Select Component
-                  </h4>
-                  <Select v-model="selectValue">
-                    <option value="">
-                      Choose an option
-                    </option>
-                    <option value="option1">
-                      Option 1
-                    </option>
-                    <option value="option2">
-                      Option 2
-                    </option>
-                    <option value="option3">
-                      Option 3
-                    </option>
-                  </Select>
-                  <p class="text-sm ui-text mt-2">
-                    Selected: {{ selectValue }}
-                  </p>
-                </div>
-
-                <div>
-                  <h4 class="text-lg font-semibold mb-3">
-                    Date Picker
-                  </h4>
-                  <div class="space-y-3">
-                    <DatePicker
-                      v-model="datePickerValue"
-                      placeholder="Pick a date"
-                    />
-                    <Calendar
-                      v-model="calendarValue"
-                      placeholder="Calendar input"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <h4 class="text-lg font-semibold mb-3">
-                    Checkbox Component
-                  </h4>
-                  <div class="space-y-2">
-                    <Checkbox
-                      v-model="checkboxValue"
-                      label="Basic checkbox"
-                    />
-                    <Checkbox
-                      v-model="checkboxValue"
-                      label="Disabled checkbox"
-                      disabled
-                    />
-                    <Checkbox
-                      v-model="checkboxValue"
-                      label="With description"
-                      description="This is a description for the checkbox."
-                    />
-                    <Checkbox
-                      v-model="checkboxValue"
-                      size="sm"
-                      label="Small checkbox"
-                    />
-                    <Checkbox
-                      v-model="checkboxValue"
-                      size="lg"
-                      label="Large checkbox"
-                    />
-                  </div>
-                  <p class="text-sm ui-text mt-2">
-                    Value: {{ checkboxValue }}
-                  </p>
-                </div>
-
-                <div>
-                  <h4 class="text-lg font-semibold mb-3">
-                    Radio Component
-                  </h4>
-                  <div class="space-y-2">
-                    <Radio
-                      v-model="radioValue"
-                      value="option1"
-                      label="Option 1"
-                    />
-                    <Radio
-                      v-model="radioValue"
-                      value="option2"
-                      label="Option 2"
-                    />
-                    <Radio
-                      v-model="radioValue"
-                      value="option3"
-                      label="Option 3"
-                    />
-                    <Radio
-                      v-model="radioValue"
-                      value="option1"
-                      label="Disabled option"
-                      disabled
-                    />
-                  </div>
-                  <p class="text-sm ui-text mt-2">
-                    Selected: {{ radioValue }}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <!-- Textarea -->
-            <div class="space-y-4">
-              <h3 class="text-xl font-semibold">
-                Textarea Component
-              </h3>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Textarea
-                  v-model="textareaValue"
-                  placeholder="Basic textarea"
-                />
-                <Textarea
-                  v-model="textareaValue"
-                  placeholder="Textarea with auto-resize"
-                  auto-resize
-                />
-                <Textarea
-                  v-model="textareaValue"
-                  :rows="5"
-                  placeholder="Textarea with 5 rows"
-                />
-                <Textarea
-                  v-model="textareaValue"
-                  variant="error"
-                  placeholder="Error state textarea"
-                  error="This field is required"
-                />
-                <Textarea
-                  v-model="textareaValue"
-                  variant="success"
-                  placeholder="Success state textarea"
-                />
-                <Textarea
-                  v-model="textareaValue"
-                  size="sm"
-                  placeholder="Small textarea"
-                />
-                <Textarea
-                  v-model="textareaValue"
-                  size="lg"
-                  placeholder="Large textarea"
-                />
-              </div>
-            </div>
-          </section>
-
-          <!-- Data Section -->
-          <section
-            id="data"
-            class="space-y-8"
-          >
-            <h2 class="text-3xl font-bold border-b pb-4">
-              Data Components
-            </h2>
-
-            <!-- DataTable -->
-            <div class="space-y-4">
-              <h3 class="text-xl font-semibold">
-                DataTable Component
-              </h3>
-              <DataTableTest />
-            </div>
-
-            <!-- File Upload -->
-            <div class="space-y-4">
-              <h3 class="text-xl font-semibold">
-                FileUpload Component
-              </h3>
-              <FileUpload
-                multiple
-                accept=".jpg,.png,.pdf"
-                @files-selected="handleFilesSelected"
-              >
-                <Icon
-                  icon="upload"
-                  class="h-8 w-8 text-muted-foreground mb-2"
-                />
-              </FileUpload>
-            </div>
-          </section>
-
-          <!-- Feedback Section -->
-          <section
-            id="feedback"
-            class="space-y-8"
-          >
-            <h2 class="text-3xl font-bold border-b pb-4">
-              Feedback Components
-            </h2>
-
-            <!-- Alert Examples -->
-            <div class="space-y-4">
-              <h3 class="text-xl font-semibold">
-                Alert Component
-              </h3>
-              <div class="space-y-4">
-                <Alert
-                  variant="info"
-                  title="Info Alert"
-                  message="This is an informational alert."
-                />
-                <Alert
-                  variant="success"
-                  title="Success Alert"
-                  message="Operation completed successfully!"
-                />
-                <Alert
-                  variant="warning"
-                  title="Warning Alert"
-                  message="Please be cautious with this action."
-                />
-                <Alert
-                  variant="error"
-                  title="Error Alert"
-                  message="Something went wrong. Please try again."
-                />
-                <Alert
-                  variant="danger"
-                  title="danger Alert"
-                  message="This action cannot be undone."
-                  dismissible
-                />
-              </div>
-            </div>
-
-            <!-- Toast Example -->
-            <div class="space-y-4">
-              <h3 class="text-xl font-semibold">
-                Toast Component
-              </h3>
-              <div class="flex flex-wrap gap-4">
-                <Button @click="toast.info('Info toast')">
-                  Info Toast
-                </Button>
-                <Button @click="toast.success('Success toast')">
-                  Success Toast
-                </Button>
-                <Button @click="toast.warning('Warning toast')">
-                  Warning Toast
-                </Button>
-                <Button @click="toast.error('Error toast')">
-                  Error Toast
-                </Button>
-              </div>
-            </div>
-
-            <!-- Progress -->
-            <div class="space-y-4">
-              <h3 class="text-xl font-semibold">
-                Progress Component
-              </h3>
-              <div class="space-y-4">
-                <div>
-                  <Button
-                    class="mb-4"
-                    @click="startProgress"
-                  >
-                    Start Progress
-                  </Button>
-                  <Progress :value="progressValue" />
-                  <p class="text-sm ui-text mt-2">
-                    {{ progressValue }}% complete
-                  </p>
-                </div>
-                <div class="space-y-2">
-                  <Progress
-                    :value="25"
-                    variant="success"
-                  />
-                  <Progress
-                    :value="50"
-                    variant="warning"
-                  />
-                  <Progress
-                    :value="75"
-                    variant="danger"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <!-- Circular Progress -->
-            <div class="space-y-4">
-              <h3 class="text-xl font-semibold">
-                Circular Progress Component
-              </h3>
-              <div class="space-y-4">
-                <div class="flex flex-wrap gap-6 items-center">
-                  <div class="flex flex-col items-center space-y-2">
-                    <CircularProgress
-                      :value="progressValue"
-                      size="xs"
-                    />
-                    <span class="text-xs">XS</span>
-                  </div>
-                  <div class="flex flex-col items-center space-y-2">
-                    <CircularProgress
-                      :value="progressValue"
-                      size="sm"
-                    />
-                    <span class="text-xs">SM</span>
-                  </div>
-                  <div class="flex flex-col items-center space-y-2">
-                    <CircularProgress
-                      :value="progressValue"
-                      size="md"
-                    />
-                    <span class="text-xs">MD</span>
-                  </div>
-                  <div class="flex flex-col items-center space-y-2">
-                    <CircularProgress
-                      :value="progressValue"
-                      size="lg"
-                    />
-                    <span class="text-xs">LG</span>
-                  </div>
-                  <div class="flex flex-col items-center space-y-2">
-                    <CircularProgress
-                      :value="progressValue"
-                      size="xl"
-                    />
-                    <span class="text-xs">XL</span>
-                  </div>
-                </div>
-                <div class="flex flex-wrap gap-6 items-center">
-                  <div class="flex flex-col items-center space-y-2">
-                    <CircularProgress
-                      :value="25"
-                      variant="success"
-                    />
-                    <span class="text-xs">Success</span>
-                  </div>
-                  <div class="flex flex-col items-center space-y-2">
-                    <CircularProgress
-                      :value="50"
-                      variant="warning"
-                    />
-                    <span class="text-xs">Warning</span>
-                  </div>
-                  <div class="flex flex-col items-center space-y-2">
-                    <CircularProgress
-                      :value="75"
-                      variant="danger"
-                    />
-                    <span class="text-xs">Danger</span>
-                  </div>
-                  <div class="flex flex-col items-center space-y-2">
-                    <CircularProgress :value="100" />
-                    <span class="text-xs">Complete</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <!-- Layout Section -->
-          <section
-            id="layout"
-            class="space-y-8"
-          >
-            <h2 class="text-3xl font-bold border-b pb-4">
-              Layout Components
-            </h2>
-
-            <!-- Card Examples -->
-            <div class="space-y-4">
-              <h3 class="text-xl font-semibold">
-                Card Component
-              </h3>
-              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <Card
-                  title="Default Card"
-                  subtitle="This is a default card"
-                >
-                  <p>This is the card content. Cards can contain any content you want.</p>
-                </Card>
-                <Card
-                  variant="outlined"
-                  title="Outlined Card"
-                >
-                  <p>This card has an outlined variant.</p>
-                </Card>
-                <Card
-                  variant="elevated"
-                  title="Elevated Card"
-                  hoverable
-                >
-                  <p>This card has elevation and hover effects.</p>
-                </Card>
-                <Card
-                  variant="filled"
-                  title="Filled Card"
-                >
-                  <p>This card has a filled background.</p>
-                </Card>
-                <Card
-                  title="Card with Actions"
-                  hoverable
-                  clickable
-                >
-                  <p>This card is clickable and has hover effects.</p>
-                  <template #actions>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                    >
-                      Action 1
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                    >
-                      Action 2
-                    </Button>
-                  </template>
-                </Card>
-                <Card title="Card with Footer">
-                  <p>Main content of the card.</p>
-                  <template #footer>
-                    <div class="flex justify-between items-center">
-                      <span class="text-sm ui-text">Footer content</span>
-                      <Button size="sm">
-                        Footer Action
-                      </Button>
-                    </div>
-                  </template>
-                </Card>
-              </div>
-            </div>
-
-            <div class="space-y-4">
-              <h3 class="text-xl font-semibold">
-                Card Subcomponents & Navigation
-              </h3>
-              <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Card>
-                  <CardHeader>
-                    <template #title>
-                      <CardTitle>Account Overview</CardTitle>
-                    </template>
-                    <template #description>
-                      A composed card using header, body, content, and footer.
-                    </template>
-                  </CardHeader>
-                  <CardBody>
-                    <CardContent>
-                      <div class="flex items-center gap-3">
-                        <Avatar
-                          name="Jordan Blake"
-                          size="md"
-                        />
-                        <div class="space-y-1">
-                          <div class="font-medium ui-text">
-                            Jordan Blake
-                          </div>
-                          <Badge variant="success">
-                            Active
-                          </Badge>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </CardBody>
-                  <CardFooter>
-                    <div class="flex items-center justify-between w-full">
-                      <Breadcrumb
-                        :items="[
-                          { label: 'Dashboard', href: '#' },
-                          { label: 'Users', href: '#' },
-                          { label: 'Profile', href: '#' }
-                        ]"
-                      />
-                      <ButtonGroup>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                        >
-                          Edit
-                        </Button>
-                        <Button size="sm">
-                          Save
-                        </Button>
-                      </ButtonGroup>
-                    </div>
-                  </CardFooter>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <template #title>
-                      <CardTitle>Events Calendar</CardTitle>
-                    </template>
-                    <template #description>
-                      Monthly view with sample events.
-                    </template>
-                  </CardHeader>
-                  <CardBody>
-                    <EventsCalendar
-                      size="sm"
-                      :events="[
-                        { id: 1, title: 'Design Review', date: new Date().toISOString().slice(0, 10), color: 'primary' }
-                      ]"
-                    />
-                  </CardBody>
-                </Card>
-              </div>
-            </div>
-
-            <!-- Accordion -->
-            <div class="space-y-4">
-              <h3 class="text-xl font-semibold">
-                Accordion Component
-              </h3>
-              <div class="max-w-2xl">
-                <Accordion :items="accordionItems" />
-              </div>
-            </div>
-
-            <!-- Modal Example -->
-            <div class="space-y-4">
-              <h3 class="text-xl font-semibold">
-                Modal Component
-              </h3>
-              <Button @click="modalOpen = true">
-                Open Modal
-              </Button>
-              <Modal
-                v-model="modalOpen"
-                size="md"
-              >
-                <div class="space-y-4">
-                  <h3 class="text-lg font-semibold">
-                    Modal Title
-                  </h3>
-                  <p>This is the modal content. You can put any content here.</p>
-                  <div class="flex justify-end space-x-2">
-                    <Button
-                      variant="outline"
-                      @click="modalOpen = false"
-                    >
-                      Cancel
-                    </Button>
-                    <Button @click="modalOpen = false">
-                      Confirm
-                    </Button>
-                  </div>
-                </div>
-              </Modal>
-            </div>
-          </section>
-
-          <!-- Loaders Section -->
-          <section
-            id="loaders"
-            class="space-y-8"
-          >
-            <h2 class="text-3xl font-bold border-b pb-4">
-              Loading Components
-            </h2>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <!--Loader -->
-              <div class="space-y-4">
-                <h3 class="text-xl font-semibold">
-                  Loader Component
-                </h3>
-                <div class="space-y-4">
-                  <div class="flex items-center gap-4">
-                    <Button @click="toggleLoading">
-                      Toggle Loading
-                    </Button>
-                    <span class="text-sm ui-text">Status: {{ loading ? 'Loading' : 'Not Loading' }}</span>
-                  </div>
-
-                  <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div class="flex flex-col items-center space-y-2">
-                      <Loader
-                        :loading="loading"
-                        type="spin"
-                        size="small"
-                      />
-                      <span class="text-xs">Spin</span>
-                    </div>
-                    <div class="flex flex-col items-center space-y-2">
-                      <Loader
-                        :loading="loading"
-                        type="pulse"
-                        size="small"
-                      />
-                      <span class="text-xs">Pulse</span>
-                    </div>
-                    <div class="flex flex-col items-center space-y-2">
-                      <Loader
-                        :loading="loading"
-                        type="bounce"
-                        size="small"
-                      />
-                      <span class="text-xs">Bounce</span>
-                    </div>
-                    <div class="flex flex-col items-center space-y-2">
-                      <Loader
-                        :loading="loading"
-                        type="dots"
-                        size="small"
-                      />
-                      <span class="text-xs">Dots</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Spinner -->
-              <div class="space-y-4">
-                <h3 class="text-xl font-semibold">
-                  Spinner Component
-                </h3>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div class="flex flex-col items-center space-y-2">
-                    <Spinner size="xs" />
-                    <span class="text-xs">XS</span>
-                  </div>
-                  <div class="flex flex-col items-center space-y-2">
-                    <Spinner size="sm" />
-                    <span class="text-xs">SM</span>
-                  </div>
-                  <div class="flex flex-col items-center space-y-2">
-                    <Spinner size="md" />
-                    <span class="text-xs">MD</span>
-                  </div>
-                  <div class="flex flex-col items-center space-y-2">
-                    <Spinner size="lg" />
-                    <span class="text-xs">LG</span>
-                  </div>
-                  <div class="flex flex-col items-center space-y-2">
-                    <Spinner size="xl" />
-                    <span class="text-xs">XL</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <!-- Graphs Section -->
-          <section
-            id="graphs"
-            class="space-y-8"
-          >
-            <h2 class="text-3xl font-bold border-b pb-4">
-              Graph Components
-            </h2>
-
-            <!-- Bar Chart Example -->
-            <div class="space-y-4">
-              <h3 class="text-xl font-semibold">
-                Bar Chart with Filters
-              </h3>
-              <Graph
-                title="Sales Overview"
-                description="Monthly sales data"
-              >
-                <template #filters>
-                  <GraphFilters
-                    :data-sources="dataSources"
-                    @update:data-source="handleDataSourceChange"
-                    @refresh="refreshChartData"
-                  />
-                </template>
-
-                <BarChart
-                  :data="barData"
-                  :labels="barLabels"
-                  :colors="['#3b82f6', '#ef4444', '#10b981', '#f59e0b']"
-                  :width="600"
-                  :height="400"
-                  @bar-hover="handleBarHover"
-                />
-
-                <template #legend>
-                  <div class="flex items-center gap-4 text-sm">
-                    <div class="flex items-center gap-2">
-                      <div class="w-3 h-3 ui-primary-bg rounded" />
-                      <span>Sales</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                      <div class="w-3 h-3 ui-danger-bg rounded" />
-                      <span>Expenses</span>
-                    </div>
-                  </div>
-                </template>
-              </Graph>
-            </div>
-
-            <!-- Line Chart Example -->
-            <div class="space-y-4">
-              <h3 class="text-xl font-semibold">
-                Line Chart with Date Filters
-              </h3>
-              <Graph
-                title="Revenue Trend"
-                variant="outlined"
-              >
-                <template #filters>
-                  <GraphFilters
-                    :show-chart-type-filter="false"
-                    :show-date-filter="true"
-                    @update:date-from="dateFrom = $event"
-                    @update:date-to="dateTo = $event"
-                  />
-                </template>
-
-                <LineChart
-                  :data="lineData"
-                  :labels="lineLabels"
-                  :fill-area="true"
-                  :colors="['#8b5cf6']"
-                  :width="600"
-                  :height="300"
-                  @point-hover="handlePointHover"
-                />
-              </Graph>
-            </div>
-          </section>
-
-          <!-- Widgets Test Section -->
-          <section
-            id="widgets-test"
-            class="space-y-8"
-          >
-            <h2 class="text-3xl font-bold border-b pb-4">
-              Widgets Test
-            </h2>
-
-            <WidgetsTest />
-          </section>
+            {{ link.label }}
+          </button>
         </div>
       </div>
-    </div>
+    </header>
 
-    <Toast />
+    <main class="mx-auto max-w-[1400px] px-4 py-8 sm:px-6 lg:px-8">
+      <div class="grid gap-8 xl:grid-cols-[240px,minmax(0,1fr),220px]">
+        <aside class="xl:sticky xl:top-24 xl:h-fit">
+          <div class="rounded-2xl border ui-border-strong ui-surface p-4">
+            <p class="text-xs font-semibold uppercase tracking-[0.16em] ui-text-muted">
+              Getting Started
+            </p>
+            <div class="mt-3 space-y-1">
+              <button
+                v-for="link in sectionLinks"
+                :key="`left-${link.id}`"
+                type="button"
+                class="block w-full rounded-md px-2 py-2 text-left text-sm font-medium hover:bg-(--ui-surface-soft)"
+                @click="scrollToSection(link.id)"
+              >
+                {{ link.label }}
+              </button>
+            </div>
+          </div>
+        </aside>
+
+        <div class="space-y-8">
+          <section
+            id="setup-intro"
+            class="rounded-2xl border ui-border-strong ui-surface p-6 docs-hero"
+          >
+            <p class="text-xs font-semibold uppercase tracking-[0.18em] ui-text-muted">
+              Setup
+            </p>
+            <h1 class="mt-2 text-3xl font-bold sm:text-4xl">
+              Install and configure STL Horizon Vue UI
+            </h1>
+            <p class="mt-3 max-w-3xl text-sm sm:text-base ui-text-muted">
+              This page is modeled after modern component-library documentation: quick install, plugin registration,
+              theme setup, verification, and a complete component catalog with ready-to-copy usage snippets.
+            </p>
+
+            <div class="mt-5 flex flex-wrap items-center gap-2">
+              <Badge variant="success">
+                82 exported components
+              </Badge>
+              <Badge variant="primary">
+                Global plugin + tree-shaking support
+              </Badge>
+              <Badge variant="warning">
+                Vue 3.5+ peer dependency
+              </Badge>
+            </div>
+          </section>
+
+          <section
+            id="download"
+            class="rounded-2xl border ui-border-strong ui-surface p-6"
+          >
+            <p class="text-xs font-semibold uppercase tracking-[0.16em] ui-text-muted">
+              Download
+            </p>
+            <h2 class="mt-2 text-2xl font-bold">
+              Add package dependency
+            </h2>
+
+            <div class="mt-4 flex flex-wrap gap-2">
+              <button
+                v-for="manager in ['npm', 'pnpm', 'yarn', 'bun']"
+                :key="manager"
+                type="button"
+                :class="[
+                  'rounded-md border px-3 py-1.5 text-xs font-semibold uppercase tracking-wide',
+                  selectedManager === manager
+                    ? 'ui-primary-bg border-(--ui-primary)'
+                    : 'ui-border-strong hover:bg-(--ui-surface-soft)'
+                ]"
+                @click="selectedManager = manager"
+              >
+                {{ manager }}
+              </button>
+            </div>
+
+            <div class="mt-4 rounded-xl border ui-border-strong bg-black/92 p-4">
+              <div class="mb-2 flex items-center justify-between gap-3">
+                <p class="text-xs font-semibold uppercase tracking-wide text-white/80">
+                  Install Command
+                </p>
+                <button
+                  type="button"
+                  class="rounded-md border border-white/30 px-3 py-1 text-xs font-medium text-white hover:bg-white/10"
+                  @click="copySnippet('install', installCommand)"
+                >
+                  {{ copiedKey === 'install' ? 'Copied' : 'Copy' }}
+                </button>
+              </div>
+              <pre class="overflow-x-auto text-sm text-white"><code>{{ installCommand }}</code></pre>
+            </div>
+          </section>
+
+          <section
+            id="plugin"
+            class="rounded-2xl border ui-border-strong ui-surface p-6"
+          >
+            <p class="text-xs font-semibold uppercase tracking-[0.16em] ui-text-muted">
+              Plugin
+            </p>
+            <h2 class="mt-2 text-2xl font-bold">
+              Register globally in <code class="font-mono">main.js</code>
+            </h2>
+
+            <div class="mt-4 rounded-xl border ui-border-strong bg-black/92 p-4">
+              <div class="mb-2 flex items-center justify-between gap-3">
+                <p class="text-xs font-semibold uppercase tracking-wide text-white/80">
+                  Global Plugin Setup
+                </p>
+                <button
+                  type="button"
+                  class="rounded-md border border-white/30 px-3 py-1 text-xs font-medium text-white hover:bg-white/10"
+                  @click="copySnippet('pluginInstall', setupSnippets.pluginInstall)"
+                >
+                  {{ copiedKey === 'pluginInstall' ? 'Copied' : 'Copy' }}
+                </button>
+              </div>
+              <pre class="overflow-x-auto text-sm text-white"><code>{{ setupSnippets.pluginInstall }}</code></pre>
+            </div>
+
+            <div class="mt-4 rounded-xl border ui-border-strong ui-surface-soft p-4">
+              <p class="text-sm font-semibold">
+                Optional prefix strategy
+              </p>
+              <p class="mt-1 text-sm ui-text-muted">
+                Use prefixes in large codebases to avoid global component name collisions.
+              </p>
+              <div class="mt-3 rounded-lg border ui-border-strong bg-black/92 p-3">
+                <div class="mb-2 flex items-center justify-between gap-3">
+                  <p class="text-xs font-semibold uppercase tracking-wide text-white/80">
+                    Prefixed Plugin Setup
+                  </p>
+                  <button
+                    type="button"
+                    class="rounded-md border border-white/30 px-3 py-1 text-xs font-medium text-white hover:bg-white/10"
+                    @click="copySnippet('prefixedPlugin', setupSnippets.prefixedPlugin)"
+                  >
+                    {{ copiedKey === 'prefixedPlugin' ? 'Copied' : 'Copy' }}
+                  </button>
+                </div>
+                <pre class="overflow-x-auto text-sm text-white"><code>{{ setupSnippets.prefixedPlugin }}</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <section
+            id="theme"
+            class="rounded-2xl border ui-border-strong ui-surface p-6"
+          >
+            <p class="text-xs font-semibold uppercase tracking-[0.16em] ui-text-muted">
+              Theme
+            </p>
+            <h2 class="mt-2 text-2xl font-bold">
+              Use component-level imports (tree-shaking)
+            </h2>
+
+            <div class="mt-4 rounded-xl border ui-border-strong bg-black/92 p-4">
+              <div class="mb-2 flex items-center justify-between gap-3">
+                <p class="text-xs font-semibold uppercase tracking-wide text-white/80">
+                  Selective Import Pattern
+                </p>
+                <button
+                  type="button"
+                  class="rounded-md border border-white/30 px-3 py-1 text-xs font-medium text-white hover:bg-white/10"
+                  @click="copySnippet('treeShaking', setupSnippets.treeShaking)"
+                >
+                  {{ copiedKey === 'treeShaking' ? 'Copied' : 'Copy' }}
+                </button>
+              </div>
+              <pre class="overflow-x-auto text-sm text-white"><code>{{ setupSnippets.treeShaking }}</code></pre>
+            </div>
+
+            <p class="mt-4 text-sm ui-text-muted">
+              Theme helpers are exported from the package: <code class="font-mono">initTheme</code>, <code class="font-mono">setTheme</code>,
+              <code class="font-mono">setMode</code>, <code class="font-mono">getTheme</code>, and <code class="font-mono">getMode</code>.
+            </p>
+          </section>
+
+          <section
+            id="verify"
+            class="rounded-2xl border ui-border-strong ui-surface p-6"
+          >
+            <p class="text-xs font-semibold uppercase tracking-[0.16em] ui-text-muted">
+              Verify
+            </p>
+            <h2 class="mt-2 text-2xl font-bold">
+              Validate setup with a first component
+            </h2>
+
+            <div class="mt-4 grid gap-4 lg:grid-cols-2">
+              <div class="rounded-xl border ui-border-strong ui-surface-soft p-4">
+                <p class="text-xs font-semibold uppercase tracking-wide ui-text-muted">
+                  Live preview
+                </p>
+                <div class="mt-3 space-y-3">
+                  <Input
+                    v-model="liveQuery"
+                    placeholder="Search reminders"
+                    clearable
+                  />
+                  <div class="flex flex-wrap items-center gap-2">
+                    <Button variant="primary">
+                      Run Search
+                    </Button>
+                    <Badge variant="secondary">
+                      Query: {{ liveQuery }}
+                    </Badge>
+                  </div>
+                </div>
+              </div>
+
+              <div class="rounded-xl border ui-border-strong bg-black/92 p-4">
+                <div class="mb-2 flex items-center justify-between gap-3">
+                  <p class="text-xs font-semibold uppercase tracking-wide text-white/80">
+                    Usage Snippet
+                  </p>
+                  <button
+                    type="button"
+                    class="rounded-md border border-white/30 px-3 py-1 text-xs font-medium text-white hover:bg-white/10"
+                    @click="copySnippet('firstUsage', setupSnippets.firstUsage)"
+                  >
+                    {{ copiedKey === 'firstUsage' ? 'Copied' : 'Copy' }}
+                  </button>
+                </div>
+                <pre class="overflow-x-auto text-sm text-white"><code>{{ setupSnippets.firstUsage }}</code></pre>
+              </div>
+            </div>
+
+            <div class="mt-4 rounded-xl border ui-border-strong bg-black/92 p-4">
+              <div class="mb-2 flex items-center justify-between gap-3">
+                <p class="text-xs font-semibold uppercase tracking-wide text-white/80">
+                  Verification Commands
+                </p>
+                <button
+                  type="button"
+                  class="rounded-md border border-white/30 px-3 py-1 text-xs font-medium text-white hover:bg-white/10"
+                  @click="copySnippet('verify', setupSnippets.verify)"
+                >
+                  {{ copiedKey === 'verify' ? 'Copied' : 'Copy' }}
+                </button>
+              </div>
+              <pre class="overflow-x-auto text-sm text-white"><code>{{ setupSnippets.verify }}</code></pre>
+            </div>
+          </section>
+
+          <section
+            id="deployment"
+            class="rounded-2xl border ui-border-strong ui-surface p-6"
+          >
+            <p class="text-xs font-semibold uppercase tracking-[0.16em] ui-text-muted">
+              Deploy
+            </p>
+            <h2 class="mt-2 text-2xl font-bold">
+              Vercel deployment output
+            </h2>
+            <p class="mt-2 text-sm ui-text-muted">
+              This project is configured to build docs to <code class="font-mono">dist-docs</code> with <code class="font-mono">npm run build:docs</code>.
+            </p>
+
+            <div class="mt-4 rounded-xl border ui-border-strong bg-black/92 p-4">
+              <div class="mb-2 flex items-center justify-between gap-3">
+                <p class="text-xs font-semibold uppercase tracking-wide text-white/80">
+                  Deploy Commands
+                </p>
+                <button
+                  type="button"
+                  class="rounded-md border border-white/30 px-3 py-1 text-xs font-medium text-white hover:bg-white/10"
+                  @click="copySnippet('deploy', setupSnippets.deploy)"
+                >
+                  {{ copiedKey === 'deploy' ? 'Copied' : 'Copy' }}
+                </button>
+              </div>
+              <pre class="overflow-x-auto text-sm text-white"><code>{{ setupSnippets.deploy }}</code></pre>
+            </div>
+          </section>
+
+          <section
+            id="component-reference"
+            class="rounded-2xl border ui-border-strong ui-surface p-6"
+          >
+            <div class="flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-[0.16em] ui-text-muted">
+                  Components
+                </p>
+                <h2 class="mt-2 text-2xl font-bold">
+                  Full component reference
+                </h2>
+                <p class="mt-1 text-sm ui-text-muted">
+                  Showing {{ filteredComponentsCount }} of {{ allExportedComponents.length }} exported components.
+                </p>
+              </div>
+              <div class="w-full max-w-xs">
+                <Input
+                  v-model="componentSearch"
+                  placeholder="Filter by component name"
+                  clearable
+                />
+              </div>
+            </div>
+
+            <div class="mt-5 space-y-5">
+              <article
+                v-for="group in filteredGroups"
+                :key="group.title"
+                class="rounded-xl border ui-border-strong ui-surface-soft p-4"
+              >
+                <h3 class="text-lg font-semibold">
+                  {{ group.title }}
+                </h3>
+                <p class="mt-1 text-sm ui-text-muted">
+                  {{ group.description }}
+                </p>
+
+                <div class="mt-4 space-y-2">
+                  <details
+                    v-for="name in group.filteredItems"
+                    :key="name"
+                    class="rounded-lg border ui-border-strong ui-surface"
+                  >
+                    <summary class="cursor-pointer list-none px-3 py-2.5">
+                      <div class="flex items-center justify-between gap-3">
+                        <span class="font-medium">{{ name }}</span>
+                        <span class="text-xs ui-text-muted">View import and usage</span>
+                      </div>
+                    </summary>
+
+                    <div class="border-t ui-border-strong px-3 py-3">
+                      <p class="mb-2 text-xs font-semibold uppercase tracking-wide ui-text-muted">
+                        Import
+                      </p>
+                      <div class="rounded-md border ui-border-strong bg-black/90 p-2.5">
+                        <div class="mb-2 flex justify-end">
+                          <button
+                            type="button"
+                            class="rounded-md border border-white/30 px-2 py-1 text-[11px] font-medium text-white hover:bg-white/10"
+                            @click="copySnippet(`import-${name}`, componentImportSnippet(name))"
+                          >
+                            {{ copiedKey === `import-${name}` ? 'Copied' : 'Copy' }}
+                          </button>
+                        </div>
+                        <pre class="overflow-x-auto text-xs text-white"><code>{{ componentImportSnippet(name) }}</code></pre>
+                      </div>
+
+                      <p class="mb-2 mt-3 text-xs font-semibold uppercase tracking-wide ui-text-muted">
+                        Usage
+                      </p>
+                      <div class="rounded-md border ui-border-strong bg-black/90 p-2.5">
+                        <div class="mb-2 flex justify-end">
+                          <button
+                            type="button"
+                            class="rounded-md border border-white/30 px-2 py-1 text-[11px] font-medium text-white hover:bg-white/10"
+                            @click="copySnippet(`usage-${name}`, componentUsageSnippet(name))"
+                          >
+                            {{ copiedKey === `usage-${name}` ? 'Copied' : 'Copy' }}
+                          </button>
+                        </div>
+                        <pre class="overflow-x-auto text-xs text-white"><code>{{ componentUsageSnippet(name) }}</code></pre>
+                      </div>
+
+                      <p
+                        v-if="componentNotes[name]"
+                        class="mt-2 text-xs ui-text-muted"
+                      >
+                        {{ componentNotes[name] }}
+                      </p>
+                    </div>
+                  </details>
+                </div>
+              </article>
+
+              <article
+                v-if="filteredUncategorized.length > 0"
+                class="rounded-xl border ui-border-strong ui-surface-soft p-4"
+              >
+                <h3 class="text-lg font-semibold">
+                  Uncategorized
+                </h3>
+                <p class="mt-1 text-sm ui-text-muted">
+                  Components not yet grouped.
+                </p>
+
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    v-for="name in filteredUncategorized"
+                    :key="name"
+                    class="rounded-full border ui-border-strong px-2.5 py-1 text-xs font-medium"
+                  >
+                    {{ name }}
+                  </span>
+                </div>
+              </article>
+            </div>
+          </section>
+        </div>
+
+        <aside class="hidden xl:block xl:sticky xl:top-24 xl:h-fit">
+          <div class="rounded-2xl border ui-border-strong ui-surface p-4">
+            <p class="text-xs font-semibold uppercase tracking-[0.16em] ui-text-muted">
+              On this page
+            </p>
+            <div class="mt-3 space-y-1">
+              <button
+                v-for="link in sectionLinks"
+                :key="`right-${link.id}`"
+                type="button"
+                class="block w-full rounded-md px-2 py-1.5 text-left text-xs font-medium hover:bg-(--ui-surface-soft)"
+                @click="scrollToSection(link.id)"
+              >
+                {{ link.label }}
+              </button>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </main>
   </div>
 </template>
+
+<style scoped>
+.docs-brand-chip {
+  background: linear-gradient(135deg, #156df9 0%, #00a7ff 100%);
+}
+
+.docs-shell {
+  background:
+    radial-gradient(circle at 8% -4%, color-mix(in oklab, var(--ui-primary), transparent 88%) 0%, transparent 45%),
+    radial-gradient(circle at 100% 0%, color-mix(in oklab, var(--ui-accent), transparent 92%) 0%, transparent 40%),
+    var(--ui-bg);
+}
+
+.docs-hero {
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in oklab, var(--ui-surface), transparent 0%) 0%,
+      color-mix(in oklab, var(--ui-primary-soft), transparent 65%) 100%
+    );
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+</style>

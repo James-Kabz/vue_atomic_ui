@@ -7,17 +7,12 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect: '/templates/overview'
+      redirect: '/components'
     },
     {
       path: '/components',
       name: 'components',
       component: () => import('../views/ComponentShowcase.vue')
-    },
-    {
-      path: '/components/full-gallery',
-      name: 'components/full-gallery',
-      component: () => import('../views/ComponentGallery.vue')
     },
     {
       path: '/templates/overview',
