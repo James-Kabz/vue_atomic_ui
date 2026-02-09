@@ -14,6 +14,7 @@ const props = defineProps({
     default: 'default',
     validator: (value) =>
       [
+        'primary',
         'default',
         'danger',
         'outline',
@@ -57,42 +58,44 @@ const props = defineProps({
 })
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ui-primary) focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-[color,background-color,border-color,box-shadow,transform] duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ui-primary) focus-visible:ring-offset-2 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
+        primary:
+          'ui-primary-bg shadow-sm hover:bg-(--ui-primary-strong) hover:shadow-md',
         default:
-          'ui-text hover:brightness-110',
+          'ui-primary-bg shadow-sm hover:bg-(--ui-primary-strong) hover:shadow-md',
         danger:
-          ' ui-text ui-danger-bg hover:bg-(--ui-danger-strong)',
+          'ui-danger-bg shadow-sm hover:bg-(--ui-danger-strong) hover:shadow-md',
         outline:
-          '  border ui-text ui-surface hover:brightness-105',
+          'border ui-border-strong ui-surface ui-text hover:bg-(--ui-surface-soft) hover:border-(--ui-primary) hover:text-(--ui-primary)',
         secondary:
-          '  border ui-text ui-surface hover:brightness-105',
+          'border ui-border ui-surface-muted ui-text hover:bg-(--ui-surface-soft) hover:shadow-sm',
         ghost:
-          'bg-transparent ui-text-muted hover:bg-[color:color-mix(in oklab, var(--ui-accent-soft), transparent 70%)] hover:backdrop-blur-sm',
+          'bg-transparent ui-text-muted hover:bg-[color:color-mix(in oklab, var(--ui-accent-soft), transparent 40%)] hover:text-(--ui-text)',
         link:
-          'ui-primary hover:underline',
+          'ui-primary underline-offset-4 hover:underline hover:text-(--ui-primary-strong)',
         success:
-          'ui-text ui-success-bg hover:bg-(--ui-success-strong)',
+          'ui-success-bg shadow-sm hover:bg-(--ui-success-strong) hover:shadow-md',
         warning:
-          ' ui-text ui-warning-bg hover:bg-(--ui-warning)',
+          'ui-warning-bg shadow-sm hover:bg-(--ui-warning-strong) hover:shadow-md',
         info:
-          'ui-text hover:brightness-110',
+          'border border-blue-300 bg-blue-50 text-blue-700 hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300 dark:hover:bg-blue-900',
         subtle:
-          '  border ui-text ui-surface hover:brightness-105',
+          'border ui-border ui-surface ui-text-muted hover:text-(--ui-text) hover:bg-(--ui-surface-soft)',
         dark:
-          '  border ui-text --ui-bg hover:brightness-105',
+          'border border-zinc-900 bg-zinc-900 text-white shadow-sm hover:bg-black hover:shadow-md dark:border-zinc-100 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white',
         light:
-          '  border ui-border-strong ui-text ui-surface hover:brightness-105',
+          'border border-zinc-200 bg-white text-zinc-900 shadow-sm hover:bg-zinc-50 hover:shadow-md dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-800',
         primaryOutline:
-          ' border border-(--ui-primary) ui-primary hover:brightness-105',
+          'border border-(--ui-primary) ui-primary bg-transparent hover:bg-(--ui-primary-soft) hover:border-(--ui-primary-strong) hover:text-(--ui-primary-strong)',
         dangerOutline:
-          ' border border-(--ui-danger) ui-danger hover:brightness-105',
+          'border border-(--ui-danger) ui-danger bg-transparent hover:bg-(--ui-danger-soft) hover:border-(--ui-danger-strong) hover:text-(--ui-danger-strong)',
         successOutline:
-          ' border border-(--ui-success) ui-success hover:brightness-105',
+          'border border-(--ui-success) ui-success bg-transparent hover:bg-(--ui-success-soft) hover:border-(--ui-success-strong) hover:text-(--ui-success-strong)',
         gradient:
-          'bg-linear-to-r from-(--ui-primary) to-(--ui-accent) ui-text hover:from-(--ui-primary) hover:to-(--ui-accent-strong)',
+          'bg-linear-to-r from-(--ui-primary) to-(--ui-accent) ui-text-inverse shadow-sm hover:from-(--ui-primary-strong) hover:to-(--ui-accent-strong) hover:shadow-md',
       },
       size: {
         '2xs': 'h-6 px-2 py-1 text-xs rounded',

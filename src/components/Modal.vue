@@ -5,7 +5,7 @@ import { cn } from '@/utils/cn'
 import Icon from './Icon.vue'
 
 const modalVariants = cva(
-  'ui-surface-strong ui-border relative w-full max-h-[100vh] overflow-y-auto rounded-xl shadow-lg duration-200 p-4 overflow-hidden',
+  'ui-surface-soft ui-border relative w-full max-h-[100vh] overflow-y-auto rounded-xl shadow-lg duration-200 p-4 overflow-hidden',
   {
     variants: {
       size: {
@@ -107,7 +107,7 @@ onUnmounted(() => {
     >
       <div
         v-if="modelValue"
-        class="fixed inset-0 z-9999 backdrop-blur-3xl flex items-center justify-center"
+        class="fixed inset-0 z-9999 backdrop-blur-modal flex items-center justify-center"
         :class="{ 'pointer-events-none': resizable }"
         @click="handleBackdropClick"
       >

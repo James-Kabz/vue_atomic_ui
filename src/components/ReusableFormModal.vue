@@ -957,7 +957,7 @@ const handleMultiFileRemoved = (field, files) => {
           type="submit"
           :disabled="isLoading"
           :loading="isLoading"
-          variant="default"
+          variant="info"
         >
           {{ modalType === 'create' ? `Create ${entityName}` : `Update ${entityName}` }}
         </Button>
