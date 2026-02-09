@@ -10,13 +10,14 @@ const AuthRoutes = {
     appName: 'eRisk & Compliance Management',
     appVersion: '1.0.0',
     secondaryLogoText: 'Risk & Compliance Management',
-    backgroundOpacity: 1
+    backgroundOpacity: 1,
+    backgroundImage: './stlbacklogo.png'
   },
   meta: { requiresAuth: false },
   children: [
     {
       name: 'login',
-      path: '/',
+      path: '/login',
       component: () => import('../views/authentication/LoginPage.vue')
     },
     {

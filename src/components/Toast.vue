@@ -1,10 +1,151 @@
-<!-- components/Toaster.vue -->
+<script setup>
+import { computed } from 'vue'
+import { cva } from 'class-variance-authority'
+import { cn } from '../utils/cn.js'
+import { useToaster } from '../lib/toast.js'
+import Icon from './Icon.vue'
+
+const props = defineProps({
+  position: {
+    type: String,
+    default: 'top-right',
+    validator: (value) => [
+      'top-left', 'top-center', 'top-right',
+      'bottom-left', 'bottom-center', 'bottom-right'
+    ].includes(value)
+  },
+  hotkey: {
+    type: Array,
+    default: () => ['altKey', 'KeyT']
+  },
+  richColors: {
+    type: Boolean,
+    default: true
+  },
+  expand: {
+    type: Boolean,
+    default: false
+  },
+  visibleToasts: {
+    type: Number,
+    default: 4
+  },
+  closeButton: {
+    type: Boolean,
+    default: true
+  }
+})
+
+const { toasts, dismiss } = useToaster()
+
+// Limit visible toasts
+const visibleToastsList = computed(() => 
+  toasts.value.slice(0, props.visibleToasts)
+)
+
+// Position classes
+const positionClasses = {
+  'top-left': 'top-0 left-0 flex-col items-start',
+  'top-center': 'top-0 left-1/2 -translate-x-1/2 flex-col items-center',
+  'top-right': 'top-0 right-0 flex-col items-end',
+  'bottom-left': 'bottom-0 left-0 flex-col-reverse items-start',
+  'bottom-center': 'bottom-0 left-1/2 -translate-x-1/2 flex-col-reverse items-center',
+  'bottom-right': 'bottom-0 right-0 flex-col-reverse items-end'
+}
+
+const containerClasses = computed(() =>
+  cn(positionClasses[props.position])
+)
+
+// Toast styling with refined variants
+const toastVariants = cva(
+  'group pointer-events-auto relative flex w-full items-start gap-3 overflow-hidden rounded-xl border bg-white dark:bg-(--ui-surface) ui-text transition-all',
+  {
+    variants: {
+      variant: {
+        default: 'ui-border-strong shadow-sm',
+        info: 'border-blue-200 dark:border-blue-900/50 bg-blue-50 dark:bg-blue-950',
+        success: 'border-green-200 ui-text-inverse  dark:border-green-900/50 bg-green-50 dark:bg-green-950',
+        warning: 'border-amber-200 dark:border-amber-900/50 bg-amber-50 dark:bg-amber-950',
+        error: 'border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-950',
+        loading: 'ui-border-strong shadow-sm'
+      }
+    },
+    defaultVariants: { variant: 'default' }
+  }
+)
+
+const toastClasses = (toast) => cn(toastVariants({ variant: toast.variant }))
+
+// Icon mapping
+const iconMap = {
+  default: 'bell',
+  info: 'info',
+  success: 'check-circle',
+  warning: 'triangle-exclamation',
+  error: 'circle-xmark',
+  loading: 'loader-circle'
+}
+
+// Icon color classes with refined palette
+const iconColorMap = {
+  default: 'ui-text',
+  info: 'text-blue-600 dark:text-blue-400',
+  success: 'text-green-800 dark:text-green-400',
+  warning: 'text-amber-600 dark:text-amber-400',
+  error: 'text-red-600 dark:text-red-400',
+  loading: 'ui-text'
+}
+
+// Icon background classes for better visual hierarchy
+const iconBackgroundMap = {
+  default: 'ui-bg',
+  info: 'bg-blue-100 dark:bg-blue-900/30',
+  success: 'bg-green-900 dark:bg-green-950/100',
+  warning: 'bg-amber-100 dark:bg-amber-950/100',
+  error: 'bg-red-100 dark:bg-red-950/100',
+  loading: 'ui-bg'
+}
+
+// Progress bar colors
+const progressBarMap = {
+  default: 'ui-border-strong-bg',
+  info: 'bg-blue-500',
+  success: 'bg-green-500',
+  warning: 'bg-amber-500',
+  error: 'bg-red-500',
+  loading: 'ui-border-strong-bg'
+}
+
+// Action button colors
+const actionButtonMap = {
+  default: 'ui-primary hover:text-(--ui-primary-strong)',
+  info: 'text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300',
+  success: 'text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300',
+  warning: 'text-amber-600 hover:text-amber-700 dark:text-amber-400 dark:hover:text-amber-300',
+  error: 'text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300',
+  loading: 'ui-primary hover:text-(--ui-primary-strong)'
+}
+
+const getIconName = (toast) => toast.icon || iconMap[toast.variant] || iconMap.default
+const getIconClasses = (toast) => {
+  const baseClasses = iconColorMap[toast.variant] || iconColorMap.default
+  return toast.variant === 'loading' ? `${baseClasses} animate-spin` : baseClasses
+}
+const getIconBackgroundClasses = (toast) => iconBackgroundMap[toast.variant] || iconBackgroundMap.default
+const getProgressBarClasses = (toast) => progressBarMap[toast.variant] || progressBarMap.default
+const getActionButtonClasses = (toast) => actionButtonMap[toast.variant] || actionButtonMap.default
+
+const showIcon = (toast) => toast.icon !== false
+const isDismissible = (toast) => toast.dismissible !== false && (toast.closeButton || props.closeButton || toast.dismissible)
+</script>
+
 <template>
   <Teleport to="body">
     <div
       :class="cn(
         containerClasses,
-        'fixed z-100 flex max-h-screen w-full p-4 md:max-w-[420px] pointer-events-none'
+        'fixed z-9999 flex max-h-screen w-full p-4 md:max-w-[420px] pointer-events-none'
       )"
     >
       <TransitionGroup
@@ -113,147 +254,6 @@
   </Teleport>
 </template>
 
-<script setup>
-import { computed } from 'vue'
-import { cva } from 'class-variance-authority'
-import { cn } from '../utils/cn.js'
-import { useToaster } from '../lib/toast.js'
-import Icon from './Icon.vue'
-
-const props = defineProps({
-  position: {
-    type: String,
-    default: 'top-right',
-    validator: (value) => [
-      'top-left', 'top-center', 'top-right',
-      'bottom-left', 'bottom-center', 'bottom-right'
-    ].includes(value)
-  },
-  hotkey: {
-    type: Array,
-    default: () => ['altKey', 'KeyT']
-  },
-  richColors: {
-    type: Boolean,
-    default: true
-  },
-  expand: {
-    type: Boolean,
-    default: false
-  },
-  visibleToasts: {
-    type: Number,
-    default: 4
-  },
-  closeButton: {
-    type: Boolean,
-    default: true
-  }
-})
-
-const { toasts, dismiss } = useToaster()
-
-// Limit visible toasts
-const visibleToastsList = computed(() => 
-  toasts.value.slice(0, props.visibleToasts)
-)
-
-// Position classes
-const positionClasses = {
-  'top-left': 'top-0 left-0 flex-col items-start',
-  'top-center': 'top-0 left-1/2 -translate-x-1/2 flex-col items-center',
-  'top-right': 'top-0 right-0 flex-col items-end',
-  'bottom-left': 'bottom-0 left-0 flex-col-reverse items-start',
-  'bottom-center': 'bottom-0 left-1/2 -translate-x-1/2 flex-col-reverse items-center',
-  'bottom-right': 'bottom-0 right-0 flex-col-reverse items-end'
-}
-
-const containerClasses = computed(() =>
-  cn(positionClasses[props.position])
-)
-
-// Toast styling with refined variants
-const toastVariants = cva(
-  'group pointer-events-auto relative flex w-full items-start gap-3 overflow-hidden rounded-xl border backdrop-blur-xl bg-white/95 dark:bg-(--ui-surface)/95 ui-text transition-all',
-  {
-    variants: {
-      variant: {
-        default: 'ui-border-strong shadow-sm',
-        info: 'border-blue-200 dark:border-blue-900/50 bg-blue-50/80 dark:bg-blue-950/30',
-        success: 'border-green-200 dark:border-green-900/50 bg-green-50/80 dark:bg-green-950/30',
-        warning: 'border-amber-200 dark:border-amber-900/50 bg-amber-50/80 dark:bg-amber-950/30',
-        error: 'border-red-200 dark:border-red-900/50 bg-red-50/80 dark:bg-red-950/30',
-        loading: 'ui-border-strong shadow-sm'
-      }
-    },
-    defaultVariants: { variant: 'default' }
-  }
-)
-
-const toastClasses = (toast) => cn(toastVariants({ variant: toast.variant }))
-
-// Icon mapping
-const iconMap = {
-  default: 'bell',
-  info: 'info',
-  success: 'check-circle',
-  warning: 'triangle-exclamation',
-  error: 'circle-xmark',
-  loading: 'loader-circle'
-}
-
-// Icon color classes with refined palette
-const iconColorMap = {
-  default: 'ui-text',
-  info: 'text-blue-600 dark:text-blue-400',
-  success: 'text-green-600 dark:text-green-400',
-  warning: 'text-amber-600 dark:text-amber-400',
-  error: 'text-red-600 dark:text-red-400',
-  loading: 'ui-text'
-}
-
-// Icon background classes for better visual hierarchy
-const iconBackgroundMap = {
-  default: 'ui-bg',
-  info: 'bg-blue-100 dark:bg-blue-900/30',
-  success: 'bg-green-100 dark:bg-green-900/30',
-  warning: 'bg-amber-100 dark:bg-amber-900/30',
-  error: 'bg-red-100 dark:bg-red-900/30',
-  loading: 'ui-bg'
-}
-
-// Progress bar colors
-const progressBarMap = {
-  default: 'ui-border-strong-bg',
-  info: 'bg-blue-500',
-  success: 'bg-green-500',
-  warning: 'bg-amber-500',
-  error: 'bg-red-500',
-  loading: 'ui-border-strong-bg'
-}
-
-// Action button colors
-const actionButtonMap = {
-  default: 'ui-primary hover:text-(--ui-primary-strong)',
-  info: 'text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300',
-  success: 'text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300',
-  warning: 'text-amber-600 hover:text-amber-700 dark:text-amber-400 dark:hover:text-amber-300',
-  error: 'text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300',
-  loading: 'ui-primary hover:text-(--ui-primary-strong)'
-}
-
-const getIconName = (toast) => toast.icon || iconMap[toast.variant] || iconMap.default
-const getIconClasses = (toast) => {
-  const baseClasses = iconColorMap[toast.variant] || iconColorMap.default
-  return toast.variant === 'loading' ? `${baseClasses} animate-spin` : baseClasses
-}
-const getIconBackgroundClasses = (toast) => iconBackgroundMap[toast.variant] || iconBackgroundMap.default
-const getProgressBarClasses = (toast) => progressBarMap[toast.variant] || progressBarMap.default
-const getActionButtonClasses = (toast) => actionButtonMap[toast.variant] || actionButtonMap.default
-
-const showIcon = (toast) => toast.icon !== false
-const isDismissible = (toast) => toast.dismissible !== false && (toast.closeButton || props.closeButton || toast.dismissible)
-</script>
 
 <style scoped>
 @keyframes toast-progress {

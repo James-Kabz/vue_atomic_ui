@@ -121,7 +121,7 @@ export default {
             >
           </div>
 
-          <div class="  rounded-lg shadow-xl p-4 sm:p-6 lg:p-8 max-w-md mx-auto w-full">
+          <div class="rounded-lg shadow-xl p-4 sm:p-6 lg:p-8 max-w-md mx-auto w-full ui-surface-muted">
             <!-- Card Header -->
             <div
               v-if="$slots['card-header'] || title"

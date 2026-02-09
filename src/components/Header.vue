@@ -246,7 +246,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
 <template>
   <header
     :class="cn(
-      'fixed top-0 z-9999 ui-bg border-b ui-border-strong  transition-all duration-300 ease-in-out w-full'
+      'fixed top-0 z-9999 ui-surface-strong border-b ui-border-strong  transition-all duration-300 ease-in-out w-full'
     )"
     :style="{ left: '0' }"
   >
