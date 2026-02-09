@@ -2,12 +2,46 @@ name: CI
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main, develop, 'docs/**' ]
   pull_request:
-    branches: [ main, develop ]
+    branches: [ main, develop, 'docs/**' ]
 
 jobs:
+  classify:
+    runs-on: ubuntu-latest
+    outputs:
+      docs_only: ${{ steps.classifier.outputs.docs_only }}
+      reason: ${{ steps.classifier.outputs.reason }}
+    steps:
+    - name: Classify workflow mode
+      id: classifier
+      env:
+        EVENT_NAME: ${{ github.event_name }}
+        REF_NAME: ${{ github.ref_name }}
+        HEAD_COMMIT_MSG: ${{ github.event.head_commit.message }}
+        PR_TITLE: ${{ github.event.pull_request.title }}
+      run: |
+        MESSAGE="$HEAD_COMMIT_MSG"
+        BRANCH="$REF_NAME"
+
+        if [ "$EVENT_NAME" = "pull_request" ]; then
+          MESSAGE="$PR_TITLE"
+        fi
+
+        if [ "$BRANCH" = "docs/usage-update" ]; then
+          echo "docs_only=true" >> "$GITHUB_OUTPUT"
+          echo "reason=docs branch (docs/usage-update)" >> "$GITHUB_OUTPUT"
+        elif echo "$MESSAGE" | grep -Eiq '(^docs(\(|:|!|[[:space:]])|\bdocs\b)'; then
+          echo "docs_only=true" >> "$GITHUB_OUTPUT"
+          echo "reason=docs commit message detected" >> "$GITHUB_OUTPUT"
+        else
+          echo "docs_only=false" >> "$GITHUB_OUTPUT"
+          echo "reason=standard ci/release path" >> "$GITHUB_OUTPUT"
+        fi
+
   test:
+    needs: classify
+    if: needs.classify.outputs.docs_only != 'true'
     runs-on: ubuntu-latest
 
     strategy:
@@ -36,10 +70,42 @@ jobs:
     - name: Build library
       run: npm run build
 
-  release:
-    needs: test
+  deploy_docs_vercel:
+    needs: classify
+    if: needs.classify.outputs.docs_only == 'true' && github.event_name == 'push'
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    environment: production
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+
+    - name: Install Vercel CLI
+      run: npm install -g vercel@latest
+
+    - name: Pull Vercel project settings
+      env:
+        VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+        VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      run: vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
+
+    - name: Deploy docs to Vercel
+      env:
+        VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+        VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      run: vercel deploy --prod --yes --token="$VERCEL_TOKEN"
+
+  release:
+    needs: [classify, test]
+    runs-on: ubuntu-latest
+    if: needs.classify.outputs.docs_only != 'true' && github.ref == 'refs/heads/main' && github.event_name == 'push'
 
     permissions:
       contents: write
@@ -58,6 +124,13 @@ jobs:
         node-version: '20.x'
         cache: 'npm'
         registry-url: 'https://registry.npmjs.org'
+
+    - name: Remove deprecated npm always-auth config
+      run: |
+        npm config delete always-auth --location=user || true
+        if [ -f "$HOME/.npmrc" ]; then
+          sed -i '/^always-auth=/d' "$HOME/.npmrc"
+        fi
 
     # CRITICAL: Update npm to version 11.5.1 or later for trusted publishing
     - name: Update npm to latest version
@@ -101,6 +174,7 @@ jobs:
 
     - name: Version bump and publish
       run: |
+        npm config delete always-auth --location=user || true
         echo "Version bump reason: ${{ steps.version.outputs.reason }}"
         echo "Bump type: ${{ steps.version.outputs.bump }}"
 

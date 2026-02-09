@@ -1,11 +1,12 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { RouterLink, useRoute, useRouter } from 'vue-router'
 import Badge from '../../../components/Badge.vue'
 import Button from '../../../components/Button.vue'
 import Checkbox from '../../../components/Checkbox.vue'
 import Input from '../../../components/Input.vue'
 import Select from '../../../components/Select.vue'
+import { getComponentGroups } from '../componentDocs.js'
 
 const route = useRoute()
 const router = useRouter()
@@ -22,49 +23,6 @@ const demoPlanOptions = [
   { value: 'growth', label: 'Growth' },
   { value: 'enterprise', label: 'Enterprise' }
 ]
-
-const componentGroups = [
-  {
-    title: 'Core UI',
-    description: 'Foundational visual elements and primitives.',
-    items: ['Avatar', 'Badge', 'Button', 'Divider', 'Icon', 'Image', 'Label', 'Link', 'Logo', 'Option', 'Text', 'Typography', 'ThemeConfigurator']
-  },
-  {
-    title: 'Forms and Inputs',
-    description: 'Data entry and selection controls.',
-    items: ['Input', 'Textarea', 'Select', 'Checkbox', 'Radio', 'Switch', 'DatePicker', 'Slider', 'FileUpload', 'Search', 'FormField', 'InputGroup']
-  },
-  {
-    title: 'Feedback and Overlay',
-    description: 'Status communication and modal/notification patterns.',
-    items: ['Alert', 'Notification', 'Toast', 'Loader', 'Spinner', 'Progress', 'ProgressBar', 'CircularProgress', 'Tooltip', 'Modal', 'ModalHeader', 'ModalBody', 'ModalFooter']
-  },
-  {
-    title: 'Surface and Navigation',
-    description: 'Navigation shells and composable container components.',
-    items: ['Breadcrumb', 'ButtonGroup', 'Card', 'CardHeader', 'CardBody', 'CardFooter', 'CardContent', 'CardTitle', 'Dropdown', 'DropdownItem', 'ListItem', 'MenuItem', 'Sidebar', 'Header', 'Footer', 'Tab', 'TabPanel', 'Accordion', 'AccordionItem', 'Timeline', 'TimelineItem']
-  },
-  {
-    title: 'Data and Visualization',
-    description: 'Tables, calendar, and charting building blocks.',
-    items: ['DataTable', 'DataTableHeader', 'DataTableRow', 'DataTableCell', 'DataTablePagination', 'DataTableFilters', 'DataTableToolBar', 'Calendar', 'EventsCalendar', 'Graph', 'GraphFilters', 'BarChart', 'LineChart', 'StackedBarChart', 'DashboardWidget']
-  },
-  {
-    title: 'Workflow and Layouts',
-    description: 'Workflow utilities and layout wrappers.',
-    items: ['Stepper', 'StepperItem', 'ReusableForm', 'ReusableFormModal', 'ReminderConfig', 'AuthLayout', 'DefaultLayout', 'ErrorLayout']
-  }
-]
-
-const usageExamples = {
-  Toast: 'toast.success("Saved successfully")',
-  Tooltip: '<Button v-tooltip="\'Helpful hint\'">Hover me</Button>'
-}
-
-const componentNotes = {
-  Toast: 'Import toast utility: import { toast } from @stlhorizon/vue-ui',
-  Tooltip: 'Use after registering plugin/directive.'
-}
 
 const componentsPlayground = `<template>\n  <div class="space-y-3">\n    <Input v-model="keyword" placeholder="Search keyword" />\n    <Select v-model="plan" :options="planOptions" placeholder="Choose plan" />\n    <Checkbox v-model="notify" label="Enable notifications" />\n    <Button :loading="saving" @click="save">Save Preferences</Button>\n  </div>\n</template>`
 
@@ -93,16 +51,11 @@ watch(searchQuery, (value) => {
 const normalizedSearch = computed(() => searchQuery.value.trim().toLowerCase())
 
 const filteredGroups = computed(() => {
-  return componentGroups
-    .map((group) => {
-      const filteredItems = group.items.filter((item) => item.toLowerCase().includes(normalizedSearch.value))
-      return { ...group, filteredItems }
-    })
-    .filter((group) => group.filteredItems.length > 0)
+  return getComponentGroups(normalizedSearch.value)
 })
 
 const filteredComponentsCount = computed(() => {
-  return filteredGroups.value.reduce((sum, group) => sum + group.filteredItems.length, 0)
+  return filteredGroups.value.reduce((sum, group) => sum + group.items.length, 0)
 })
 
 const runDemoAction = () => {
@@ -114,15 +67,14 @@ const runDemoAction = () => {
 
 const copySnippet = async (key, content) => {
   if (!navigator?.clipboard) return
+
   await navigator.clipboard.writeText(content)
   copiedKey.value = key
+
   window.setTimeout(() => {
     if (copiedKey.value === key) copiedKey.value = ''
   }, 1200)
 }
-
-const componentImportSnippet = (name) => `import { ${name} } from '@stlhorizon/vue-ui'`
-const componentUsageSnippet = (name) => usageExamples[name] || `<${name} />`
 </script>
 
 <template>
@@ -132,7 +84,7 @@ const componentUsageSnippet = (name) => usageExamples[name] || `<${name} />`
         Components
       </h1>
       <p class="mt-3 text-lg leading-8 ui-text-muted">
-        Try live controls and inspect usage snippets per component.
+        Try live controls, then open each component page for full props and usage details.
       </p>
 
       <div class="mt-4 grid gap-4 lg:grid-cols-2">
@@ -200,7 +152,7 @@ const componentUsageSnippet = (name) => usageExamples[name] || `<${name} />`
       <div class="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h2 class="text-2xl font-bold">
-            Reference
+            Component Reference
           </h2>
           <p class="mt-1 text-sm ui-text-muted">
             Showing {{ filteredComponentsCount }} components.
@@ -228,69 +180,31 @@ const componentUsageSnippet = (name) => usageExamples[name] || `<${name} />`
             {{ group.description }}
           </p>
 
-          <div class="mt-4 space-y-2">
-            <details
-              v-for="name in group.filteredItems"
-              :key="name"
-              class="rounded-lg border ui-border-strong ui-surface"
+          <div class="mt-4 grid gap-2">
+            <div
+              v-for="component in group.items"
+              :key="component.slug"
+              class="flex flex-wrap items-center justify-between gap-3 rounded-lg border ui-border-strong ui-surface px-3 py-2.5"
             >
-              <summary class="cursor-pointer list-none px-3 py-2.5">
-                <div class="flex items-center justify-between gap-3">
-                  <span class="font-medium">{{ name }}</span>
-                  <span class="text-xs ui-text-muted">View import and usage</span>
-                </div>
-              </summary>
-
-              <div class="border-t ui-border-strong px-3 py-3">
-                <p class="mb-2 text-xs font-semibold uppercase tracking-wide ui-text-muted">
-                  Import
+              <div>
+                <p class="font-medium">
+                  {{ component.name }}
                 </p>
-                <div class="rounded-md border ui-border-strong bg-black/90 p-2.5">
-                  <div class="mb-2 flex justify-end">
-                    <button
-                      type="button"
-                      class="rounded-md border border-white/30 px-2 py-1 text-[11px] font-medium text-white hover:bg-white/10"
-                      @click="copySnippet(`import-${name}`, componentImportSnippet(name))"
-                    >
-                      {{ copiedKey === `import-${name}` ? 'Copied' : 'Copy' }}
-                    </button>
-                  </div>
-                  <pre class="overflow-x-auto text-xs text-white"><code>{{ componentImportSnippet(name) }}</code></pre>
-                </div>
-
-                <p class="mb-2 mt-3 text-xs font-semibold uppercase tracking-wide ui-text-muted">
-                  Usage
-                </p>
-                <div class="rounded-md border ui-border-strong bg-black/90 p-2.5">
-                  <div class="mb-2 flex justify-end">
-                    <button
-                      type="button"
-                      class="rounded-md border border-white/30 px-2 py-1 text-[11px] font-medium text-white hover:bg-white/10"
-                      @click="copySnippet(`usage-${name}`, componentUsageSnippet(name))"
-                    >
-                      {{ copiedKey === `usage-${name}` ? 'Copied' : 'Copy' }}
-                    </button>
-                  </div>
-                  <pre class="overflow-x-auto text-xs text-white"><code>{{ componentUsageSnippet(name) }}</code></pre>
-                </div>
-
-                <p
-                  v-if="componentNotes[name]"
-                  class="mt-2 text-xs ui-text-muted"
-                >
-                  {{ componentNotes[name] }}
+                <p class="text-xs ui-text-muted">
+                  {{ component.sourcePath || 'Source file unavailable' }}
                 </p>
               </div>
-            </details>
+
+              <RouterLink
+                :to="`/components/components/${component.slug}`"
+                class="rounded-md border ui-border-strong px-3 py-1.5 text-sm font-medium hover:bg-(--ui-surface-soft)"
+              >
+                View docs
+              </RouterLink>
+            </div>
           </div>
         </article>
       </div>
     </article>
   </div>
 </template>
-
-<style scoped>
-summary::-webkit-details-marker {
-  display: none;
-}
-</style>

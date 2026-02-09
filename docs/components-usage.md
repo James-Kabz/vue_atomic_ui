@@ -2,6 +2,40 @@
 
 This document provides comprehensive usage examples and API reference for all Vue components in the STL Horizon Vue Atomic UI library.
 
+## How Interactive Docs Render Real Components
+
+The docs playground pages render the actual component modules from this repository, not static mock widgets.
+
+### Runtime flow
+
+1. `src/views/docs/componentDocs.js` creates lazy loaders using `import.meta.glob('../../components/**/*.vue')`.
+2. The route `/components/components/:componentSlug` picks the requested component by slug.
+3. `src/views/docs/pages/ComponentDetailPage.vue` loads the module for that slug at runtime.
+4. Vue mounts it using dynamic rendering:
+
+```vue
+<component :is="loadedComponent" v-bind="playgroundBindings" />
+```
+
+5. Playground controls mutate `playgroundValues`, and those values are passed as live props.
+6. The props table is generated from each component's runtime `props` definition.
+
+### JSON fields in playground controls
+
+When a prop is `Array` or `Object`, the playground expects strict JSON (quoted keys and string values), not JavaScript object syntax.
+
+Invalid:
+
+```js
+[{ name: 'email' }]
+```
+
+Valid:
+
+```json
+[{"name":"email"}]
+```
+
 ## Styling Conventions
 
 Use **base classes** for static color decisions and **token utilities** for interactive states.

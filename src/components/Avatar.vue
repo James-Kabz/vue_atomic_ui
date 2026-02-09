@@ -15,7 +15,7 @@
     </span>
     <Icon
       v-else
-      name="User"
+      name="user"
       :class="iconClasses"
     />
   </div>
