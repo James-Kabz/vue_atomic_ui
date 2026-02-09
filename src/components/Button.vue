@@ -81,7 +81,7 @@ const buttonVariants = cva(
         warning:
           'ui-warning-bg shadow-sm hover:bg-(--ui-warning-strong) hover:shadow-md',
         info:
-          'border border-blue-300 bg-blue-50 text-blue-700 hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300 dark:hover:bg-blue-900',
+          'border border-blue-600 bg-blue-600 text-white shadow-sm hover:bg-blue-700 hover:shadow-md dark:border-blue-500 dark:bg-blue-500 dark:text-white dark:hover:bg-blue-400',
         subtle:
           'border ui-border ui-surface ui-text-muted hover:text-(--ui-text) hover:bg-(--ui-surface-soft)',
         dark:

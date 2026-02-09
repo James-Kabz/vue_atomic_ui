@@ -246,17 +246,17 @@ watch(searchQuery, (newValue) => emit('search', newValue))
 <template>
   <header
     :class="cn(
-      'fixed top-0 z-9999 ui-surface-strong border-b ui-border-strong  transition-all duration-300 ease-in-out w-full'
+      'fixed top-0 z-9999 w-full border-b ui-border-strong bg-[color:color-mix(in oklab, var(--ui-surface), transparent 8%)] backdrop-blur-md transition-all duration-300 ease-out'
     )"
     :style="{ left: '0' }"
   >
-    <div class="flex items-center justify-between h-20 sm:h-20 px-3 sm:px-4 md:px-6">
+    <div class="flex items-center justify-between h-16 sm:h-18 px-3 sm:px-4 md:px-6">
       <!-- Left side - Organisation & Page Info -->
-      <div class="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
+      <div class="flex items-center gap-2 sm:gap-3 md:gap-4 min-w-0 flex-1">
         <!-- Mobile Sidebar Toggle - Moved to far left -->
         <button
           v-if="isMobile"
-          class="p-2 ui-text hover:text-(--ui-text) rounded-lg hover:bg-(--ui-surface) transition-colors shrink-0"
+          class="p-2 ui-text rounded-lg hover:bg-(--ui-surface-muted) transition-colors shrink-0"
           @click="emit('toggle-mobile-sidebar')"
         >
           <Icon
@@ -280,13 +280,13 @@ watch(searchQuery, (newValue) => emit('search', newValue))
         <!-- Divider -->
         <div
           v-if="companyLogo && showOrganisationInfo && currentOrganisation"
-          class="h-6 sm:h-8 w-px ui-bg shrink-0 hidden sm:block"
+          class="h-6 sm:h-8 w-px ui-border-strong-bg shrink-0 hidden sm:block"
         />
 
         <!-- Organisation Info Card - Simplified for mobile -->
         <div
           v-if="showOrganisationInfo && currentOrganisation"
-          class="shrink-0 ui-bg border ui-border-strong px-2.5 py-1.5 rounded-lg shadow-2xs flex items-center gap-2 relative hover:bg-(--ui-surface) transition-colors max-w-40 sm:max-w-md"
+          class="shrink-0 ui-surface border ui-border-strong px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl shadow-sm flex items-center gap-2 relative hover:bg-(--ui-surface-muted) transition-colors max-w-44 sm:max-w-md"
         >
           <!-- Organisation Logo - Smaller on all screens -->
           <div
@@ -307,24 +307,23 @@ watch(searchQuery, (newValue) => emit('search', newValue))
           <!-- Organisation Details with Switcher -->
           <button
             v-if="organisations.length > 1"
-            class="flex items-center gap-8 w-56 cursor-pointer hover:bg-[color:color-mix(in oklab, var(--ui-surface), transparent 50%)] rounded-md px-1 py-1 transition-all group"
+            class="flex items-center gap-2 sm:gap-3 w-52 sm:w-60 cursor-pointer hover:bg-[color:color-mix(in oklab, var(--ui-surface-muted), transparent 35%)] rounded-md px-1.5 py-1 transition-all group"
             @click="toggleOrganisationDropdown"
           >
             <div class="flex-1 min-w-0">
               <p
-                class="text-sm font-bold ui-text truncate group-hover:text-(--ui-primary) leading-tight "
+                class="text-sm font-semibold ui-text truncate group-hover:text-(--ui-primary) leading-tight"
               >
                 {{ currentOrganisation.organisation_name }}
               </p>
               <div class="flex items-center gap-1.5">
                 <Icon
                   icon="user"
-                  size="lg"
-                  class="ui-primary shrink-0"
+                  class="w-3.5 h-3.5 ui-primary shrink-0"
                 />
                 <p
                   v-if="formattedActiveRoles"
-                  class="text-sm ui-primary truncate font-bold leading-tight"
+                  class="text-xs sm:text-sm ui-primary truncate font-medium leading-tight"
                 >
                   {{ formattedActiveRoles }}
                 </p>
@@ -370,10 +369,10 @@ watch(searchQuery, (newValue) => emit('search', newValue))
           >
             <div
               v-if="showOrganisationDropdown"
-              class="ui-surface-strong absolute top-full left-0 right-0 sm:left-0 sm:right-auto mt-2 lg:w-80 w-72 rounded-xl shadow-xl z-50 max-h-96 overflow-hidden"
+              class="ui-surface absolute top-full left-0 right-0 sm:left-0 sm:right-auto mt-2 w-72 sm:w-80 rounded-2xl border ui-border-strong shadow-2xl z-50 max-h-96 overflow-hidden"
             >
-              <div class="p-3 sm:p-4 border-b ui-border-strong bg-linear-to-r from-(--ui-primary-soft) to-(--ui-accent-soft)">
-                <h3 class="text-md font-bold ui-text flex items-center gap-2">
+              <div class="p-3 sm:p-4 border-b ui-border-strong ui-surface-muted">
+                <h3 class="text-sm sm:text-base font-semibold ui-text flex items-center gap-2">
                   <Icon
                     icon="list"
                     class="w-4 h-4 ui-primary"
@@ -389,10 +388,10 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                   v-for="org in organisations"
                   :key="org.org_id || org.organisation_name"
                   :class="cn(
-                    'flex items-center w-full px-3 sm:px-4 py-2.5 sm:py-3 text-md transition-all group',
+                    'flex items-center w-full px-3 sm:px-4 py-2.5 text-sm transition-all group',
                     org.org_id === currentOrganisation?.org_id
-                      ? 'bg-linear-to-r from-(--ui-primary-soft) to-(--ui-accent-soft) ui-primary border-l-4 border-(--ui-primary)'
-                      : 'ui-text hover:bg-(--ui-surface) border-l-4 border-transparent'
+                      ? 'bg-[color:color-mix(in oklab, var(--ui-primary-soft), transparent 30%)] ui-primary border-l-4 border-(--ui-primary)'
+                      : 'ui-text hover:bg-(--ui-surface-muted) border-l-4 border-transparent'
                   )"
                   @click="handleOrganisationChange(org)"
                 >
@@ -440,35 +439,35 @@ watch(searchQuery, (newValue) => emit('search', newValue))
         <!-- Breadcrumb - Hidden on mobile -->
         <nav
           v-if="showBreadcrumb"
-          class="hidden lg:flex items-center space-x-2 text-md truncate"
+          class="hidden lg:flex items-center gap-2 text-sm truncate"
         >
-          <span class="ui-text truncate">{{ currentSection }}</span>
+          <span class="ui-text-muted truncate">{{ currentSection }}</span>
           <Icon
             icon="chevron-right"
-            class="w-4 h-4 ui-text shrink-0"
+            class="w-3.5 h-3.5 ui-text-soft shrink-0"
           />
           <span class="ui-text font-semibold truncate">{{ currentPage }}</span>
         </nav>
       </div>
 
       <!-- Right side - Actions -->
-      <div class="flex ui-bg items-center space-x-1 sm:space-x-2 md:space-x-3">
+      <div class="flex items-center gap-1 sm:gap-2 md:gap-3 pl-2">
         <!-- Search - Mobile optimized -->
         <div
           v-if="showSearch && (!isMobile || showMobileSearch)"
           class="relative"
         >
-          <div class="absolute inset-y-0 left-0 pl-2 sm:pl-3 flex items-center pointer-events-none">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <Icon
               icon="search"
-              class="w-4 h-4 ui-text"
+              class="w-4 h-4 ui-text-soft"
             />
           </div>
           <input
             v-model="searchQuery"
             type="text"
             :placeholder="searchPlaceholder"
-            class="ui-bg pl-8 sm:pl-10 pr-8 sm:pr-4 py-1.5 sm:py-2 w-36 sm:w-48 md:w-64 text-xs sm:text-md border ui-border-strong  rounded-lg focus:ring-2 focus:ring-(--ui-primary) focus:border-(--ui-primary) outline-none transition-all ui-surface "
+            class="w-40 sm:w-52 md:w-64 rounded-xl border ui-border-strong ui-surface pl-9 sm:pl-10 pr-9 sm:pr-4 py-2 text-sm ui-text focus:ring-2 focus:ring-(--ui-primary) focus:border-(--ui-primary) outline-none transition-all"
           >
           <button
             v-if="isMobile"
@@ -483,7 +482,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
         </div>
         <button
           v-else-if="showSearch && isMobile"
-          class="p-2 ui-text hover:text-(--ui-text) rounded-lg hover:bg-(--ui-surface) transition-colors"
+          class="p-2 ui-text rounded-xl hover:bg-(--ui-surface-muted) transition-colors"
           @click="showMobileSearch = true"
         >
           <Icon
@@ -495,7 +494,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
         <!-- Notifications -->
         <button
           v-if="showNotifications"
-          class="relative p-1.5 sm:p-2 ui-text hover:text-(--ui-text) rounded-lg hover:bg-(--ui-surface) transition-colors"
+          class="relative p-2 ui-text rounded-xl hover:bg-(--ui-surface-muted) transition-colors"
           @click="toggleNotifications"
         >
           <Icon
@@ -504,7 +503,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
           />
           <span
             v-if="notificationCount > 0"
-            class="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 min-w-4 h-4 sm:min-w-[18px] sm:h-[18px] ui-danger-bg ui-text text-[10px] sm:text-xs rounded-full flex items-center justify-center font-semibold px-0.5 sm:px-1"
+            class="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 min-w-4 h-4 sm:min-w-[18px] sm:h-[18px] ui-danger-bg ui-text-inverse text-[10px] sm:text-xs rounded-full flex items-center justify-center font-semibold px-0.5 sm:px-1"
           >
             {{ notificationCount > 9 ? '9+' : notificationCount }}
           </span>
@@ -521,10 +520,10 @@ watch(searchQuery, (newValue) => emit('search', newValue))
         >
           <div
             v-if="showNotificationsDropdown"
-            class="ui-bg absolute right-2 sm:right-4 md:right-6 top-14 sm:top-16 mt-2 w-[calc(100vw-1rem)] max-w-sm sm:w-80 md:w-96 rounded-2xl shadow-xl z-9999"
+            class="ui-surface absolute right-2 sm:right-4 md:right-6 top-14 sm:top-16 mt-2 w-[calc(100vw-1rem)] max-w-sm sm:w-80 md:w-96 rounded-2xl border ui-border-strong shadow-2xl z-9999 overflow-hidden"
           >
-            <div class="p-3 sm:p-4 border-b ui-border-strong bg-linear-to-r from-(--ui-primary-soft) to-(--ui-accent-soft) rounded-lg">
-              <h3 class="text-md sm:text-base font-bold ui-text">
+            <div class="p-3 sm:p-4 border-b ui-border-strong ui-surface-muted">
+              <h3 class="text-sm sm:text-base font-semibold ui-text">
                 {{ notificationsTitle }}
               </h3>
               <p
@@ -554,7 +553,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                 v-else
                 :key="notification.id"
                 :class="[
-                  'p-3 sm:p-4 border-b ui-border-strong hover:bg-(--ui-surface) cursor-pointer transition-colors',
+                  'p-3 sm:p-4 border-b ui-border-strong hover:bg-(--ui-surface-muted) cursor-pointer transition-colors',
                   notification.read ? 'opacity-60' : ''
                 ]"
                 @click="handleNotificationClick(notification)"
@@ -673,7 +672,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
               class="p-2 sm:p-3 text-center border-t ui-border-strong ui-surface-muted"
             >
               <button
-                class="text-xs sm:text-md font-semibold ui-primary hover:text-(--ui-primary) transition-colors"
+                class="text-sm font-semibold ui-primary hover:text-(--ui-primary-strong) transition-colors"
                 @click="handleViewAllNotifications"
               >
                 View all notifications →
@@ -685,7 +684,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
         <!-- Profile Dropdown -->
         <div class="relative">
           <button
-            class="shrink-0 ui-bg border ui-border-strong px-3 py-4 rounded-lg shadow-2xs flex items-start gap-4 relative hover:bg-(--ui-surface) transition-colors max-w-40 sm:max-w-md"
+            class="shrink-0 ui-surface border ui-border-strong px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl shadow-sm flex items-center gap-2 sm:gap-3 relative hover:bg-(--ui-surface-muted) transition-colors max-w-44 sm:max-w-md"
             @click="toggleProfile"
           >
             <div
@@ -707,7 +706,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
             </div>
             <Icon
               icon="chevron-down"
-              class="w-3.5 h-3.5 ui-text mt-0.5"
+              class="w-3.5 h-3.5 ui-text-soft mt-0.5"
             />
           </button>
 
@@ -722,10 +721,10 @@ watch(searchQuery, (newValue) => emit('search', newValue))
           >
             <div
               v-if="showProfile"
-              class="ui-surface absolute right-0 mt-4 w-56 sm:w-58 rounded-lg shadow-lg z-50"
+              class="ui-surface absolute right-0 mt-2 w-56 sm:w-60 rounded-xl border ui-border-strong shadow-xl z-50 overflow-hidden"
             >
               <div class="p-3 sm:p-4 border-b ui-border-strong">
-                <p class="text-md font-medium ui-text truncate">
+                <p class="text-sm font-semibold ui-text truncate">
                   {{ user.name }}
                 </p>
                 <p class="text-xs ui-text truncate">
@@ -741,10 +740,10 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                     v-if="item.route"
                     :to="item.route"
                     :class="cn(
-                      'flex items-center px-2.5 sm:px-3 py-2 sm:py-2.5 rounded-lg text-md font-medium transition-all duration-200 group relative',
+                      'flex items-center px-2.5 sm:px-3 py-2 sm:py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative',
                       isItemActive(item)
                         ? 'bg-linear-to-br from-(--ui-primary-soft) to-(--ui-primary-soft) ui-primary shadow-sm border border-(--ui-primary-soft)'
-                        : 'ui-text hover:bg-(--ui-surface) hover:text-(--ui-text) border border-transparent'
+                        : 'ui-text hover:bg-(--ui-surface-muted) hover:text-(--ui-text) border border-transparent'
                     )"
                     @click="handleNavigation(item)"
                   >
@@ -778,7 +777,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                   </router-link>
                   <button
                     v-else
-                    class="flex items-center w-full px-2.5 sm:px-3 py-2 sm:py-2.5 rounded-lg text-md font-medium transition-all duration-200 group relative ui-text hover:bg-(--ui-surface) hover:text-(--ui-text) border border-transparent"
+                    class="flex items-center w-full px-2.5 sm:px-3 py-2 sm:py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative ui-text hover:bg-(--ui-surface-muted) hover:text-(--ui-text) border border-transparent"
                     @click="handleProfileAction(item)"
                   >
                     <div
@@ -798,7 +797,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
               </div>
               <div class="border-t ui-border-strong py-2">
                 <button
-                  class="flex items-center w-full px-2.5 sm:px-3 py-2 sm:py-2.5 rounded-lg text-md font-medium transition-all duration-200 group relative ui-danger hover:bg-(--ui-danger-soft) border border-transparent"
+                  class="flex items-center w-full px-2.5 sm:px-3 py-2 sm:py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative ui-danger hover:bg-(--ui-danger-soft) border border-transparent"
                   @click="handleLogout"
                 >
                   <div

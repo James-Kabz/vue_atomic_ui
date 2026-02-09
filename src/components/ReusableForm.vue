@@ -992,7 +992,7 @@ const handleCancel = () => {
                   class="flex-1"
                   :aria-describedby="ariaDescribedBy"
                 />
-                <span class="text-sm font-medium ui-text min-w-[3rem] text-right">
+                <span class="text-sm font-medium ui-text min-w-12 text-right">
                   {{ formData[field.name] }}
                 </span>
               </div>

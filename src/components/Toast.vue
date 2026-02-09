@@ -28,7 +28,7 @@ const props = defineProps({
   },
   visibleToasts: {
     type: Number,
-    default: 4
+    default: 3
   },
   closeButton: {
     type: Boolean,
@@ -59,16 +59,16 @@ const containerClasses = computed(() =>
 
 // Toast styling with refined variants
 const toastVariants = cva(
-  'group pointer-events-auto relative flex w-full items-start gap-3 overflow-hidden rounded-xl border bg-white dark:bg-(--ui-surface) ui-text transition-all',
+  'group pointer-events-auto relative flex w-full items-start gap-3 overflow-hidden rounded-xl border p-4 transition-all duration-200 hover:-translate-y-0.5',
   {
     variants: {
       variant: {
-        default: 'ui-border-strong shadow-sm',
-        info: 'border-blue-200 dark:border-blue-900/50 bg-blue-50 dark:bg-blue-950',
-        success: 'border-green-200 ui-text-inverse  dark:border-green-900/50 bg-green-50 dark:bg-green-950',
-        warning: 'border-amber-200 dark:border-amber-900/50 bg-amber-50 dark:bg-amber-950',
-        error: 'border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-950',
-        loading: 'ui-border-strong shadow-sm'
+        default: 'ui-surface ui-border-strong ui-text shadow-lg shadow-black/5 dark:shadow-black/30',
+        info: 'border-blue-700 bg-blue-700 ui-text-inverse shadow-lg shadow-blue-900/25',
+        success: 'border-green-700 bg-green-700 ui-text-inverse shadow-lg shadow-green-900/25',
+        warning: 'border-amber-600 bg-amber-600 ui-text-inverse shadow-lg shadow-amber-900/25',
+        error: 'border-red-700 bg-red-700 ui-text-inverse shadow-lg shadow-red-900/25',
+        loading: 'ui-surface ui-border-strong ui-text shadow-lg shadow-black/5 dark:shadow-black/30'
       }
     },
     defaultVariants: { variant: 'default' }
@@ -89,42 +89,69 @@ const iconMap = {
 
 // Icon color classes with refined palette
 const iconColorMap = {
-  default: 'ui-text',
-  info: 'text-blue-600 dark:text-blue-400',
-  success: 'text-green-800 dark:text-green-400',
-  warning: 'text-amber-600 dark:text-amber-400',
-  error: 'text-red-600 dark:text-red-400',
-  loading: 'ui-text'
+  default: 'ui-primary',
+  info: 'text-white',
+  success: 'text-white',
+  warning: 'text-white',
+  error: 'text-white',
+  loading: 'ui-primary'
 }
 
 // Icon background classes for better visual hierarchy
 const iconBackgroundMap = {
-  default: 'ui-bg',
-  info: 'bg-blue-100 dark:bg-blue-900/30',
-  success: 'bg-green-900 dark:bg-green-950/100',
-  warning: 'bg-amber-100 dark:bg-amber-950/100',
-  error: 'bg-red-100 dark:bg-red-950/100',
-  loading: 'ui-bg'
+  default: 'ui-surface-muted border ui-border',
+  info: 'bg-white/15 ring-1 ring-white/25',
+  success: 'bg-white/15 ring-1 ring-white/25',
+  warning: 'bg-white/15 ring-1 ring-white/25',
+  error: 'bg-white/15 ring-1 ring-white/25',
+  loading: 'ui-surface-muted border ui-border'
 }
 
 // Progress bar colors
 const progressBarMap = {
-  default: 'ui-border-strong-bg',
-  info: 'bg-blue-500',
-  success: 'bg-green-500',
-  warning: 'bg-amber-500',
-  error: 'bg-red-500',
-  loading: 'ui-border-strong-bg'
+  default: 'bg-(--ui-primary)',
+  info: 'bg-white/70',
+  success: 'bg-white/70',
+  warning: 'bg-white/70',
+  error: 'bg-white/70',
+  loading: 'bg-(--ui-primary)'
 }
 
 // Action button colors
 const actionButtonMap = {
-  default: 'ui-primary hover:text-(--ui-primary-strong)',
-  info: 'text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300',
-  success: 'text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300',
-  warning: 'text-amber-600 hover:text-amber-700 dark:text-amber-400 dark:hover:text-amber-300',
-  error: 'text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300',
-  loading: 'ui-primary hover:text-(--ui-primary-strong)'
+  default: 'ui-primary hover:text-(--ui-primary-strong) underline-offset-4 hover:underline',
+  info: 'text-white/90 hover:text-white underline-offset-4 hover:underline',
+  success: 'text-white/90 hover:text-white underline-offset-4 hover:underline',
+  warning: 'text-white/90 hover:text-white underline-offset-4 hover:underline',
+  error: 'text-white/90 hover:text-white underline-offset-4 hover:underline',
+  loading: 'ui-primary hover:text-(--ui-primary-strong) underline-offset-4 hover:underline'
+}
+
+const titleTextMap = {
+  default: 'ui-text',
+  info: 'text-white',
+  success: 'text-white',
+  warning: 'text-white',
+  error: 'text-white',
+  loading: 'ui-text'
+}
+
+const messageTextMap = {
+  default: 'ui-text-muted',
+  info: 'text-white/90',
+  success: 'text-white/90',
+  warning: 'text-white/90',
+  error: 'text-white/90',
+  loading: 'ui-text-muted'
+}
+
+const closeButtonMap = {
+  default: 'ui-text-soft hover:bg-black/5 dark:hover:bg-white/10 hover:text-(--ui-text)',
+  info: 'text-white/80 hover:text-white hover:bg-white/15',
+  success: 'text-white/80 hover:text-white hover:bg-white/15',
+  warning: 'text-white/80 hover:text-white hover:bg-white/15',
+  error: 'text-white/80 hover:text-white hover:bg-white/15',
+  loading: 'ui-text hover:bg-black/5 dark:hover:bg-white/5 hover:text-(--ui-text)'
 }
 
 const getIconName = (toast) => toast.icon || iconMap[toast.variant] || iconMap.default
@@ -135,6 +162,9 @@ const getIconClasses = (toast) => {
 const getIconBackgroundClasses = (toast) => iconBackgroundMap[toast.variant] || iconBackgroundMap.default
 const getProgressBarClasses = (toast) => progressBarMap[toast.variant] || progressBarMap.default
 const getActionButtonClasses = (toast) => actionButtonMap[toast.variant] || actionButtonMap.default
+const getTitleTextClasses = (toast) => titleTextMap[toast.variant] || titleTextMap.default
+const getMessageTextClasses = (toast) => messageTextMap[toast.variant] || messageTextMap.default
+const getCloseButtonClasses = (toast) => closeButtonMap[toast.variant] || closeButtonMap.default
 
 const showIcon = (toast) => toast.icon !== false
 const isDismissible = (toast) => toast.dismissible !== false && (toast.closeButton || props.closeButton || toast.dismissible)
@@ -165,7 +195,6 @@ const isDismissible = (toast) => toast.dismissible !== false && (toast.closeButt
           :class="toastClasses(toast)"
           role="alert"
           :aria-live="toast.variant === 'error' ? 'assertive' : 'polite'"
-          class="group pointer-events-auto relative flex w-full items-start gap-3 overflow-hidden rounded-xl border p-4 shadow-lg transition-all hover:shadow-xl"
         >
           <!-- Icon with animated background glow -->
           <div
@@ -188,13 +217,13 @@ const isDismissible = (toast) => toast.dismissible !== false && (toast.closeButt
           <div class="flex-1 min-w-0 pt-0.5">
             <div
               v-if="toast.title"
-              class="text-md font-semibold leading-tight ui-text mb-1"
+              :class="cn('text-md font-semibold leading-tight mb-1', getTitleTextClasses(toast))"
             >
               {{ toast.title }}
             </div>
             <div
               v-if="toast.message || toast.description"
-              class="text-md leading-relaxed ui-text"
+              :class="cn('text-md leading-relaxed', getMessageTextClasses(toast))"
             >
               {{ toast.message || toast.description }}
             </div>
@@ -210,14 +239,14 @@ const isDismissible = (toast) => toast.dismissible !== false && (toast.closeButt
             <!-- Action Button -->
             <button
               v-if="toast.action"
-              class="mt-3 inline-flex items-center gap-1.5 text-xs font-medium transition-colors"
+              class="mt-3 inline-flex items-center gap-1.5 text-sm font-medium transition-colors"
               :class="getActionButtonClasses(toast)"
               @click="toast.action.onClick"
             >
               {{ toast.action.label }}
               <Icon
                 icon="arrow-right"
-                class="h-3 w-3"
+                class="h-3 w-3 transition-transform duration-200 group-hover:translate-x-0.5"
               />
             </button>
           </div>
@@ -225,7 +254,10 @@ const isDismissible = (toast) => toast.dismissible !== false && (toast.closeButt
           <!-- Close Button -->
           <button
             v-if="isDismissible(toast)"
-            class="absolute right-2 top-2 flex h-6 w-6 shrink-0 items-center justify-center rounded-md ui-text opacity-0 transition-all hover:bg-black/5 dark:hover:bg-white/5 hover:text-(--ui-text) focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-(--ui-ring) focus:ring-offset-1 group-hover:opacity-100"
+            :class="cn(
+              'absolute right-2 top-2 flex h-7 w-7 shrink-0 items-center justify-center rounded-md opacity-70 transition-all hover:opacity-100 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-(--ui-ring)',
+              getCloseButtonClasses(toast)
+            )"
             aria-label="Dismiss"
             @click="dismiss(toast.id)"
           >
