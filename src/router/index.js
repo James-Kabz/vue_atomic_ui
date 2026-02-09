@@ -7,12 +7,42 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect: '/components'
+      redirect: '/components/getting-started'
     },
     {
       path: '/components',
-      name: 'components',
-      component: () => import('../views/ComponentShowcase.vue')
+      component: () => import('../views/docs/DocsLayout.vue'),
+      children: [
+        {
+          path: '',
+          redirect: '/components/getting-started'
+        },
+        {
+          path: 'getting-started',
+          name: 'docs.getting-started',
+          component: () => import('../views/docs/pages/GettingStartedPage.vue')
+        },
+        {
+          path: 'installation',
+          name: 'docs.installation',
+          component: () => import('../views/docs/pages/InstallationPage.vue')
+        },
+        {
+          path: 'theming',
+          name: 'docs.theming',
+          component: () => import('../views/docs/pages/ThemingPage.vue')
+        },
+        {
+          path: 'components',
+          name: 'docs.components',
+          component: () => import('../views/docs/pages/ComponentsPage.vue')
+        },
+        {
+          path: 'support',
+          name: 'docs.support',
+          component: () => import('../views/docs/pages/SupportPage.vue')
+        }
+      ]
     },
     {
       path: '/templates/overview',
