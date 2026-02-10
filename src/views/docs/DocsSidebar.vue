@@ -24,7 +24,7 @@ const sections = [
 </script>
 
 <template>
-  <aside class="ui-surface px-4 py-6">
+  <aside class="ui-surface h-full px-4 py-6">
     <p class="px-2 text-xs font-semibold uppercase tracking-[0.16em] ui-text-muted">
       Documentation
     </p>
@@ -42,10 +42,21 @@ const sections = [
             v-for="item in section.links"
             :key="item.to"
             :to="item.to"
-            class="block rounded-md border border-transparent px-3 py-2 text-sm font-medium ui-text-muted transition-colors hover:bg-(--ui-surface-soft) hover:text-(--ui-text)"
-            active-class="ui-primary-soft ui-primary border-(--ui-primary)"
+            v-slot="{ href, navigate, isActive }"
+            custom
           >
-            {{ item.label }}
+            <a
+              :href="href"
+              :class="[
+                'block rounded-md border px-3 py-2 text-sm font-medium transition-colors',
+                isActive
+                  ? 'ui-primary-soft ui-primary border-(--ui-primary)'
+                  : 'border-transparent ui-text-muted hover:bg-(--ui-surface-soft) hover:text-(--ui-text)'
+              ]"
+              @click="navigate"
+            >
+              {{ item.label }}
+            </a>
           </router-link>
         </div>
       </section>

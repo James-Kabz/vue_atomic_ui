@@ -1,0 +1,1 @@
+import{c as e,o as t,D as a,n as r,m as n,M as o}from"./index-GxWqBnN7.js";const p=Object.assign({inheritAttrs:!1},{__name:"CardContent",setup(l){return(s,c)=>(t(),e("div",{class:r(n(o)("p-6 pt-0 ui-text",s.$attrs.class))},[a(s.$slots,"default")],2))}});export{p as default};
