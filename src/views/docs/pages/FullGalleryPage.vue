@@ -684,21 +684,21 @@ onMounted(loadEntries)
                 <p class="text-[11px] font-semibold uppercase tracking-wide ui-text-muted">
                   Preset Examples
                 </p>
-              <section
-                v-for="(example, index) in entry.examples"
-                :key="`${entry.slug}-${index}`"
-                class="space-y-1"
-              >
-                <p class="text-[11px] font-semibold uppercase tracking-wide ui-text-muted">
-                  {{ example.label }}
-                </p>
-                <ComponentPreviewCard
-                  :component="entry.loadedComponent"
-                  :component-name="entry.name"
-                  :bindings="example.props"
-                  :slot-text="example.slot"
-                />
-              </section>
+                <section
+                  v-for="(example, index) in entry.examples"
+                  :key="`${entry.slug}-${index}`"
+                  class="space-y-1"
+                >
+                  <p class="text-[11px] font-semibold uppercase tracking-wide ui-text-muted">
+                    {{ example.label }}
+                  </p>
+                  <ComponentPreviewCard
+                    :component="entry.loadedComponent"
+                    :component-name="entry.name"
+                    :bindings="example.props"
+                    :slot-text="example.slot"
+                  />
+                </section>
               </section>
             </div>
 

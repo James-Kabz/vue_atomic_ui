@@ -585,7 +585,7 @@ watch(componentSlug, loadRuntimeComponent, { immediate: true })
                 :is="loadedComponent"
                 v-else-if="loadedComponent"
                 v-bind="playgroundBindings"
-                @update:modelValue="handleModelValueUpdate"
+                @update:model-value="handleModelValueUpdate"
               >
                 {{ previewSlotText }}
               </component>
