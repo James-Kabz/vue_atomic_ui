@@ -41,8 +41,8 @@ const sections = [
           <router-link
             v-for="item in section.links"
             :key="item.to"
-            :to="item.to"
             v-slot="{ href, navigate, isActive }"
+            :to="item.to"
             custom
           >
             <a

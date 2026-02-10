@@ -1,7 +1,7 @@
 <script setup>
 import { onErrorCaptured, ref } from 'vue'
 
-const props = defineProps({
+defineProps({
   component: {
     type: [Object, Function],
     default: null
@@ -51,7 +51,6 @@ onErrorCaptured((error) => {
       v-else-if="component"
       v-bind="bindings"
       @update:model-value="emit('update:modelValue', $event)"
-      @update:modelValue="emit('update:modelValue', $event)"
     >
       {{ slotText }}
     </component>

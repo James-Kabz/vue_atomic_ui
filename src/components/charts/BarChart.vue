@@ -157,83 +157,175 @@ const handleBarClick = (value, index) => {
 
 <template>
   <div class="ui-surface w-full h-full relative">
-    <svg :width="width" :height="height" :viewBox="`0 0 ${width} ${height}`" class="overflow-visible">
+    <svg
+      :width="width"
+      :height="height"
+      :viewBox="`0 0 ${width} ${height}`"
+      class="overflow-visible"
+    >
       <!-- Grid lines -->
       <g v-if="showGrid">
-        <line v-for="tick in yTicks" :key="`grid-${tick}`" :x1="padding.left" :y1="tick" :x2="width - padding.right"
-          :y2="tick" :stroke="gridColor" stroke-width="1" stroke-dasharray="4,4" opacity="0.3" />
+        <line
+          v-for="tick in yTicks"
+          :key="`grid-${tick}`"
+          :x1="padding.left"
+          :y1="tick"
+          :x2="width - padding.right"
+          :y2="tick"
+          :stroke="gridColor"
+          stroke-width="1"
+          stroke-dasharray="4,4"
+          opacity="0.3"
+        />
       </g>
 
       <!-- Bars with gradient -->
       <defs>
-        <linearGradient v-for="(value, index) in data" :id="`barGradient-${index}`" :key="`gradient-${index}`" x1="0%"
-          y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" :stop-color="getBarColor(index)" stop-opacity="1" />
-          <stop offset="100%" :stop-color="getBarColor(index)" stop-opacity="0.7" />
+        <linearGradient
+          v-for="(value, index) in data"
+          :id="`barGradient-${index}`"
+          :key="`gradient-${index}`"
+          x1="0%"
+          y1="0%"
+          x2="0%"
+          y2="100%"
+        >
+          <stop
+            offset="0%"
+            :stop-color="getBarColor(index)"
+            stop-opacity="1"
+          />
+          <stop
+            offset="100%"
+            :stop-color="getBarColor(index)"
+            stop-opacity="0.7"
+          />
         </linearGradient>
       </defs>
 
       <g>
-        <rect v-for="(value, index) in data" :key="`bar-${index}`" :x="getBarX(index)" :y="getBarY(value)"
-          :width="barWidth" :height="getBarHeight(value)" :fill="`url(#barGradient-${index})`" :class="barClasses"
-          rx="4" @mouseenter="handleMouseEnter($event, value, index)" @mouseleave="handleMouseLeave"
-          @click="handleBarClick(value, index)">
-          <animate attributeName="height" :from="0" :to="getBarHeight(value)" dur="0.8s" fill="freeze" />
-          <animate attributeName="y" :from="padding.top + chartHeight" :to="getBarY(value)" dur="0.8s" fill="freeze" />
+        <rect
+          v-for="(value, index) in data"
+          :key="`bar-${index}`"
+          :x="getBarX(index)"
+          :y="getBarY(value)"
+          :width="barWidth"
+          :height="getBarHeight(value)"
+          :fill="`url(#barGradient-${index})`"
+          :class="barClasses"
+          rx="4"
+          @mouseenter="handleMouseEnter($event, value, index)"
+          @mouseleave="handleMouseLeave"
+          @click="handleBarClick(value, index)"
+        >
+          <animate
+            attributeName="height"
+            :from="0"
+            :to="getBarHeight(value)"
+            dur="0.8s"
+            fill="freeze"
+          />
+          <animate
+            attributeName="y"
+            :from="padding.top + chartHeight"
+            :to="getBarY(value)"
+            dur="0.8s"
+            fill="freeze"
+          />
         </rect>
       </g>
 
       <!-- X-axis labels -->
       <g v-if="showXAxis">
-        <text v-for="(label, index) in labels" :key="`xlabel-${index}`" :x="getBarX(index) + barWidth / 2"
-          :y="height - padding.bottom + 20" :class="axisLabelClasses" text-anchor="middle">
+        <text
+          v-for="(label, index) in labels"
+          :key="`xlabel-${index}`"
+          :x="getBarX(index) + barWidth / 2"
+          :y="height - padding.bottom + 20"
+          :class="axisLabelClasses"
+          text-anchor="middle"
+        >
           {{ label }}
         </text>
       </g>
 
       <!-- X-axis title -->
       <g v-if="xAxisLabel">
-        <text :x="padding.left + chartWidth / 2" :y="height - 10" class="fill-(--ui-text) text-sm font-semibold"
-          text-anchor="middle">
+        <text
+          :x="padding.left + chartWidth / 2"
+          :y="height - 10"
+          class="fill-(--ui-text) text-sm font-semibold"
+          text-anchor="middle"
+        >
           {{ xAxisLabel }}
         </text>
       </g>
 
       <!-- Y-axis labels -->
       <g v-if="showYAxis">
-        <text v-for="tick in yTicks" :key="`ylabel-${tick}`" :x="padding.left - 10" :y="tick + 4"
-          :class="axisLabelClasses" text-anchor="end">
+        <text
+          v-for="tick in yTicks"
+          :key="`ylabel-${tick}`"
+          :x="padding.left - 10"
+          :y="tick + 4"
+          :class="axisLabelClasses"
+          text-anchor="end"
+        >
           {{ getYAxisLabel(tick) }}
         </text>
       </g>
 
       <!-- Y-axis title -->
       <g v-if="yAxisLabel">
-        <text :x="-(padding.top + chartHeight / 2)" :y="15" class="fill-(--ui-text) text-sm font-semibold"
-          text-anchor="middle" transform="rotate(-90)">
+        <text
+          :x="-(padding.top + chartHeight / 2)"
+          :y="15"
+          class="fill-(--ui-text) text-sm font-semibold"
+          text-anchor="middle"
+          transform="rotate(-90)"
+        >
           {{ yAxisLabel }}
         </text>
       </g>
 
       <!-- Axes lines -->
-      <line :x1="padding.left" :y1="padding.top" :x2="padding.left" :y2="height - padding.bottom" stroke="#cbd5e1"
-        stroke-width="2" />
-      <line :x1="padding.left" :y1="height - padding.bottom" :x2="width - padding.right" :y2="height - padding.bottom"
-        stroke="#cbd5e1" stroke-width="2" />
+      <line
+        :x1="padding.left"
+        :y1="padding.top"
+        :x2="padding.left"
+        :y2="height - padding.bottom"
+        stroke="#cbd5e1"
+        stroke-width="2"
+      />
+      <line
+        :x1="padding.left"
+        :y1="height - padding.bottom"
+        :x2="width - padding.right"
+        :y2="height - padding.bottom"
+        stroke="#cbd5e1"
+        stroke-width="2"
+      />
     </svg>
 
     <!-- Professional Tooltip -->
-    <div v-if="tooltip.visible" :style="{
-      position: 'fixed',
-      left: `${tooltip.x}px`,
-      top: `${tooltip.y}px`,
-      transform: 'translate(-50%, -120%)',
-      pointerEvents: 'none',
-      zIndex: 9999
-    }" class="ui-surface-strong animate-in fade-in duration-200">
+    <div
+      v-if="tooltip.visible"
+      :style="{
+        position: 'fixed',
+        left: `${tooltip.x}px`,
+        top: `${tooltip.y}px`,
+        transform: 'translate(-50%, -120%)',
+        pointerEvents: 'none',
+        zIndex: 9999
+      }"
+      class="ui-surface-strong animate-in fade-in duration-200"
+    >
       <div class="ui--surface ui-text px-4 py-3 rounded-lg shadow-2xl border ui-border-strong min-w-40">
         <div class="flex items-center gap-2 mb-1">
-          <div :style="{ backgroundColor: tooltip.color }" class="w-3 h-3 rounded shadow-sm" />
+          <div
+            :style="{ backgroundColor: tooltip.color }"
+            class="w-3 h-3 rounded shadow-sm"
+          />
           <p class="font-semibold text-sm">
             {{ tooltip.label }}
           </p>
@@ -243,7 +335,8 @@ const handleBarClick = (value, index) => {
         </div>
         <!-- Tooltip arrow -->
         <div
-          class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 rotate-45 w-2 h-2 ui-surface border-r border-b ui-border-strong" />
+          class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 rotate-45 w-2 h-2 ui-surface border-r border-b ui-border-strong"
+        />
       </div>
     </div>
   </div>

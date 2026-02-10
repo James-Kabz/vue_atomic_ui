@@ -6,7 +6,7 @@ export default [
   js.configs.recommended,
   ...vue.configs['flat/recommended'],
   {
-    ignores: ['dist/**', 'node_modules/**', '.git/**']
+    ignores: ['dist/**', 'dist-docs/**', 'node_modules/**', '.git/**']
   },
   {
     languageOptions: {
