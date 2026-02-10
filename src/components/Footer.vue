@@ -16,7 +16,7 @@
         <div>
           <slot name="links">
             <Typography
-              variant="h6"
+              variant="text-sm"
               class="mb-4"
             >
               Quick Links
@@ -48,7 +48,7 @@
         <div>
           <slot name="social">
             <Typography
-              variant="h6"
+              variant="text-sm"
               class="mb-4"
             >
               Follow Us
@@ -59,7 +59,8 @@
                 class="ui-text hover:text-(--ui-text)"
               >
                 <Icon
-                  name="twitter"
+                  name="square-x-twitter"
+                  prefix="fab"
                   class="h-5 w-5"
                 />
               </Link>
@@ -69,6 +70,7 @@
               >
                 <Icon
                   name="github"
+                  prefix="fab"
                   class="h-5 w-5"
                 />
               </Link>
@@ -108,6 +110,12 @@
 
 <script setup>
 import { cn } from '../utils/cn.js'
+import Divider from './Divider.vue'
+import Icon from './Icon.vue'
+import Link from './Link.vue'
+import Logo from './Logo.vue'
+import Text from './Text.vue'
+import Typography from './Typography.vue'
 
 defineProps({
   className: {

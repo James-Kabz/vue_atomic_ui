@@ -54,90 +54,44 @@ const onSubmit = async () => {
     <Typography class="text-h6 text-dark mb-2">
       Sign In
     </Typography>
-    <Typography
-      size="sm"
-      color="muted"
-    >
+    <Typography size="sm" color="muted">
       Provide your eRisk & Compliance Management authentication credentials
     </Typography>
   </div>
 
-  <form
-    class="space-y-6"
-    @submit.prevent="onSubmit"
-  >
+  <form class="space-y-6" @submit.prevent="onSubmit">
     <!-- Email -->
-    <FormField 
-      label="Email" 
-      :error="errors.email" 
-      type="email"
-      required
-    >
+    <FormField label="Email" :error="errors.email" type="email" required>
       <template #default="{ fieldId, hasError, ariaDescribedBy }">
-        <Input
-          :id="fieldId"
-          v-model="email"
-          placeholder="Enter your email"
-          type="email"
-          :disabled="isLoading"
-          :class="hasError ? 'border-(--ui-danger)' : 'ui-border-strong'"
-          :aria-describedby="ariaDescribedBy"
-        />
+        <Input :id="fieldId" v-model="email" placeholder="Enter your email" type="email" :disabled="isLoading"
+          :class="hasError ? 'border-(--ui-danger)' : 'ui-border-strong'" :aria-describedby="ariaDescribedBy" />
       </template>
     </FormField>
 
     <!-- Password with Toggle -->
-    <FormField 
-      label="Password" 
-      :error="errors.password" 
-      type="password"
-      required
-    >
+    <FormField label="Password" :error="errors.password" type="password" required>
       <template #default="{ fieldId, hasError, ariaDescribedBy, showPassword }">
-        <Input
-          :id="fieldId"
-          v-model="password"
-          placeholder="Enter your password"
-          :type="showPassword ? 'text' : 'password'"
-          :disabled="isLoading"
-          :class="[
+        <Input :id="fieldId" v-model="password" placeholder="Enter your password"
+          :type="showPassword ? 'text' : 'password'" :disabled="isLoading" :class="[
             hasError ? 'border-(--ui-danger)' : 'ui-border-strong',
             'pr-10' // Add padding to accommodate the toggle button
-          ]"
-          :aria-describedby="ariaDescribedBy"
-        />
+          ]" :aria-describedby="ariaDescribedBy" />
       </template>
     </FormField>
 
     <!-- Company Code -->
-    <FormField 
-      label="Company Code" 
-      :error="errors.companyCode" 
-      type="text"
-      required
-    >
+    <FormField label="Company Code" :error="errors.companyCode" type="text" required>
       <template #default="{ fieldId, hasError, ariaDescribedBy }">
-        <Input
-          :id="fieldId"
-          v-model="companyCode"
-          placeholder="Enter your company code"
-          type="text"
-          :disabled="isLoading"
-          :class="hasError ? 'border-(--ui-danger)' : 'ui-border-strong'"
-          :aria-describedby="ariaDescribedBy"
-        />
+        <Input :id="fieldId" v-model="companyCode" placeholder="Enter your company code" type="text"
+          :disabled="isLoading" :class="hasError ? 'border-(--ui-danger)' : 'ui-border-strong'"
+          :aria-describedby="ariaDescribedBy" />
       </template>
     </FormField>
 
     <!-- Remember me and forgot password -->
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-2">
-        <Checkbox
-          id="rememberMe"
-          v-model="rememberMe"
-          label="Remember me"
-          :disabled="isLoading"
-        />
+        <Checkbox id="rememberMe" v-model="rememberMe" label="Remember me" :disabled="isLoading" />
       </div>
 
       <Typography class="text-sm font-medium">
@@ -151,12 +105,9 @@ const onSubmit = async () => {
     </div>
 
     <!-- Submit -->
-    <Button
-      type="submit"
+    <Button type="submit"
       class="w-full rounded-md ui-primary-bg py-2 ui-text font-medium hover:bg-(--ui-primary-strong) transition flex items-center justify-center"
-      :disabled="isLoading"
-      :loading="isLoading"
-    >
+      :disabled="isLoading" :loading="isLoading">
       Sign In
     </Button>
   </form>

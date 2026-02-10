@@ -32,7 +32,7 @@ const copySnippet = async () => {
         Theming
       </h1>
       <p class="mt-3 max-w-4xl text-lg leading-8 ui-text-muted">
-        Theme behavior is controlled by exported helpers: `initTheme`, `setTheme`, `setMode`, `getTheme`, and `getMode`.
+        Kabz Vue theme behavior is controlled by exported helpers: `initTheme`, `setTheme`, `setMode`, `getTheme`, and `getMode`.
       </p>
 
       <div class="mt-4 rounded-xl border ui-border-strong bg-black/92 p-4">

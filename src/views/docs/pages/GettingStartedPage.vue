@@ -5,7 +5,7 @@
         Overview
       </h1>
       <p class="mt-3 max-w-4xl text-lg leading-8 ui-text-muted">
-        STL Horizon Vue UI is a complete component suite for Vue.js with reusable building blocks for forms, data views,
+        Kabz Vue is a complete component suite for Vue.js with reusable building blocks for forms, data views,
         navigation shells, overlays, and visual analytics.
       </p>
       <p class="mt-4 max-w-4xl text-lg leading-8 ui-text-muted">

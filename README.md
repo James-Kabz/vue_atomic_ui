@@ -26,6 +26,24 @@ npm run build
 npm run preview
 ```
 
+### Docs Full Gallery
+
+The docs now include a permanent full component gallery route:
+
+- `/components/full-gallery`
+
+How to use it:
+
+1. Open docs at `/components/components`
+2. Click **Open Full Gallery**
+3. Interact with component props live and preview changes immediately
+
+For local docs development:
+
+```bash
+npm run dev:docs
+```
+
 ### Commit Convention
 
 This project uses [Conventional Commits](https://conventionalcommits.org/) for automatic semantic versioning:

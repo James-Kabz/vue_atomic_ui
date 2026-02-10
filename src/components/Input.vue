@@ -41,7 +41,7 @@
         @click="handleClear"
       >
         <Icon
-          name="x-mark"
+          name="x"
           class="w-5 h-5"
         />
       </button>

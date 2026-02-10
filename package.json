@@ -1,6 +1,6 @@
 {
   "name": "kabzvue",
-  "version": "3.27.11",
+  "version": "3.27.13",
   "private": false,
   "type": "module",
   "description": "A Vue.js component library with Tailwind CSS styling",
@@ -48,7 +48,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/James-Kabz/vue_atomic_ui.git"
+    "url": "git+https://github.com/James-Kabz/kabzvue.git"
+  },
+  "homepage": "https://github.com/James-Kabz/kabzvue#readme",
+  "bugs": {
+    "url": "https://github.com/James-Kabz/kabzvue/issues"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^7.0.1",

@@ -1,0 +1,1 @@
+import{c as a,o as l,D as r,n as o}from"./index-GxWqBnN7.js";const s={__name:"Timeline",props:{orientation:{type:String,default:"vertical",validator:e=>["vertical","horizontal"].includes(e)}},setup(e){return(t,i)=>(l(),a("div",{class:o(["relative flex ui-text",e.orientation==="vertical"?"flex-col":"flex-row"])},[r(t.$slots,"default")],2))}};export{s as default};

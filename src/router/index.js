@@ -35,12 +35,19 @@ const router = createRouter({
         {
           path: 'components',
           name: 'docs.components',
+          alias: ['/showcase', '/components-showcase'],
           component: () => import('../views/docs/pages/ComponentsPage.vue')
         },
         {
           path: 'components/:componentSlug',
           name: 'docs.component-detail',
+          alias: ['/showcase/:componentSlug', '/components-showcase/:componentSlug'],
           component: () => import('../views/docs/pages/ComponentDetailPage.vue')
+        },
+        {
+          path: 'full-gallery',
+          name: 'docs.full-gallery',
+          component: () => import('../views/docs/pages/FullGalleryPage.vue')
         },
         {
           path: 'support',

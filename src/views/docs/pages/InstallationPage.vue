@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue'
 
 const packageName = 'kabzvue'
+const packageDisplayName = 'Kabz Vue'
 
 const selectedManager = ref('npm')
 const copiedKey = ref('')
@@ -72,7 +73,7 @@ const copySnippet = async (key, content) => {
         Installation
       </h1>
       <p class="mt-3 text-lg leading-8 ui-text-muted">
-        Add package dependencies, then register plugin, icons, and tooltip directive.
+        Install {{ packageDisplayName }}, then register plugin, icons, and tooltip directive.
       </p>
 
       <div class="mt-4 flex flex-wrap gap-2">
