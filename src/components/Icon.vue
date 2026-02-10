@@ -25,7 +25,7 @@ const props = defineProps({
   },
   prefix: {
     type: String,
-    default: 'fas'
+    default: 'fa'
   },
   size: {
     type: String,

@@ -4,7 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import Input from '../../components/Input.vue'
 import DocsSidebar from './DocsSidebar.vue'
 
-const packageVersion = '3.27.10'
+const packageVersion = '3.27.13'
 const githubUrl = 'https://github.com/James-Kabz/vue_atomic_ui'
 
 const route = useRoute()

@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, markRaw, onMounted, ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import Input from '../../../components/Input.vue'
 import ComponentPreviewCard from '../components/ComponentPreviewCard.vue'
@@ -19,6 +19,17 @@ const sampleRows = [
   { id: 1, name: 'Jordan Blake', email: 'jordan@example.com', role: 'Admin', status: 'active' },
   { id: 2, name: 'Casey Moore', email: 'casey@example.com', role: 'Manager', status: 'pending' }
 ]
+
+const sampleBarChartData = [42, 58, 71, 65, 80]
+const sampleLineChartData = [14, 26, 19, 33, 29]
+const sampleChartLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May']
+const sampleStackedData = [
+  { complied: 62, uncomplied: 38 },
+  { complied: 55, uncomplied: 45 },
+  { complied: 74, uncomplied: 26 },
+  { complied: 68, uncomplied: 32 }
+]
+const sampleStackedLabels = ['Q1', 'Q2', 'Q3', 'Q4']
 
 const sampleColumns = [
   { key: 'name', label: 'Name' },
@@ -73,15 +84,54 @@ const componentExamplePresets = {
   Alert: [
     { label: 'Info', props: { title: 'Heads up', description: 'Alert preview', variant: 'info' } }
   ],
+  BarChart: [
+    {
+      label: 'Default',
+      props: { data: sampleBarChartData, labels: sampleChartLabels, width: 420, height: 260 }
+    }
+  ],
+  LineChart: [
+    {
+      label: 'Default',
+      props: { data: sampleLineChartData, labels: sampleChartLabels, width: 420, height: 260 }
+    }
+  ],
+  StackedBarChart: [
+    {
+      label: 'Default',
+      props: {
+        data: sampleStackedData,
+        labels: sampleStackedLabels,
+        width: 420,
+        height: 260,
+        maxValue: 100
+      }
+    }
+  ],
   DataTable: [
     { label: 'DataTable', props: { data: sampleRows, columns: sampleColumns, showPagination: false } }
   ],
   ReusableFormModal: [
     { label: 'Modal Closed', props: { modelValue: false, modalType: 'create', entityName: 'User', fields: sampleFields } }
+  ],
+  Breadcrumb: [
+    {
+      label: 'Default',
+      props: {
+        items: [
+          { label: 'Dashboard', href: '#' },
+          { label: 'Components' }
+        ],
+        separator: 'chevron-right',
+        ariaLabel: 'Breadcrumb navigation',
+        variant: 'default'
+      }
+    }
   ]
 }
 
 const slotComponents = new Set(['Button', 'Badge', 'Text', 'Link', 'Option'])
+const previewDisabledComponents = new Set(['DefaultLayout', 'AuthLayout', 'ErrorLayout', 'TabPanel'])
 
 const specialDefaults = {
   options: () => sampleOptions,
@@ -319,7 +369,8 @@ const loadEntries = async () => {
     docs.map(async (docEntry) => {
       try {
         const loadedComponent = await loadComponentBySlug(docEntry.slug)
-        const runtimeComponent = loadedComponent?.__vccOpts || loadedComponent || null
+        const safeLoadedComponent = loadedComponent ? markRaw(loadedComponent) : null
+        const runtimeComponent = safeLoadedComponent?.__vccOpts || safeLoadedComponent || null
         const propRows = buildPropRows(runtimeComponent?.props)
         const propControls = buildPropControls(runtimeComponent?.props)
 
@@ -348,7 +399,13 @@ const loadEntries = async () => {
 
         return {
           ...docEntry,
-          loadedComponent,
+          loadedComponent: safeLoadedComponent,
+          previewDisabled: previewDisabledComponents.has(docEntry.name),
+          previewDisabledReason: previewDisabledComponents.has(docEntry.name)
+            ? docEntry.name === 'TabPanel'
+              ? 'Preview disabled in gallery. TabPanel must be used inside the Tab component.'
+              : 'Preview disabled in gallery. This layout depends on full app context and child components.'
+            : '',
           propRows,
           propControls,
           examples,
@@ -361,6 +418,8 @@ const loadEntries = async () => {
         return {
           ...docEntry,
           loadedComponent: null,
+          previewDisabled: false,
+          previewDisabledReason: '',
           propRows: [],
           propControls: [],
           examples: [],
@@ -525,6 +584,15 @@ onMounted(loadEntries)
             >
               Failed to load component: {{ entry.loadError }}
             </p>
+
+            <div
+              v-else-if="entry.previewDisabled"
+              class="rounded-lg border ui-border-strong ui-surface-soft p-3"
+            >
+              <p class="text-xs ui-text-muted">
+                {{ entry.previewDisabledReason }}
+              </p>
+            </div>
 
             <div
               v-else

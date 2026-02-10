@@ -1,1 +1,0 @@
-import{c as t,o as s,B as o}from"./index-swU1CFca.js";const r={class:"flex items-center space-x-4 ui-text"},l={__name:"Stepper",setup(a){return(e,c)=>(s(),t("div",r,[o(e.$slots,"default")]))}};export{l as default};
