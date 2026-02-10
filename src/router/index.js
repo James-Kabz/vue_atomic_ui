@@ -45,6 +45,11 @@ const router = createRouter({
           component: () => import('../views/docs/pages/ComponentDetailPage.vue')
         },
         {
+          path: 'full-gallery',
+          name: 'docs.full-gallery',
+          component: () => import('../views/docs/pages/FullGalleryPage.vue')
+        },
+        {
           path: 'support',
           name: 'docs.support',
           component: () => import('../views/docs/pages/SupportPage.vue')
@@ -86,15 +91,6 @@ const router = createRouter({
       name: 'widgets-test',
       component: () => import('../views/WidgetsTest.vue')
     },
-    ...(import.meta.env.DEV
-      ? [
-          {
-            path: '/dev/showcase',
-            name: 'dev.showcase',
-            component: () => import('../views/dev/DevComponentShowcasePage.vue')
-          }
-        ]
-      : []),
     AuthRoutes,
     DashboardRoutes
   ],

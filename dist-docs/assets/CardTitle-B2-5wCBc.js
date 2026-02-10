@@ -1,0 +1,1 @@
+import{c as t,o as s,B as a,n,l as r,L as l}from"./index-swU1CFca.js";const f=Object.assign({inheritAttrs:!1},{__name:"CardTitle",setup(o){return(e,c)=>(s(),t("h3",{class:n(r(l)("text-2xl font-semibold leading-none tracking-tight ui-text",e.$attrs.class))},[a(e.$slots,"default")],2))}});export{f as default};

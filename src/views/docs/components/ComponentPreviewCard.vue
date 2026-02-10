@@ -31,7 +31,10 @@ onErrorCaptured((error) => {
 </script>
 
 <template>
-  <div class="rounded-lg border ui-border-strong ui-surface p-3">
+  <div
+    class="relative isolate overflow-hidden rounded-lg border ui-border-strong ui-surface p-3"
+    style="transform: translateZ(0);"
+  >
     <p class="mb-2 text-xs font-semibold uppercase tracking-wide ui-text-muted">
       {{ componentName }}
     </p>

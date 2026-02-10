@@ -1,0 +1,11 @@
+import{f as i,c as n,a as e,j as l,t as s,o as p}from"./index-swU1CFca.js";const d={class:"space-y-8"},c={class:"rounded-2xl border ui-border-strong ui-surface p-6"},u={class:"mt-4 rounded-xl border ui-border-strong bg-black/92 p-4"},m={class:"mb-2 flex items-center justify-between gap-3"},a=`import { createApp } from 'vue'
+import App from './App.vue'
+import { Button, Input, Card } from 'kabzvue'
+import 'kabzvue/css'
+
+const app = createApp(App)
+
+app.component('Button', Button)
+app.component('Input', Input)
+app.component('Card', Card)
+app.mount('#app')`,h={__name:"ThemingPage",setup(x){const o=i(!1),r=async()=>{navigator?.clipboard&&(await navigator.clipboard.writeText(a),o.value=!0,window.setTimeout(()=>{o.value=!1},1200))};return(b,t)=>(p(),n("div",d,[e("article",c,[t[1]||(t[1]=e("h1",{class:"text-3xl font-bold"}," Theming ",-1)),t[2]||(t[2]=e("p",{class:"mt-3 max-w-4xl text-lg leading-8 ui-text-muted"}," Theme behavior is controlled by exported helpers: `initTheme`, `setTheme`, `setMode`, `getTheme`, and `getMode`. ",-1)),e("div",u,[e("div",m,[t[0]||(t[0]=e("p",{class:"text-xs font-semibold uppercase tracking-wide text-white/80"}," Tree-shaking Pattern ",-1)),e("button",{type:"button",class:"rounded-md border border-white/30 px-3 py-1 text-xs font-medium text-white hover:bg-white/10",onClick:r},s(o.value?"Copied":"Copy"),1)]),e("pre",{class:"overflow-x-auto text-xs text-white"},[e("code",null,s(a))])])]),t[3]||(t[3]=l('<article class="rounded-2xl border ui-border-strong ui-surface p-6"><h2 class="text-2xl font-bold"> Pass Through </h2><p class="mt-2 max-w-4xl text-lg leading-8 ui-text-muted"> Tailor internals by passing classes and attributes while preserving behavior and accessibility. </p></article><article class="rounded-2xl border ui-border-strong ui-surface p-6"><h2 class="text-2xl font-bold"> Accessibility </h2><p class="mt-2 max-w-4xl text-lg leading-8 ui-text-muted"> Components include keyboard interaction patterns and semantic output to help meet accessibility requirements. </p></article><article class="rounded-2xl border ui-border-strong ui-surface p-6"><h2 class="text-2xl font-bold"> Add-Ons </h2><p class="mt-2 max-w-4xl text-lg leading-8 ui-text-muted"> Use helpers like `tooltip` and `toast` with charts and data components to build complete dashboard flows. </p></article>',3))]))}};export{h as default};

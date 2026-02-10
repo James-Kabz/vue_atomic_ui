@@ -80,12 +80,23 @@ const copySnippet = async (key, content) => {
 <template>
   <div class="space-y-8">
     <article class="rounded-2xl border ui-border-strong ui-surface p-6">
-      <h1 class="text-3xl font-bold">
-        Components
-      </h1>
-      <p class="mt-3 text-lg leading-8 ui-text-muted">
-        Try live controls, then open each component page for full props and usage details.
-      </p>
+      <div class="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <h1 class="text-3xl font-bold">
+            Components
+          </h1>
+          <p class="mt-3 text-lg leading-8 ui-text-muted">
+            Try live controls, then open each component page for full props and usage details.
+          </p>
+        </div>
+
+        <RouterLink
+          to="/components/full-gallery"
+          class="inline-flex rounded-md border ui-border-strong px-3 py-1.5 text-sm font-medium hover:bg-(--ui-surface-soft)"
+        >
+          Open Full Gallery
+        </RouterLink>
+      </div>
 
       <div class="mt-4 grid gap-4 lg:grid-cols-2">
         <div class="rounded-xl border ui-border-strong ui-surface-soft p-4">
