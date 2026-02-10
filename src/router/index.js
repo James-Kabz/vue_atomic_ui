@@ -35,11 +35,13 @@ const router = createRouter({
         {
           path: 'components',
           name: 'docs.components',
+          alias: ['/showcase', '/components-showcase'],
           component: () => import('../views/docs/pages/ComponentsPage.vue')
         },
         {
           path: 'components/:componentSlug',
           name: 'docs.component-detail',
+          alias: ['/showcase/:componentSlug', '/components-showcase/:componentSlug'],
           component: () => import('../views/docs/pages/ComponentDetailPage.vue')
         },
         {
@@ -84,6 +86,15 @@ const router = createRouter({
       name: 'widgets-test',
       component: () => import('../views/WidgetsTest.vue')
     },
+    ...(import.meta.env.DEV
+      ? [
+          {
+            path: '/dev/showcase',
+            name: 'dev.showcase',
+            component: () => import('../views/dev/DevComponentShowcasePage.vue')
+          }
+        ]
+      : []),
     AuthRoutes,
     DashboardRoutes
   ],
