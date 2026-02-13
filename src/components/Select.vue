@@ -258,7 +258,7 @@ watch(isOpen, (open) => {
         ref="dropdownRef"
         :style="dropdownStyle"
         data-select-dropdown
-        class="  shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-(----ui-bg) ring-opacity-5 overflow-auto focus:outline-none"
+        class="ui-surface border ui-border-strong shadow-lg max-h-60 rounded-md py-1 text-base overflow-auto focus:outline-none"
       >
         <!-- Search input -->
         <div class="px-3 py-2 border-b ui-border">

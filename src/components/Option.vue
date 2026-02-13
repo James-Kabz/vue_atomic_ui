@@ -33,7 +33,7 @@ const props = defineProps({
 
 const optionClasses = computed(() =>
   [
-    'bg-(--ui-bg) ',
+    'ui-surface-strong',
     'ui-text',
     props.disabled ? 'ui-text-soft' : 'ui-text'
   ]
