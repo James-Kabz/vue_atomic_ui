@@ -224,8 +224,8 @@ const formatDueDate = (dateString) => {
 }
 
 const getOrgLogoUrl = (org) => {
-  if (!org?.org_id) return null
-  return props.organisationLogos[org.org_id] || null
+  if (!org?.id) return null
+  return props.organisationLogos[org.id] || null
 }
 
 
@@ -296,7 +296,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
             <div class="relative">
               <img
                 :src="organisationLogo"
-                :alt="`${currentOrganisation.organisation_name} logo`"
+                :alt="`${currentOrganisation.organisationName} logo`"
                 class="w-6 h-6 sm:w-8 sm:h-8 object-contain rounded-md ui-bg p-0.5 border border-(--ui-primary-soft) shadow-sm"
               >
               <!-- Online indicator - smaller -->
@@ -314,7 +314,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
               <p
                 class="text-sm font-semibold ui-text truncate group-hover:text-(--ui-primary) leading-tight"
               >
-                {{ currentOrganisation.organisation_name }}
+                {{ currentOrganisation.organisationName }}
               </p>
               <div class="flex items-center gap-1.5">
                 <Icon
@@ -342,7 +342,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
             class="min-w-0 flex-1"
           >
             <p class="text-xs font-bold ui-primary truncate max-w-[100px] sm:max-w-40 leading-tight">
-              {{ currentOrganisation.organisation_name }}
+              {{ currentOrganisation.organisationName }}
             </p>
             <div class="flex items-center gap-1 mt-0.5">
               <Icon
@@ -386,10 +386,10 @@ watch(searchQuery, (newValue) => emit('search', newValue))
               <div class="py-2 max-h-80 overflow-y-auto">
                 <button
                   v-for="org in organisations"
-                  :key="org.org_id || org.organisation_name"
+                  :key="org.id || org.organisationName"
                   :class="cn(
                     'flex items-center w-full px-3 sm:px-4 py-2.5 text-sm transition-all group',
-                    org.org_id === currentOrganisation?.org_id
+                    org.id === currentOrganisation?.id
                       ? 'bg-[color:color-mix(in oklab, var(--ui-primary-soft), transparent 30%)] ui-primary border-l-4 border-(--ui-primary)'
                       : 'ui-text hover:bg-(--ui-surface-muted) border-l-4 border-transparent'
                   )"
@@ -401,7 +401,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                   >
                     <img
                       :src="getOrgLogoUrl(org)"
-                      :alt="`${org.organisation_name} logo`"
+                      :alt="`${org.organisationName} logo`"
                       class="w-7 h-7 sm:w-8 sm:h-8 object-contain rounded-lg ui-surface p-0.5 sm:p-1 border ui-border-strong group-hover:border-(--ui-primary-soft) transition-colors"
                     >
                   </div>
@@ -416,7 +416,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                   </div>
                   <div class="flex-1 text-left min-w-0">
                     <p class="font-semibold truncate text-md">
-                      {{ org.organisation_name }}
+                      {{ org.organisationName }}
                     </p>
                     <p
                       v-if="org.type"
@@ -426,7 +426,7 @@ watch(searchQuery, (newValue) => emit('search', newValue))
                     </p>
                   </div>
                   <Icon
-                    v-if="org.org_id === currentOrganisation?.org_id"
+                    v-if="org.id === currentOrganisation?.id"
                     icon="check-circle"
                     class="w-4 h-4 sm:w-5 sm:h-5 ui-primary shrink-0 ml-2"
                   />
