@@ -1,6 +1,6 @@
 {
   "name": "kabzvue",
-  "version": "3.28.1",
+  "version": "3.28.2",
   "private": false,
   "type": "module",
   "description": "A Vue.js component library with Tailwind CSS styling",
