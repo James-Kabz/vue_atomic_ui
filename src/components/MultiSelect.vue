@@ -213,7 +213,7 @@ watch(isOpen, (open) => {
           v-if="isOpen"
           :style="dropdownStyle"
           data-multiselect-dropdown
-          class="  shadow-lg max-h-72 rounded-md text-base ring-1 ring-(----ui-bg) ring-opacity-5 overflow-hidden focus:outline-none"
+          class="shadow-lg max-h-72 rounded-md text-base ring-1 ring-(----ui-bg) ring-opacity-5 overflow-hidden focus:outline-none ui-surface"
         >
           <!-- Search input -->
           <div class="px-3 py-2.5 border-b ui-border-strong  ui-surface-muted">
