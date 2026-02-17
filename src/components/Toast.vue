@@ -175,7 +175,7 @@ const isDismissible = (toast) => toast.dismissible !== false && (toast.closeButt
     <div
       :class="cn(
         containerClasses,
-        'fixed z-9999 flex max-h-screen w-full p-4 md:max-w-[420px] pointer-events-none'
+        'fixed z-[10000] flex max-h-screen w-full p-4 md:max-w-[420px] pointer-events-none'
       )"
     >
       <TransitionGroup
